@@ -3,19 +3,19 @@ package no.HiOAProsjektV2013.Main;
 public class Krav {
 
 	private String beskrivelse;
-	private boolean status;
+	private boolean godkjent;
 	
 	public Krav(String beskrivelse){
 		this.beskrivelse = beskrivelse;
-		status = false;
+		godkjent = false;
 	}
 
-	public boolean isStatus() {
-		return status;
+	public boolean isGodkjent() {
+		return godkjent;
 	}
 
-	public void setStatus(boolean status) {
-		this.status = status;
+	public void setGodkjent(boolean godkjent) {
+		this.godkjent = godkjent;
 	}
 
 	public String getBeskrivelse() {
