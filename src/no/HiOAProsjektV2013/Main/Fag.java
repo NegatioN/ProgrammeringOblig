@@ -3,24 +3,24 @@ package no.HiOAProsjektV2013.Main;
 public class Fag {
 
 	private String navn, fagkode, beskrivelse;
-	private Laerer lærer;
+	private Laerer lÃ¦rer;
 	private Arbeidskrav krav;
 	private int studiepoeng;
 	
-	public Fag(String navn, String fagkode, String beskrivelse, int studiepoeng, Laerer lærer){
+	public Fag(String navn, String fagkode, String beskrivelse, int studiepoeng, Laerer lÃ¦rer){
 		this.beskrivelse = beskrivelse;
 		this.navn = navn;
 		this.fagkode = fagkode;
-		this.lærer = lærer;
+		this.lÃ¦rer = lÃ¦rer;
 		this.studiepoeng = studiepoeng;
 	}
 
-	public Laerer getLærer() {
-		return lærer;
+	public Laerer getLÃ¦rer() {
+		return lÃ¦rer;
 	}
 
-	public void setLærer(Laerer lærer) {
-		this.lærer = lærer;
+	public void setLÃ¦rer(Laerer lÃ¦rer) {
+		this.lÃ¦rer = lÃ¦rer;
 	}
 
 	public String getNavn() {
@@ -41,7 +41,7 @@ public class Fag {
 	public int getStudiepoeng(){
 		return studiepoeng;
 	}
-	//Lager et krav for referanse-kravlista basert på en beskrivelse
+	//Lager et krav for referanse-kravlista basert pÃ¥ en beskrivelse
 	public void addKrav(String beskrivelse){
 		Krav kravet = new Krav(beskrivelse);
 		krav.addKrav(kravet);

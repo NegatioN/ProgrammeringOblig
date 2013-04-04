@@ -6,22 +6,22 @@ import java.util.List;
 public class Student extends Person{
 	
 	private String adresse, studentnummer;
-	private int startÅr, sluttÅr;
+	private int startÃ¥r, sluttÃ…r;
 	private List<Arbeidskrav> fagListe = new LinkedList<>();
 	private boolean avsluttet = false;
 	
 
-	public Student(String navn, String epost, int tlf, String adresse, String studentnummer, int startÅr) {
+	public Student(String navn, String epost, int tlf, String adresse, String studentnummer, int startÃ¥r) {
 		super(navn, epost, tlf);
 		this.adresse = adresse;
 		this.studentnummer = studentnummer;
-		this.startÅr = startÅr;
-		//sluttår settes lik -1 til studenten avslutter
-		sluttÅr = -1;
+		this.startÃ¥r = startÃ¥r;
+		//sluttÃ…r settes lik -1 til studenten avslutter
+		sluttÃ…r = -1;
 	}
 
 	//Listen med arbeidskrav representerer alle fagene studenten tar
-	//finner fag studenten har ved å liste opp .getFagkode() fra kravene.
+	//finner fag studenten har ved ï¿½ liste opp .getFagkode() fra kravene.
 	public void settInn(Fag fag){
 		fagListe.add(fag.getKrav());
 	}
@@ -46,17 +46,17 @@ public class Student extends Person{
 	}
 
 
-	public int getSluttÅr() {
-		return sluttÅr;
+	public int getSluttÃ…r() {
+		return sluttÃ…r;
 	}
 
 
-	public void setSluttÅr(int sluttÅr) {
-		this.sluttÅr = sluttÅr;
+	public void setSluttÃ…r(int sluttÃ…r) {
+		this.sluttÃ…r = sluttÃ…r;
 	}
-	//har studenten avsluttet studiet? sant hvis sluttår ikke lik -1
+	//har studenten avsluttet studiet? sant hvis sluttÃ…r ikke lik -1
 	public boolean isAvsluttet(){
-	if(sluttÅr != -1) avsluttet = true;
+	if(sluttÃ…r != -1) avsluttet = true;
 	return avsluttet;
 	}
 
@@ -66,8 +66,8 @@ public class Student extends Person{
 	}
 
 
-	public int getStartÅr() {
-		return startÅr;
+	public int getStartÃ…r() {
+		return startÃ¥r;
 	}
 
 }
