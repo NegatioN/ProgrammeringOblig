@@ -2,15 +2,16 @@ package no.HiOAProsjektV2013.Main;
 
 public class Fag {
 
-	private String navn, fagkode, beskrivelse;
+	private String navn, fagkode, beskrivelse, vurderingsform;
 	private Laerer lærer;
 	private Arbeidskrav krav;
 	private int studiepoeng;
 	
-	public Fag(String navn, String fagkode, String beskrivelse, int studiepoeng, Laerer lærer){
+	public Fag(String navn, String fagkode, String beskrivelse, String vurderingsform , int studiepoeng, Laerer lærer){
 		this.beskrivelse = beskrivelse;
 		this.navn = navn;
 		this.fagkode = fagkode;
+		this.vurderingsform = vurderingsform;
 		this.lærer = lærer;
 		this.studiepoeng = studiepoeng;
 	}
@@ -34,19 +35,31 @@ public class Fag {
 	public String getBeskrivelse() {
 		return beskrivelse;
 	}
-
-	public Arbeidskrav getKrav() {
-		return krav;
+	
+	public void setBeskrivelse(String beskrivelse) {
+		this.beskrivelse = beskrivelse;
 	}
+	
 	public int getStudiepoeng(){
 		return studiepoeng;
 	}
+	
+	public Arbeidskrav getKrav() {
+		return krav;
+	}
+	
+	public String getVurderingsform(){
+		return vurderingsform;
+	}
+	
+	public void setVurderingsform(String vurderingsform) {
+		this.vurderingsform = vurderingsform;
+	}
+	
 	//Lager et krav for referanse-kravlista basert på en beskrivelse
 	public void addKrav(String beskrivelse){
 		Krav kravet = new Krav(beskrivelse);
 		krav.addKrav(kravet);
 	}
-	
-	//Hæi på dø
-	
+		
 }

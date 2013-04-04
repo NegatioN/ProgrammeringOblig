@@ -21,7 +21,7 @@ public class Studieprogram {
 		try {
 			fagIProgrammet.remove(i);
 		} catch (IndexOutOfBoundsException e) {
-			// return message til bruker? Handle exceptions på et høyere nivå
+			// return message til bruker? Handle exceptions pÃ¥ et hÃ¸yere nivÃ¥
 			// for mer uniform behandling
 		}
 	}
@@ -31,7 +31,7 @@ public class Studieprogram {
 	}
 
 	// toString returnerer en liste av alle fag i studieprogrammet.
-	// kan være nødvendig å flytte en sånn metode til window slik at hver
+	// kan vÃ¦re nÃ¸dvendig Ã¥ flytte en sÃ¥nn metode til window slik at hver
 	// getFagkode blir en egen knapp.
 	public String toString() {
 		String stringen = "";
