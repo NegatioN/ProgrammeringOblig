@@ -30,8 +30,5 @@ public class Arbeidskrav {
 	public String getFagkode(){
 		return fagkode;
 	}
-	public List getList(){
-		return register;
-	}
 
 }

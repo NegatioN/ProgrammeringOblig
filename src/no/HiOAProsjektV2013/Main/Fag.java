@@ -61,5 +61,4 @@ public class Fag {
 		Krav kravet = new Krav(beskrivelse);
 		krav.addKrav(kravet);
 	}
-		
 }

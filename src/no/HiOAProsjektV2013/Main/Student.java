@@ -26,10 +26,27 @@ public class Student extends Person{
 		fagListe.add(fag.getKrav());
 	}
 	
+	public boolean innfriddKrav(Fag fag){
+		for(int i = 0; i < fagListe.size();i++){
+			if(fag.getFagkode().equals(fagListe.get(i).getFagkode())){
+				return fagListe.get(i).kravInnfridd();
+			}
+		}
+		return false;
+	}
+	public String visAlleFag(){
+		String stringen = new String();
+		for(int i = 0; i< fagListe.size();i++){
+			stringen += fagListe.get(i).getFagkode() + "\n";
+		}
+		stringen += "############";
+		return stringen;
+	}
+	
 	public String showFag(){
 		String stringen = new String();
 		
-		for(int i = 0;i < fagListe.size();i++){
+		for(int i = 0;i < fagListe.size()-1;i++){
 			stringen += fagListe.get(i).getFagkode() + "\n";
 		}
 		
@@ -68,6 +85,11 @@ public class Student extends Person{
 
 	public int getStartÅr() {
 		return startÅr;
+	}
+	public String toString(){
+		String stringen = new String();
+		
+		return stringen;
 	}
 
 }
