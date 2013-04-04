@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Student extends Person{
+	
 	private String adresse, studentnummer;
 	private int startÅr, sluttÅr;
 	private List<Arbeidskrav> fagListe = new LinkedList<>();
@@ -19,8 +20,20 @@ public class Student extends Person{
 		sluttÅr = -1;
 	}
 
+	//Listen med arbeidskrav representerer alle fagene studenten tar
+	//finner fag studenten har ved å liste opp .getFagkode() fra kravene.
 	public void settInn(Fag fag){
 		fagListe.add(fag.getKrav());
+	}
+	
+	public String showFag(){
+		String stringen = new String();
+		
+		for(int i = 0;i < fagListe.size();i++){
+			stringen += fagListe.get(i).getFagkode() + "\n";
+		}
+		
+		return stringen;
 	}
 
 	public String getAdresse() {

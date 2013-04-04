@@ -27,5 +27,11 @@ public class Arbeidskrav {
 	public void addKrav(Krav krav) {
 		register.add(krav);
 	}
+	public String getFagkode(){
+		return fagkode;
+	}
+	public List getList(){
+		return register;
+	}
 
 }
