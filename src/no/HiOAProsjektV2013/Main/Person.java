@@ -21,7 +21,7 @@ public class Person {
 		
 		this.fNavn = alleNavn[FORNAVN];
 		
-		if(alleNavn.length <= KUNETNAVNSKREVET)
+		if(alleNavn.length >= KUNETNAVNSKREVET)
 		this.eNavn = alleNavn[alleNavn.length + ETTERNAVN];
 	}
 
