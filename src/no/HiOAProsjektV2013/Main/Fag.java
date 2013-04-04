@@ -47,4 +47,6 @@ public class Fag {
 		krav.addKrav(kravet);
 	}
 	
+	//Hæi på dø
+	
 }
