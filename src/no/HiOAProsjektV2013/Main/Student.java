@@ -6,22 +6,22 @@ import java.util.List;
 public class Student extends Person{
 	
 	private String adresse, studentnummer;
-	private int startår, sluttÅr;
+	private int startÅr, sluttÅr;
 	private List<Arbeidskrav> fagListe = new LinkedList<>();
 	private boolean avsluttet = false;
 	
 
-	public Student(String navn, String epost, int tlf, String adresse, String studentnummer, int startår) {
+	public Student(String navn, String epost, int tlf, String adresse, String studentnummer, int startÅr) {
 		super(navn, epost, tlf);
 		this.adresse = adresse;
 		this.studentnummer = studentnummer;
-		this.startår = startår;
+		this.startÅr = startÅr;
 		//sluttÅr settes lik -1 til studenten avslutter
 		sluttÅr = -1;
 	}
 
 	//Listen med arbeidskrav representerer alle fagene studenten tar
-	//finner fag studenten har ved � liste opp .getFagkode() fra kravene.
+	//finner fag studenten har ved å liste opp .getFagkode() fra kravene.
 	public void settInn(Fag fag){
 		fagListe.add(fag.getKrav());
 	}
@@ -67,7 +67,7 @@ public class Student extends Person{
 
 
 	public int getStartÅr() {
-		return startår;
+		return startÅr;
 	}
 
 }

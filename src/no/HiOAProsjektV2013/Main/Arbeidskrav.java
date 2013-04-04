@@ -33,9 +33,5 @@ public class Arbeidskrav {
 	public List getList(){
 		return register;
 	}
-	
-	public void testMeth(){
-		//whatevah!!
-	}
 
 }
