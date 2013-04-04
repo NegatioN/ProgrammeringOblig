@@ -5,7 +5,7 @@ import java.util.List;
 
 public class StudentRegister {
 	
-	public static int studentNummer = 0;
+	public static int studentNummer = 100000;
 	
 
 	private List<Student> register = new LinkedList<>();
