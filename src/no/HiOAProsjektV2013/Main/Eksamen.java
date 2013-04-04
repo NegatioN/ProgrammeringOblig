@@ -7,7 +7,7 @@ public class Eksamen {
 	private String navn;
 	private int karakter;
 	private Date dato;
-	private List<Student> deltakere = new LinkedList<>();
+	private List<EksamensDeltaker> deltakere = new LinkedList<>();
 	
 	public Eksamen(String navn, int karakter, Date dato){
 		this.navn = navn;
@@ -36,8 +36,10 @@ public class Eksamen {
 		this.dato = dato;
 	}
 	
+	//lager eksamensdeltakeren og legger til i listen
 	public void addDeltaker(Student student){
-		deltakere.add(student);
+		EksamensDeltaker ed = new EksamensDeltaker(student);
+		deltakere.add(ed);
 	}
 	
 }

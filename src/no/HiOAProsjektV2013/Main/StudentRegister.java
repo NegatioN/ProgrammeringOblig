@@ -7,7 +7,7 @@ public class StudentRegister {
 	
 	public static int studentNummer = 100000;
 	
-
+	private final int FORNAVN = 0;
 	private List<Student> register = new LinkedList<>();
 	
 	public StudentRegister(){

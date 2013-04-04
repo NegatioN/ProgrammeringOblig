@@ -50,12 +50,12 @@ public class Window extends JFrame implements ActionListener{
 
 	
 	private void addLærer(){
-		Laerer l = new Laerer("Eva", "EvaATpost.com", 95153437, "PI227");
+		Laerer l = new Laerer("Eva LINKED LIST Hadler", "EvaATpost.com", 95153437, "PI227");
 		skolen.getLærerne().add(l);
 	}
 	
 //	private void addStudent(){
-//		skolen.getStudentene().addStudent("Are", "areATsomething.com", 95153437, "lillehammer 1", 2013);
+//		skolen.getStudentene().addStudent("Are ben Hur", "areATsomething.com", 95153437, "lillehammer 1", 2013);
 //	}
 
 	private void display(){
@@ -67,11 +67,11 @@ public class Window extends JFrame implements ActionListener{
 	}
 	
 	private String finnLærere(String s){
-		Laerer[] lærerne = skolen.findLærer(s);
+		Laerer[] lærerne = skolen.findLærerByFornavn(s);
 		String stringen = new String();
 		
 		for(int i = 0; i < lærerne.length;i++){
-			stringen += lærerne[i].getNavn() + "\n";
+			stringen += lærerne[i].getfNavn() + "\t" + lærerne[i].geteNavn() + "\n";
 		}
 		return stringen;
 	}
