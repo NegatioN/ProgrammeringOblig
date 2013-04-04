@@ -21,17 +21,17 @@ public class Window extends JFrame implements ActionListener{
 	
 	private JTextArea ta;
 	private JButton add, show;
-	private StudentRegister studentene;
+	private Skole skolen;
 	
 	
 	public Window(){
 		super();
 		
-		studentene = new StudentRegister();
+		skolen = new Skole();
 		
 		ta = new JTextArea(20,25);
-		add = new JButton("Add student");
-		show = new JButton("Show students");
+		add = new JButton("Add teacher");
+		show = new JButton("show teacher by name");
 		
 		add.addActionListener(this);
 		show.addActionListener(this);
@@ -48,14 +48,32 @@ public class Window extends JFrame implements ActionListener{
 		setResizable(false);
 		}
 
-	private void addStudent(){
-		studentene.addStudent("Are", "areATsomething.com", 95153437, "lillehammer 1", 2013);
+	
+	private void addLærer(){
+		Laerer l = new Laerer("Eva", "EvaATpost.com", 95153437, "PI227");
+		skolen.getLærerne().add(l);
 	}
+	
+//	private void addStudent(){
+//		skolen.getStudentene().addStudent("Are", "areATsomething.com", 95153437, "lillehammer 1", 2013);
+//	}
 
 	private void display(){
-		String stringen = studentene.toString();
+		String stringen = finnLærere("Eva");
 		
+		if(stringen == null)
+			System.out.println("NULL");
 		ta.setText(stringen);
+	}
+	
+	private String finnLærere(String s){
+		Laerer[] lærerne = skolen.findLærer(s);
+		String stringen = new String();
+		
+		for(int i = 0; i < lærerne.length;i++){
+			stringen += lærerne[i].getNavn() + "\n";
+		}
+		return stringen;
 	}
 
 	@Override
@@ -64,7 +82,7 @@ public class Window extends JFrame implements ActionListener{
 			display();
 		}
 		if(e.getSource() == add){
-			addStudent();
+			addLærer();
 			System.out.println("ding");
 		}
 	}
