@@ -7,7 +7,8 @@ public class Eksamen {
 	private String navn;
 	private int karakter;
 	private Date dato;
-	private List<EksamensDeltaker> deltakere = new LinkedList<>();
+	private Liste<EksamensDeltaker> deltakere = new Liste<>();
+	private Iterator<EksamensDeltaker> iterator = deltakere.getIterator();
 	
 	public Eksamen(String navn, int karakter, Date dato){
 		this.navn = navn;
@@ -34,6 +35,18 @@ public class Eksamen {
 	}
 	public void setDato(Date dato) {
 		this.dato = dato;
+	}
+	
+	//melder studenten av eksamenen. Fjernes fra listen over eksamensdeltakere.
+	public void avmeld(Student student){
+		while(iterator.hasNext()){
+			if(student.equals((iterator.next().getDeltaker()))){
+				iterator.remove();
+				return;
+			}
+		}
+		//add en eller annen beskjed om at deltakeren ikke ble funnet og dermed ikke fjernet.
+		return;
 	}
 	
 	//lager eksamensdeltakeren og legger til i listen

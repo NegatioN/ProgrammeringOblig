@@ -10,7 +10,8 @@ public class Fag {
 	public Fag(String navn, String fagkode, String beskrivelse, String vurderingsform , int studiepoeng, Laerer lærer){
 		this.beskrivelse = beskrivelse;
 		this.navn = navn;
-		this.fagkode = fagkode;
+		//alltid uppercase fagkode
+		this.fagkode = fagkode.toUpperCase();
 		this.vurderingsform = vurderingsform;
 		this.lærer = lærer;
 		this.studiepoeng = studiepoeng;
