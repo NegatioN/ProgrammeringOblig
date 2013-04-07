@@ -4,10 +4,16 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
+
+import no.HiOAProsjektV2013.DataStructure.Laerer;
+import no.HiOAProsjektV2013.DataStructure.Skole;
 
 public class Window extends JFrame implements ActionListener{
 	
@@ -22,6 +28,7 @@ public class Window extends JFrame implements ActionListener{
 	private JTextArea ta;
 	private JButton add, show;
 	private Skole skolen;
+	private Iterator<Laerer> iterator;
 	
 	
 	public Window(){
@@ -50,6 +57,8 @@ public class Window extends JFrame implements ActionListener{
 
 	
 	private void addLærer(){
+		Laerer l1 = new Laerer("Linked Evasenr", "EvaATpost.com", 95153437, "PI227");
+		skolen.getLærerne().add(l1);
 		Laerer l = new Laerer("Eva LINKED LIST Hadler", "EvaATpost.com", 95153437, "PI227");
 		skolen.getLærerne().add(l);
 	}
@@ -59,7 +68,7 @@ public class Window extends JFrame implements ActionListener{
 //	}
 
 	private void display(){
-		String stringen = finnLærere("Eva");
+		String stringen = finnLærere("Evasenr");
 		
 		if(stringen == null)
 			System.out.println("NULL");
@@ -67,11 +76,16 @@ public class Window extends JFrame implements ActionListener{
 	}
 	
 	private String finnLærere(String s){
-		Laerer[] lærerne = skolen.findLærerByFornavn(s);
-		String stringen = new String();
+		ArrayList<Laerer> lærerne = skolen.getLærerne().findLærerByNavn(s);
 		
-		for(int i = 0; i < lærerne.length;i++){
-			stringen += lærerne[i].getfNavn() + "\t" + lærerne[i].geteNavn() + "\n";
+		iterator = lærerne.iterator();
+		
+		
+		String stringen = new String();	
+		
+		while(iterator.hasNext()){
+			Laerer lærer = iterator.next();
+			stringen += lærer.getfNavn() + "\t" + lærer.geteNavn() + "\n";
 		}
 		return stringen;
 	}
@@ -86,5 +100,4 @@ public class Window extends JFrame implements ActionListener{
 			System.out.println("ding");
 		}
 	}
-	
 }

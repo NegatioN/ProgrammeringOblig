@@ -1,12 +1,12 @@
-package no.HiOAProsjektV2013.Main;
+package no.HiOAProsjektV2013.DataStructure;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Arbeidskrav {
 
 	private String fagkode;
-	private List<Krav> register = new LinkedList<>();
+	private List<Krav> register = new ArrayList<>();
 
 	public Arbeidskrav(Fag fag) {
 		fagkode = fag.getFagkode();

@@ -1,11 +1,11 @@
-package no.HiOAProsjektV2013.Main;
+package no.HiOAProsjektV2013.DataStructure;
 
 public class Person {
 	private String fNavn, eNavn = null, epost;
 	private int telefonNr;
 	
 	//variable for posisjon i string-arrayen av navn
-	private final int FORNAVN = 0, ETTERNAVN = -1, KUNETNAVNSKREVET = 1;
+	public static final int FORNAVN = 0, ETTERNAVN = 1, KUNETNAVNSKREVET = 1;
 	
 	public Person(String navn, String epost, int tlf){
 		nameSplitter(navn);
@@ -22,7 +22,7 @@ public class Person {
 		this.fNavn = alleNavn[FORNAVN];
 		
 		if(alleNavn.length >= KUNETNAVNSKREVET)
-		this.eNavn = alleNavn[alleNavn.length + ETTERNAVN];
+		this.eNavn = alleNavn[alleNavn.length - ETTERNAVN];
 	}
 
 	public int getTelefonNr() {

@@ -1,4 +1,4 @@
-package no.HiOAProsjektV2013.Main;
+package no.HiOAProsjektV2013.DataStructure;
 
 public class EksamensDeltaker {
 

@@ -1,4 +1,4 @@
-package no.HiOAProsjektV2013.Main;
+package no.HiOAProsjektV2013.DataStructure;
 
 import java.util.*;
 
@@ -7,8 +7,8 @@ public class Eksamen {
 	private String navn;
 	private int karakter;
 	private Date dato;
-	private Liste<EksamensDeltaker> deltakere = new Liste<>();
-	private Iterator<EksamensDeltaker> iterator = deltakere.getIterator();
+	private List<EksamensDeltaker> deltakere = new LinkedList<>();
+	private Iterator<EksamensDeltaker> iterator;
 	
 	public Eksamen(String navn, int karakter, Date dato){
 		this.navn = navn;
@@ -53,6 +53,10 @@ public class Eksamen {
 	public void addDeltaker(Student student){
 		EksamensDeltaker ed = new EksamensDeltaker(student);
 		deltakere.add(ed);
+	}
+	
+	private void refreshIterator(){
+		iterator = deltakere.iterator();
 	}
 	
 }
