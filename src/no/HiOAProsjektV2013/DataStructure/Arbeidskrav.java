@@ -1,12 +1,14 @@
 package no.HiOAProsjektV2013.DataStructure;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Arbeidskrav {
 
 	private String fagkode;
 	private List<Krav> register = new ArrayList<>();
+	private Iterator<Krav> iterator;
 
 	public Arbeidskrav(Fag fag) {
 		fagkode = fag.getFagkode();
@@ -15,11 +17,12 @@ public class Arbeidskrav {
 	// Sjekker at alle arbeidskrav i listen er innfridd. Hvis ikke alle er
 	// innfridd returners false
 	public boolean kravInnfridd() {
-		boolean innfridd = false;
-
-		for (int i = 0; i < register.size(); i++) {
-			if (register.get(i).isGodkjent() == false)
-				return innfridd;
+		refreshIterator();
+		
+		while(iterator.hasNext()){
+			Krav krav = iterator.next();
+			if(!krav.isGodkjent())
+				return false;
 		}
 		return true;
 	}
@@ -29,6 +32,9 @@ public class Arbeidskrav {
 	}
 	public String getFagkode(){
 		return fagkode;
+	}
+	private void refreshIterator(){
+		iterator = register.iterator();
 	}
 
 }

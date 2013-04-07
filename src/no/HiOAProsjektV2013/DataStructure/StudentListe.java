@@ -1,6 +1,7 @@
 package no.HiOAProsjektV2013.DataStructure;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,9 +19,22 @@ public class StudentListe{
 		register = new LinkedList<>();
 	}
 	//legger til en ny student UANSETT og incrementer studentnummer
-	public void addStudent(String navn, String epost, int tlf, String adresse, int startÅr){
-		Student s = new Student(navn, epost, tlf, adresse, "s" + studentNummer++, startÅr);
+	public void addStudent(String navn, String epost, int tlf, String adresse, Date start){
+		Student s = new Student(navn, epost, tlf, adresse, "s" + studentNummer++, start);
 		register.add(s);
+	}
+	public ArrayList<Student> findKravBeståttStudenter(Fag fag){
+		ArrayList<Student> studentene = new ArrayList<>();
+		refreshIterator();
+		Student s = null;
+		while(iterator.hasNext()){
+			s = iterator.next();
+			if(s.innfriddKrav(fag))
+				studentene.add(s);
+		}
+		
+		
+		return studentene;
 	}
 	
 	

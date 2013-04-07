@@ -10,9 +10,9 @@ public class Eksamen {
 	private List<EksamensDeltaker> deltakere = new LinkedList<>();
 	private Iterator<EksamensDeltaker> iterator;
 	
-	public Eksamen(String navn, int karakter, Date dato){
+	
+	public Eksamen(String navn, Date dato){
 		this.navn = navn;
-		this.karakter = karakter;
 		this.dato = dato;
 	}
 	
@@ -22,13 +22,6 @@ public class Eksamen {
 	public void setNavn(String navn) {
 		this.navn = navn;
 	}
-	
-	public int getKarakter() {
-		return karakter;
-	}
-	public void setKarakter(int karakter) {
-		this.karakter = karakter;
-	}
 
 	public Date getDato() {
 		return dato;
@@ -36,12 +29,17 @@ public class Eksamen {
 	public void setDato(Date dato) {
 		this.dato = dato;
 	}
+	public List<EksamensDeltaker> getDeltakere(){
+		return deltakere;
+	}
 	
-	//melder studenten av eksamenen. Fjernes fra listen over eksamensdeltakere.
+	//melder studenten av eksamenen. Setter boolean i deltaker til false for oppmeldt. (for historikkens del)
 	public void avmeld(Student student){
+		refreshIterator();
 		while(iterator.hasNext()){
-			if(student.equals((iterator.next().getDeltaker()))){
-				iterator.remove();
+			EksamensDeltaker ed = iterator.next();
+			if(student.equals(ed.getDeltaker())){
+				ed.avmeld();
 				return;
 			}
 		}

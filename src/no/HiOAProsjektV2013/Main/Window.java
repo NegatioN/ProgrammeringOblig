@@ -5,8 +5,9 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -29,6 +30,7 @@ public class Window extends JFrame implements ActionListener{
 	private JButton add, show;
 	private Skole skolen;
 	private Iterator<Laerer> iterator;
+	private Date testDato;
 	
 	
 	public Window(){
@@ -64,11 +66,12 @@ public class Window extends JFrame implements ActionListener{
 	}
 	
 //	private void addStudent(){
-//		skolen.getStudentene().addStudent("Are ben Hur", "areATsomething.com", 95153437, "lillehammer 1", 2013);
+//	testDato = new Date();
+//		skolen.getStudentene().addStudent("Are ben Hur", "areATsomething.com", 95153437, "lillehammer 1", testDato);
 //	}
 
 	private void display(){
-		String stringen = finnLærere("Evasenr");
+		String stringen = finnLærere("Eva Evasenr");
 		
 		if(stringen == null)
 			System.out.println("NULL");

@@ -1,11 +1,18 @@
 package no.HiOAProsjektV2013.DataStructure;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+
 public class Fag {
 
 	private String navn, fagkode, beskrivelse, vurderingsform;
 	private Laerer lærer;
 	private Arbeidskrav krav;
 	private int studiepoeng;
+	private List<Eksamen> eksamener = new LinkedList<>();
+	private ListIterator<Eksamen> iterator = eksamener.listIterator();
+	
 	
 	public Fag(String navn, String fagkode, String beskrivelse, String vurderingsform , int studiepoeng, Laerer lærer){
 		this.beskrivelse = beskrivelse;
@@ -15,6 +22,12 @@ public class Fag {
 		this.vurderingsform = vurderingsform;
 		this.lærer = lærer;
 		this.studiepoeng = studiepoeng;
+	}
+	
+	//skal returnere startobjekt-1 altså siste, men usikker på om det funker, trenger bugtest.
+	public Eksamen getRecentEksamen(){
+		refreshIterator();
+		return iterator.previous();
 	}
 
 	public Laerer getLærer() {
@@ -61,5 +74,8 @@ public class Fag {
 	public void addKrav(String beskrivelse){
 		Krav kravet = new Krav(beskrivelse);
 		krav.addKrav(kravet);
+	}
+	private void refreshIterator(){
+		iterator = eksamener.listIterator();
 	}
 }

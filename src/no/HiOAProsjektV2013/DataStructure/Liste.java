@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+
+//OVERFLØDIG FOR NÅ. Om vi finner en god måte å bruke arv, burde vi vel det.
 public abstract class Liste<E> {
 	//listenes parentklasse implementerer en privat linkedlist
 	//bruk listemetoder for innsetting o.l.

@@ -1,5 +1,6 @@
 package no.HiOAProsjektV2013.DataStructure;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,11 +9,54 @@ public class FagListe {
 
 	private List<Fag> register = new LinkedList<>();
 	private Iterator<Fag> iterator;
+	private Iterator<EksamensDeltaker> eIterator;
 	
 	public FagListe(){
 		
 	}
 	
+	//vi går ut ifra at det kun er snakk om den aller nyeste eksamenen i dette tilfellet.
+	//Finner alle studentene som er oppmeldt i faget.
+	public ArrayList<Student> findEksamensOppmeldtStudenter(Fag fag){
+		ArrayList<Student> studentene = new ArrayList<>();
+		Eksamen e = fag.getRecentEksamen();
+		List<EksamensDeltaker> deltakerne = e.getDeltakere();
+		eIterator = deltakerne.iterator();
+		while(eIterator.hasNext()){
+			EksamensDeltaker ed = eIterator.next();
+			if(ed.isOppmeldt())
+			studentene.add(ed.getDeltaker());
+		}
+			
+		return studentene;
+	}
+	
+	//Finner et fag basert på navnet, kan returnere flere fag.
+	public ArrayList<Fag> finnFagByNavn(String navn){
+		ArrayList<Fag> fagene = new ArrayList<>();
+		Fag faget = null;
+		refreshIterator();
+		while(iterator.hasNext()){
+			faget = iterator.next();
+			if(navn.equalsIgnoreCase(faget.getNavn()))
+				fagene.add(faget);
+		}
+		
+		
+		return fagene;
+	}
+	//returnerer null om vi ikke finner faget ved input, returnerer unikt fag basert på fagkode
+	public Fag finnFagByFagkode(String fagkode){
+		Fag faget = null;
+		refreshIterator();
+		while(iterator.hasNext()){
+			faget = iterator.next();
+			if(fagkode.equalsIgnoreCase(faget.getFagkode()))
+				return faget;
+		}
+		
+		return null;
+	}
 	
 	// metoden legger til et fag i faglisten, sjekker via privat metode om
 	// fagkoden er valid

@@ -1,5 +1,6 @@
 package no.HiOAProsjektV2013.DataStructure;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,20 +8,23 @@ import java.util.List;
 public class Student extends Person{
 	
 	private String adresse, studentnummer;
-	private int startÅr, sluttÅr;
+	private Date start, slutt;
+	//Listen med arbeidskrav representerer alle fagene studenten tar
+	//finner fag studenten har ved å liste opp .getFagkode() fra kravene.
 	private List<Arbeidskrav> fagListe = new LinkedList<>();
+	private List<EksamensDeltaker> eksamener = new LinkedList<>();
 	private Iterator<Arbeidskrav> iterator;
 	private boolean avsluttet = false;
 	private Studieprogram sp = null;
 	
 
-	public Student(String navn, String epost, int tlf, String adresse, String studentnummer, int startÅr) {
+	public Student(String navn, String epost, int tlf, String adresse, String studentnummer, Date start) {
 		super(navn, epost, tlf);
 		this.adresse = adresse;
 		this.studentnummer = studentnummer;
-		this.startÅr = startÅr;
+		this.start = start;
 		//sluttÅr settes lik -1 til studenten avslutter
-		sluttÅr = -1;
+		slutt = null;
 	}
 
 	public void setStudieprogram(Studieprogram studieprogram){
@@ -28,6 +32,10 @@ public class Student extends Person{
 	}
 	public Studieprogram getStudieprogram(){
 		return sp;
+	}
+	
+	public void setEksamen(EksamensDeltaker ed){
+		eksamener.add(ed);
 	}
 	
 	
@@ -45,18 +53,42 @@ public class Student extends Person{
 		
 		return false;
 	}
+	private boolean harFaget(Fag fag){
+		Arbeidskrav krav = null;
+		String fagkode = fag.getFagkode();
+		refreshIterator();
+		
+		while(iterator.hasNext()){
+			krav = iterator.next();
+			if(fagkode.equalsIgnoreCase(krav.getFagkode())){
+				return true;
+			}
+		}
+		return false;
+	}
 	
-	
-	//Listen med arbeidskrav representerer alle fagene studenten tar
-	//finner fag studenten har ved å liste opp .getFagkode() fra kravene.
-	public void settInn(Fag fag){
+	public void addFag(Fag fag){
 		fagListe.add(fag.getKrav());
 	}
 	
 	public boolean innfriddKrav(Fag fag){
-		//dummy
+		Arbeidskrav kravene = null;
+		//Har personen faget? For debug. Dobler søkefarten, men kanskje ikke så relevant mtp 
+		//at man har maks 20-25 fag.
+		boolean harFaget = harFaget(fag);
+		if(!harFaget)
+			return false;
+		refreshIterator();
+		String fagkode = fag.getFagkode();
+		
+		while(iterator.hasNext()){
+			kravene = iterator.next();
+			if(fagkode.equalsIgnoreCase(kravene.getFagkode()))
+					return kravene.kravInnfridd();
+		}
 		return false;
 	}
+	
 	public String visAlleFag(){
 		String stringen = new String();
 		for(int i = 0; i< fagListe.size();i++){
@@ -77,17 +109,17 @@ public class Student extends Person{
 	}
 
 
-	public int getSluttÅr() {
-		return sluttÅr;
+	public Date getSlutt() {
+		return slutt;
 	}
 
 
-	public void setSluttÅr(int sluttÅr) {
-		this.sluttÅr = sluttÅr;
+	public void setSluttÅr(Date slutt) {
+		this.slutt = slutt;
 	}
 	//har studenten avsluttet studiet? sant hvis sluttÅr ikke lik -1
 	public boolean isAvsluttet(){
-	if(sluttÅr != -1) avsluttet = true;
+	if(slutt != null) avsluttet = true;
 	return avsluttet;
 	}
 
@@ -97,8 +129,8 @@ public class Student extends Person{
 	}
 
 
-	public int getStartÅr() {
-		return startÅr;
+	public Date getStart() {
+		return start;
 	}
 	public String toString(){
 		String stringen = new String();

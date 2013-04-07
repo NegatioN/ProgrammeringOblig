@@ -37,12 +37,19 @@ public class LaererListe {
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
+		}finally{
+			for(Laerer l : lærerneEtternavn){
+				System.out.println("Her er jeg");
+				lærerne.add(l);
+			}
 		}
-		Iterator<Laerer> etternavnIterator = lærerneEtternavn.iterator();
-		
-		while(etternavnIterator.hasNext()){
-			lærerne.add(etternavnIterator.next());
-		}
+
+//		while(iterator.hasNext()){
+//			System.out.println("Her er jeg");
+//			Laerer lærer = iterator.next();
+//			System.out.println(lærer.geteNavn());
+//			lærerne.add(lærer);
+//		}
 		
 		return lærerne;
 	}

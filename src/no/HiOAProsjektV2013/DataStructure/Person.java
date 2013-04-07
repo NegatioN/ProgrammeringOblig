@@ -5,7 +5,7 @@ public class Person {
 	private int telefonNr;
 	
 	//variable for posisjon i string-arrayen av navn
-	public static final int FORNAVN = 0, ETTERNAVN = 1, KUNETNAVNSKREVET = 1;
+	protected static final int FORNAVN = 0, ETTERNAVN = 1, KUNETNAVNSKREVET = 1;
 	
 	public Person(String navn, String epost, int tlf){
 		nameSplitter(navn);
