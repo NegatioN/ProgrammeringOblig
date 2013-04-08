@@ -43,6 +43,9 @@ public class LaererListe {
 				lærerne.add(l);
 			}
 		}
+		if(lærerneEtternavn.isEmpty()){
+			System.out.println("DEN ER TOM");
+		}
 
 //		while(iterator.hasNext()){
 //			System.out.println("Her er jeg");
