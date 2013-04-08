@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class LaererListe {
+public class LaererListe extends Liste<Laerer>{
 
 	private List<Laerer> register = new LinkedList<>();
 	private Iterator<Laerer> iterator;
@@ -81,10 +81,6 @@ public class LaererListe {
 		return lærerne;
 	}
 	
-	
-	private void refreshIterator(){
-		iterator = register.iterator();
-	}
 	
 }
 

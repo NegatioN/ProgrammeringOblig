@@ -7,40 +7,17 @@ import java.util.List;
 
 //OVERFLØDIG FOR NÅ. Om vi finner en god måte å bruke arv, burde vi vel det.
 public abstract class Liste<E> {
-	//listenes parentklasse implementerer en privat linkedlist
-	//bruk listemetoder for innsetting o.l.
-
-	private List<E> register;
-	//iterator må lages på nytt hver gang et objekt har blitt lagt til
-	//ellers oppstår concurrentmodification-exception.
+	private LinkedList<E> register = new LinkedList<>();
 	private Iterator<E> iterator;
 	
+	public Liste(){
+		
+	}
+	public LinkedList<E> getRegister(){
+		return register;
+	}
 	
-//	public Liste(){
-//		register = new LinkedList<E>();
-//	}
-//	
-//	//finner objektet ved en iterator while loop
-//	public E find(E obj){
-//		E e = null;
-//		iterator = register.iterator();
-//		
-//		while(iterator.hasNext()){
-//			if(obj.equals(iterator.next())){
-//				e = iterator.next();
-//				return e;
-//			}
-//			iterator.next();
-//		}
-//		return null;
-//	}
-//	public List<E>
-//	
-//	public Iterator<E> getIterator(){
-//		return iterator;
-//	}
-	
-	private void refreshIterator(){
+	public void refreshIterator(){
 		iterator = register.iterator();
 	}
 }
