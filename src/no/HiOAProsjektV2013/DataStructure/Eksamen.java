@@ -4,23 +4,13 @@ import java.util.*;
 
 public class Eksamen {
 
-	private String navn;
-	private int karakter;
 	private Date dato;
 	private List<EksamensDeltaker> deltakere = new LinkedList<>();
 	private Iterator<EksamensDeltaker> iterator;
 	
 	
-	public Eksamen(String navn, Date dato){
-		this.navn = navn;
+	public Eksamen(Date dato){
 		this.dato = dato;
-	}
-	
-	public String getNavn() {
-		return navn;
-	}
-	public void setNavn(String navn) {
-		this.navn = navn;
 	}
 
 	public Date getDato() {
