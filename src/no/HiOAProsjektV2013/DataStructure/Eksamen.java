@@ -12,9 +12,10 @@ public class Eksamen {
 	public Eksamen(Date dato){
 		this.dato = dato;
 	}
-	public Eksamen(Date dato, ArrayList<Student> studenter){
+	
+	public Eksamen(Date dato, ArrayList<Student> studenter, Fag fag){
 		this.dato = dato;
-		addOppmeldteStudenter(studenter);
+		addOppmeldteStudenter(studenter, fag);
 	}
 
 	public Date getDato() {
@@ -47,7 +48,12 @@ public class Eksamen {
 		deltakere.add(ed);
 	}
 	
-	public void addOppmeldteStudenter(ArrayList<Student>)
+	public void addOppmeldteStudenter(ArrayList<Student> studentene, Fag faget){
+		for(Student studenten : studentene)
+			if(studenten.innfriddKrav(faget)){
+				addDeltaker(studenten);
+			}
+	}
 	
 	private void refreshIterator(){
 		iterator = deltakere.iterator();
