@@ -25,6 +25,7 @@ public class Student extends Person{
 		this.start = start;
 		//sluttÅr settes lik -1 til studenten avslutter
 		slutt = null;
+		System.out.println("Lagret student: " + navn);
 	}
 
 	public void setStudieprogram(Studieprogram studieprogram){

@@ -22,6 +22,7 @@ public class Fag {
 		this.vurderingsform = vurderingsform;
 		this.lærer = lærer;
 		this.studiepoeng = studiepoeng;
+		System.out.println("registrert fag " + navn + " med lærer " + lærer.getfNavn() + lærer.geteNavn());
 	}
 	public void addEksamen(Eksamen e){
 		eksamener.add(e);

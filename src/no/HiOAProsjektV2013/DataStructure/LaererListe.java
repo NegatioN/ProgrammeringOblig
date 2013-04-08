@@ -18,6 +18,12 @@ public class LaererListe extends Liste<Laerer>{
 	public void add(Laerer lærer){
 		register.add(lærer);
 	}
+
+	//Fant ut at jeg ikke måtte ha denne, men kanskje ikke så dumt?
+	public void addLærer(String navn, String epost, int tlf, String kontorNr){
+		Laerer l = new Laerer(navn, epost, tlf, kontorNr);
+		register.add(l);
+	}
 	
 	
 	//finner lærer ved navn uansett om det søkes ved fornavn eller etternavn i input

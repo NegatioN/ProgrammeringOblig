@@ -18,10 +18,10 @@ import no.HiOAProsjektV2013.DataStructure.Skole;
 
 public class Window extends JFrame implements ActionListener{
 	
-	public static void main(String[] args){
+	/*public static void main(String[] args){
 		Window w = new Window();
 		w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
+	}*/
 	
 	
 	private static final long serialVersionUID = 1L;
