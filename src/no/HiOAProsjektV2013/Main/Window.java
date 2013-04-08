@@ -69,7 +69,7 @@ public class Window extends JFrame implements ActionListener{
 //	}
 
 	private void display(){
-		String stringen = finnLærere("Eva Evasenr");
+		String stringen = finnLærere("Eva");
 		
 		if(stringen == null)
 			System.out.println("NULL");
@@ -98,6 +98,7 @@ public class Window extends JFrame implements ActionListener{
 		}
 		if(e.getSource() == add){
 			addLærer();
+			System.out.println("DING");
 		}
 	}
 }

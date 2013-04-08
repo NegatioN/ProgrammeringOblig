@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class LaererListe extends Liste<Laerer>{
+public class LaererListe{
 
 	
 	private List<Laerer> register = new LinkedList<>();
@@ -46,9 +46,7 @@ public class LaererListe extends Liste<Laerer>{
 			e.printStackTrace();
 		}finally{
 			//setter sammen begge listene som kommer fra søket.
-			for(Laerer l : lærerneEtternavn){
-				lærerne.add(l);
-			}
+			lærerne.addAll(lærerneEtternavn);
 		}
 		
 		return lærerne;
@@ -88,6 +86,8 @@ public class LaererListe extends Liste<Laerer>{
 		return lærerne;
 	}
 	
-	
+	private void refreshIterator(){
+		iterator = register.iterator();
+	}
 }
 

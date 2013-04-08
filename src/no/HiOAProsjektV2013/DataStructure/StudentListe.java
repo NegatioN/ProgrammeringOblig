@@ -28,29 +28,62 @@ public class StudentListe {
 
 	public ArrayList<Student> findKravBeståttStudenter(Fag fag) {
 		ArrayList<Student> studentene = new ArrayList<>();
-		refreshIterator();
-		Student s = null;
-		while (iterator.hasNext()) {
-			s = iterator.next();
-			if (s.innfriddKrav(fag))
+		for(Student s : register){
+			if(s.innfriddKrav(fag))
 				studentene.add(s);
 		}
+		
+//		refreshIterator();
+//		Student s = null;
+//		while (iterator.hasNext()) {
+//			s = iterator.next();
+//			if (s.innfriddKrav(fag))
+//				studentene.add(s);
+//		}
 		return studentene;
 	}
 	public ArrayList<Student> findStudentByNavn(String navn){
 		ArrayList<Student> studentene = new ArrayList<>();
-		
-		
-		
+		//looper gjennom alle studentene og finner de med korrekt navn (kan være flere)
 		for(Student s : register){
 			if(s.getfNavn().equalsIgnoreCase(navn))
 				studentene.add(s);
-			
-		}
+			}
 		
 		return studentene;
 	}
 
+	//metoden skal gjøre et binærsøk gjennom studentlista som er i rekkefølge på studentNr
+	public Student findStudentByStudentNr(String studNr){
+		//input har en s, og 6 tall
+		String regex = "s\\d{6}";
+		if(!studNr.matches(regex))
+			//bruker har skrevet et ikke-valid studentnr
+			return null;
+		//splitter på non-digit
+		regex = "\\D";
+		String[] inputFixed = studNr.split(regex);
+		//vi får studentnummeret
+		int studentnummeret = Integer.parseInt(inputFixed[inputFixed.length-1]);
+		
+		LinkedList<Student> studentlista = new LinkedList<>();
+		studentlista.addAll(register);
+		for(int i = 0; i < register.size();i++){
+			Student checkStudent = studentlista.get(studentlista.size()/2);
+			int checkStudentnummer = checkStudent.getStudentnummer();
+			if(studentnummeret == checkStudentnummer)
+				return checkStudent;
+			else if(studentnummeret < checkStudentnummer){
+				////// FIX JOAKIM
+			}
+		}
+		
+		
+		
+		Student s = null;
+		return s;
+		//DUMMY
+	}
 	// gir nytt studentnummer, og øker staticvariabel. Gjør variabelen usynlig
 	// for andre deler av programmet
 	private int newId() {

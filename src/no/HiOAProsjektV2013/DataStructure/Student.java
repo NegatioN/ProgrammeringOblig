@@ -7,7 +7,8 @@ import java.util.List;
 
 public class Student extends Person{
 	
-	private String adresse, studentnummer;
+	private String adresse;
+	private int studentnummer;
 	private Date start, slutt;
 	//Listen med arbeidskrav representerer alle fagene studenten tar
 	//finner fag studenten har ved å liste opp .getFagkode() fra kravene.
@@ -16,12 +17,13 @@ public class Student extends Person{
 	private Iterator<Arbeidskrav> iterator;
 	private boolean avsluttet = false;
 	private Studieprogram sp = null;
+	private static int studentNr = 100000;
 	
 
-	public Student(String navn, String epost, int tlf, String adresse, String studentnummer, Date start) {
+	public Student(String navn, String epost, int tlf, String adresse, Date start) {
 		super(navn, epost, tlf);
 		this.adresse = adresse;
-		this.studentnummer = studentnummer;
+		studentnummer = newId();
 		this.start = start;
 		//sluttÅr settes lik -1 til studenten avslutter
 		slutt = null;
@@ -124,8 +126,11 @@ public class Student extends Person{
 	return avsluttet;
 	}
 
-
-	public String getStudentnummer() {
+	//returnerer "sXXXXXX", men studentnummeret er en int så binærsøk går fortere.
+	public String printStudentnummer() {
+		return "s" + studentnummer;
+	}
+	public int getStudentnummer(){
 		return studentnummer;
 	}
 
@@ -137,6 +142,9 @@ public class Student extends Person{
 		String stringen = new String();
 		
 		return stringen;
+	}
+	private int newId(){
+		return studentNr++;
 	}
 	private void refreshIterator(){
 		iterator = fagListe.iterator();

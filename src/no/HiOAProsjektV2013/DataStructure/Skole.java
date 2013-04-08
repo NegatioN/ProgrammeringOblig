@@ -1,5 +1,6 @@
 package no.HiOAProsjektV2013.DataStructure;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,6 +17,12 @@ public class Skole {
 		// Constructor
 	}
 
+	public ArrayList<Studieprogram> getStudieprogramListe(){
+		ArrayList<Studieprogram> programmene = new ArrayList<>();
+		programmene.addAll(studieprogrammene);
+		return programmene;
+	}
+	
 	public List<Studieprogram> getStudieprogrammene() {
 		return studieprogrammene;
 	}
