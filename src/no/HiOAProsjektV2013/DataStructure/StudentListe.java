@@ -22,7 +22,7 @@ public class StudentListe {
 	// legger til en ny student UANSETT og incrementer studentnummer
 	public void addStudent(String navn, String epost, int tlf, String adresse,
 			Date start) {
-		Student s = new Student(navn, epost, tlf, adresse, "s" + newId(), start);
+		Student s = new Student(navn, epost, tlf, adresse, newId(), start);
 		register.add(s);
 	}
 
@@ -65,24 +65,27 @@ public class StudentListe {
 		String[] inputFixed = studNr.split(regex);
 		//vi får studentnummeret
 		int studentnummeret = Integer.parseInt(inputFixed[inputFixed.length-1]);
+		//størrelser for binærsøk
+		int max = register.size()-1;
+		int min = 0;
 		
-		LinkedList<Student> studentlista = new LinkedList<>();
-		studentlista.addAll(register);
-		for(int i = 0; i < register.size();i++){
-			Student checkStudent = studentlista.get(studentlista.size()/2);
+		//binærsøk gjennom register
+		while(min < max){
+			int mid = (max + min) / 2;
+			Student checkStudent = register.get(mid);
 			int checkStudentnummer = checkStudent.getStudentnummer();
 			if(studentnummeret == checkStudentnummer)
 				return checkStudent;
 			else if(studentnummeret < checkStudentnummer){
-				////// FIX JOAKIM
+				max = mid;
+			}
+			else if(studentnummeret > checkStudentnummer){
+				min = mid;
 			}
 		}
 		
 		
-		
-		Student s = null;
-		return s;
-		//DUMMY
+		return null;
 	}
 	// gir nytt studentnummer, og øker staticvariabel. Gjør variabelen usynlig
 	// for andre deler av programmet
