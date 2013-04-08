@@ -12,6 +12,10 @@ public class Eksamen {
 	public Eksamen(Date dato){
 		this.dato = dato;
 	}
+	public Eksamen(Date dato, ArrayList<Student> studenter){
+		this.dato = dato;
+		addOppmeldteStudenter(studenter);
+	}
 
 	public Date getDato() {
 		return dato;
@@ -42,6 +46,8 @@ public class Eksamen {
 		EksamensDeltaker ed = new EksamensDeltaker(student);
 		deltakere.add(ed);
 	}
+	
+	public void addOppmeldteStudenter(ArrayList<Student>)
 	
 	private void refreshIterator(){
 		iterator = deltakere.iterator();
