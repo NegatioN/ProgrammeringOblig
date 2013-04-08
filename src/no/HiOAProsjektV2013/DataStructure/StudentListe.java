@@ -6,94 +6,127 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class StudentListe{
-	
+public class StudentListe {
+
 	private static int studentNummer = 100000;
 
 	private List<Student> register;
-	//iterator må lages på nytt hver gang et objekt har blitt lagt til
-	//ellers oppstår concurrentmodification-exception.
+	// iterator må lages på nytt hver gang et objekt har blitt lagt til
+	// ellers oppstår concurrentmodification-exception.
 	private Iterator<Student> iterator;
 
-	public StudentListe(){
+	public StudentListe() {
 		register = new LinkedList<>();
 	}
-	//legger til en ny student UANSETT og incrementer studentnummer
-	public void addStudent(String navn, String epost, int tlf, String adresse, Date start){
+
+	// legger til en ny student UANSETT og incrementer studentnummer
+	public void addStudent(String navn, String epost, int tlf, String adresse,
+			Date start) {
 		Student s = new Student(navn, epost, tlf, adresse, "s" + newId(), start);
 		register.add(s);
 	}
-	public ArrayList<Student> findKravBeståttStudenter(Fag fag){
+
+	public ArrayList<Student> findKravBeståttStudenter(Fag fag) {
 		ArrayList<Student> studentene = new ArrayList<>();
 		refreshIterator();
 		Student s = null;
-		while(iterator.hasNext()){
+		while (iterator.hasNext()) {
 			s = iterator.next();
-			if(s.innfriddKrav(fag))
+			if (s.innfriddKrav(fag))
 				studentene.add(s);
 		}
-		
-		
+
 		return studentene;
 	}
-	//gir nytt studentnummer, og øker staticvariabel. Gjør variabelen usynlig for andre deler av programmet
-	private int newId(){
+
+	// gir nytt studentnummer, og øker staticvariabel. Gjør variabelen usynlig
+	// for andre deler av programmet
+	private int newId() {
 		return studentNummer++;
 	}
-	
-	
-	public ArrayList<Student> findStudentByFag(Fag fag){
+
+	public ArrayList<Student> findStudentByFag(Fag fag) {
 		ArrayList<Student> studentene = new ArrayList<>();
 		String fagkode = fag.getFagkode();
 		refreshIterator();
-		while(iterator.hasNext()){
+		while (iterator.hasNext()) {
 			Student s = iterator.next();
-			//sjekker hver students arbeidskrav for fagkoden, og ser om de har faget.
-			if(s.harFaget(fagkode))
-				studentene.add(s);			
-		}		
-		//returnerer en liste med alle studentene i faget
-		return studentene;
-	}
-	
-	public ArrayList<Student> findStudentByStudieprogram(Studieprogram sp){
-		ArrayList<Student> studentene = new ArrayList<>();
-		refreshIterator();
-		//går gjennom studentlista og tar ut alle med gitt studieprogram
-		while(iterator.hasNext()){
-			Student s = iterator.next();
-			if(s.getStudieprogram().equals(sp)){
-				studentene.add(s);
-			}
-		}		
-		return studentene;
-	}
-	//finner alle studentene i studieprogrammet, og velger ut de som startet i en viss dato.
-	public ArrayList<Student> findStudentByStudieprogramByÅr(Studieprogram sp, Date dato){
-		ArrayList<Student> checkStudenter = findStudentByStudieprogram(sp);
-		ArrayList<Student> studentene = new ArrayList<>();
-		
-		for(Student s : checkStudenter){
-			if(dato.equals(s.getStart()))
+			// sjekker hver students arbeidskrav for fagkoden, og ser om de har
+			// faget.
+			if (s.harFaget(fagkode))
 				studentene.add(s);
 		}
-		
+		// returnerer en liste med alle studentene i faget
 		return studentene;
 	}
-	
-	public String toString(){
-		String stringen = new String();
-		
+
+	public ArrayList<Student> findStudentByStart(Date dato) {
+		ArrayList<Student> studentene = new ArrayList<>();
 		refreshIterator();
-		
-		while(iterator.hasNext()){
+		while (iterator.hasNext()) {
+			Student checkStud = iterator.next();
+			if (checkStud.getStart().equals(dato))
+				studentene.add(checkStud);
+		}
+
+		return studentene;
+	}
+
+	public ArrayList<Student> findStudentBySlutt(Date dato) {
+		ArrayList<Student> studentene = new ArrayList<>();
+		refreshIterator();
+		while (iterator.hasNext()) {
+			Student checkStud = iterator.next();
+			if (checkStud.isAvsluttet()) {
+				if (checkStud.getSlutt().equals(dato))
+					studentene.add(checkStud);
+			}
+		}
+		return studentene;
+	}
+
+	public ArrayList<Student> findStudentByStudieprogram(Studieprogram sp) {
+		ArrayList<Student> studentene = new ArrayList<>();
+		refreshIterator();
+		// går gjennom studentlista og tar ut alle med gitt studieprogram
+		while (iterator.hasNext()) {
+			Student s = iterator.next();
+			if (s.getStudieprogram().equals(sp)) {
+				studentene.add(s);
+			}
+		}
+		return studentene;
+	}
+
+	// finner alle studentene i studieprogrammet, og velger ut de som startet i
+	// en viss dato.
+	public ArrayList<Student> findStudentByStudieprogramByÅr(Studieprogram sp,
+			Date dato) {
+		ArrayList<Student> checkStudenter = findStudentByStudieprogram(sp);
+		ArrayList<Student> studentene = new ArrayList<>();
+
+		for (Student s : checkStudenter) {
+			if (dato.equals(s.getStart()))
+				studentene.add(s);
+		}
+
+		return studentene;
+	}
+
+	public String toString() {
+		String stringen = new String();
+
+		refreshIterator();
+
+		while (iterator.hasNext()) {
 			stringen += iterator.next().getStudentnummer() + "\n";
 		}
 		return stringen;
 	}
-	//gjør iteratoren klar for gjennomløping av lista. Laget for oversiktlighet
-	private void refreshIterator(){
+
+	// gjør iteratoren klar for gjennomløping av lista. Laget for oversiktlighet
+	private void refreshIterator() {
 		iterator = register.iterator();
 	}
-	
+
 }
