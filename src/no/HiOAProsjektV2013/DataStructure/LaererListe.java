@@ -7,6 +7,7 @@ import java.util.List;
 
 public class LaererListe extends Liste<Laerer>{
 
+	
 	private List<Laerer> register = new LinkedList<>();
 	private Iterator<Laerer> iterator;
 	

@@ -117,7 +117,7 @@ public class Student extends Person{
 	public void setSluttÅr(Date slutt) {
 		this.slutt = slutt;
 	}
-	//har studenten avsluttet studiet? sant hvis sluttÅr ikke lik -1
+	//har studenten avsluttet studiet? sant hvis slutt ikke lik null
 	public boolean isAvsluttet(){
 	if(slutt != null) avsluttet = true;
 	return avsluttet;
