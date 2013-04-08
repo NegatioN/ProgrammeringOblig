@@ -35,7 +35,19 @@ public class StudentListe {
 			if (s.innfriddKrav(fag))
 				studentene.add(s);
 		}
-
+		return studentene;
+	}
+	public ArrayList<Student> findStudentByNavn(String navn){
+		ArrayList<Student> studentene = new ArrayList<>();
+		
+		
+		
+		for(Student s : register){
+			if(s.getfNavn().equalsIgnoreCase(navn))
+				studentene.add(s);
+			
+		}
+		
 		return studentene;
 	}
 
