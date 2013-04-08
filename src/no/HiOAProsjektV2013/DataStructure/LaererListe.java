@@ -29,8 +29,8 @@ public class LaererListe {
 		ArrayList<Laerer> lærerneEtternavn = null;
 		//har brukeren skrevet inn minst to ord?
 		try {
-			if(navnene.length < Person.KUNETNAVNSKREVET){
-				lærerneEtternavn = findLærerByEtternavn(navnene[Person.ETTERNAVN]);
+			if(navnene.length > Person.KUNETNAVNSKREVET){
+				lærerneEtternavn = findLærerByEtternavn(navnene[navnene.length - Person.ETTERNAVN]);
 			}else{
 				//hvis denne slår til, har brukeren skrevet inn kun et ord, og det vil da søkes på både som fornavn og etternavn
 				lærerneEtternavn = findLærerByEtternavn(navnene[Person.FORNAVN]);
@@ -38,21 +38,11 @@ public class LaererListe {
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
 		}finally{
+			//setter sammen begge listene som kommer fra søket.
 			for(Laerer l : lærerneEtternavn){
-				System.out.println("Her er jeg");
 				lærerne.add(l);
 			}
 		}
-		if(lærerneEtternavn.isEmpty()){
-			System.out.println("DEN ER TOM");
-		}
-
-//		while(iterator.hasNext()){
-//			System.out.println("Her er jeg");
-//			Laerer lærer = iterator.next();
-//			System.out.println(lærer.geteNavn());
-//			lærerne.add(lærer);
-//		}
 		
 		return lærerne;
 	}
@@ -90,8 +80,6 @@ public class LaererListe {
 
 		return lærerne;
 	}
-	
-	
 	
 	
 	private void refreshIterator(){

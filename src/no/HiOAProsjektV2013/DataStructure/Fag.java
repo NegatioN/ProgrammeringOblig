@@ -23,6 +23,9 @@ public class Fag {
 		this.lærer = lærer;
 		this.studiepoeng = studiepoeng;
 	}
+	public void addEksamen(Eksamen e){
+		eksamener.add(e);
+	}
 	
 	//skal returnere startobjekt-1 altså siste, men usikker på om det funker, trenger bugtest.
 	public Eksamen getRecentEksamen(){

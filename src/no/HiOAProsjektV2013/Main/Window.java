@@ -59,8 +59,6 @@ public class Window extends JFrame implements ActionListener{
 
 	
 	private void addLærer(){
-		Laerer l1 = new Laerer("Linked Evasenr", "EvaATpost.com", 95153437, "PI227");
-		skolen.getLærerne().add(l1);
 		Laerer l = new Laerer("Eva LINKED LIST Hadler", "EvaATpost.com", 95153437, "PI227");
 		skolen.getLærerne().add(l);
 	}
@@ -100,7 +98,6 @@ public class Window extends JFrame implements ActionListener{
 		}
 		if(e.getSource() == add){
 			addLærer();
-			System.out.println("ding");
 		}
 	}
 }

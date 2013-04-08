@@ -8,7 +8,7 @@ import java.util.List;
 
 public class StudentListe{
 	
-	public static int studentNummer = 100000;
+	private static int studentNummer = 100000;
 
 	private List<Student> register;
 	//iterator må lages på nytt hver gang et objekt har blitt lagt til
@@ -20,7 +20,7 @@ public class StudentListe{
 	}
 	//legger til en ny student UANSETT og incrementer studentnummer
 	public void addStudent(String navn, String epost, int tlf, String adresse, Date start){
-		Student s = new Student(navn, epost, tlf, adresse, "s" + studentNummer++, start);
+		Student s = new Student(navn, epost, tlf, adresse, "s" + newId(), start);
 		register.add(s);
 	}
 	public ArrayList<Student> findKravBeståttStudenter(Fag fag){
@@ -35,6 +35,10 @@ public class StudentListe{
 		
 		
 		return studentene;
+	}
+	//gir nytt studentnummer, og øker staticvariabel. Gjør variabelen usynlig for andre deler av programmet
+	private int newId(){
+		return studentNummer++;
 	}
 	
 	
@@ -62,6 +66,18 @@ public class StudentListe{
 				studentene.add(s);
 			}
 		}		
+		return studentene;
+	}
+	//finner alle studentene i studieprogrammet, og velger ut de som startet i en viss dato.
+	public ArrayList<Student> findStudentByStudieprogramByÅr(Studieprogram sp, Date dato){
+		ArrayList<Student> checkStudenter = findStudentByStudieprogram(sp);
+		ArrayList<Student> studentene = new ArrayList<>();
+		
+		for(Student s : checkStudenter){
+			if(dato.equals(s.getStart()))
+				studentene.add(s);
+		}
+		
 		return studentene;
 	}
 	
