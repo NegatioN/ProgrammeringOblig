@@ -25,6 +25,10 @@ public class StudentListe {
 		Student s = new Student(navn, epost, tlf, adresse, newId(), start);
 		register.add(s);
 	}
+	//tar inn date eleven sluttet og studenten.
+	public void avsluttStudent(Student student, Date dato){
+		student.setSlutt(dato);
+	}
 
 	public ArrayList<Student> findKravBeståttStudenter(Fag fag) {
 		ArrayList<Student> studentene = new ArrayList<>();

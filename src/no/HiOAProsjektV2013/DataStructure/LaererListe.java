@@ -15,14 +15,18 @@ public class LaererListe{
 		
 	}
 	
-	public void add(Laerer lærer){
+	public void addLærer(Laerer lærer){
 		register.add(lærer);
 	}
+	
 
-	//Fant ut at jeg ikke måtte ha denne, men kanskje ikke så dumt?
+	//adder lærer
 	public void addLærer(String navn, String epost, int tlf, String kontorNr){
 		Laerer l = new Laerer(navn, epost, tlf, kontorNr);
-		register.add(l);
+		addLærer(l);
+	}
+	public void removeLærer(Laerer lærer){
+		register.remove(lærer);
 	}
 	
 	
