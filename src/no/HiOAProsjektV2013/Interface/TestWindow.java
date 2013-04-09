@@ -12,99 +12,118 @@ import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Skole;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 
-public class TestWindow extends JFrame implements ActionListener{
-	
-	public static void main(String[] args){
+public class TestWindow extends JFrame implements ActionListener {
+
+	public static void main(String[] args) {
 		TestWindow tw = new TestWindow();
 		tw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	private JTextArea info;
-	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, lagre, tilbake, legginnfag;
-	private JTextField navn, epost, tlf, adresse, studentnummer, start, kontorNr, fagkode, beskrivelse, studiepoeng, vurderingsform, lærer;
+	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
+			vislærer, visfag, visstudieprog, lagre, tilbake, legginnfag;
+	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode,
+			beskrivelse, studiepoeng, vurderingsform, lærer;
 	private Skole skolen;
 	private Iterator<Laerer> iterator;
 	private Date testDato;
-	private JPanel c, stud, lær, fag, studprog;
-	private Dimension knapp;
-	
-	public TestWindow(){
-		
-		super("Registrering");
-		
-		skolen = new Skole();
-		
-		knapp = new Dimension(260, 25);
+	private JPanel c, stud, lær, fag, studprog, vis;
+	private Dimension knapp, halvknapp;
+	private JScrollPane scroll;
 
+	public TestWindow() {
+
+		super("Registrering");
+
+		skolen = new Skole();
+
+		knapp = new Dimension(260, 25);
 		åpningsvindu();
-		
+
 		setLayout(new FlowLayout());
-		setSize(400,700);
+		setSize(400, 700);
 		setVisible(true);
 		setLocationRelativeTo(null);
 		setResizable(false);
 
+		info = new JTextArea(20, 25);
+
 		lagre = new JButton("Lagre");
 		lagre.setPreferredSize(knapp);
 		lagre.addActionListener(this);
-		
+
 		tilbake = new JButton("Tilbake");
 		tilbake.setPreferredSize(knapp);
 		tilbake.addActionListener(this);
 	}
-	
-	public void åpningsvindu(){
-		
+
+	public void åpningsvindu() {
+
 		nystudent = new JButton("Legg til student");
 		nylærer = new JButton("Legg til lærer");
 		nyttfag = new JButton("Legg til fag");
 		nyttstudieprog = new JButton("Legg til studieprogram");
-		
-		nystudent.setPreferredSize(knapp);
-		nylærer.setPreferredSize(knapp);
-		nyttfag.setPreferredSize(knapp);
-		nyttstudieprog.setPreferredSize(knapp);
-		
+		visstudent = new JButton("Vis studenter");
+		vislærer = new JButton("Vis lærere");
+		visfag = new JButton("Vis fag");
+		visstudieprog = new JButton("Vis studieprogram");
+
+		halvknapp = new Dimension(130, 25);
+
+		nystudent.setPreferredSize(halvknapp);
+		nylærer.setPreferredSize(halvknapp);
+		nyttfag.setPreferredSize(halvknapp);
+		nyttstudieprog.setPreferredSize(halvknapp);
+		visstudent.setPreferredSize(halvknapp);
+		vislærer.setPreferredSize(halvknapp);
+		visfag.setPreferredSize(halvknapp);
+		visstudieprog.setPreferredSize(halvknapp);
+
 		nystudent.addActionListener(this);
 		nylærer.addActionListener(this);
 		nyttfag.addActionListener(this);
 		nyttstudieprog.addActionListener(this);
-		
+		visstudent.addActionListener(this);
+		vislærer.addActionListener(this);
+		visfag.addActionListener(this);
+		visstudieprog.addActionListener(this);
+
 		JPanel c = new JPanel();
 		c.add(nystudent);
+		c.add(visstudent);
 		c.add(nylærer);
+		c.add(vislærer);
 		c.add(nyttfag);
+		c.add(visfag);
 		c.add(nyttstudieprog);
+		c.add(visstudieprog);
 		setContentPane(c);
 		revalidate();
-		
+
 	}
-	
-	public void student(){
+
+	public void student() {
 		stud = new JPanel();
-		
-		info = new JTextArea(20,25);
-		
+
+		info = new JTextArea(20, 25);
+
 		navn = new JTextField("navn", 20);
 		epost = new JTextField("e-post", 20);
 		tlf = new JTextField("tlf", 20);
 		adresse = new JTextField("adresse", 20);
-		studentnummer = new JTextField("studnr", 20);
 		start = new JTextField("startdato", 20);
 
 		lagre = new JButton("Lagre");
 		lagre.setPreferredSize(knapp);
 		lagre.addActionListener(this);
-		
+
 		stud.add(info);
 		stud.add(navn);
 		stud.add(epost);
 		stud.add(tlf);
 		stud.add(adresse);
-		stud.add(studentnummer);
 		stud.add(start);
 		stud.add(lagre);
 		stud.add(tilbake);
@@ -112,17 +131,17 @@ public class TestWindow extends JFrame implements ActionListener{
 		setContentPane(stud);
 		revalidate();
 	}
-	
-	public void lærer(){
+
+	public void lærer() {
 		lær = new JPanel();
-		
-		info = new JTextArea(20,25);
-		
+
+		info = new JTextArea(20, 25);
+
 		navn = new JTextField("navn", 20);
 		epost = new JTextField("e-post", 20);
 		tlf = new JTextField("tlf", 20);
 		kontorNr = new JTextField("kontorNr", 20);
-		
+
 		lær.add(info);
 		lær.add(navn);
 		lær.add(epost);
@@ -134,12 +153,12 @@ public class TestWindow extends JFrame implements ActionListener{
 		setContentPane(lær);
 		revalidate();
 	}
-	
-	public void fag(){
+
+	public void fag() {
 		fag = new JPanel();
-		
-		info = new JTextArea(20,25);
-		
+
+		info = new JTextArea(20, 25);
+
 		navn = new JTextField("navn", 20);
 		fagkode = new JTextField("fagkode", 20);
 		beskrivelse = new JTextField("beskrivelse", 20);
@@ -160,19 +179,19 @@ public class TestWindow extends JFrame implements ActionListener{
 		setContentPane(fag);
 		revalidate();
 	}
-	
-	public void studieprog(){
+
+	public void studieprog() {
 		studprog = new JPanel();
-		
-		info = new JTextArea(20,25);
-		
+
+		info = new JTextArea(20, 25);
+
 		navn = new JTextField("navn", 20);
 		fagkode = new JTextField("fagkode", 20);
-		
+
 		legginnfag = new JButton("Legg til fag");
 		legginnfag.setPreferredSize(knapp);
 		legginnfag.addActionListener(this);
-		
+
 		studprog.add(info);
 		studprog.add(navn);
 		studprog.add(fagkode);
@@ -184,51 +203,93 @@ public class TestWindow extends JFrame implements ActionListener{
 		revalidate();
 	}
 
+	public void vis() {
+		vis = new JPanel();
+
+		scroll = new JScrollPane(info);
+
+		vis.add(scroll);
+		vis.add(visstudent);
+		vis.add(vislærer);
+		vis.add(visfag);
+		vis.add(visstudieprog);
+		vis.add(tilbake);
+
+		setContentPane(vis);
+		revalidate();
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == nystudent){
+		if (e.getSource() == nystudent) {
 			student();
 		}
-		if(e.getSource() == nylærer){
+		if (e.getSource() == nylærer) {
 			lærer();
 		}
-		if(e.getSource() == nyttfag){
+		if (e.getSource() == nyttfag) {
 			fag();
 		}
-		if(e.getSource() == nyttstudieprog){
+		if (e.getSource() == nyttstudieprog) {
 			studieprog();
 		}
-		if(e.getSource() == tilbake){
+		if (e.getSource() == tilbake) {
 			åpningsvindu();
 		}
-		if(e.getSource() == lagre){
-			if(getContentPane() == stud){
-				
+		if (e.getSource() == visstudent) {
+			info.setText(skolen.getStudentene().toString());
+			vis();
+		}
+		if (e.getSource() == vislærer) {
+			info.setText(skolen.getLærerne().toString());
+			vis();
+		}
+		if (e.getSource() == visfag) {
+			info.setText(skolen.getFagene().toString());
+			vis();
+		}
+		if (e.getSource() == visstudieprog) {
+			info.setText(skolen.getStudieprogrammene().toString());
+			vis();
+		}
+		if (e.getSource() == lagre) {
+			if (getContentPane() == stud) {
+
 				int nr = Integer.parseInt(tlf.getText());
 				DateFormat formatter = new SimpleDateFormat("dd-MMM-yy");
 				try {
-					Date date = (Date)formatter.parse(start.getText());
-					skolen.getStudentene().addStudent(navn.getText(), epost.getText(), nr, adresse.getText(), date);
-				}
-				catch (ParseException pe){
+					Date date = (Date) formatter.parse(start.getText());
+					info.setText(skolen
+							.getStudentene()
+							.addStudent(navn.getText(), epost.getText(), nr,
+									adresse.getText(), date).toString());
+
+				} catch (ParseException pe) {
 					info.setText("Feil datoformat");
 				}
-			}
-			else if(getContentPane() == lær){
+			} else if (getContentPane() == lær) {
 				int nr = Integer.parseInt(tlf.getText());
-				skolen.getLærerne().add(new Laerer(navn.getText(), epost.getText(), nr, kontorNr.getText()));
-			}
-			else if(getContentPane() == fag){
+				info.setText(skolen
+						.getLærerne()
+						.addLærer(navn.getText(), epost.getText(), nr,
+								kontorNr.getText()).toString());
+			} else if (getContentPane() == fag) {
 				int poeng = Integer.parseInt(studiepoeng.getText());
-				Laerer læreren = new Laerer("Eva Vihovde", "Lærern@hioa.no", 95113342, "PS230");
-				skolen.getFagene().addFag(new Fag(navn.getText(), fagkode.getText(), beskrivelse.getText(), vurderingsform.getText(), poeng, læreren));
-			}
-			else if(getContentPane() == studprog){
-				skolen.getStudieprogrammene().add(new Studieprogram(navn.getText()));
+				Laerer læreren = new Laerer("Eva Vihovde", "Lærern@hioa.no",
+						95113342, "PS230");
+				info.setText(skolen
+						.getFagene()
+						.addFag(navn.getText(), fagkode.getText(),
+								beskrivelse.getText(),
+								vurderingsform.getText(), poeng, læreren)
+						.toString());
+			} else if (getContentPane() == studprog) {
+				skolen.getStudieprogrammene().add(
+						new Studieprogram(navn.getText()));
 			}
 		}
-		if(e.getSource() == legginnfag){
-			//skolen.getFagene().finnFagByFagkode(fagkode.getText());
+		if (e.getSource() == legginnfag) {
+			// skolen.getFagene().finnFagByFagkode(fagkode.getText());
 		}
 	}
 }

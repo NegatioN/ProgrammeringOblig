@@ -20,10 +20,11 @@ public class StudentListe {
 	}
 
 	// legger til en ny student UANSETT og incrementer studentnummer
-	public void addStudent(String navn, String epost, int tlf, String adresse,
+	public Student addStudent(String navn, String epost, int tlf, String adresse,
 			Date start) {
 		Student s = new Student(navn, epost, tlf, adresse, newId(), start);
 		register.add(s);
+		return s;
 	}
 
 	public ArrayList<Student> findKravBeståttStudenter(Fag fag) {
@@ -167,7 +168,7 @@ public class StudentListe {
 		refreshIterator();
 
 		while (iterator.hasNext()) {
-			stringen += iterator.next().getStudentnummer() + "\n";
+			stringen += iterator.next().toString() + "\n\n";
 		}
 		return stringen;
 	}

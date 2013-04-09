@@ -19,10 +19,11 @@ public class LaererListe{
 		register.add(lærer);
 	}
 
-	//Fant ut at jeg ikke måtte ha denne, men kanskje ikke så dumt?
-	public void addLærer(String navn, String epost, int tlf, String kontorNr){
+	//Legger til ny lærer med parameterne som input
+	public Laerer addLærer(String navn, String epost, int tlf, String kontorNr){
 		Laerer l = new Laerer(navn, epost, tlf, kontorNr);
 		register.add(l);
+		return l;
 	}
 	
 	

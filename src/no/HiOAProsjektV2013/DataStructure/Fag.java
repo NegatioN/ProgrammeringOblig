@@ -22,7 +22,6 @@ public class Fag {
 		this.vurderingsform = vurderingsform;
 		this.lærer = lærer;
 		this.studiepoeng = studiepoeng;
-		System.out.println("registrert fag " + navn + " med lærer " + lærer.getfNavn() + lærer.geteNavn());
 	}
 	public void addEksamen(Eksamen e){
 		eksamener.add(e);
@@ -79,7 +78,22 @@ public class Fag {
 		Krav kravet = new Krav(beskrivelse);
 		krav.addKrav(kravet);
 	}
+	
 	private void refreshIterator(){
 		iterator = eksamener.listIterator();
+	}
+	
+	public String toString(){
+		String stringen = new String();
+		stringen = 	"Fagkode: " + fagkode + 
+					"\nNavn: " + navn + 
+					"\nBeskrivelse: " + beskrivelse + 
+					"\nVurderingsform: " + vurderingsform + 
+					"\nStudiepoeng: " + studiepoeng +
+					"\nLærer: " + lærer.geteNavn();
+					//"\nArbeidskrav: " + krav.toString() +
+					//"\nEksamener: " + eksamener.toString();
+		
+		return stringen;
 	}
 }

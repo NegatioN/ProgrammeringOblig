@@ -26,7 +26,6 @@ public class Student extends Person{
 		this.start = start;
 		//sluttÅr settes lik -1 til studenten avslutter
 		slutt = null;
-		System.out.println("Lagret student: " + navn);
 	}
 
 	public void setStudieprogram(Studieprogram studieprogram){
@@ -139,6 +138,12 @@ public class Student extends Person{
 	}
 	public String toString(){
 		String stringen = new String();
+		stringen = "StudentNr: " + studentnummer + 
+					"\nNavn: " + getfNavn() + " " + geteNavn() + 
+					"\nE-post: " + getEpost() + 
+					"\nTlf: " + getTelefonNr() + 
+					"\nAdresse: " + adresse + 
+					"\nStartdato: " + start;
 		
 		return stringen;
 	}

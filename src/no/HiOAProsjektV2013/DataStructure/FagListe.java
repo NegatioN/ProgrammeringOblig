@@ -76,6 +76,14 @@ public class FagListe {
 		return false;
 	}
 	
+	//Legger til fag med parameter
+	public Fag addFag(String navn, String fagkode, String beskrivelse, String vurderingsform , int studiepoeng, Laerer lærer){
+		Fag f = new Fag(navn, fagkode, beskrivelse, vurderingsform, studiepoeng, lærer);
+		addFag(f);
+		return f;
+	}
+	
+	
 	//sjekker om fagkode ikke er lik eksisterende fagkode, og returnerer boolean
 	private boolean checkValidFagkode(String fagkode) {
 		refreshIterator();
