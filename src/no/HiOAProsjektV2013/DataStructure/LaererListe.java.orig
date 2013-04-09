@@ -20,13 +20,21 @@ public class LaererListe{
 	}
 	
 
+<<<<<<< HEAD
 	//Legger til ny lærer med parameterne som input
 	public Laerer addLærer(String navn, String epost, int tlf, String kontorNr){
+		Laerer l = new Laerer(navn, epost, tlf, kontorNr);
+		register.add(l);
+		return l;
+=======
+	//adder lærer
+	public void addLærer(String navn, String epost, int tlf, String kontorNr){
 		Laerer l = new Laerer(navn, epost, tlf, kontorNr);
 		addLærer(l);
 	}
 	public void removeLærer(Laerer lærer){
 		register.remove(lærer);
+>>>>>>> 7f254dadd7a1d80cd16f9b2947fe4f473f7c7c50
 	}
 	
 	

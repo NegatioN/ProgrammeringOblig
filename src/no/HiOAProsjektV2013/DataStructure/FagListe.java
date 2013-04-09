@@ -14,6 +14,9 @@ public class FagListe {
 	public FagListe(){
 		
 	}
+	public void removeFag(Fag fag){
+		register.remove(fag);
+	}
 	
 	//vi går ut ifra at det kun er snakk om den aller nyeste eksamenen i dette tilfellet.
 	//Finner alle studentene som er oppmeldt i faget.

@@ -25,6 +25,11 @@ public class Fag {
 		this.vurderingsform = vurderingsform;
 		this.lærer = lærer;
 		this.studiepoeng = studiepoeng;
+<<<<<<< HEAD
+=======
+		System.out.println("registrert fag " + navn + " med lærer "
+				+ lærer.getfNavn() + lærer.geteNavn());
+>>>>>>> 7f254dadd7a1d80cd16f9b2947fe4f473f7c7c50
 	}
 
 	public void addEksamen(Eksamen e) {
@@ -92,6 +97,10 @@ public class Fag {
 		Krav kravet = new Krav(beskrivelse);
 		krav.addKrav(kravet);
 	}
+<<<<<<< HEAD
+	
+	private void refreshIterator(){
+=======
 
 	// returnerer en array av intverdier som representerer antall av hver
 	// karakter fra A = array[0] til F = array[6]
@@ -150,6 +159,7 @@ public class Fag {
 	}
 
 	private void refreshIterator() {
+>>>>>>> 7f254dadd7a1d80cd16f9b2947fe4f473f7c7c50
 		iterator = eksamener.listIterator();
 	}
 	
