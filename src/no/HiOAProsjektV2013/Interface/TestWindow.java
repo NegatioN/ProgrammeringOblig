@@ -7,7 +7,6 @@ import java.util.*;
 
 import javax.swing.*;
 
-import no.HiOAProsjektV2013.DataStructure.Fag;
 import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Skole;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
@@ -27,9 +26,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode,
 			beskrivelse, studiepoeng, vurderingsform, lærer;
 	private Skole skolen;
-	private Iterator<Laerer> iterator;
-	private Date testDato;
-	private JPanel c, stud, lær, fag, studprog, vis;
+	private JPanel stud, lær, fag, studprog, vis;
 	private Dimension knapp, halvknapp;
 	private JScrollPane scroll;
 
@@ -284,8 +281,7 @@ public class TestWindow extends JFrame implements ActionListener {
 								vurderingsform.getText(), poeng, læreren)
 						.toString());
 			} else if (getContentPane() == studprog) {
-				skolen.getStudieprogrammene().add(
-						new Studieprogram(navn.getText()));
+				info.setText(skolen.addStudProg(navn.getText()).toString());
 			}
 		}
 		if (e.getSource() == legginnfag) {

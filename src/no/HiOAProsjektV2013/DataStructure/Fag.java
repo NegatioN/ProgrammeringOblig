@@ -148,7 +148,7 @@ public class Fag {
 		}
 		return null;
 	}
-
+		
 	private void refreshIterator() {
 		iterator = eksamener.listIterator();
 	}

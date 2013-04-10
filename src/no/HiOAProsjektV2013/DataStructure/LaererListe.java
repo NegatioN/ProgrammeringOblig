@@ -24,6 +24,7 @@ public class LaererListe{
 	public Laerer addLærer(String navn, String epost, int tlf, String kontorNr){
 		Laerer l = new Laerer(navn, epost, tlf, kontorNr);
 		addLærer(l);
+		return l;
 	}
 	public void removeLærer(Laerer lærer){
 		register.remove(lærer);
@@ -92,6 +93,17 @@ public class LaererListe{
 	
 	private void refreshIterator(){
 		iterator = register.iterator();
+	}
+	
+	public String toString() {
+		String stringen = new String();
+
+		refreshIterator();
+
+		while (iterator.hasNext()) {
+			stringen += iterator.next().toString() + "\n\n";
+		}
+		return stringen;
 	}
 }
 

@@ -60,7 +60,7 @@ public class Window extends JFrame implements ActionListener{
 	
 	private void addLærer(){
 		Laerer l = new Laerer("Eva LINKED LIST Hadler", "EvaATpost.com", 95153437, "PI227");
-		skolen.getLærerne().add(l);
+		//skolen.getLærerne().add(l);
 	}
 	
 //	private void addStudent(){

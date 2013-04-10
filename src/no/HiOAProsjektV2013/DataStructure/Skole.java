@@ -38,5 +38,20 @@ public class Skole {
 	public StudentListe getStudentene() {
 		return studentene;
 	}
+	
+	public Studieprogram addStudProg(String navn) {
+		Studieprogram sp = new Studieprogram(navn);
+		studieprogrammene.add(sp);
+		return sp;
+	}
+	
+	public String studprogToString() {
+		String stringen = new String();
+		for(Studieprogram sp : studieprogrammene){
+			stringen += sp.toString();
+		}
+		
+		return stringen;
+	}
 
 }

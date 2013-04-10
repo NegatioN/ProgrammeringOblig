@@ -103,4 +103,15 @@ public class FagListe {
 	private void refreshIterator(){
 		iterator = register.iterator();
 	}
+	
+	public String toString() {
+		String stringen = new String();
+
+		refreshIterator();
+
+		while (iterator.hasNext()) {
+			stringen += iterator.next().toString() + "\n\n";
+		}
+		return stringen;
+	}
 }
