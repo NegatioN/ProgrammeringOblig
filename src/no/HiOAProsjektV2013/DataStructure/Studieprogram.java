@@ -34,9 +34,9 @@ public class Studieprogram {
 	// kan være nødvendig å flytte en sånn metode til window slik at hver
 	// getFagkode blir en egen knapp.
 	public String toString() {
-		String stringen = "Navn: " + navn +  "\n";
+		String stringen = "Navn: " + navn +  "\nFag:";
 		for (int i = 0; i < fagIProgrammet.size(); i++) {
-			stringen += fagIProgrammet.get(i).getFagkode() + "\n";
+			stringen += "\n" + fagIProgrammet.get(i).getFagkode();
 		}
 
 		return stringen;
