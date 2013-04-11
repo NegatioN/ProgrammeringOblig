@@ -9,6 +9,7 @@ import javax.swing.*;
 
 import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Skole;
+import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.Main.Archiver;
 
 public class TestWindow extends JFrame implements ActionListener {
@@ -23,7 +24,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private Archiver arkivet;
 	private JTextArea info;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
-			vislærer, visfag, visstudieprog, lagre, legginnfag, søk;
+			vislærer, visfag, visstudieprog, lagre, leggtilfag, søk;
 	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode,
 			beskrivelse, studiepoeng, vurderingsform, lærer, søkefelt;
 	private Skole skolen;
@@ -35,7 +36,7 @@ public class TestWindow extends JFrame implements ActionListener {
 
 		super(tittel);
 
-		skolen = arkivet.readFromFile();
+		skolen = new Skole();//arkivet.readFromFile();
 
 		rammeverk = new JPanel(new BorderLayout());
 		add(rammeverk);
@@ -118,27 +119,46 @@ public class TestWindow extends JFrame implements ActionListener {
 		tlf		 		= new JTextField("tlf", 20);
 		adresse			= new JTextField("adresse", 20);
 		start			= new JTextField("startdato", 20);
-		navn			= new JTextField("navn", 20);
-		epost			= new JTextField("e-post", 20);
-		tlf				= new JTextField("tlf", 20);
 		kontorNr		= new JTextField("kontorNr", 20);
 		fagkode			= new JTextField("fagkode", 20);
 		beskrivelse		= new JTextField("beskrivelse", 20);
 		vurderingsform	= new JTextField("vurderingsform", 20);
 		studiepoeng		= new JTextField("studiepoeng", 20);
 		lærer			= new JTextField("lærer", 20);
+		
 		info 			= new JTextArea(20, 25);
 		
-		lagre = new JButton("Lagre");
-		lagre.setPreferredSize(knapp);
-		lagre.addActionListener(this);
+		lagre 		= new JButton("Lagre");
+		leggtilfag 	= new JButton("Legg til fag");
 		
+		lagre		.setPreferredSize(knapp);
+		leggtilfag	.setPreferredSize(knapp);
+		
+		lagre		.addActionListener(this);
+		leggtilfag	.addActionListener(this);
+
 		innhold = new JPanel();
 		vis("");
 		rammeverk.add(innhold, BorderLayout.WEST);
 	}
 	
+	public void refresh(){
+		
+		navn		.setText("navn");
+		epost		.setText("epost");
+		tlf			.setText("tlf");
+		adresse		.setText("adresse");
+		start		.setText("startdato");
+		kontorNr	.setText("kontoNr");
+		fagkode		.setText("fagkode");
+		beskrivelse		.setText("beskrivelse");
+		vurderingsform	.setText("vurderingsform");
+		studiepoeng		.setText("studiepoeng");
+		lærer			.setText("lærer");
+	}
+	
 	public void innhold(Component c){
+		refresh();
 		innhold.removeAll();
 		innhold.add(c);
 		innhold.updateUI();
@@ -160,7 +180,6 @@ public class TestWindow extends JFrame implements ActionListener {
 		stud.add(adresse);
 		stud.add(start);
 		stud.add(lagre);
-
 		innhold(stud);
 	}
 
@@ -201,15 +220,11 @@ public class TestWindow extends JFrame implements ActionListener {
 		studprog.setPreferredSize(size);
 		info = new JTextArea(8,25);
 
-		legginnfag = new JButton("Legg til fag");
-		legginnfag.setPreferredSize(knapp);
-		legginnfag.addActionListener(this);
-
 		studprog.add(info);
 		studprog.add(navn);
 		studprog.add(fagkode);
 		studprog.add(lagre);
-		studprog.add(legginnfag);
+		studprog.add(leggtilfag);
 
 		innhold(studprog);
 	}
@@ -310,6 +325,8 @@ public class TestWindow extends JFrame implements ActionListener {
 					info.setText("Feil nummerformat");
 				}catch (NullPointerException nfe){
 					info.setText("Finner ikke lærer");
+				}catch (IndexOutOfBoundsException iobe){
+					info.setText("Finner ikke lærer");
 				}
 				
 			} 
@@ -319,9 +336,15 @@ public class TestWindow extends JFrame implements ActionListener {
 			}
 		}
 		
-		if (e.getSource() == legginnfag) {
-			skolen.addFagToStudProg(navn.getText(), fagkode.getText());
-			info.setText(skolen.finnStudProgByNavn(navn.getText()).toString());
+		if (e.getSource() == leggtilfag) {
+			if(innhold.getComponent(0).equals(studprog)){
+				try{
+					skolen.addFagToStudProg(navn.getText(), fagkode.getText());
+					info.setText(skolen.finnStudProgByNavn(navn.getText()).toString());
+				} catch (NullPointerException npe){
+					info.setText("Ugyldig fagkode");
+				}
+			}
 		}
 		if (e.getSource() == søk || e.getSource() == søkefelt){
 			String resultat = "Lærere:";

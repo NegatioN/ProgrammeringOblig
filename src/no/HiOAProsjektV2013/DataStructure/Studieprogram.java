@@ -37,10 +37,13 @@ public class Studieprogram implements Serializable{
 	// getFagkode blir en egen knapp.
 	public String toString() {
 		String stringen = "Navn: " + navn +  "\nFag:";
-		for (int i = 0; i < fagIProgrammet.size(); i++) {
-			stringen += "\n" + fagIProgrammet.get(i).getFagkode();
+		try{
+			for (int i = 0; i < fagIProgrammet.size(); i++) {
+				stringen += "\n" + fagIProgrammet.get(i).getFagkode();
+			}
+		} catch(NullPointerException npe){
+			stringen = "Ingen fag registrert";
 		}
-
 		return stringen;
 	}
 
