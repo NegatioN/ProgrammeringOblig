@@ -1,6 +1,11 @@
 package no.HiOAProsjektV2013.DataStructure;
 
-public class Person {
+import java.io.Serializable;
+
+public class Person implements Serializable{
+	
+
+	private static final long serialVersionUID = 1022L;
 	private String fNavn, eNavn = null, epost;
 	private int telefonNr;
 	

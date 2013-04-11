@@ -15,19 +15,37 @@ public class Archiver {
 	private Skole skolen;
 
 	public void writeToFile(Skole skolen){
+<<<<<<< HEAD
 		try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("savedData.data"))){
+=======
+		try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("src/savedData.data"))){
+>>>>>>> Save skal fungere.
 			
 			out.writeObject(skolen);
+			out.close();
 			
 		}catch(NotSerializableException nse){
+<<<<<<< HEAD
 			System.out.println("IKKE SERIALISERT");
+=======
+			nse.printStackTrace();
+			System.out.println("Not serialized");
+			// ERROR-MESSAGE ikke serialisert
+>>>>>>> Save skal fungere.
 		}catch(IOException ioe){
+			System.out.println("IO error saving");
 			// ERROR-MESSAGE IO
 		}
 	}
+<<<<<<< HEAD
 	public void readFromFile(){
 		try(ObjectInputStream in = new ObjectInputStream(new FileInputStream("savedData.data"))){
+=======
+	public Skole readFromFile(){
+		try(ObjectInputStream in = new ObjectInputStream(new FileInputStream("src/savedData.data"))){
+>>>>>>> Save skal fungere.
 			skolen = (Skole) in.readObject();
+			in.close();
 		}catch(ClassNotFoundException cnfe){
 			System.out.println("Class not found");
 			skolen = new Skole();

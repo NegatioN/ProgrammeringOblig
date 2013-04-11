@@ -1,10 +1,13 @@
 package no.HiOAProsjektV2013.Interface;
 
+import java.io.Serializable;
+
 import no.HiOAProsjektV2013.DataStructure.Skole;
 
 //klassen skal ta for seg håntering av input og videresende dette til 
-public class KontrollPanel {
+public class KontrollPanel implements Serializable{
 
+	private static final long serialVersionUID = 3L;
 	//SØK PÅ NAVN AV FAG/STUDENT o.l. blir gjort som en else-case. Altså hvis det ikke matcher et regex
 	
 	private Skole skolen = new Skole();

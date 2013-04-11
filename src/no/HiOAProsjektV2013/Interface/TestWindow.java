@@ -6,8 +6,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+<<<<<<< HEAD
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+=======
+>>>>>>> Save skal fungere.
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,21 +25,24 @@ import javax.swing.JTextField;
 
 import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Skole;
-import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.Main.Archiver;
 
 public class TestWindow extends JFrame implements ActionListener {
 
 	public static void main(String[] args) {
 		TestWindow tw = new TestWindow("StudieAdministrasjon");
+<<<<<<< HEAD
 		tw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			  
+=======
+>>>>>>> Save skal fungere.
 	}
 
 	private static final long serialVersionUID = 1L;
 
 	private Archiver arkivet;
 	private JTextArea info;
+	private VinduLytter vl;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
 			vislærer, visfag, visstudieprog, lagre, leggtilfag, søk;
 	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode,
@@ -51,6 +57,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		super(tittel);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 		skolen = new Skole();//arkivet.readFromFile();
 =======
 		
@@ -64,6 +71,17 @@ public class TestWindow extends JFrame implements ActionListener {
 		}
 >>>>>>> Save-funksjon, fortsatt ikke funksjonell.
 
+=======
+		//oppretter save-objektet
+		arkivet 	= new Archiver();
+		
+		//Oppretter gammelt objekt om det fins, eller nytt om vi ikke har et.
+		skolen 		= arkivet.readFromFile();
+		
+		//setter WindowListener
+		vl = new VinduLytter(this);
+		
+>>>>>>> Save skal fungere.
 		rammeverk = new JPanel(new BorderLayout());
 		add(rammeverk);
 		
@@ -181,6 +199,14 @@ public class TestWindow extends JFrame implements ActionListener {
 		vurderingsform	.setText("vurderingsform");
 		studiepoeng		.setText("studiepoeng");
 		lærer			.setText("lærer");
+	}
+	
+	//getmetoder for windowlistener slik at det lagres info via system.exit
+	public Archiver getArkiv(){
+		return arkivet;
+	}
+	public Skole getSkole(){
+		return skolen;
 	}
 	
 	public void innhold(Component c){
