@@ -2,7 +2,6 @@ package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,7 +9,6 @@ public class FagListe implements Serializable{
 
 	private static final long serialVersionUID = 1030L;
 	private List<Fag> register = new LinkedList<>();
-	private Iterator<EksamensDeltaker> eIterator;
 	
 	public FagListe(){
 		
@@ -25,9 +23,7 @@ public class FagListe implements Serializable{
 		ArrayList<Student> studentene = new ArrayList<>();
 		Eksamen e = fag.getRecentEksamen();
 		List<EksamensDeltaker> deltakerne = e.getDeltakere();
-		eIterator = deltakerne.iterator();
-		while(eIterator.hasNext()){
-			EksamensDeltaker ed = eIterator.next();
+		for(EksamensDeltaker ed : deltakerne){
 			if(ed.isOppmeldt())
 			studentene.add(ed.getDeltaker());
 		}
