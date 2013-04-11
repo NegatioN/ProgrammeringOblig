@@ -1,12 +1,15 @@
 package no.HiOAProsjektV2013.DataStructure;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class StudentListe {
+public class StudentListe implements Serializable{
+
+	private static final long serialVersionUID = 1020L;
 
 	private static int studentNummer = 100000;
 

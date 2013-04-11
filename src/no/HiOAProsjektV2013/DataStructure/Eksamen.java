@@ -1,9 +1,15 @@
 package no.HiOAProsjektV2013.DataStructure;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
-public class Eksamen {
-
+public class Eksamen implements Serializable{
+	
+	private static final long serialVersionUID = 1040L;
 	private Date dato;
 	private List<EksamensDeltaker> deltakere = new LinkedList<>();
 	private Iterator<EksamensDeltaker> iterator;

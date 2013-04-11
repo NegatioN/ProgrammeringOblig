@@ -1,6 +1,10 @@
 package no.HiOAProsjektV2013.DataStructure;
 
-public class Laerer extends Person{
+import java.io.Serializable;
+
+public class Laerer extends Person implements Serializable{
+	
+	private static final long serialVersionUID = 1011L;
 	private String kontorNr;
 
 	public Laerer(String navn, String epost, int tlf, String kontorNr) {

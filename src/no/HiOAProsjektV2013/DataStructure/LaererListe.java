@@ -1,13 +1,14 @@
 package no.HiOAProsjektV2013.DataStructure;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class LaererListe{
+public class LaererListe implements Serializable{
 
-	
+	private static final long serialVersionUID = 1010L;
 	private List<Laerer> register = new LinkedList<>();
 	private Iterator<Laerer> iterator;
 	

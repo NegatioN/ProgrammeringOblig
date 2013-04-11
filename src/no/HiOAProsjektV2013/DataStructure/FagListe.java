@@ -1,12 +1,14 @@
 package no.HiOAProsjektV2013.DataStructure;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class FagListe {
+public class FagListe implements Serializable{
 
+	private static final long serialVersionUID = 1030L;
 	private List<Fag> register = new LinkedList<>();
 	private Iterator<Fag> iterator;
 	private Iterator<EksamensDeltaker> eIterator;

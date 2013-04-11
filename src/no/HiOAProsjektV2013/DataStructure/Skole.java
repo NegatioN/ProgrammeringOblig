@@ -1,5 +1,6 @@
 package no.HiOAProsjektV2013.DataStructure;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -7,8 +8,9 @@ import java.util.List;
 
 //	Klassen fungerer som en samling av alle datastrukturer for skolesystemet
 //	Dette for å unngå clutter i hovedklassen/vindusklassen som skal lage og holde datastrukturen
-public class Skole {
+public class Skole implements Serializable{
 
+	private static final long serialVersionUID = 1000L;
 	private List<Studieprogram> studieprogrammene = new LinkedList<>();
 	private LaererListe lærerne = new LaererListe();
 	private FagListe fagene = new FagListe();

@@ -1,9 +1,12 @@
 package no.HiOAProsjektV2013.DataStructure;
 
+import java.io.Serializable;
+
 
 //Sette eksamensdeltakerobjekt til å være en eksamen for en person om karakteren har blitt satt?
-public class EksamensDeltaker {
+public class EksamensDeltaker implements Serializable{
 
+	private static final long serialVersionUID = 1041L;
 	private Student deltakeren;
 	private char karakter = '\0';
 	private boolean oppmeldt;

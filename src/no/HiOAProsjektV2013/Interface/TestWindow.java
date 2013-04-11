@@ -1,15 +1,26 @@
 package no.HiOAProsjektV2013.Interface;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.text.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Skole;
-import no.HiOAProsjektV2013.DataStructure.Studieprogram;
+import no.HiOAProsjektV2013.Main.Archiver;
 
 public class TestWindow extends JFrame implements ActionListener {
 
@@ -20,6 +31,7 @@ public class TestWindow extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
+	private Archiver arkivet;
 	private JTextArea info;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
 			vislærer, visfag, visstudieprog, lagre, legginnfag, søk;
@@ -34,7 +46,7 @@ public class TestWindow extends JFrame implements ActionListener {
 
 		super(tittel);
 
-		skolen = new Skole();
+		skolen = arkivet.readFromFile();
 
 		innhold = new JPanel();
 		rammeverk = new JPanel(new BorderLayout());

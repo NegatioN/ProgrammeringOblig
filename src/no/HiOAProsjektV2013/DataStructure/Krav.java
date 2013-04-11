@@ -1,7 +1,10 @@
 package no.HiOAProsjektV2013.DataStructure;
 
-public class Krav {
+import java.io.Serializable;
 
+public class Krav implements Serializable{
+
+	private static final long serialVersionUID = 1051L;
 	private String beskrivelse;
 	private boolean godkjent;
 	

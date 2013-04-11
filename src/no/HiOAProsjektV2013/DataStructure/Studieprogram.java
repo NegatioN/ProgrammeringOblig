@@ -1,10 +1,12 @@
 package no.HiOAProsjektV2013.DataStructure;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Studieprogram {
+public class Studieprogram implements Serializable{
 
+	private static final long serialVersionUID = 1060L;
 	private String navn;
 	private List<Fag> fagIProgrammet = new LinkedList<>();
 

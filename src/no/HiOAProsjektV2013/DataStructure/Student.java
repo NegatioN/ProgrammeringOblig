@@ -1,12 +1,14 @@
 package no.HiOAProsjektV2013.DataStructure;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Student extends Person{
+public class Student extends Person implements Serializable{
 	
+	private static final long serialVersionUID = 1021L;
 	private String adresse;
 	private int studentnummer;
 	private Date start, slutt;

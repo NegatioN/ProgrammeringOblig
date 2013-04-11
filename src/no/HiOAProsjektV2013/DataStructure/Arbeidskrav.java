@@ -1,11 +1,13 @@
 package no.HiOAProsjektV2013.DataStructure;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Arbeidskrav {
+public class Arbeidskrav implements Serializable{
 
+	private static final long serialVersionUID = 1050L;
 	private String fagkode;
 	private List<Krav> register = new ArrayList<>();
 	private Iterator<Krav> iterator;
