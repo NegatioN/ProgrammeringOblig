@@ -37,13 +37,6 @@ public class StudentListe implements Serializable{
 				studentene.add(s);
 		}
 		
-//		refreshIterator();
-//		Student s = null;
-//		while (iterator.hasNext()) {
-//			s = iterator.next();
-//			if (s.innfriddKrav(fag))
-//				studentene.add(s);
-//		}
 		return studentene;
 	}
 	public ArrayList<Student> findStudentByNavn(String navn){

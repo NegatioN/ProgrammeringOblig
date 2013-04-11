@@ -50,9 +50,14 @@ public class LaererListe implements Serializable{
 			e.printStackTrace();
 		}finally{
 			//setter sammen begge listene som kommer fra søket.
-			lærerne.addAll(lærerneEtternavn);
+			//sørger for at lærere som er inkludert fra før, ikke blir lagt til igjen.
+			for(Laerer l : lærerneEtternavn){
+				for(Laerer eksisterendeLærer : lærerne){
+					if(!eksisterendeLærer.equals(l))
+						lærerne.add(l);
+				}
+			}
 		}
-		
 		return lærerne;
 	}
 	

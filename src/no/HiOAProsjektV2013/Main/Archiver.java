@@ -25,10 +25,8 @@ public class Archiver {
 
 			nse.printStackTrace();
 			System.out.println("Not serialized");
-			// ERROR-MESSAGE ikke serialisert
 		} catch (IOException ioe) {
 			System.out.println("IO error saving");
-			// ERROR-MESSAGE IO
 		}
 	}
 

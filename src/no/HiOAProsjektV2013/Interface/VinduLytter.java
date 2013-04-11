@@ -22,9 +22,8 @@ public class VinduLytter implements WindowListener, Serializable{
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		
+		//Skriver datastrukturen til fil
 		info.getArkiv().writeToFile(info.getSkole());
-		System.out.println("Ka-ching");
 		
 		System.exit(0);
 	}
