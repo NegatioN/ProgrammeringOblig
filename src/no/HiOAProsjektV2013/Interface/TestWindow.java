@@ -1,11 +1,24 @@
 package no.HiOAProsjektV2013.Interface;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.text.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Skole;
@@ -17,6 +30,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	public static void main(String[] args) {
 		TestWindow tw = new TestWindow("StudieAdministrasjon");
 		tw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			  
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -36,7 +50,19 @@ public class TestWindow extends JFrame implements ActionListener {
 
 		super(tittel);
 
+<<<<<<< HEAD
 		skolen = new Skole();//arkivet.readFromFile();
+=======
+		
+		try{
+			
+		arkivet.readFromFile();
+		skolen = arkivet.getSkole();
+		}catch(NullPointerException e){
+			e.printStackTrace();
+			System.out.println("Null");
+		}
+>>>>>>> Save-funksjon, fortsatt ikke funksjonell.
 
 		rammeverk = new JPanel(new BorderLayout());
 		add(rammeverk);
@@ -353,6 +379,12 @@ public class TestWindow extends JFrame implements ActionListener {
 			}
 			vis(resultat);
 		}
+	}
+	public Archiver getArkiv(){
+		return arkivet;
+	}
+	public Skole getSkole(){
+		return skolen;
 	}
 }
 
