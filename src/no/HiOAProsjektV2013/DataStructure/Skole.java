@@ -2,7 +2,6 @@ package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,7 +14,6 @@ public class Skole implements Serializable{
 	private LaererListe lærerne = new LaererListe();
 	private FagListe fagene = new FagListe();
 	private StudentListe studentene = new StudentListe();
-	private Iterator<Studieprogram> iterator;
 
 	public Skole() {
 		// Constructor
@@ -71,15 +69,9 @@ public class Skole implements Serializable{
 	public String studprogToString() {
 		String stringen = new String();
 
-		refreshIterator();
-
-		while (iterator.hasNext()) {
-			stringen += iterator.next().toString() + "\n\n";
+		for(Studieprogram sp: studieprogrammene){
+			stringen += sp.toString() + "\n\n";
 		}
 		return stringen;
-	}
-
-	private void refreshIterator() {
-		iterator = studieprogrammene.iterator();
 	}
 }

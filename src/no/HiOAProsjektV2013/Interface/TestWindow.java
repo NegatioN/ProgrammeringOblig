@@ -46,18 +46,6 @@ public class TestWindow extends JFrame implements ActionListener {
 	public TestWindow(String tittel) {
 
 		super(tittel);
-
-		skolen = arkivet.readFromFile();
-
-		
-		try{
-			
-		arkivet.readFromFile();
-		skolen = arkivet.getSkole();
-		}catch(NullPointerException e){
-			e.printStackTrace();
-			System.out.println("Null");
-		}
 		//oppretter save-objektet
 		arkivet 	= new Archiver();
 		
