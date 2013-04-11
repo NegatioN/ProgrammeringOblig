@@ -10,7 +10,6 @@ public class LaererListe implements Serializable{
 
 	private static final long serialVersionUID = 1010L;
 	private List<Laerer> register = new LinkedList<>();
-	private Iterator<Laerer> iterator;
 	
 	public LaererListe(){
 		
@@ -62,13 +61,9 @@ public class LaererListe implements Serializable{
 	// Finner alle lærerne med et gitt fornavn
 	private ArrayList<Laerer> findLærerByFornavn(String fnavn) {
 		ArrayList<Laerer> lærerne = new ArrayList<>();
-		refreshIterator();
-		
-		while(iterator.hasNext()){
-			Laerer sjekkLærer = iterator.next();
-			String fornavn = sjekkLærer.getfNavn();
-			if(fornavn.equalsIgnoreCase(fnavn)){
-				lærerne.add(sjekkLærer);
+		for(Laerer l : register){
+			if(l.getfNavn().equalsIgnoreCase(fnavn)){
+				lærerne.add(l);
 			}
 		}
 
@@ -79,30 +74,20 @@ public class LaererListe implements Serializable{
 	private ArrayList<Laerer> findLærerByEtternavn(String enavn) {
 
 		ArrayList<Laerer> lærerne = new ArrayList<>();
-		refreshIterator();
-		
-		while(iterator.hasNext()){
-			Laerer sjekkLærer = iterator.next();
-			String etternavn = sjekkLærer.geteNavn();
-			if(etternavn.equalsIgnoreCase(enavn)){
-				lærerne.add(sjekkLærer);
+		for(Laerer l : register){
+			if(l.geteNavn().equalsIgnoreCase(enavn)){
+				lærerne.add(l);
 			}
 		}
 
 		return lærerne;
 	}
 	
-	private void refreshIterator(){
-		iterator = register.iterator();
-	}
-	
 	public String toString() {
 		String stringen = new String();
 
-		refreshIterator();
-
-		while (iterator.hasNext()) {
-			stringen += iterator.next().toString() + "\n\n";
+		for(Laerer l : register){
+			stringen += l.toString() + "\n\n";
 		}
 		return stringen;
 	}

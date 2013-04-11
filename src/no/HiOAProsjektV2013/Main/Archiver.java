@@ -44,6 +44,7 @@ public class Archiver {
 			System.out.println("File not found");
 			skolen = new Skole();
 		} catch (IOException ioe) {
+			ioe.printStackTrace();
 			System.out.println("IO input error");
 			skolen = new Skole();
 		}

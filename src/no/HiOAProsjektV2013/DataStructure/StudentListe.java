@@ -14,9 +14,6 @@ public class StudentListe implements Serializable{
 	private static int studentNummer = 100000;
 
 	private List<Student> register;
-	// iterator må lages på nytt hver gang et objekt har blitt lagt til
-	// ellers oppstår concurrentmodification-exception.
-	private Iterator<Student> iterator;
 
 	public StudentListe() {
 		register = new LinkedList<>();
@@ -104,9 +101,7 @@ public class StudentListe implements Serializable{
 	public ArrayList<Student> findStudentByFag(Fag fag) {
 		ArrayList<Student> studentene = new ArrayList<>();
 		String fagkode = fag.getFagkode();
-		refreshIterator();
-		while (iterator.hasNext()) {
-			Student s = iterator.next();
+		for(Student s : register){
 			// sjekker hver students arbeidskrav for fagkoden, og ser om de har
 			// faget.
 			if (s.harFaget(fagkode))
@@ -118,24 +113,19 @@ public class StudentListe implements Serializable{
 
 	public ArrayList<Student> findStudentByStart(Date dato) {
 		ArrayList<Student> studentene = new ArrayList<>();
-		refreshIterator();
-		while (iterator.hasNext()) {
-			Student checkStud = iterator.next();
-			if (checkStud.getStart().equals(dato))
-				studentene.add(checkStud);
+		for(Student s : register){
+			if (s.getStart().equals(dato))
+				studentene.add(s);
 		}
-
 		return studentene;
 	}
 
 	public ArrayList<Student> findStudentBySlutt(Date dato) {
 		ArrayList<Student> studentene = new ArrayList<>();
-		refreshIterator();
-		while (iterator.hasNext()) {
-			Student checkStud = iterator.next();
-			if (checkStud.isAvsluttet()) {
-				if (checkStud.getSlutt().equals(dato))
-					studentene.add(checkStud);
+		for(Student s : register){
+			if (s.isAvsluttet()) {
+				if (s.getSlutt().equals(dato))
+					studentene.add(s);
 			}
 		}
 		return studentene;
@@ -143,10 +133,8 @@ public class StudentListe implements Serializable{
 
 	public ArrayList<Student> findStudentByStudieprogram(Studieprogram sp) {
 		ArrayList<Student> studentene = new ArrayList<>();
-		refreshIterator();
 		// går gjennom studentlista og tar ut alle med gitt studieprogram
-		while (iterator.hasNext()) {
-			Student s = iterator.next();
+		for(Student s : register){
 			if (s.getStudieprogram().equals(sp)) {
 				studentene.add(s);
 			}
@@ -172,17 +160,11 @@ public class StudentListe implements Serializable{
 	public String toString() {
 		String stringen = new String();
 
-		refreshIterator();
-
-		while (iterator.hasNext()) {
-			stringen += iterator.next().toString() + "\n\n";
+		for(Student s : register){
+			stringen += s.toString() + "\n\n";
 		}
 		return stringen;
 	}
 
-	// gjør iteratoren klar for gjennomløping av lista. Laget for oversiktlighet
-	private void refreshIterator() {
-		iterator = register.iterator();
-	}
 
 }

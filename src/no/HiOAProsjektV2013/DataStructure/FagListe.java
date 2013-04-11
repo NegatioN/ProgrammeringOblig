@@ -10,7 +10,6 @@ public class FagListe implements Serializable{
 
 	private static final long serialVersionUID = 1030L;
 	private List<Fag> register = new LinkedList<>();
-	private Iterator<Fag> iterator;
 	private Iterator<EksamensDeltaker> eIterator;
 	
 	public FagListe(){
@@ -39,27 +38,18 @@ public class FagListe implements Serializable{
 	//Finner et fag basert på navnet, kan returnere flere fag.
 	public ArrayList<Fag> finnFagByNavn(String navn){
 		ArrayList<Fag> fagene = new ArrayList<>();
-		Fag faget = null;
-		refreshIterator();
-		while(iterator.hasNext()){
-			faget = iterator.next();
-			if(navn.equalsIgnoreCase(faget.getNavn()))
-				fagene.add(faget);
+		for(Fag f : register){
+			if(navn.equalsIgnoreCase(f.getNavn()))
+				fagene.add(f);
 		}
-		
-		
 		return fagene;
 	}
 	//returnerer null om vi ikke finner faget ved input, returnerer unikt fag basert på fagkode
 	public Fag finnFagByFagkode(String fagkode){
-		Fag faget = null;
-		refreshIterator();
-		while(iterator.hasNext()){
-			faget = iterator.next();
-			if(fagkode.equalsIgnoreCase(faget.getFagkode()))
-				return faget;
-		}
-		
+		for(Fag f : register){
+			if(fagkode.equalsIgnoreCase(f.getFagkode()))
+				return f;
+		}	
 		return null;
 	}
 	
@@ -91,9 +81,8 @@ public class FagListe implements Serializable{
 	
 	//sjekker om fagkode ikke er lik eksisterende fagkode, og returnerer boolean
 	private boolean checkValidFagkode(String fagkode) {
-		refreshIterator();
-		while (iterator.hasNext()) {
-			String fagetsKode = iterator.next().getFagkode();
+		for(Fag f : register){
+			String fagetsKode = f.getFagkode();
 			if (fagkode.equalsIgnoreCase(fagetsKode)) {
 				return false;
 			}
@@ -102,17 +91,11 @@ public class FagListe implements Serializable{
 		return true;
 	}
 	
-	private void refreshIterator(){
-		iterator = register.iterator();
-	}
-	
 	public String toString() {
 		String stringen = new String();
 
-		refreshIterator();
-
-		while (iterator.hasNext()) {
-			stringen += iterator.next().toString() + "\n\n";
+		for(Fag f : register){
+			stringen += f.toString() + "\n\n";
 		}
 		return stringen;
 	}

@@ -14,7 +14,6 @@ public class Fag implements Serializable{
 	private Arbeidskrav krav;
 	private int studiepoeng;
 	private List<Eksamen> eksamener = new LinkedList<>();
-	private ListIterator<Eksamen> iterator = eksamener.listIterator();
 	private final int AKARAKTER = 0, BKARAKTER = 1, CKARAKTER = 2,
 			DKARAKTER = 3, EKARAKTER = 4, FKARAKTER = 5;
 
@@ -44,9 +43,8 @@ public class Fag implements Serializable{
 
 	// skal returnere startobjekt-1 altså siste, men usikker på om det funker,
 	// trenger bugtest.
-	public Eksamen getRecentEksamen() {
-		refreshIterator();
-		return iterator.previous();
+	public Eksamen getRecentEksamen() {	
+		return eksamener.get(eksamener.size()-1);
 	}
 
 	public Laerer getLærer() {
@@ -149,10 +147,6 @@ public class Fag implements Serializable{
 				return e;
 		}
 		return null;
-	}
-		
-	private void refreshIterator() {
-		iterator = eksamener.listIterator();
 	}
 	
 	public String toString(){
