@@ -6,11 +6,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-<<<<<<< HEAD
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-=======
->>>>>>> Save skal fungere.
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,16 +26,12 @@ public class TestWindow extends JFrame implements ActionListener {
 
 	public static void main(String[] args) {
 		TestWindow tw = new TestWindow("StudieAdministrasjon");
-<<<<<<< HEAD
 		tw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			  
-=======
->>>>>>> Save skal fungere.
 	}
 
 	private static final long serialVersionUID = 1L;
 
-	private Archiver arkivet;
+	private Archiver arkivet = new Archiver();
 	private JTextArea info;
 	private VinduLytter vl;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
@@ -56,10 +47,8 @@ public class TestWindow extends JFrame implements ActionListener {
 
 		super(tittel);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-		skolen = new Skole();//arkivet.readFromFile();
-=======
+		skolen = arkivet.readFromFile();
+
 		
 		try{
 			
@@ -69,9 +58,6 @@ public class TestWindow extends JFrame implements ActionListener {
 			e.printStackTrace();
 			System.out.println("Null");
 		}
->>>>>>> Save-funksjon, fortsatt ikke funksjonell.
-
-=======
 		//oppretter save-objektet
 		arkivet 	= new Archiver();
 		
@@ -81,7 +67,6 @@ public class TestWindow extends JFrame implements ActionListener {
 		//setter WindowListener
 		vl = new VinduLytter(this);
 		
->>>>>>> Save skal fungere.
 		rammeverk = new JPanel(new BorderLayout());
 		add(rammeverk);
 		
@@ -405,12 +390,6 @@ public class TestWindow extends JFrame implements ActionListener {
 			}
 			vis(resultat);
 		}
-	}
-	public Archiver getArkiv(){
-		return arkivet;
-	}
-	public Skole getSkole(){
-		return skolen;
 	}
 }
 

@@ -11,53 +11,46 @@ import java.io.ObjectOutputStream;
 import no.HiOAProsjektV2013.DataStructure.Skole;
 
 public class Archiver {
-	
+
 	private Skole skolen;
 
-	public void writeToFile(Skole skolen){
-<<<<<<< HEAD
-		try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("savedData.data"))){
-=======
-		try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("src/savedData.data"))){
->>>>>>> Save skal fungere.
-			
+	public void writeToFile(Skole skolen) {
+
+		try (ObjectOutputStream out = new ObjectOutputStream(
+				new FileOutputStream("src/savedData.data"))) {
 			out.writeObject(skolen);
 			out.close();
-			
-		}catch(NotSerializableException nse){
-<<<<<<< HEAD
-			System.out.println("IKKE SERIALISERT");
-=======
+
+		} catch (NotSerializableException nse) {
+
 			nse.printStackTrace();
 			System.out.println("Not serialized");
 			// ERROR-MESSAGE ikke serialisert
->>>>>>> Save skal fungere.
-		}catch(IOException ioe){
+		} catch (IOException ioe) {
 			System.out.println("IO error saving");
 			// ERROR-MESSAGE IO
 		}
 	}
-<<<<<<< HEAD
-	public void readFromFile(){
-		try(ObjectInputStream in = new ObjectInputStream(new FileInputStream("savedData.data"))){
-=======
-	public Skole readFromFile(){
-		try(ObjectInputStream in = new ObjectInputStream(new FileInputStream("src/savedData.data"))){
->>>>>>> Save skal fungere.
+
+	public Skole readFromFile() {
+		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(
+				"src/savedData.data"))) {
 			skolen = (Skole) in.readObject();
 			in.close();
-		}catch(ClassNotFoundException cnfe){
+		} catch (ClassNotFoundException cnfe) {
 			System.out.println("Class not found");
 			skolen = new Skole();
-		}catch(FileNotFoundException fne){
+		} catch (FileNotFoundException fne) {
 			System.out.println("File not found");
 			skolen = new Skole();
-		}catch(IOException ioe){
+		} catch (IOException ioe) {
 			System.out.println("IO input error");
 			skolen = new Skole();
 		}
+		return skolen;
 	}
-	public Skole getSkole(){
+
+	public Skole getSkole() {
 		return skolen;
 	}
 }
