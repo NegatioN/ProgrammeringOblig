@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
@@ -13,6 +15,8 @@ import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -20,6 +24,7 @@ import javax.swing.JTextField;
 
 import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Skole;
+import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.Main.Archiver;
 
 public class TestWindow extends JFrame implements ActionListener {
@@ -32,6 +37,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	private Archiver arkivet = new Archiver();
+	private ListeBoks<Student> listeboks = new ListeBoks<Student>();
 	private JTextArea info;
 	private VinduLytter vl;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
@@ -261,6 +267,27 @@ public class TestWindow extends JFrame implements ActionListener {
 
 		innhold(vis);
 	}
+	
+	//Listeboks funker kind-of, men vi må redefinere toStrings for å bruke de saklig. Trenger også noe hjelp med plassering av de. 
+//	public void vis(JList<Student> studenter){
+//	vis = panelRefresh();
+//	}
+//	private JPanel panelRefresh(){
+//		
+//		vis = new JPanel();
+//		vis.setPreferredSize(size);
+//		vis.setLayout(new GridBagLayout());
+//		GridBagConstraints gbc = new GridBagConstraints();
+//		vis.add(listeboks.listiFy(skolen.getStudentene().findStudentByNavn("Joakim")), gbc);
+//		JLabel myLabel = new JLabel("Label1");
+//		vis.add(myLabel, gbc);
+//		
+//		scroll = new JScrollPane(info);
+//
+//		vis.add(scroll);
+//		
+//		return vis;
+//	}
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == nystudent) {

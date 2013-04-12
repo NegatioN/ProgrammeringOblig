@@ -1,8 +1,10 @@
 package no.HiOAProsjektV2013.Interface;
 
+import java.awt.Component;
 import java.util.ArrayList;
 
 import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -16,13 +18,14 @@ public class ListeBoks<E> implements ListSelectionListener{
 	}
 
 
-	public JList<E> listiFy(ArrayList<E> array){
+	public Component listiFy(ArrayList<E> array){
 		JList<E> listen = new JList<>();
 		E[] tilArray = (E[]) array.toArray();
 		listen.setListData(tilArray);
 		listen.setVisibleRowCount(ROWCOUNT);
 		listen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listen.addListSelectionListener(this);
+		
 		
 		return listen;
 	}
@@ -36,6 +39,7 @@ public class ListeBoks<E> implements ListSelectionListener{
 			//opprettUtvidelsesVindu(valgtObjekt);
 		}
 	}
+
 	
 	
 }
