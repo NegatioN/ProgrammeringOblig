@@ -42,11 +42,14 @@ public class StudentListe implements Serializable{
 	public ArrayList<Student> findStudentByNavn(String navn){
 		ArrayList<Student> studentene = new ArrayList<>();
 		//looper gjennom alle studentene og finner de med korrekt navn (kan være flere)
-		for(Student s : register){
-			if(s.getfNavn().equalsIgnoreCase(navn))
-				studentene.add(s);
-			}
+		String regex = "\\s";
+		String[] navnene = navn.split(regex);
 		
+		for(Student s : register){
+			if(s.getfNavn().equalsIgnoreCase(navn) || s.geteNavn().equalsIgnoreCase(navn) || 
+					s.getfNavn().equalsIgnoreCase(navnene[0]) || s.geteNavn().equalsIgnoreCase(navnene[navnene.length-1]))
+				studentene.add(s);
+		}
 		return studentene;
 	}
 

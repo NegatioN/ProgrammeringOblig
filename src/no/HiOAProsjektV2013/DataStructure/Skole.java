@@ -46,7 +46,7 @@ public class Skole implements Serializable{
 	//Søk på studieprogram etter navn
 	public Studieprogram finnStudProgByNavn(String navn){
 		for(Studieprogram sp : studieprogrammene){
-			if(navn.equalsIgnoreCase(sp.getNavn()));
+			if(sp.getNavn().equalsIgnoreCase(navn))
 				return sp;
 		}
 		return null;
@@ -55,7 +55,9 @@ public class Skole implements Serializable{
 	//Legger til et gitt fag i et gitt studieprogram
 	public void addFagToStudProg(String navn, String fagkode){
 		Studieprogram sp = finnStudProgByNavn(navn);
-		sp.addFag(getFagene().finnFagByFagkode(fagkode));
+		Fag f = sp.finnFag(getFagene().finnFagByFagkode(fagkode));
+		if( f == null)
+			sp.addFag(f);
 	}
 	
 	//Legger til nytt studieprogram med gitt navn i listen studieprogrammene

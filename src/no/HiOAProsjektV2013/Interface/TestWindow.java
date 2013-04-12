@@ -35,13 +35,14 @@ public class TestWindow extends JFrame implements ActionListener {
 	private JTextArea info;
 	private VinduLytter vl;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
-			vislærer, visfag, visstudieprog, lagre, leggtilfag, søk;
+			vislærer, visfag, visstudieprog, lagre, leggtilfag;
 	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode,
-			beskrivelse, studiepoeng, vurderingsform, lærer, søkefelt;
+			beskrivelse, studiepoeng, vurderingsform, lærer;
 	private Skole skolen;
 	private JPanel rammeverk, innhold, stud, lær, fag, studprog, vis;
 	private Dimension knapp, halvknapp, size;
 	private JScrollPane scroll;
+	private Soek søk;
 
 	public TestWindow(String tittel) {
 
@@ -83,8 +84,6 @@ public class TestWindow extends JFrame implements ActionListener {
 		vislærer		= new JButton("Vis lærere");
 		visfag			= new JButton("Vis fag");
 		visstudieprog	= new JButton("Vis studieprogram");
-		søk			 	= new JButton("Søk");
-		søkefelt		= new JTextField("Søk");
 		
 		nystudent		.setPreferredSize(halvknapp);
 		nylærer			.setPreferredSize(halvknapp);
@@ -94,8 +93,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		vislærer		.setPreferredSize(halvknapp);
 		visfag			.setPreferredSize(halvknapp);
 		visstudieprog	.setPreferredSize(halvknapp);
-		søk				.setPreferredSize(halvknapp);
-		søkefelt		.setPreferredSize(halvknapp);
+
 		
 		nystudent		.addActionListener(this);
 		nylærer			.addActionListener(this);
@@ -105,8 +103,8 @@ public class TestWindow extends JFrame implements ActionListener {
 		vislærer		.addActionListener(this);
 		visfag			.addActionListener(this);
 		visstudieprog	.addActionListener(this);
-		søk				.addActionListener(this);
-		søkefelt		.addActionListener(this);
+
+		søk = new Soek(skolen, this, 150, 100);
 		
 		JPanel leggtil = new JPanel();
 		JPanel visning = new JPanel();
@@ -114,7 +112,6 @@ public class TestWindow extends JFrame implements ActionListener {
 		leggtil.setPreferredSize(new Dimension(700,50));
 		visning.setPreferredSize(new Dimension(150,450));
 		
-		visning.add(søkefelt);
 		visning.add(søk);
 		visning.add(visstudent);
 		visning.add(vislærer);
@@ -159,15 +156,16 @@ public class TestWindow extends JFrame implements ActionListener {
 		rammeverk.add(innhold, BorderLayout.WEST);
 	}
 	
+	//Resetter tekstfeltene
 	public void refresh(){
 		
-		navn		.setText("navn");
-		epost		.setText("epost");
-		tlf			.setText("tlf");
-		adresse		.setText("adresse");
-		start		.setText("startdato");
-		kontorNr	.setText("kontoNr");
-		fagkode		.setText("fagkode");
+		navn			.setText("navn");
+		epost			.setText("epost");
+		tlf				.setText("tlf");
+		adresse			.setText("adresse");
+		start			.setText("startdato");
+		kontorNr		.setText("kontoNr");
+		fagkode			.setText("fagkode");
 		beskrivelse		.setText("beskrivelse");
 		vurderingsform	.setText("vurderingsform");
 		studiepoeng		.setText("studiepoeng");
@@ -182,6 +180,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		return skolen;
 	}
 	
+	//Oppdaterer innholdspanelet
 	public void innhold(Component c){
 		refresh();
 		innhold.removeAll();
@@ -192,7 +191,6 @@ public class TestWindow extends JFrame implements ActionListener {
 	}
 	
 	//Metoder for å vise relevante felter for registrering av objekter
-
 	public void student() {
 		stud = new JPanel();
 		stud.setPreferredSize(size);
@@ -207,7 +205,6 @@ public class TestWindow extends JFrame implements ActionListener {
 		stud.add(lagre);
 		innhold(stud);
 	}
-
 	public void lærer() {
 		lær = new JPanel();
 		lær.setPreferredSize(size);
@@ -222,7 +219,6 @@ public class TestWindow extends JFrame implements ActionListener {
 
 		innhold(lær);
 	}
-
 	public void fag() {
 		fag = new JPanel();
 		fag.setPreferredSize(size);
@@ -239,7 +235,6 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		innhold(fag);
 	}
-
 	public void studieprog() {
 		studprog = new JPanel();
 		studprog.setPreferredSize(size);
@@ -255,21 +250,18 @@ public class TestWindow extends JFrame implements ActionListener {
 	}
 	
 	//Viser resultat av søk o.l
-
 	public void vis(String tekst) {
 		vis = new JPanel();
 		vis.setPreferredSize(size);
 		
 		info = new JTextArea(20, 25);
 		info.setText(tekst);
-		scroll = new JScrollPane(info);
 
-		vis.add(scroll);
+		vis.add(new JScrollPane(info));
 
 		innhold(vis);
 	}
 
-	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == nystudent) {
 			student();
@@ -297,6 +289,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		}
 		
 		//Lagring av objekter
+		//************************************************************************************************************************************
 		if (e.getSource() == lagre) {
 			
 			if (innhold.getComponent(0).equals(stud)) { //Sjekker hvilket panel som ligger i innhold-panelet
@@ -319,8 +312,9 @@ public class TestWindow extends JFrame implements ActionListener {
 				}
 				
 			} 
+		//***************************************************************
 		
-		else if (innhold.getComponent(0).equals(lær)) {
+			else if (innhold.getComponent(0).equals(lær)) {
 				try{
 					int nr = Integer.parseInt(tlf.getText());
 					
@@ -333,7 +327,8 @@ public class TestWindow extends JFrame implements ActionListener {
 					info.setText("Feil nummerformat");
 				}
 			} 
-			
+		//***************************************************************
+		
 		else if (innhold.getComponent(0).equals(fag)) {
 				try{
 					int poeng = Integer.parseInt(studiepoeng.getText());
@@ -349,17 +344,20 @@ public class TestWindow extends JFrame implements ActionListener {
 				}catch (NumberFormatException nfe){
 					info.setText("Feil nummerformat");
 				}catch (NullPointerException nfe){
-					info.setText("Finner ikke lærer");
+					info.setText("Nullpointer-feil");
 				}catch (IndexOutOfBoundsException iobe){
 					info.setText("Finner ikke lærer");
 				}
 				
 			} 
-			
+		//***************************************************************
+		
 		else if (innhold.getComponent(0).equals(studprog)) {
 				info.setText(skolen.addStudProg(navn.getText()).toString());
 			}
 		}
+		
+		//************************************************************************************************************************************
 		
 		if (e.getSource() == leggtilfag) {
 			if(innhold.getComponent(0).equals(studprog)){
@@ -371,14 +369,11 @@ public class TestWindow extends JFrame implements ActionListener {
 				}
 			}
 		}
-		if (e.getSource() == søk || e.getSource() == søkefelt){
-			String resultat = "Lærere:";
-			for(Laerer l : skolen.getLærerne().findLærerByNavn(søkefelt.getText())){
-				resultat += "\n" + l.getfNavn() + l.geteNavn();
-			}
-			vis(resultat);
+		
+		if (e.getSource() == søk.getFelt() || e.getSource() == søk.getKnapp())
+		{
+			info.setText(søk.søk());
 		}
 	}
 }
-
 

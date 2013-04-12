@@ -18,14 +18,27 @@ public class Studieprogram implements Serializable{
 		fagIProgrammet.add(fag);
 	}
 
+	public List<Fag> getFagene()
+	{
+		return fagIProgrammet;
+	}
+	
 	public void fjernFag(Fag fag) {
-		int i = indeks(fag);
-		try {
-			fagIProgrammet.remove(i);
-		} catch (IndexOutOfBoundsException e) {
-			// return message til bruker? Handle exceptions på et høyere nivå
-			// for mer uniform behandling
+		
+		for (Fag f : fagIProgrammet) {
+			if(f.equals(fag)) {
+				fagIProgrammet.remove(fag);
+			}
 		}
+	}
+	
+	public Fag finnFag(Fag fag){
+		for (Fag f : fagIProgrammet) {
+			if(f.equals(fag)) {
+				return fag;
+			}
+		}
+		return null;
 	}
 
 	public String getNavn() {
@@ -37,23 +50,11 @@ public class Studieprogram implements Serializable{
 	// getFagkode blir en egen knapp.
 	public String toString() {
 		String stringen = "Navn: " + navn +  "\nFag:";
-		try{
-			for (int i = 0; i < fagIProgrammet.size(); i++) {
-				stringen += "\n" + fagIProgrammet.get(i).getFagkode();
-			}
-		} catch(NullPointerException npe){
-			stringen = "Ingen fag registrert";
+		
+		for (Fag f : fagIProgrammet) {
+			stringen += "\n" + f.getFagkode();
 		}
+		
 		return stringen;
 	}
-
-	private int indeks(Fag fag) {
-		for (int i = 0; i < fagIProgrammet.size(); i++) {
-			if (fagIProgrammet.get(i).equals(fag)) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
 }
