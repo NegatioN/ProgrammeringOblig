@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public class StudentListe implements Serializable{
+public class StudentListe extends PersonListe<Student> implements Serializable{
 
 	private static final long serialVersionUID = 1020L;
 
@@ -15,7 +15,7 @@ public class StudentListe implements Serializable{
 	private List<Student> register;
 
 	public StudentListe() {
-		register = new LinkedList<>();
+		register = new LinkedList<Student>();
 	}
 
 	// legger til en ny student UANSETT og incrementer studentnummer
@@ -39,20 +39,39 @@ public class StudentListe implements Serializable{
 		
 		return studentene;
 	}
-	public ArrayList<Student> findStudentByNavn(String navn){
-		ArrayList<Student> studentene = new ArrayList<>();
-		//looper gjennom alle studentene og finner de med korrekt navn (kan være flere)
-		String regex = "\\s";
-		String[] navnene = navn.split(regex);
+	//finner studenter basert på navn
+	public ArrayList<Student> findByNavn(String navn){
+		String[] navnene = nameSplitter(navn);
 		
-		for(Student s : register){
-			if(s.getfNavn().equalsIgnoreCase(navn) || s.geteNavn().equalsIgnoreCase(navn) || 
-					s.getfNavn().equalsIgnoreCase(navnene[0]) || s.geteNavn().equalsIgnoreCase(navnene[navnene.length-1]))
-				studentene.add(s);
-		}
+		ArrayList<Student> fornavn = findByFornavn(navnene[Person.FORNAVN]);
+		ArrayList<Student> etternavn = findByEtternavn(navnene[Person.ETTERNAVN]);
+		ArrayList<Student> studentene = super.findByNavn(fornavn, etternavn);
 		return studentene;
 	}
-
+	
+	//delmetode for å gå gjennom registeret i studentlista.
+	private ArrayList<Student> findByFornavn(String fnavn){
+		ArrayList<Student> studentene = new ArrayList<>();
+		
+		for(Student s : register){
+			if(s.getfNavn().equalsIgnoreCase(fnavn)){
+				studentene.add(s);
+			}
+		}		
+		return studentene;
+	}
+	//delmetode for å gå gjennom registeret i studentlista.
+	private ArrayList<Student> findByEtternavn(String enavn){
+		ArrayList<Student> studentene = new ArrayList<>();
+		
+		for(Student s : register){
+			if(s.geteNavn().equalsIgnoreCase(enavn)){
+				studentene.add(s);
+			}
+		}		
+		return studentene;
+	}
+	
 	//metoden skal gjøre et binærsøk gjennom studentlista som er i rekkefølge på studentNr
 	public Student findStudentByStudentNr(String studNr){
 		//input har en s, og 6 tall

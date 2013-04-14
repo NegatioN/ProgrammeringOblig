@@ -77,7 +77,7 @@ public class Window extends JFrame implements ActionListener{
 	}
 	
 	private String finnLærere(String s){
-		ArrayList<Laerer> lærerne = skolen.getLærerne().findLærerByNavn(s);
+		ArrayList<Laerer> lærerne = skolen.getLærerne().findByNavn(s);
 		
 		iterator = lærerne.iterator();
 		

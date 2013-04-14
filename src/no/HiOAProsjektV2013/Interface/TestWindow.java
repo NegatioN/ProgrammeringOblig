@@ -53,6 +53,11 @@ public class TestWindow extends JFrame implements ActionListener {
 	public TestWindow(String tittel) {
 
 		super(tittel);
+		
+		Student stud = new Student("are konradi", "epost@epost.no", 95153437, "Bogata 21", 252525, new Date());
+		Object o = stud.getClass();
+		String s = o.toString();
+		System.out.println(s);
 		//oppretter save-objektet
 		arkivet 	= new Archiver();
 		
@@ -359,7 +364,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		else if (innhold.getComponent(0).equals(fag)) {
 				try{
 					int poeng = Integer.parseInt(studiepoeng.getText());
-					Laerer læreren = skolen.getLærerne().findLærerByNavn(lærer.getText()).get(0);
+					Laerer læreren = skolen.getLærerne().findByNavn(lærer.getText()).get(0);
 					
 					info.setText(skolen.getFagene().addFag(navn.getText(), 
 							fagkode.getText(),

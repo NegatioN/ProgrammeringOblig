@@ -69,11 +69,11 @@ public class Soek extends JPanel {
 
 	public String navnSøk(){
 		
-		for(Laerer l : skolen.getLærerne().findLærerByNavn(søkefelt.getText())){
+		for(Laerer l : skolen.getLærerne().findByNavn(søkefelt.getText())){
 			resultat += "\n" + l.getfNavn() +" "+ l.geteNavn();
 		}
 		
-		for(Student s : skolen.getStudentene().findStudentByNavn(søkefelt.getText())){
+		for(Student s : skolen.getStudentene().findByNavn(søkefelt.getText())){
 			resultat += "\n" + s.getfNavn() +" "+ s.geteNavn();
 		}
 		
