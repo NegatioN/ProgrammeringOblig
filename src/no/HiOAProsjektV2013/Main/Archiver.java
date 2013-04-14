@@ -1,5 +1,6 @@
 package no.HiOAProsjektV2013.Main;
 
+import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -19,6 +20,10 @@ public class Archiver {
 		try (ObjectOutputStream out = new ObjectOutputStream(
 				new FileOutputStream("src/savedData.data"))) {
 			out.writeObject(skolen);
+			//skriver statics til fil.
+			out.writeInt(skolen.getStudentene().getStudentnummer());
+			
+			
 			out.close();
 
 		} catch (NotSerializableException nse) {
@@ -34,6 +39,9 @@ public class Archiver {
 		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(
 				"src/savedData.data"))) {
 			skolen = (Skole) in.readObject();
+			//leser statics
+			int studentnummer = in.readInt();
+			skolen.getStudentene().setStudentNrCount(studentnummer);
 			in.close();
 		} catch (ClassNotFoundException cnfe) {
 			System.out.println("Class not found");
@@ -44,7 +52,7 @@ public class Archiver {
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 			System.out.println("IO input error");
-			skolen = new Skole();
+//			skolen = new Skole();
 		}
 		return skolen;
 	}

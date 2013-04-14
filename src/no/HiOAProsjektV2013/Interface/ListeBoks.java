@@ -26,7 +26,6 @@ public class ListeBoks<E> implements ListSelectionListener{
 		listen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listen.addListSelectionListener(this);
 		
-		
 		return listen;
 	}
 
@@ -39,6 +38,7 @@ public class ListeBoks<E> implements ListSelectionListener{
 			//opprettUtvidelsesVindu(valgtObjekt);
 		}
 	}
+	
 
 	
 	

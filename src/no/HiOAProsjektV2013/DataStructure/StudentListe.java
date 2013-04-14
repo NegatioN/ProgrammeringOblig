@@ -171,6 +171,13 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 
 		return studentene;
 	}
+	//brukes KUN i loading av programmet slik at vi får overført verdien
+	public void setStudentNrCount(int studnr){
+		studentNummer = studnr;
+	}
+	public int getStudentnummer(){
+		return studentNummer;
+	}
 
 	public String toString() {
 		String stringen = new String();

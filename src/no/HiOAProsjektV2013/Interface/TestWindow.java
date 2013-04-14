@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
@@ -14,6 +16,8 @@ import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -274,30 +278,29 @@ public class TestWindow extends JFrame implements ActionListener {
 		info.setText(tekst);
 
 		vis.add(new JScrollPane(info));
-
 		innhold(vis);
 	}
 	
 	//Listeboks funker kind-of, men vi må redefinere toStrings for å bruke de saklig. Trenger også noe hjelp med plassering av de. 
-//	public void vis(JList<Student> studenter){
-//	vis = panelRefresh();
-//	}
-//	private JPanel panelRefresh(){
-//		
-//		vis = new JPanel();
-//		vis.setPreferredSize(size);
-//		vis.setLayout(new GridBagLayout());
-//		GridBagConstraints gbc = new GridBagConstraints();
-//		vis.add(listeboks.listiFy(skolen.getStudentene().findStudentByNavn("Joakim")), gbc);
-//		JLabel myLabel = new JLabel("Label1");
-//		vis.add(myLabel, gbc);
-//		
-//		scroll = new JScrollPane(info);
-//
-//		vis.add(scroll);
-//		
-//		return vis;
-//	}
+	public void vis(JList<Student> studenter){
+	vis = panelRefresh();
+	}
+	private JPanel panelRefresh(){
+		
+		vis = new JPanel();
+		vis.setPreferredSize(size);
+		vis.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		vis.add(listeboks.listiFy(skolen.getStudentene().findByNavn("Kåre Rishaug")), gbc);
+		JLabel myLabel = new JLabel("Label1");
+		vis.add(myLabel, gbc);
+		
+		scroll = new JScrollPane(info);
+
+		vis.add(scroll);
+		
+		return vis;
+	}
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == nystudent) {
