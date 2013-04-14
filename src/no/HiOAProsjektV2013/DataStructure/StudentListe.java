@@ -30,6 +30,7 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 		student.setSlutt(dato);
 	}
 
+	//finnes ved knapp i Studentinfo-display
 	public ArrayList<Student> findKravBeståttStudenter(Fag fag) {
 		ArrayList<Student> studentene = new ArrayList<>();
 		for(Student s : register){
@@ -111,7 +112,7 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 	private int newId() {
 		return studentNummer++;
 	}
-
+	
 	public ArrayList<Student> findStudentByFag(Fag fag) {
 		ArrayList<Student> studentene = new ArrayList<>();
 		String fagkode = fag.getFagkode();

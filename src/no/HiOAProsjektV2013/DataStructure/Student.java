@@ -2,7 +2,6 @@ package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,7 +15,6 @@ public class Student extends Person implements Serializable{
 	//finner fag studenten har ved å liste opp .getFagkode() fra kravene.
 	private List<Arbeidskrav> fagListe = new LinkedList<>();
 	private List<EksamensDeltaker> eksamener = new LinkedList<>();
-	private Iterator<Arbeidskrav> iterator;
 	private boolean avsluttet = false;
 	private Studieprogram sp = null;
 	
@@ -45,33 +43,29 @@ public class Student extends Person implements Serializable{
 	//har studenten faget vi leter etter?
 	//Sjekker gjennom arbeidskravene etter fagkode.
 	public boolean harFaget(String fagkode){
-		refreshIterator();
 		
-		while(iterator.hasNext()){
-			Arbeidskrav krav = iterator.next();
-			if(fagkode.equalsIgnoreCase(krav.getFagkode())){
+		for(Arbeidskrav krav : fagListe){
+			if(fagkode.equalsIgnoreCase(krav.getFagkode()))
 				return true;
-			}
 		}
 		
 		return false;
 	}
 	private boolean harFaget(Fag fag){
-		Arbeidskrav krav = null;
 		String fagkode = fag.getFagkode();
-		refreshIterator();
-		
-		while(iterator.hasNext()){
-			krav = iterator.next();
-			if(fagkode.equalsIgnoreCase(krav.getFagkode())){
+		for(Arbeidskrav krav : fagListe){
+			if(fagkode.equalsIgnoreCase(krav.getFagkode()))
 				return true;
-			}
 		}
 		return false;
 	}
-	
+	//legger til krav i kravlista til studenten, men kun hvis det ikke finnes.
 	public void addFag(Fag fag){
+		if(!harFaget(fag))
 		fagListe.add(fag.getKrav());
+		else{
+			return;
+		}
 	}
 	
 	public boolean innfriddKrav(Fag fag){
@@ -81,13 +75,11 @@ public class Student extends Person implements Serializable{
 		boolean harFaget = harFaget(fag);
 		if(!harFaget)
 			return false;
-		refreshIterator();
 		String fagkode = fag.getFagkode();
 		
-		while(iterator.hasNext()){
-			kravene = iterator.next();
-			if(fagkode.equalsIgnoreCase(kravene.getFagkode()))
-					return kravene.kravInnfridd();
+		for(Arbeidskrav krav : fagListe){
+			if(fagkode.equalsIgnoreCase(krav.getFagkode()))
+				return krav.kravInnfridd();
 		}
 		return false;
 	}
@@ -145,12 +137,17 @@ public class Student extends Person implements Serializable{
 					"\nE-post: " + getEpost() + 
 					"\nTlf: " + getTelefonNr() + 
 					"\nAdresse: " + adresse + 
-					"\nStartdato: " + start;
+					"\nStartdato: " + start +
+					"\nFag: ";
+		
+		//må legge inn arbeidskrav i faget før vi kan reference.
+		if(!fagListe.isEmpty()){
+		for(Arbeidskrav fag : fagListe){
+			stringen += fag.getFagkode() + "\n";
+		}
+		}
 		
 		return stringen;
-	}
-	private void refreshIterator(){
-		iterator = fagListe.iterator();
 	}
 
 }

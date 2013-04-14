@@ -32,7 +32,7 @@ public class FagListe implements Serializable{
 	}
 	
 	//Finner et fag basert på navnet, kan returnere flere fag.
-	public ArrayList<Fag> finnFagByNavn(String navn){
+	public ArrayList<Fag> findByNavn(String navn){
 		ArrayList<Fag> fagene = new ArrayList<>();
 		for(Fag f : register){
 			if(navn.equalsIgnoreCase(f.getNavn()))

@@ -3,7 +3,6 @@ package no.HiOAProsjektV2013.DataStructure;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,7 +11,6 @@ public class Eksamen implements Serializable{
 	private static final long serialVersionUID = 1040L;
 	private Date dato;
 	private List<EksamensDeltaker> deltakere = new LinkedList<>();
-	private Iterator<EksamensDeltaker> iterator;
 	
 	
 	public Eksamen(Date dato){
@@ -36,9 +34,7 @@ public class Eksamen implements Serializable{
 	
 	//melder studenten av eksamenen. Setter boolean i deltaker til false for oppmeldt. (for historikkens del)
 	public void avmeld(Student student){
-		refreshIterator();
-		while(iterator.hasNext()){
-			EksamensDeltaker ed = iterator.next();
+		for(EksamensDeltaker ed : deltakere){
 			if(student.equals(ed.getDeltaker())){
 				ed.avmeld();
 				return;
@@ -61,8 +57,5 @@ public class Eksamen implements Serializable{
 			}
 	}
 	
-	private void refreshIterator(){
-		iterator = deltakere.iterator();
-	}
 	
 }

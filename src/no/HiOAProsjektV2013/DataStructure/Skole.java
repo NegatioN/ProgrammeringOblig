@@ -44,6 +44,7 @@ public class Skole implements Serializable{
 	//********************************Studieprogrammetoder********************************
 	
 	//Søk på studieprogram etter navn
+	//utvikle noe som gir treff på delvis korrekt tekst for denne?
 	public Studieprogram finnStudProgByNavn(String navn){
 		for(Studieprogram sp : studieprogrammene){
 			if(sp.getNavn().equalsIgnoreCase(navn))

@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
 public class Fag implements Serializable{
 
+	
 	private static final long serialVersionUID = 1031L;
 	private String navn, fagkode, beskrivelse, vurderingsform;
 	private Laerer lærer;
@@ -26,6 +26,7 @@ public class Fag implements Serializable{
 		this.vurderingsform = vurderingsform;
 		this.lærer = lærer;
 		this.studiepoeng = studiepoeng;
+		krav = new Arbeidskrav(this);
 	}
 
 	public void addEksamen(Eksamen e) {

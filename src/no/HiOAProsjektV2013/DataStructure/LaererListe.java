@@ -33,7 +33,6 @@ public class LaererListe extends PersonListe<Laerer> implements Serializable{
 	//PS finner IKKE folk med delvis treff. Må være korrekt stavet fornavn eller etternavn.
 	public ArrayList<Laerer> findByNavn(String navn){
 		String[] navnene = nameSplitter(navn);
-		System.out.println("lærercheck");
 		
 		ArrayList<Laerer> fornavn = findByFornavn(navnene[Person.FORNAVN]);
 		ArrayList<Laerer> etternavn = findByEtternavn(navnene[Person.ETTERNAVN]);

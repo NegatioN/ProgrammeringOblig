@@ -14,6 +14,9 @@ public class KontrollPanel implements Serializable{
 	private String fagkodeRegex = "\\D{4}\\d{4}";
 	private String studentNrRegex = "s\\d{6}";
 	private String årRegex = "\\d{4}";
+	private String mobRegex = "\\d{8}";
+	private String mailRegex = "";
+	private String adresseRegex = "";
 	
 	public void checkSpression(String input){
 		

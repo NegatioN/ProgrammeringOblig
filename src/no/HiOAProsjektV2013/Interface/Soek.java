@@ -77,7 +77,7 @@ public class Soek extends JPanel {
 			resultat += "\n" + s.getfNavn() +" "+ s.geteNavn();
 		}
 		
-		for(Fag f : skolen.getFagene().finnFagByNavn(søkefelt.getText())){
+		for(Fag f : skolen.getFagene().findByNavn(søkefelt.getText())){
 			resultat += "\n" + f.getNavn() +" "+ f.getFagkode();
 		}
 		

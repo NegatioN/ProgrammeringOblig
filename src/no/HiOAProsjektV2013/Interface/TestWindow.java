@@ -4,24 +4,22 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import no.HiOAProsjektV2013.DataStructure.Fag;
 import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Skole;
 import no.HiOAProsjektV2013.DataStructure.Student;
@@ -36,7 +34,7 @@ public class TestWindow extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private Archiver arkivet = new Archiver();
+	private Archiver arkivet;
 	private ListeBoks<Student> listeboks = new ListeBoks<Student>();
 	private JTextArea info;
 	private VinduLytter vl;
@@ -53,17 +51,24 @@ public class TestWindow extends JFrame implements ActionListener {
 	public TestWindow(String tittel) {
 
 		super(tittel);
-		
-		Student stud = new Student("are konradi", "epost@epost.no", 95153437, "Bogata 21", 252525, new Date());
-		Object o = stud.getClass();
-		String s = o.toString();
-		System.out.println(s);
 		//oppretter save-objektet
 		arkivet 	= new Archiver();
 		
 		//Oppretter gammelt objekt om det fins, eller nytt om vi ikke har et.
 		skolen 		= arkivet.readFromFile();
 		
+		
+		//TEST
+		ArrayList<Fag> fag = skolen.getFagene().findByNavn("Faget");
+		fag.get(0).addKrav("Bare et testkrav");
+		
+		ArrayList<Student> student = skolen.getStudentene().findByNavn("Joakim");
+		System.out.println(student.get(0).toString());
+		System.out.println(fag.get(0).toString());
+		student.get(0).addFag(fag.get(0));
+		
+		
+		//TEST
 		//setter WindowListener
 		vl = new VinduLytter(this);
 		
