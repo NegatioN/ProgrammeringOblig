@@ -77,36 +77,35 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 	public Student findStudentByStudentNr(String studNr){
 		//input har en s, og 6 tall
 		String regex = "s\\d{6}";
-		if(!studNr.matches(regex))
-			//bruker har skrevet et ikke-valid studentnr
+		if(!studNr.matches(regex)) //bruker har skrevet et ikke-valid studentnr
 			return null;
-		//splitter på non-digit
-		regex = "\\D";
-		String[] inputFixed = studNr.split(regex);
+		String[] splittet = studNr.split("\\D"); //splitter på non-digit
 		//vi får studentnummeret
-		int studentnummeret = Integer.parseInt(inputFixed[inputFixed.length-1]);
+		int studNret = Integer.parseInt(splittet[1]);
+		
+		
 		//størrelser for binærsøk
 		int max = register.size()-1;
 		int min = 0;
+		int mid, tempStudNr;
 		
 		//binærsøk gjennom register
-		while(min < max){
-			int mid = (max + min) / 2;
-			Student checkStudent = register.get(mid);
-			int checkStudentnummer = checkStudent.getStudentnummer();
-			if(studentnummeret == checkStudentnummer)
-				return checkStudent;
-			else if(studentnummeret < checkStudentnummer){
-				max = mid;
-			}
-			else if(studentnummeret > checkStudentnummer){
-				min = mid;
-			}
+		while(min <= max){
+			mid = max + min / 2;
+			
+			tempStudNr = register.get(mid).getStudentnummer();
+			
+			if(tempStudNr < studNret)
+				min = mid + 1;
+			else if(tempStudNr > studNret)
+				max = mid - 1;
+			else
+				return register.get(mid);
 		}
-		
 		
 		return null;
 	}
+	
 	// gir nytt studentnummer, og øker staticvariabel. Gjør variabelen usynlig
 	// for andre deler av programmet
 	private int newId() {

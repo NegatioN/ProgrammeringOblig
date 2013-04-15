@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -22,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import no.HiOAProsjektV2013.DataStructure.Fag;
 import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Skole;
 import no.HiOAProsjektV2013.DataStructure.Student;
@@ -246,7 +248,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		fag = new JPanel();
 		fag.setPreferredSize(size);
 		info = new JTextArea(8,25);
-
+		
 		fag.add(info);
 		fag.add(navn);
 		fag.add(fagkode);
