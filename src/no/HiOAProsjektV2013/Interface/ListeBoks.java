@@ -1,10 +1,10 @@
 package no.HiOAProsjektV2013.Interface;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.util.ArrayList;
 
 import javax.swing.JList;
-import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -12,6 +12,7 @@ import javax.swing.event.ListSelectionListener;
 //tingene her må legges i main-vindus-klassen
 public class ListeBoks<E> implements ListSelectionListener{
 	private final int ROWCOUNT = 10;
+	private Dimension størrelse = new Dimension(650,150);
 	
 	public ListeBoks(){
 		
@@ -25,6 +26,8 @@ public class ListeBoks<E> implements ListSelectionListener{
 		listen.setVisibleRowCount(ROWCOUNT);
 		listen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listen.addListSelectionListener(this);
+		listen.setFixedCellWidth(100);
+		listen.setPreferredSize(størrelse);
 		
 		return listen;
 	}
