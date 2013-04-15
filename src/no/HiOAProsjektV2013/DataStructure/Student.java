@@ -1,7 +1,6 @@
 package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
@@ -68,6 +67,21 @@ public class Student extends Person implements Serializable{
 		else{
 			return;
 		}
+	}
+	//privat metode kun for bruk i removeFag.
+	//studenten vil ikke ha samme pointer til et arbeidskrav-objekt som faget, så det må søkes på intærne krav.
+	private Arbeidskrav harKravet(Fag fag){
+		String fagkode = fag.getFagkode();
+		for(Arbeidskrav krav : fagListe){
+			if(fagkode.equalsIgnoreCase(krav.getFagkode()))
+				return krav;
+		}
+		return null;
+	}
+	public void removeFag(Fag fag){
+		Arbeidskrav krav = harKravet(fag);
+		if(krav != null)
+			fagListe.remove(krav);
 	}
 	
 	public boolean innfriddKrav(Fag fag){

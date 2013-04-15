@@ -2,6 +2,7 @@ package no.HiOAProsjektV2013.Interface;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JList;
+import javax.swing.JPanel;
 
 public class IndreVindu<E> {
 
@@ -12,7 +13,7 @@ public class IndreVindu<E> {
 		indreVindu = new JInternalFrame(title,true,true,true,true);
 	}
 	
-	public void generateWindow(JList<E> liste){
+	public void generateWindow(JList<E> liste, JPanel panel){
 		JList<E> lista = liste;
 		
 	}

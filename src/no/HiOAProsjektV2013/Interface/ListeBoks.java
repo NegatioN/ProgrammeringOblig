@@ -11,8 +11,8 @@ import javax.swing.event.ListSelectionListener;
 
 //tingene her må legges i main-vindus-klassen
 public class ListeBoks<E> implements ListSelectionListener{
-	private final int ROWCOUNT = 10;
-	private Dimension størrelse = new Dimension(650,150);
+	private final int ROWCOUNT = 15;
+	private Dimension størrelse = new Dimension(400,800);
 	
 	public ListeBoks(){
 		
@@ -26,7 +26,7 @@ public class ListeBoks<E> implements ListSelectionListener{
 		listen.setVisibleRowCount(ROWCOUNT);
 		listen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listen.addListSelectionListener(this);
-		listen.setFixedCellWidth(100);
+		listen.setFixedCellWidth(400);
 		listen.setPreferredSize(størrelse);
 		
 		return listen;

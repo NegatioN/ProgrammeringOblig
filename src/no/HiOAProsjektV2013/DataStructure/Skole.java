@@ -1,6 +1,11 @@
 package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 //	Klassen fungerer som en samling av alle datastrukturer for skolesystemet
 //	Dette for å unngå clutter i hovedklassen/vindusklassen som skal lage og holde datastrukturen
@@ -41,10 +46,46 @@ public class Skole implements Serializable{
 	public void addFagToStudProg(String navn, String fagkode){
 		Studieprogram sp = studieprogrammene.findByNavn(navn);
 		Fag f = sp.finnFag(getFagene().finnFagByFagkode(fagkode));
+		//hvis faget ikke finnes i studieprogrammet fra før, altså søket gir null.
 		if( f == null)
 			sp.addFag(getFagene().finnFagByFagkode(fagkode));
+
 	}
-	
+	//legger til kravene fra faget i studentobjektet. Skal brukes via internal window.
+	public void addFagToStud(Student s, String fagkode){
+		Fag f = fagene.finnFagByFagkode(fagkode);
+		if(f != null)
+			s.addFag(f);
+	}
+	//fjernet et arbeidskrav/fag fra en studenten gitt at han har det
+	public void removeFagFromStud(Student s, String fagkode){
+		Fag f = fagene.finnFagByFagkode(fagkode);
+		if(f != null)
+		s.removeFag(f);
+	}
+	//legger til krav til gitt fag
+	public void addKravToFag(String fagkode, String beskrivelse){
+		Fag f = fagene.finnFagByFagkode(fagkode);
+		if(f != null)
+			f.addKrav(beskrivelse);
+	}
+	public void addKravToFag(Fag f, String beskrivelse){
+		if(f != null)
+			f.addKrav(beskrivelse);
+	}
+	//prøver å legge til en eksamen til gitt fag basert på input. Kan feile.
+	public void addEksamenToFag(Fag fag, String dato){
+		DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); //Setter inputformat for startdato
+		try {
+			Date date = (Date) formatter.parse(dato);
+			fag.addEksamen(date);
+		} catch (NumberFormatException nfe){
+			System.out.println("NumberformatException i addEksamenToFag");
+		} catch (ParseException pe) {
+			System.out.println("ParseException i addEksamenToFag");
+		}
+		
+	}
 	
 	//****************SØØØØØØØØØØK SØKEMETODER SØØØØØØØØØØK****************//
 	
@@ -70,6 +111,8 @@ public class Skole implements Serializable{
 		return "Ugyldig søk";
 	}
 
+	//tror vi må gjøre søkene separate om vi skal ha ut objektlister.
+	// Virker som det kan være lurt å kun returnere søk basert på aktivert tab eller en eller annen restriction
 	public String navnSøk(){ //Utfører alle søk som tar imot navn, og returnerer en string (SKAL RETURNERE OBJEKT)
 		for(Laerer l : getLærerne().findByNavn(in)){
 			resultat += "\n" + l.getfNavn() +" "+ l.geteNavn();

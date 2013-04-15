@@ -281,27 +281,36 @@ public class TestWindow extends JFrame implements ActionListener {
 		info.setText(tekst);
 
 		vis.add(new JScrollPane(info));
+		//comment ut panelRefresh her for å få normalt display av info igjen.
+		panelRefresh();
 		innhold(vis);
 	}
 	
-	//Listeboks funker kind-of, men vi må redefinere toStrings for å bruke de saklig. Trenger også noe hjelp med plassering av de. 
-//	public void vis(JList<Student> studenter){
-//	vis = panelRefresh();
-//	}
-//	private JPanel panelRefresh(){
-//		
-//		vis = new JPanel();
-//		vis.setPreferredSize(size);
-//		vis.setLayout(new GridBagLayout());
-//		GridBagConstraints gbc = new GridBagConstraints();
-//		vis.add(listeboks.listiFy(skolen.getStudentene().findStudentByNavn("Joakim")), gbc);
-//		JLabel myLabel = new JLabel("Label1");
-//		vis.add(myLabel, gbc);
-//
-//		vis.add(new JScrollPane(info));
-//		
-//		return vis;
-//	}
+	//Listeboks funker kind-of, men vi må redefinere toStrings for å bruke de saklig.
+	//trenger å jobbe med plassering innenfor hovedpanelet.
+	//noe er messed up med scrollen. blir sånn 3 ganger så lang som den skal være.
+	private JPanel panelRefresh(){
+		
+		vis = new JPanel();
+		vis.setPreferredSize(size);
+		vis.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.LINE_START;
+		gbc.weightx = 1.0D;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		JLabel myLabel = new JLabel("Info");
+		vis.add(myLabel, gbc);
+		gbc.gridy = 1;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		JList<Student> listen = (JList<Student>) listeboks.listiFy(skolen.getStudentene().findByNavn("Joakim"));
+		
+		vis.add(new JScrollPane(listen), gbc);
+		
+		
+		return vis;
+	}
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == nystudent) {
