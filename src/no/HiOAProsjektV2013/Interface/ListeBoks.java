@@ -10,9 +10,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 //tingene her må legges i main-vindus-klassen
+//endre til overload constructors på "Listiyfy"? for å ikke opprette mange typeparameteriserte objekter i testwindow?
 public class ListeBoks<E> implements ListSelectionListener{
 	private final int ROWCOUNT = 15;
-	private Dimension størrelse = new Dimension(400,800);
+	private Dimension størrelse = new Dimension(400,200);
 	
 	public ListeBoks(){
 		
@@ -38,6 +39,7 @@ public class ListeBoks<E> implements ListSelectionListener{
 		if(e.getValueIsAdjusting()){
 			JList<E> lista = (JList<E>) e.getSource();
 			E valgtObjekt = lista.getSelectedValue();
+			System.out.println("TRYKK TRYKK");
 			//opprettUtvidelsesVindu(valgtObjekt);
 		}
 	}

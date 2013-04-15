@@ -185,5 +185,8 @@ public class Student extends Person implements Serializable{
 		
 		return stringene;
 	}
+	public Arbeidskrav[] getFagene(){
+		return (Arbeidskrav[]) fagListe.toArray();
+	}
 
 }

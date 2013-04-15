@@ -11,9 +11,11 @@ import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JButton;
+import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -43,6 +45,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private ListeBoks<Laerer> laererboks = new ListeBoks<Laerer>();
 	//private ListeBoks<Fag> fagboks = new ListeBoks<Fag>();
 	//private ListeBoks<Studieprogram> studprogboks = new ListeBoks<Studieprogram>();
+	private IndreVindu innerWindow;
 	private JTextArea info;
 	private VinduLytter vl;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
@@ -64,14 +67,10 @@ public class TestWindow extends JFrame implements ActionListener {
 		skolen 		= arkivet.readFromFile();
 		
 		//TEST
-		/*ArrayList<Fag> fag = skolen.getFagene().findByNavn("Faget");
-		fag.get(0).addKrav("Bare et testkrav");
-		
 		ArrayList<Student> student = skolen.getStudentene().findByNavn("Joakim");
-		System.out.println(student.get(0).toString());
-		System.out.println(fag.get(0).toString());
-		student.get(0).addFag(fag.get(0));
-		*/
+		JDesktopPane pane = new JDesktopPane();
+		getContentPane().add(pane, BorderLayout.CENTER);
+		innerWindow = new IndreVindu(pane,student.get(0));
 		
 		//TEST
 		//setter WindowListener
@@ -300,7 +299,6 @@ public class TestWindow extends JFrame implements ActionListener {
 	
 	//Listeboks funker kind-of, men vi må redefinere toStrings for å bruke de saklig.
 	//trenger å jobbe med plassering innenfor hovedpanelet.
-	//noe er messed up med scrollen. blir sånn 3 ganger så lang som den skal være.
 	private <E> JPanel panelRefresh(JList<? extends Person> liste){
 		
 		vis = new JPanel();
