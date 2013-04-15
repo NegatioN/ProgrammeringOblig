@@ -1,6 +1,8 @@
 package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -132,12 +134,13 @@ public class Student extends Person implements Serializable{
 	}
 	public String toString(){
 		String stringen = new String();
+				
 		stringen = "StudentNr: " + studentnummer + 
 					"\nNavn: " + getfNavn() + " " + geteNavn() + 
 					"\nE-post: " + getEpost() + 
 					"\nTlf: " + getTelefonNr() + 
 					"\nAdresse: " + adresse + 
-					"\nStartdato: " + start +
+					"\nStartdato: " + new SimpleDateFormat("dd. MMM yyyy").format(start) +
 					"\nFag: ";
 		
 		//må legge inn arbeidskrav i faget før vi kan reference.
@@ -148,6 +151,25 @@ public class Student extends Person implements Serializable{
 		}
 		
 		return stringen;
+	}
+	
+	public String[] toStringArray(){
+		String[] stringene = new String[7];
+		stringene[0] =  ""+studentnummer;
+		stringene[1] = 	getfNavn() + " " + geteNavn();
+		stringene[2] = 	getEpost();
+		stringene[3] =  ""+getTelefonNr();
+		stringene[4] = 	adresse;
+		stringene[5] = 	""+start;
+		
+		//må legge inn arbeidskrav i faget før vi kan reference.
+		if(!fagListe.isEmpty()){
+			for(Arbeidskrav fag : fagListe){
+				stringene[6] += fag.getFagkode() + "\n";
+			}
+		}
+		
+		return stringene;
 	}
 
 }

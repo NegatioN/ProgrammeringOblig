@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -23,7 +22,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import no.HiOAProsjektV2013.DataStructure.Fag;
 import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Skole;
 import no.HiOAProsjektV2013.DataStructure.Student;
@@ -43,14 +41,13 @@ public class TestWindow extends JFrame implements ActionListener {
 	private JTextArea info;
 	private VinduLytter vl;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
-			vislærer, visfag, visstudieprog, lagre, leggtilfag;
+			vislærer, visfag, visstudieprog, lagre, leggtilfag, søkeknapp;
 	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode,
-			beskrivelse, studiepoeng, vurderingsform, lærer;
+			beskrivelse, studiepoeng, vurderingsform, lærer, søkefelt;
 	private Skole skolen;
 	private JPanel rammeverk, innhold, stud, lær, fag, studprog, vis;
 	private Dimension knapp, halvknapp, size;
-	private JScrollPane scroll;
-	private Soek søk;
+
 
 	public TestWindow(String tittel) {
 
@@ -63,14 +60,14 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		
 		//TEST
-		ArrayList<Fag> fag = skolen.getFagene().findByNavn("Faget");
+		/*ArrayList<Fag> fag = skolen.getFagene().findByNavn("Faget");
 		fag.get(0).addKrav("Bare et testkrav");
 		
 		ArrayList<Student> student = skolen.getStudentene().findByNavn("Joakim");
 		System.out.println(student.get(0).toString());
 		System.out.println(fag.get(0).toString());
 		student.get(0).addFag(fag.get(0));
-		
+		*/
 		
 		//TEST
 		//setter WindowListener
@@ -104,7 +101,9 @@ public class TestWindow extends JFrame implements ActionListener {
 		vislærer		= new JButton("Vis lærere");
 		visfag			= new JButton("Vis fag");
 		visstudieprog	= new JButton("Vis studieprogram");
-		
+		søkeknapp 		= new JButton("Søk");
+		søkefelt 		= new JTextField("Søk");
+
 		nystudent		.setPreferredSize(halvknapp);
 		nylærer			.setPreferredSize(halvknapp);
 		nyttfag			.setPreferredSize(halvknapp);
@@ -113,6 +112,8 @@ public class TestWindow extends JFrame implements ActionListener {
 		vislærer		.setPreferredSize(halvknapp);
 		visfag			.setPreferredSize(halvknapp);
 		visstudieprog	.setPreferredSize(halvknapp);
+		søkeknapp		.setPreferredSize(halvknapp);
+		søkefelt		.setPreferredSize(halvknapp);
 
 		
 		nystudent		.addActionListener(this);
@@ -123,16 +124,17 @@ public class TestWindow extends JFrame implements ActionListener {
 		vislærer		.addActionListener(this);
 		visfag			.addActionListener(this);
 		visstudieprog	.addActionListener(this);
-
-		søk = new Soek(skolen, this, 150, 100);
-		
+		søkeknapp		.addActionListener(this);
+		søkefelt		.addActionListener(this);
+				
 		JPanel leggtil = new JPanel();
 		JPanel visning = new JPanel();
 		
 		leggtil.setPreferredSize(new Dimension(700,50));
 		visning.setPreferredSize(new Dimension(150,450));
 		
-		visning.add(søk);
+		visning.add(søkefelt);
+		visning.add(søkeknapp);
 		visning.add(visstudent);
 		visning.add(vislærer);
 		visning.add(visfag);
@@ -196,6 +198,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	public Archiver getArkiv(){
 		return arkivet;
 	}
+	
 	public Skole getSkole(){
 		return skolen;
 	}
@@ -282,25 +285,23 @@ public class TestWindow extends JFrame implements ActionListener {
 	}
 	
 	//Listeboks funker kind-of, men vi må redefinere toStrings for å bruke de saklig. Trenger også noe hjelp med plassering av de. 
-	public void vis(JList<Student> studenter){
-	vis = panelRefresh();
-	}
-	private JPanel panelRefresh(){
-		
-		vis = new JPanel();
-		vis.setPreferredSize(size);
-		vis.setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		vis.add(listeboks.listiFy(skolen.getStudentene().findByNavn("Kåre Rishaug")), gbc);
-		JLabel myLabel = new JLabel("Label1");
-		vis.add(myLabel, gbc);
-		
-		scroll = new JScrollPane(info);
-
-		vis.add(scroll);
-		
-		return vis;
-	}
+//	public void vis(JList<Student> studenter){
+//	vis = panelRefresh();
+//	}
+//	private JPanel panelRefresh(){
+//		
+//		vis = new JPanel();
+//		vis.setPreferredSize(size);
+//		vis.setLayout(new GridBagLayout());
+//		GridBagConstraints gbc = new GridBagConstraints();
+//		vis.add(listeboks.listiFy(skolen.getStudentene().findStudentByNavn("Joakim")), gbc);
+//		JLabel myLabel = new JLabel("Label1");
+//		vis.add(myLabel, gbc);
+//
+//		vis.add(new JScrollPane(info));
+//		
+//		return vis;
+//	}
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == nystudent) {
@@ -325,7 +326,7 @@ public class TestWindow extends JFrame implements ActionListener {
 			vis(skolen.getFagene().toString());
 		}
 		if (e.getSource() == visstudieprog) {
-			vis(skolen.studprogToString());
+			vis(skolen.getStudieprogrammene().toString());
 		}
 		
 		//Lagring av objekter
@@ -393,7 +394,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		//***************************************************************
 		
 		else if (innhold.getComponent(0).equals(studprog)) {
-				info.setText(skolen.addStudProg(navn.getText()).toString());
+				info.setText(skolen.getStudieprogrammene().addStudProg(navn.getText()).toString());
 			}
 		}
 		
@@ -403,16 +404,16 @@ public class TestWindow extends JFrame implements ActionListener {
 			if(innhold.getComponent(0).equals(studprog)){
 				try{
 					skolen.addFagToStudProg(navn.getText(), fagkode.getText());
-					info.setText(skolen.finnStudProgByNavn(navn.getText()).toString());
+					info.setText(skolen.getStudieprogrammene().findByNavn(navn.getText()).toString());
 				} catch (NullPointerException npe){
 					info.setText("Ugyldig fagkode");
 				}
 			}
 		}
 		
-		if (e.getSource() == søk.getFelt() || e.getSource() == søk.getKnapp())
+		if (e.getSource() == søkefelt || e.getSource() == søkeknapp)
 		{
-			info.setText(søk.søk());
+			vis(skolen.søk(søkefelt.getText()));
 		}
 	}
 }
