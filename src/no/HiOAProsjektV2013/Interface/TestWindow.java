@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JButton;
-import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -29,6 +28,7 @@ import no.HiOAProsjektV2013.DataStructure.Person;
 import no.HiOAProsjektV2013.DataStructure.Skole;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.Main.Archiver;
+import no.HiOAProsjektV2013.Main.ScriptClass;
 
 public class TestWindow extends JFrame implements ActionListener {
 
@@ -40,11 +40,9 @@ public class TestWindow extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	private Archiver arkivet;
-	//private ListeBoks<E> listeboks = new ListeBoks<E>();
 	private ListeBoks<Student> studentboks = new ListeBoks<Student>();
 	private ListeBoks<Laerer> laererboks = new ListeBoks<Laerer>();
-	//private ListeBoks<Fag> fagboks = new ListeBoks<Fag>();
-	//private ListeBoks<Studieprogram> studprogboks = new ListeBoks<Studieprogram>();
+	private ScriptClass sc;
 	private IndreVindu innerWindow;
 	private JTextArea info;
 	private VinduLytter vl;
@@ -70,8 +68,9 @@ public class TestWindow extends JFrame implements ActionListener {
 		desktop.setSize(700, 500);
 		desktop.setBackground(null);
 		setContentPane(desktop);
+		//script for å generere fag, studenter og lærere
+//		sc = new ScriptClass(skolen);
 		
-		//TEST
 		//setter WindowListener
 		vl = new VinduLytter(this);
 		
