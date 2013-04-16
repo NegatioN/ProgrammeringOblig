@@ -49,14 +49,13 @@ public class TestWindow extends JFrame implements ActionListener {
 	private JTextArea info;
 	private VinduLytter vl;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
-			vislærer, visfag, visstudieprog, lagre, leggtilfag, søkeknapp;
+			vislærer, visfag, visstudieprog, lagre, leggtilfag, søkeknapp, åpne;
 	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode,
 			beskrivelse, studiepoeng, vurderingsform, lærer, søkefelt;
 	private Skole skolen;
 	private JPanel rammeverk, innhold, stud, lær, fag, studprog, vis;
 	private Dimension knapp, halvknapp, size;
-
-
+	private JDesktopPane desktop;
 	public TestWindow(String tittel) {
 
 		super(tittel);
@@ -67,21 +66,21 @@ public class TestWindow extends JFrame implements ActionListener {
 		skolen 		= arkivet.readFromFile();
 		
 		//TEST
-		ArrayList<Student> student = skolen.getStudentene().findByNavn("Joakim");
-		JDesktopPane pane = new JDesktopPane();
-		getContentPane().add(pane, BorderLayout.CENTER);
-		innerWindow = new IndreVindu(pane,student.get(0));
+		desktop = new JDesktopPane();
+		desktop.setSize(700, 500);
+		desktop.setBackground(null);
+		setContentPane(desktop);
 		
 		//TEST
 		//setter WindowListener
 		vl = new VinduLytter(this);
 		
 		rammeverk = new JPanel(new BorderLayout());
-		add(rammeverk);
-		
+		desktop.add(rammeverk);
+
 		knapp 		= new Dimension(260, 25);
 		halvknapp 	= new Dimension(140, 25);
-		size 		= new Dimension(500, 500);
+		size 		= new Dimension(500, 450);
 		
 		fyllRamme();
 
@@ -303,7 +302,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		vis = new JPanel();
 		vis.setPreferredSize(size);
-		vis.setLayout(new GridBagLayout());
+		/*vis.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.anchor = GridBagConstraints.LINE_START;
@@ -313,9 +312,14 @@ public class TestWindow extends JFrame implements ActionListener {
 		JLabel myLabel = new JLabel("Info");
 		vis.add(myLabel, gbc);
 		gbc.gridy = 1;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.fill = GridBagConstraints.HORIZONTAL;*/
 		
-		vis.add(new JScrollPane(liste), gbc);
+		åpne = new JButton("Åpne");
+		åpne.setPreferredSize(knapp);
+		åpne.addActionListener(this);
+		
+		vis.add(new JScrollPane(liste));
+		vis.add(åpne);
 		return vis;
 	}
 
@@ -439,6 +443,12 @@ public class TestWindow extends JFrame implements ActionListener {
 			}
 			else
 				vis(skolen.søk(søkefelt.getText()));
+		}
+		
+		if (e.getSource() == åpne){
+			if(studentboks.getValgt() != null)
+				innerWindow = new IndreVindu(desktop, (Student) studentboks.getValgt());
+			revalidate();
 		}
 	}
 }

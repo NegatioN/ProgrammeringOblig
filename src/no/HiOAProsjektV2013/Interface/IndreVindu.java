@@ -8,6 +8,7 @@ import java.beans.PropertyVetoException;
 
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -21,23 +22,22 @@ public class IndreVindu implements ListSelectionListener{
 
 	private JInternalFrame indreVindu;
 	private String title = "Info-display";
-	private Dimension size = new Dimension(800, 600);
+	private Dimension size = new Dimension(300, 300);
 	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode,
 	beskrivelse, studiepoeng, vurderingsform, lærer;
-	private JButton visFag, vislærer, visfag, visstudieprog, leggtilFagPåStud;
 	private JPanel panelet;
 	
 	public IndreVindu(JDesktopPane desktop, Student stud){
-		indreVindu = new JInternalFrame(title,true,true,true,true);
-		Container c = indreVindu.getContentPane();
 		
-		c.add(generateWindow(stud), BorderLayout.CENTER);
-		indreVindu.setSize(size);
+		indreVindu = new JInternalFrame(title,true,true,true,true);
+		indreVindu.add(generateWindow(stud));		
 		indreVindu.setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
 		indreVindu.setVisible(true);
-		c.setVisible(true);
-		indreVindu.pack();
-		desktop.add(indreVindu);
+		indreVindu.setSize(size);
+		indreVindu.setResizable(false);
+
+		desktop.add(indreVindu, JDesktopPane.POPUP_LAYER);
+		
 		System.out.println("vi er her");
 		try {
 			indreVindu.setSelected(true);
@@ -68,7 +68,7 @@ public class IndreVindu implements ListSelectionListener{
 	}
 	//trenger ikke ta inn lista som parameter, kan hentes fra objeketet.
 	public Component generateWindow(Student s){
-		String studNavn = s.geteNavn();
+		String studNavn = s.getfNavn() +" "+ s.geteNavn();
 		String studEpost = s.getEpost();
 		String studTlf = s.getTelefonNr() + "";
 		String studAdresse = s.getAdresse();
@@ -78,17 +78,18 @@ public class IndreVindu implements ListSelectionListener{
 //		liste.setListData(fagene);
 		
 		
-		navn	 		= new JTextField(studNavn, 20);
-		epost	 		= new JTextField(studEpost, 20);
-		tlf		 		= new JTextField(studTlf, 20);
-		adresse			= new JTextField(studAdresse, 20);
-		start			= new JTextField("startdato", 20);
+		navn	 		= new JTextField(studNavn, 10);
+		epost	 		= new JTextField(studEpost, 10);
+		tlf		 		= new JTextField(studTlf, 8);
+		adresse			= new JTextField(studAdresse, 10);
+		start			= new JTextField("startdato", 10);
 		navn.setEditable(false);
 		epost.setEditable(false);
 		tlf.setEditable(false);
 		start.setEditable(false);
 		
 		panelet = new JPanel();
+		panelet.setSize(size);
 		panelet.add(navn);
 		panelet.add(epost);
 		panelet.add(tlf);
