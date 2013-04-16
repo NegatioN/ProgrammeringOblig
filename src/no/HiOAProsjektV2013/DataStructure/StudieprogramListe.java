@@ -22,12 +22,20 @@ public class StudieprogramListe implements Serializable{
 	
 	//Søk på studieprogram etter navn
 	//utvikle noe som gir treff på delvis korrekt tekst for denne?
-	public Studieprogram findByNavn(String navn){
+	public Studieprogram findEnByNavn(String navn){
 		for(Studieprogram sp : register){
 			if(sp.getNavn().equalsIgnoreCase(navn))
 				return sp;
 		}
 		return null;
+	}
+	public ArrayList<Studieprogram> findByNavn(String navn){
+		ArrayList<Studieprogram> programmene = new ArrayList<>();
+		for(Studieprogram sp : register){
+			if(navn.equalsIgnoreCase(sp.getNavn()))
+				programmene.add(sp);
+		}
+		return programmene;
 	}
 	
 	//Legger til nytt studieprogram med gitt navn i listen studieprogrammene

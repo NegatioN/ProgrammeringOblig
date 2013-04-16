@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -23,8 +22,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import no.HiOAProsjektV2013.DataStructure.Fag;
 import no.HiOAProsjektV2013.DataStructure.Laerer;
+import no.HiOAProsjektV2013.DataStructure.Person;
 import no.HiOAProsjektV2013.DataStructure.Skole;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.Main.Archiver;
@@ -39,7 +38,11 @@ public class TestWindow extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	private Archiver arkivet;
-	private ListeBoks<Student> listeboks = new ListeBoks<Student>();
+	//private ListeBoks<E> listeboks = new ListeBoks<E>();
+	private ListeBoks<Student> studentboks = new ListeBoks<Student>();
+	private ListeBoks<Laerer> laererboks = new ListeBoks<Laerer>();
+	//private ListeBoks<Fag> fagboks = new ListeBoks<Fag>();
+	//private ListeBoks<Studieprogram> studprogboks = new ListeBoks<Studieprogram>();
 	private JTextArea info;
 	private VinduLytter vl;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
@@ -59,7 +62,6 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		//Oppretter gammelt objekt om det fins, eller nytt om vi ikke har et.
 		skolen 		= arkivet.readFromFile();
-		
 		
 		//TEST
 		/*ArrayList<Fag> fag = skolen.getFagene().findByNavn("Faget");
@@ -275,6 +277,16 @@ public class TestWindow extends JFrame implements ActionListener {
 	}
 	
 	//Viser resultat av søk o.l
+	public <E> void vis(JList<? extends Person> liste) {
+		vis = new JPanel();
+		vis.setPreferredSize(size);
+
+		vis.add(new JScrollPane(info));
+		//comment ut panelRefresh her for å få normalt display av info igjen.
+		panelRefresh(liste);
+		innhold(vis);
+	}
+	
 	public void vis(String tekst) {
 		vis = new JPanel();
 		vis.setPreferredSize(size);
@@ -283,15 +295,13 @@ public class TestWindow extends JFrame implements ActionListener {
 		info.setText(tekst);
 
 		vis.add(new JScrollPane(info));
-		//comment ut panelRefresh her for å få normalt display av info igjen.
-		panelRefresh();
 		innhold(vis);
 	}
 	
 	//Listeboks funker kind-of, men vi må redefinere toStrings for å bruke de saklig.
 	//trenger å jobbe med plassering innenfor hovedpanelet.
 	//noe er messed up med scrollen. blir sånn 3 ganger så lang som den skal være.
-	private JPanel panelRefresh(){
+	private <E> JPanel panelRefresh(JList<? extends Person> liste){
 		
 		vis = new JPanel();
 		vis.setPreferredSize(size);
@@ -306,11 +316,8 @@ public class TestWindow extends JFrame implements ActionListener {
 		vis.add(myLabel, gbc);
 		gbc.gridy = 1;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		JList<Student> listen = (JList<Student>) listeboks.listiFy(skolen.getStudentene().findByNavn("Joakim"));
 		
-		vis.add(new JScrollPane(listen), gbc);
-		
-		
+		vis.add(new JScrollPane(liste), gbc);
 		return vis;
 	}
 
@@ -424,7 +431,16 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		if (e.getSource() == søkefelt || e.getSource() == søkeknapp)
 		{
-			vis(skolen.søk(søkefelt.getText()));
+			if(skolen.getStudentene().findByNavn(søkefelt.getText()).size() > 0){
+				JList<Student> listen = (JList<Student>) studentboks.listiFy(skolen.getStudentene().findByNavn(søkefelt.getText()));	
+				vis(listen);
+			}
+			else if(skolen.getLærerne().findByNavn(søkefelt.getText()).size() > 0){
+				JList<Laerer> listen = (JList<Laerer>) laererboks.listiFy(skolen.getLærerne().findByNavn(søkefelt.getText()));
+				vis(listen);
+			}
+			else
+				vis(skolen.søk(søkefelt.getText()));
 		}
 	}
 }

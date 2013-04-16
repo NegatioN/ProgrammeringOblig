@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 //	Klassen fungerer som en samling av alle datastrukturer for skolesystemet
@@ -44,7 +43,7 @@ public class Skole implements Serializable{
 	
 	//Legger til et gitt fag i et gitt studieprogram
 	public void addFagToStudProg(String navn, String fagkode){
-		Studieprogram sp = studieprogrammene.findByNavn(navn);
+		Studieprogram sp = studieprogrammene.findEnByNavn(navn);
 		Fag f = sp.finnFag(getFagene().finnFagByFagkode(fagkode));
 		//hvis faget ikke finnes i studieprogrammet fra før, altså søket gir null.
 		if( f == null)
@@ -107,13 +106,25 @@ public class Skole implements Serializable{
 		else if (in.matches(navnRegex)){ //Sjekker om det er søkt på navn (student, lærer, fag og studieprogram)
 			return navnSøk();
 		}
-		
 		return "Ugyldig søk";
 	}
 
 	//tror vi må gjøre søkene separate om vi skal ha ut objektlister.
 	// Virker som det kan være lurt å kun returnere søk basert på aktivert tab eller en eller annen restriction
 	public String navnSøk(){ //Utfører alle søk som tar imot navn, og returnerer en string (SKAL RETURNERE OBJEKT)
+		
+		/*
+		if( getLærerne().findByNavn(in).size() > 0 )
+			return (ArrayList<E>) getLærerne().findByNavn(in);
+		else if( getStudentene().findByNavn(in).size() > 0 )
+			return (ArrayList<E>) getStudentene().findByNavn(in);
+		else if( getFagene().findByNavn(in).size() > 0 )
+			return (ArrayList<E>) getFagene().findByNavn(in);
+		else if( getStudieprogrammene().findByNavn(in).size() > 0 );
+			return (ArrayList<E>) getStudieprogrammene().findByNavn(in);
+		*/
+		
+		//Tekstsøk
 		for(Laerer l : getLærerne().findByNavn(in)){
 			resultat += "\n" + l.getfNavn() +" "+ l.geteNavn();
 		}
@@ -126,11 +137,13 @@ public class Skole implements Serializable{
 			resultat += "\n" + f.getNavn() +" "+ f.getFagkode();
 		}
 		
-		if(getStudieprogrammene().findByNavn(in) != null)
-			resultat += "\n" + getStudieprogrammene().findByNavn(in).getNavn();
+		for(Studieprogram sp : getStudieprogrammene().findByNavn(in)){
+			resultat += "\n" + sp.getNavn();
+		}
 		
 		if( resultat == "Søkeresultat:")
 			return "Ingen treff";
+		
 		return resultat;
 	}
 	

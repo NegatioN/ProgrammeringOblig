@@ -19,7 +19,7 @@ public class ListeBoks<E> implements ListSelectionListener{
 	}
 
 
-	public Component listiFy(ArrayList<E> array){
+	public JList<E> listiFy(ArrayList<E> array){
 		JList<E> listen = new JList<>();
 		E[] tilArray = (E[]) array.toArray();
 		listen.setListData(tilArray);
