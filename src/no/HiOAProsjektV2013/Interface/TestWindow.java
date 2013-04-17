@@ -49,7 +49,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private Skole skolen;
 	private JPanel rammeverk, innhold, stud, lær, fag, studprog, vis;
 	private Dimension knapp, halvknapp, size;
-	private JDesktopPane desktop;
+
 	public TestWindow(String tittel) {
 
 		super(tittel);
@@ -63,22 +63,18 @@ public class TestWindow extends JFrame implements ActionListener {
 		//setter WindowListener
 		vl = new VinduLytter(this);
 		
-		desktop = new JDesktopPane();
-		desktop.setSize(700, 500);
-		desktop.setBackground(null);
-		setContentPane(desktop);
 		//script for å generere fag, studenter og lærere
 //		sc = new ScriptClass(skolen);
 		
 		rammeverk = new JPanel(new BorderLayout());
-		desktop.add(rammeverk);
-
+		add(rammeverk);
+		
 		knapp 		= new Dimension(260, 25);
 		halvknapp 	= new Dimension(140, 25);
 		size 		= new Dimension(500, 450);
 		
 		fyllRamme();
-
+		
 		setSize(700, 500);
 		setVisible(true);
 		setLocationRelativeTo(null);
@@ -153,7 +149,6 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		rammeverk.add(leggtil, BorderLayout.NORTH);
 		rammeverk.add(visning, BorderLayout.EAST);
-		revalidate();
 		
 		//Oppretter objekter til registreringsfelter
 		navn	 		= new JTextField("navn", 20);
@@ -178,10 +173,11 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		lagre		.addActionListener(this);
 		leggtilfag	.addActionListener(this);
-
+	
 		innhold = new JPanel();
 		vis("");
 		rammeverk.add(innhold, BorderLayout.WEST);
+		revalidate();
 	}
 	
 	//Resetter tekstfeltene
@@ -441,9 +437,9 @@ public class TestWindow extends JFrame implements ActionListener {
 		}
 		
 		if (e.getSource() == rediger){
-			if(studentboks.getValgt() != null)
-				innerWindow = new IndreVindu(desktop, (Student) studentboks.getValgt());
-			desktop.revalidate();
+			if(studentboks.getValgt() != null){
+				
+			}
 		}
 	}
 }
