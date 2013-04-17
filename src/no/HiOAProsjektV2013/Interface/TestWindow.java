@@ -3,7 +3,6 @@ package no.HiOAProsjektV2013.Interface;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -11,12 +10,10 @@ import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -47,7 +44,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private JTextArea info;
 	private VinduLytter vl;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
-			vislærer, visfag, visstudieprog, lagre, leggtilfag, søkeknapp, åpne;
+			vislærer, visfag, visstudieprog, lagre, leggtilfag, søkeknapp, rediger;
 	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode,
 			beskrivelse, studiepoeng, vurderingsform, lærer, søkefelt;
 	private Skole skolen;
@@ -62,17 +59,17 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		//Oppretter gammelt objekt om det fins, eller nytt om vi ikke har et.
 		skolen 		= arkivet.readFromFile();
-		
+
 		//TEST
+		//setter WindowListener
+		vl = new VinduLytter(this);
+		
 		desktop = new JDesktopPane();
 		desktop.setSize(700, 500);
 		desktop.setBackground(null);
 		setContentPane(desktop);
 		//script for å generere fag, studenter og lærere
 //		sc = new ScriptClass(skolen);
-		
-		//setter WindowListener
-		vl = new VinduLytter(this);
 		
 		rammeverk = new JPanel(new BorderLayout());
 		desktop.add(rammeverk);
@@ -83,13 +80,22 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		fyllRamme();
 
-		setLayout(new FlowLayout());
 		setSize(700, 500);
 		setVisible(true);
 		setLocationRelativeTo(null);
 		setResizable(false);
 	}
 
+	
+	//getmetoder for windowlistener slik at det lagres info via system.exit
+	public Archiver getArkiv(){
+		return arkivet;
+	}
+	
+	public Skole getSkole(){
+		return skolen;
+	}
+	
 	//Oppretter og legger inn elementer til vinduet
 	public void fyllRamme() {
 
@@ -194,16 +200,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		studiepoeng		.setText("studiepoeng");
 		lærer			.setText("lærer");
 	}
-	
-	//getmetoder for windowlistener slik at det lagres info via system.exit
-	public Archiver getArkiv(){
-		return arkivet;
-	}
-	
-	public Skole getSkole(){
-		return skolen;
-	}
-	
+
 	//Oppdaterer innholdspanelet
 	public void innhold(Component c){
 		refresh();
@@ -274,7 +271,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	}
 	
 	//Viser resultat av søk o.l
-	public <E> void vis(JList<? extends Person> liste) {
+	public void vis(JList<? extends Person> liste) {
 		vis = new JPanel();
 		vis.setPreferredSize(size);
 
@@ -297,7 +294,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	
 	//Listeboks funker kind-of, men vi må redefinere toStrings for å bruke de saklig.
 	//trenger å jobbe med plassering innenfor hovedpanelet.
-	private <E> JPanel panelRefresh(JList<? extends Person> liste){
+	private JPanel panelRefresh(JList<? extends Person> liste){
 		
 		vis = new JPanel();
 		vis.setPreferredSize(size);
@@ -313,12 +310,12 @@ public class TestWindow extends JFrame implements ActionListener {
 		gbc.gridy = 1;
 		gbc.fill = GridBagConstraints.HORIZONTAL;*/
 		
-		åpne = new JButton("Åpne");
-		åpne.setPreferredSize(knapp);
-		åpne.addActionListener(this);
+		rediger = new JButton("rediger");
+		rediger.setPreferredSize(knapp);
+		rediger.addActionListener(this);
 		
 		vis.add(new JScrollPane(liste));
-		vis.add(åpne);
+		vis.add(rediger);
 		return vis;
 	}
 
@@ -444,10 +441,10 @@ public class TestWindow extends JFrame implements ActionListener {
 				vis(skolen.søk(søkefelt.getText()));
 		}
 		
-		if (e.getSource() == åpne){
+		if (e.getSource() == rediger){
 			if(studentboks.getValgt() != null)
 				innerWindow = new IndreVindu(desktop, (Student) studentboks.getValgt());
-			revalidate();
+			desktop.revalidate();
 		}
 	}
 }

@@ -4,8 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
@@ -27,19 +31,19 @@ public class IndreVindu implements ListSelectionListener{
 	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode,
 	beskrivelse, studiepoeng, vurderingsform, lærer;
 	private JPanel panelet;
+	private Student studenten;
 	
 	public IndreVindu(JDesktopPane desktop, Student stud){
-		
+		studenten = stud;
 		indreVindu = new JInternalFrame(title,true,true,true,true);
 		indreVindu.add(generateWindow(stud));		
 		indreVindu.setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
 		indreVindu.setVisible(true);
-		indreVindu.setSize(size);
+		indreVindu.pack();
 		indreVindu.setResizable(false);
 
-		desktop.add(indreVindu, JDesktopPane.POPUP_LAYER);
+		desktop.add(indreVindu, BorderLayout.CENTER);
 		
-		System.out.println("vi er her");
 		try {
 			indreVindu.setSelected(true);
 		} catch (PropertyVetoException e) {
@@ -49,7 +53,7 @@ public class IndreVindu implements ListSelectionListener{
 	}
 	
 	public Component generateWindow(JList liste){
-		panelet = new JPanel(new BorderLayout());
+		panelet = new JPanel();
 
 
 		navn	 		= new JTextField("navn", 20);
@@ -69,25 +73,30 @@ public class IndreVindu implements ListSelectionListener{
 	}
 	//trenger ikke ta inn lista som parameter, kan hentes fra objeketet.
 	public Component generateWindow(Student s){
+		DateFormat formatter = new SimpleDateFormat("dd-MMM-yy");
 		String studNavn = s.getfNavn() +" "+ s.geteNavn();
 		String studEpost = s.getEpost();
 		String studTlf = s.getTelefonNr() + "";
 		String studAdresse = s.getAdresse();
-		
+		Date startdato = s.getStart();
 //		Arbeidskrav[] fagene = s.getFagene();
 //		JList<Arbeidskrav> liste = new JList<>();
 //		liste.setListData(fagene);
+		lytter l = new lytter();
 		
+		navn	 		= new JTextField(studNavn, 20);
+		epost	 		= new JTextField(studEpost, 20);
+		tlf		 		= new JTextField(studTlf, 20);
+		adresse			= new JTextField(studAdresse, 20);
+		start			= new JTextField(formatter.format(startdato), 20);
+		JButton lagre	= new JButton("Lagre");
 		
-		navn	 		= new JTextField(studNavn, 10);
-		epost	 		= new JTextField(studEpost, 10);
-		tlf		 		= new JTextField(studTlf, 8);
-		adresse			= new JTextField(studAdresse, 10);
-		start			= new JTextField("startdato", 10);
 		navn.setEditable(false);
-		epost.setEditable(false);
-		tlf.setEditable(false);
+		epost.setEditable(true);
+		tlf.setEditable(true);
 		start.setEditable(false);
+		lagre.setPreferredSize(new Dimension(150,30));
+		lagre.addActionListener(l);
 		
 		panelet = new JPanel();
 		panelet.setSize(size);
@@ -96,9 +105,16 @@ public class IndreVindu implements ListSelectionListener{
 		panelet.add(tlf);
 		panelet.add(adresse);
 		panelet.add(start);
+		panelet.add(lagre);
 //		panelet.add(liste);
 		
 		return panelet;
+	}
+	
+	private class lytter implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			studenten.setAdresse(adresse.getText());
+		}
 	}
 
 	@Override
