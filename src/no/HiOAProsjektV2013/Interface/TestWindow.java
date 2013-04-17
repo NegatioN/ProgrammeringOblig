@@ -8,10 +8,10 @@ import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JButton;
-import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -19,10 +19,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import no.HiOAProsjektV2013.DataStructure.Fag;
 import no.HiOAProsjektV2013.DataStructure.Laerer;
-import no.HiOAProsjektV2013.DataStructure.Person;
 import no.HiOAProsjektV2013.DataStructure.Skole;
 import no.HiOAProsjektV2013.DataStructure.Student;
+import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 import no.HiOAProsjektV2013.Main.Archiver;
 import no.HiOAProsjektV2013.Main.ScriptClass;
 
@@ -36,8 +37,10 @@ public class TestWindow extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	private Archiver arkivet;
-	private ListeBoks<Student> studentboks = new ListeBoks<Student>();
-	private ListeBoks<Laerer> laererboks = new ListeBoks<Laerer>();
+	private ListeBoks<Student> studentboks = new ListeBoks<>();
+	private ListeBoks<Laerer> laererboks = new ListeBoks<>();
+	private ListeBoks<Fag> fagboks = new ListeBoks<>();
+	private ListeBoks<Studieprogram> studieboks = new ListeBoks<>();
 	private ScriptClass sc;
 	private IndreVindu innerWindow;
 	private JTextArea info;
@@ -64,6 +67,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		vl = new VinduLytter(this);
 		
 		//script for å generere fag, studenter og lærere
+		//kommenter den ut etter 1 generate
 //		sc = new ScriptClass(skolen);
 		
 		rammeverk = new JPanel(new BorderLayout());
@@ -266,7 +270,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	}
 	
 	//Viser resultat av søk o.l
-	public void vis(JList<? extends Person> liste) {
+	public void vis(JList<?> liste) {
 		vis = new JPanel();
 		vis.setPreferredSize(size);
 
@@ -289,21 +293,10 @@ public class TestWindow extends JFrame implements ActionListener {
 	
 	//Listeboks funker kind-of, men vi må redefinere toStrings for å bruke de saklig.
 	//trenger å jobbe med plassering innenfor hovedpanelet.
-	private JPanel panelRefresh(JList<? extends Person> liste){
+	private JPanel panelRefresh(JList<?> liste){
 		
 		vis = new JPanel();
 		vis.setPreferredSize(size);
-		/*vis.setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.anchor = GridBagConstraints.LINE_START;
-		gbc.weightx = 1.0D;
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		JLabel myLabel = new JLabel("Info");
-		vis.add(myLabel, gbc);
-		gbc.gridy = 1;
-		gbc.fill = GridBagConstraints.HORIZONTAL;*/
 		
 		rediger = new JButton("rediger");
 		rediger.setPreferredSize(knapp);
@@ -422,18 +415,46 @@ public class TestWindow extends JFrame implements ActionListener {
 			}
 		}
 		
-		if (e.getSource() == søkefelt || e.getSource() == søkeknapp)
-		{
-			if(skolen.getStudentene().findByNavn(søkefelt.getText()).size() > 0){
-				JList<Student> listen = (JList<Student>) studentboks.listiFy(skolen.getStudentene().findByNavn(søkefelt.getText()));	
+		// søker på fritekst-søk, gjennom navn på alle tingene. Tror dette må
+		// optimaliseres slik at vi ikke looper HELE datastrukturen vår hver
+		// gang.
+		if (e.getSource() == søkefelt || e.getSource() == søkeknapp) {
+			ArrayList<Student> studentene = skolen.getStudentene().findByNavn(
+					søkefelt.getText());
+			ArrayList<Laerer> lærerne = skolen.getLærerne().findByNavn(
+					søkefelt.getText());
+			ArrayList<Fag> fagene = skolen.getFagene().findByNavn(
+					søkefelt.getText());
+			ArrayList<Studieprogram> studieprogrammene = skolen
+					.getStudieprogrammene().findByNavn(søkefelt.getText());
+			if (studentene.size() > 0) {
+				JList<Student> listen = studentboks.listiFy(studentene);
 				vis(listen);
-			}
-			else if(skolen.getLærerne().findByNavn(søkefelt.getText()).size() > 0){
-				JList<Laerer> listen = (JList<Laerer>) laererboks.listiFy(skolen.getLærerne().findByNavn(søkefelt.getText()));
+			} else if (lærerne.size() > 0) {
+				JList<Laerer> listen = laererboks.listiFy(lærerne);
 				vis(listen);
+			} else if (fagene.size() > 0) {
+				JList<Fag> listen = fagboks.listiFy(fagene);
+				vis(listen);
+			} else if (studieprogrammene.size() > 0) {
+				JList<Studieprogram> listen = studieboks.listiFy(studieprogrammene);
+				vis(listen);
+			} else {
+				//sjekker søket for hvilken liste som kom ut av navnsøk. Vi remaker nok denne, så orker ikke implemente hele.
+				try {
+					ArrayList<?> arrayen = skolen.søk(søkefelt.getText());
+					if (arrayen.get(0) instanceof Student) {
+						JList<Student> listen = studentboks.listiFy((ArrayList<Student>) arrayen);
+						vis(listen);
+					} else if (arrayen.get(0) instanceof Fag) {
+						JList<Fag> listen = fagboks.listiFy((ArrayList<Fag>) arrayen);
+						vis(listen);
+					}
+				} catch (NullPointerException npe) {
+					npe.printStackTrace();
+				}
 			}
-			else
-				vis(skolen.søk(søkefelt.getText()));
+
 		}
 		
 		if (e.getSource() == rediger){

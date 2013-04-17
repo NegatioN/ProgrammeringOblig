@@ -18,10 +18,8 @@ public class Laerer extends Person implements Serializable{
 	
 	public String toString(){
 		String stringen = new String();
-		stringen = 	"Navn: " + getfNavn() + " " + geteNavn() + 
-					"\nE-post: " + getEpost() + 
-					"\nTlf: " + getTelefonNr() + 
-					"\nKontorNr: " + kontorNr;
+		stringen = 	"Navn: " + getfNavn() + " " + geteNavn() +  
+					"- KontorNr: " + kontorNr;
 		return stringen;
 	}
 }

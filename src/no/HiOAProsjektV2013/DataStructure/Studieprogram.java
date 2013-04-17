@@ -49,11 +49,7 @@ public class Studieprogram implements Serializable{
 	// kan være nødvendig å flytte en sånn metode til window slik at hver
 	// getFagkode blir en egen knapp.
 	public String toString() {
-		String stringen = "Navn: " + navn +  "\nFag:";
-		
-		for (Fag f : fagIProgrammet) {
-			stringen += "\n" + f.getFagkode();
-		}
+		String stringen = "Navn: " + navn;
 		
 		return stringen;
 	}

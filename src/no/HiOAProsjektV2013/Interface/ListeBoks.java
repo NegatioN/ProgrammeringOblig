@@ -1,6 +1,5 @@
 package no.HiOAProsjektV2013.Interface;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
@@ -8,8 +7,6 @@ import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
-import no.HiOAProsjektV2013.DataStructure.Student;
 
 //tingene her må legges i main-vindus-klassen
 //endre til overload constructors på "Listiyfy"? for å ikke opprette mange typeparameteriserte objekter i testwindow?
@@ -22,9 +19,10 @@ public class ListeBoks<E> implements ListSelectionListener{
 		
 	}
 
-
+	//gjør om arraylisten til en JList
 	public JList<E> listiFy(ArrayList<E> array){
 		JList<E> listen = new JList<>();
+		@SuppressWarnings("unchecked")
 		E[] tilArray = (E[]) array.toArray();
 		listen.setListData(tilArray);
 		listen.setVisibleRowCount(ROWCOUNT);
@@ -46,6 +44,7 @@ public class ListeBoks<E> implements ListSelectionListener{
 	public void valueChanged(ListSelectionEvent e) {
 		//Det som skal skje når vi clicker objektet
 		if(e.getValueIsAdjusting()){
+			@SuppressWarnings("unchecked")
 			JList<E> lista = (JList<E>) e.getSource();
 			E valgtObjekt = lista.getSelectedValue();
 			setValgt(valgtObjekt);

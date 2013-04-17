@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 //	Klassen fungerer som en samling av alle datastrukturer for skolesystemet
@@ -15,7 +16,6 @@ public class Skole implements Serializable{
 	private LaererListe lærerne = new LaererListe();
 	private FagListe fagene = new FagListe();
 	private StudentListe studentene = new StudentListe();
-	private String in, resultat;
 	private String navnRegex = "\\D+";
 	private String fagkodeRegex = "\\w{4}\\d{4}";
 	private String studentNrRegex = "s\\d{6}";
@@ -88,83 +88,69 @@ public class Skole implements Serializable{
 	
 	//****************SØØØØØØØØØØK SØKEMETODER SØØØØØØØØØØK****************//
 	
-	public String søk(String input){ //Sjekker inputen i søkefeltet og utfører relevante søk
-
-		resultat = "Søkeresultat:";
+	public ArrayList<?> søk(String input){ //Sjekker inputen i søkefeltet og utfører relevante søk
 		
-		in = input; //For at input skal kunne brukes i de andre søkemetodene
-		
-		if(in.matches(arRegex)){ //Sjekker om det er søkt på år
-			
+		if(input.matches(arRegex)){ //Sjekker om det er søkt på år
+			//split input og sjekk neste paramenter for hvordan søket skal håndteres.
 		}
-		else if (in.matches(fagkodeRegex)){ //Sjekker om det er søkt på fagkode	
-			return fagkodeSøk();
+		else if (input.matches(fagkodeRegex)){ //Sjekker om det er søkt på fagkode	
+			return fagkodeSøk(input);
 		}
-		else if (in.matches(studentNrRegex)){ //Sjekker om det er søkt på studentNr
-			return studentNrSøk();
+		else if (input.matches(studentNrRegex)){ //Sjekker om det er søkt på studentNr
+			return studentNrSøk(input);
 		}
-		else if (in.matches(navnRegex)){ //Sjekker om det er søkt på navn (student, lærer, fag og studieprogram)
-			return navnSøk();
+		else if (input.matches(navnRegex)){ //Sjekker om det er søkt på navn (student, lærer, fag og studieprogram)
+			return navnSøk(input);
 		}
-		return "Ugyldig søk";
+		return null;
 	}
 
 	//tror vi må gjøre søkene separate om vi skal ha ut objektlister.
 	// Virker som det kan være lurt å kun returnere søk basert på aktivert tab eller en eller annen restriction
-	public String navnSøk(){ //Utfører alle søk som tar imot navn, og returnerer en string (SKAL RETURNERE OBJEKT)
-		
-		/*
-		if( getLærerne().findByNavn(in).size() > 0 )
-			return (ArrayList<E>) getLærerne().findByNavn(in);
-		else if( getStudentene().findByNavn(in).size() > 0 )
-			return (ArrayList<E>) getStudentene().findByNavn(in);
-		else if( getFagene().findByNavn(in).size() > 0 )
-			return (ArrayList<E>) getFagene().findByNavn(in);
-		else if( getStudieprogrammene().findByNavn(in).size() > 0 );
-			return (ArrayList<E>) getStudieprogrammene().findByNavn(in);
-		*/
+	private ArrayList<Student> navnSøk(String input){ //Utfører alle søk som tar imot navn, og returnerer en string (SKAL RETURNERE OBJEKT)
+		ArrayList<Student> studenter = new ArrayList<>();
 		
 		//Tekstsøk
-		for(Laerer l : getLærerne().findByNavn(in)){
-			resultat += "\n" + l.getfNavn() +" "+ l.geteNavn();
+//		for(Laerer l : getLærerne().findByNavn(input)){
+//			resultat += "\n" + l.getfNavn() +" "+ l.geteNavn();
+//		}
+		
+		for(Student s : getStudentene().findByNavn(input)){
+			studenter.add(s);
 		}
 		
-		for(Student s : getStudentene().findByNavn(in)){
-			resultat += "\n" + s.getfNavn() +" "+ s.geteNavn();
-		}
+//		for(Fag f : getFagene().findByNavn(input)){
+//			resultat += "\n" + f.getNavn() +" "+ f.getFagkode();
+//		}
+//		
+//		for(Studieprogram sp : getStudieprogrammene().findByNavn(input)){
+//			resultat += "\n" + sp.getNavn();
+//		}
 		
-		for(Fag f : getFagene().findByNavn(in)){
-			resultat += "\n" + f.getNavn() +" "+ f.getFagkode();
-		}
+		if(studenter.isEmpty())
+			return null;
 		
-		for(Studieprogram sp : getStudieprogrammene().findByNavn(in)){
-			resultat += "\n" + sp.getNavn();
-		}
-		
-		if( resultat == "Søkeresultat:")
-			return "Ingen treff";
-		
-		return resultat;
+		return studenter;
 	}
 	
 	public String årSøk(){
 		return null;
 	}
 
-	public String studentNrSøk(){
-
-		resultat += "\n" + getStudentene().findStudentByStudentNr(in);
-		if( resultat == "Søkeresultat:")
-			return "Ingen treff";
-		return resultat;
+	private ArrayList<Student> studentNrSøk(String input){
+		ArrayList<Student> student = new ArrayList<>();
+		student.add(studentene.findStudentByStudentNr(input));
+		if(student.isEmpty())
+			return null;
+		return student;
 	}
 	
-	public String fagkodeSøk(){
-	
-		resultat += "\n" + getFagene().finnFagByFagkode(in);
-		if( resultat == "Søkeresultat:")
-			return "Ingen treff";
-		return resultat;
+	private ArrayList<Fag> fagkodeSøk(String input){
+		ArrayList<Fag> fag = new ArrayList<>();
+		fag.add(getFagene().finnFagByFagkode(input));
+		if(fag.isEmpty())
+			return null;
+		return fag;
 
 	}
 

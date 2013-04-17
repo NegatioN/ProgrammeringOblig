@@ -14,8 +14,9 @@ public class Student extends Person implements Serializable{
 	private Date start, slutt;
 	//Listen med arbeidskrav representerer alle fagene studenten tar
 	//finner fag studenten har ved å liste opp .getFagkode() fra kravene.
-	private List<Arbeidskrav> fagListe = new LinkedList<>();
+	private List<Arbeidskrav> kravListe = new LinkedList<>();
 	private List<EksamensDeltaker> eksamener = new LinkedList<>();
+	private List<Fag> fagListe = new LinkedList<>();
 	private boolean avsluttet = false;
 	private Studieprogram sp = null;
 	
@@ -45,7 +46,7 @@ public class Student extends Person implements Serializable{
 	//Sjekker gjennom arbeidskravene etter fagkode.
 	public boolean harFaget(String fagkode){
 		
-		for(Arbeidskrav krav : fagListe){
+		for(Arbeidskrav krav : kravListe){
 			if(fagkode.equalsIgnoreCase(krav.getFagkode()))
 				return true;
 		}
@@ -53,17 +54,18 @@ public class Student extends Person implements Serializable{
 		return false;
 	}
 	private boolean harFaget(Fag fag){
-		String fagkode = fag.getFagkode();
-		for(Arbeidskrav krav : fagListe){
-			if(fagkode.equalsIgnoreCase(krav.getFagkode()))
+		for(Fag checkFag : fagListe){
+			if(fag.equals(checkFag))
 				return true;
 		}
 		return false;
 	}
 	//legger til krav i kravlista til studenten, men kun hvis det ikke finnes.
 	public void addFag(Fag fag){
-		if(!harFaget(fag))
-		fagListe.add(fag.getKrav());
+		if(!harFaget(fag)){
+			kravListe.add(fag.getKrav());
+			fagListe.add(fag);
+		}
 		else{
 			return;
 		}
@@ -72,7 +74,7 @@ public class Student extends Person implements Serializable{
 	//studenten vil ikke ha samme pointer til et arbeidskrav-objekt som faget, så det må søkes på intærne krav.
 	private Arbeidskrav harKravet(Fag fag){
 		String fagkode = fag.getFagkode();
-		for(Arbeidskrav krav : fagListe){
+		for(Arbeidskrav krav : kravListe){
 			if(fagkode.equalsIgnoreCase(krav.getFagkode()))
 				return krav;
 		}
@@ -80,12 +82,13 @@ public class Student extends Person implements Serializable{
 	}
 	public void removeFag(Fag fag){
 		Arbeidskrav krav = harKravet(fag);
-		if(krav != null)
-			fagListe.remove(krav);
+		if(krav != null){
+			kravListe.remove(krav);
+			fagListe.remove(fag);
+		}
 	}
 	
 	public boolean innfriddKrav(Fag fag){
-		Arbeidskrav kravene = null;
 		//Har personen faget? For debug. Dobler søkefarten, men kanskje ikke så relevant mtp 
 		//at man har maks 20-25 fag.
 		boolean harFaget = harFaget(fag);
@@ -93,7 +96,7 @@ public class Student extends Person implements Serializable{
 			return false;
 		String fagkode = fag.getFagkode();
 		
-		for(Arbeidskrav krav : fagListe){
+		for(Arbeidskrav krav : kravListe){
 			if(fagkode.equalsIgnoreCase(krav.getFagkode()))
 				return krav.kravInnfridd();
 		}
@@ -102,8 +105,8 @@ public class Student extends Person implements Serializable{
 	
 	public String visAlleFag(){
 		String stringen = new String();
-		for(int i = 0; i< fagListe.size();i++){
-			stringen += fagListe.get(i).getFagkode() + "\n";
+		for(int i = 0; i< kravListe.size();i++){
+			stringen += kravListe.get(i).getFagkode() + "\n";
 		}
 		stringen += "############";
 		return stringen;
@@ -150,19 +153,11 @@ public class Student extends Person implements Serializable{
 		String stringen = new String();
 				
 		stringen = "StudentNr: " + studentnummer + 
-					"\nNavn: " + getfNavn() + " " + geteNavn() + 
-					"\nE-post: " + getEpost() + 
-					"\nTlf: " + getTelefonNr() + 
-					"\nAdresse: " + adresse + 
-					"\nStartdato: " + new SimpleDateFormat("dd. MMM yyyy").format(start) +
-					"\nFag: ";
-		
-		//må legge inn arbeidskrav i faget før vi kan reference.
-		if(!fagListe.isEmpty()){
-		for(Arbeidskrav fag : fagListe){
-			stringen += fag.getFagkode() + "\n";
-		}
-		}
+					" Navn: " + getfNavn() + " " + geteNavn() + 
+					" E-post: " + getEpost() + 
+					" Tlf: " + getTelefonNr() + 
+					" Adresse: " + adresse + 
+					" Startdato: " + new SimpleDateFormat("dd. MMM yyyy").format(start);
 		
 		return stringen;
 	}
@@ -177,8 +172,8 @@ public class Student extends Person implements Serializable{
 		stringene[5] = 	""+start;
 		
 		//må legge inn arbeidskrav i faget før vi kan reference.
-		if(!fagListe.isEmpty()){
-			for(Arbeidskrav fag : fagListe){
+		if(!kravListe.isEmpty()){
+			for(Arbeidskrav fag : kravListe){
 				stringene[6] += fag.getFagkode() + "\n";
 			}
 		}
@@ -186,7 +181,7 @@ public class Student extends Person implements Serializable{
 		return stringene;
 	}
 	public Arbeidskrav[] getFagene(){
-		return (Arbeidskrav[]) fagListe.toArray();
+		return (Arbeidskrav[]) kravListe.toArray();
 	}
 
 }
