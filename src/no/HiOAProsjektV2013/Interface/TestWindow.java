@@ -52,7 +52,7 @@ public class TestWindow extends JFrame implements ActionListener {
 			beskrivelse, studiepoeng, vurderingsform, lærer, søkefelt;
 	private Skole skolen;
 	private JPanel rammeverk, innhold, stud, lær, fag, studprog, vis;
-	private Dimension knapp, halvknapp, size;
+	private Dimension size;
 
 	public TestWindow(String tittel) {
 
@@ -73,9 +73,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		rammeverk = new JPanel(new BorderLayout());
 		add(rammeverk);
-		
-		knapp 		= new Dimension(260, 25);
-		halvknapp 	= new Dimension(140, 25);
+
 		size 		= new Dimension(500, 450);
 		
 		fyllRamme();
@@ -106,20 +104,20 @@ public class TestWindow extends JFrame implements ActionListener {
 		visning.setPreferredSize(new Dimension(150,450));
 		
 		søkefelt 		= new JTextField("Søk");
-		søkefelt.setPreferredSize(halvknapp);
+		søkefelt.setPreferredSize(Buttons.HALV);
 		søkefelt		.addActionListener(this);
 		visning.add(søkefelt);
 		
-		nystudent = buttonGenerator.generateButton("Legg til student", leggtil, halvknapp);
-		nylærer = buttonGenerator.generateButton("Legg til lærer", leggtil, halvknapp);
-		nyttfag = buttonGenerator.generateButton("Legg til fag", leggtil, halvknapp);
-		nyttstudieprog = buttonGenerator.generateButton("Legg til studieprogram", leggtil, halvknapp);
+		nystudent = buttonGenerator.generateButton("Legg til student", leggtil, Buttons.HALV);
+		nylærer = buttonGenerator.generateButton("Legg til lærer", leggtil, Buttons.HALV);
+		nyttfag = buttonGenerator.generateButton("Legg til fag", leggtil, Buttons.HALV);
+		nyttstudieprog = buttonGenerator.generateButton("Legg til studieprogram", leggtil, Buttons.HALV);
 
-		søkeknapp = buttonGenerator.generateButton("søk", visning, halvknapp);
-		visstudent = buttonGenerator.generateButton("Vis student", visning, halvknapp);
-		vislærer = buttonGenerator.generateButton("Vis lærere", visning, halvknapp);
-		visfag = buttonGenerator.generateButton("Vis fag", visning, halvknapp);
-		visstudieprog = buttonGenerator.generateButton("Vis studieprogram", visning, halvknapp);
+		søkeknapp = buttonGenerator.generateButton("søk", visning, Buttons.HALV);
+		visstudent = buttonGenerator.generateButton("Vis student", visning, Buttons.HALV);
+		vislærer = buttonGenerator.generateButton("Vis lærere", visning, Buttons.HALV);
+		visfag = buttonGenerator.generateButton("Vis fag", visning, Buttons.HALV);
+		visstudieprog = buttonGenerator.generateButton("Vis studieprogram", visning, Buttons.HALV);
 
 		
 		rammeverk.add(leggtil, BorderLayout.NORTH);
@@ -141,8 +139,8 @@ public class TestWindow extends JFrame implements ActionListener {
 		info 			= new JTextArea(20, 25);
 		
 		
-		lagre = buttonGenerator.generateButton("Lagre", knapp);
-		leggtilfag = buttonGenerator.generateButton("Legg til fag", knapp);
+		lagre = buttonGenerator.generateButton("Lagre", Buttons.HEL);
+		leggtilfag = buttonGenerator.generateButton("Legg til fag", Buttons.HEL);
 	
 		innhold = new JPanel();
 		vis("");
@@ -264,12 +262,8 @@ public class TestWindow extends JFrame implements ActionListener {
 		vis = new JPanel();
 		vis.setPreferredSize(size);
 		
-		rediger = new JButton("rediger");
-		rediger.setPreferredSize(knapp);
-		rediger.addActionListener(this);
-		
 		vis.add(new JScrollPane(liste));
-		vis.add(rediger);
+		rediger = buttonGenerator.generateButton("Rediger", vis, Buttons.HEL);
 		return vis;
 	}
 
