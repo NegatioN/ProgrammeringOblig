@@ -37,6 +37,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	private Archiver arkivet;
+	private Buttons buttonGenerator = new Buttons(this);
 	private ListeBoks<Student> studentboks = new ListeBoks<>();
 	private ListeBoks<Laerer> laererboks = new ListeBoks<>();
 	private ListeBoks<Fag> fagboks = new ListeBoks<>();
@@ -99,57 +100,28 @@ public class TestWindow extends JFrame implements ActionListener {
 	public void fyllRamme() {
 
 		//Oppretter objekter til Fast ramme
-		nystudent		= new JButton("Legg til student");
-		nylærer			= new JButton("Legg til lærer");
-		nyttfag			= new JButton("Legg til fag");
-		nyttstudieprog	= new JButton("Legg til studieprogram");
-		visstudent		= new JButton("Vis studenter");
-		vislærer		= new JButton("Vis lærere");
-		visfag			= new JButton("Vis fag");
-		visstudieprog	= new JButton("Vis studieprogram");
-		søkeknapp 		= new JButton("Søk");
-		søkefelt 		= new JTextField("Søk");
-
-		nystudent		.setPreferredSize(halvknapp);
-		nylærer			.setPreferredSize(halvknapp);
-		nyttfag			.setPreferredSize(halvknapp);
-		nyttstudieprog	.setPreferredSize(halvknapp);
-		visstudent		.setPreferredSize(halvknapp);
-		vislærer		.setPreferredSize(halvknapp);
-		visfag			.setPreferredSize(halvknapp);
-		visstudieprog	.setPreferredSize(halvknapp);
-		søkeknapp		.setPreferredSize(halvknapp);
-		søkefelt		.setPreferredSize(halvknapp);
-
-		
-		nystudent		.addActionListener(this);
-		nylærer			.addActionListener(this);
-		nyttfag			.addActionListener(this);
-		nyttstudieprog	.addActionListener(this);
-		visstudent		.addActionListener(this);
-		vislærer		.addActionListener(this);
-		visfag			.addActionListener(this);
-		visstudieprog	.addActionListener(this);
-		søkeknapp		.addActionListener(this);
-		søkefelt		.addActionListener(this);
-				
 		JPanel leggtil = new JPanel();
 		JPanel visning = new JPanel();
-		
 		leggtil.setPreferredSize(new Dimension(700,50));
 		visning.setPreferredSize(new Dimension(150,450));
 		
+		søkefelt 		= new JTextField("Søk");
+		søkefelt.setPreferredSize(halvknapp);
+		søkefelt		.addActionListener(this);
 		visning.add(søkefelt);
-		visning.add(søkeknapp);
-		visning.add(visstudent);
-		visning.add(vislærer);
-		visning.add(visfag);
-		visning.add(visstudieprog);
+		
+		
+		nystudent = buttonGenerator.generateButton("Legg til student", leggtil, halvknapp);
+		nylærer = buttonGenerator.generateButton("Legg til lærer", leggtil, halvknapp);
+		nyttfag = buttonGenerator.generateButton("Legg til fag", leggtil, halvknapp);
+		nyttstudieprog = buttonGenerator.generateButton("Legg til studieprogram", leggtil, halvknapp);
 
-		leggtil.add(nystudent);
-		leggtil.add(nylærer);
-		leggtil.add(nyttfag);
-		leggtil.add(nyttstudieprog);
+		søkeknapp = buttonGenerator.generateButton("søk", visning, halvknapp);
+		visstudent = buttonGenerator.generateButton("Vis student", visning, halvknapp);
+		vislærer = buttonGenerator.generateButton("Vis lærere", visning, halvknapp);
+		visfag = buttonGenerator.generateButton("Vis fag", visning, halvknapp);
+		visstudieprog = buttonGenerator.generateButton("Vis studieprogram", visning, halvknapp);
+
 		
 		rammeverk.add(leggtil, BorderLayout.NORTH);
 		rammeverk.add(visning, BorderLayout.EAST);
@@ -169,14 +141,9 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		info 			= new JTextArea(20, 25);
 		
-		lagre 		= new JButton("Lagre");
-		leggtilfag 	= new JButton("Legg til fag");
 		
-		lagre		.setPreferredSize(knapp);
-		leggtilfag	.setPreferredSize(knapp);
-		
-		lagre		.addActionListener(this);
-		leggtilfag	.addActionListener(this);
+		lagre = buttonGenerator.generateButton("Lagre", knapp);
+		leggtilfag = buttonGenerator.generateButton("Legg til fag", knapp);
 	
 		innhold = new JPanel();
 		vis("");
