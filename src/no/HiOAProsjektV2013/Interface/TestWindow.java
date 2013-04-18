@@ -3,6 +3,7 @@ package no.HiOAProsjektV2013.Interface;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
@@ -11,13 +12,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.*;
 
 import no.HiOAProsjektV2013.DataStructure.Fag;
 import no.HiOAProsjektV2013.DataStructure.Laerer;
@@ -37,6 +43,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	private Archiver arkivet;
+	private VinduLytter vl;
 	private Buttons buttonGenerator = new Buttons(this);
 	private ListeBoks<Student> studentboks = new ListeBoks<>();
 	private ListeBoks<Laerer> laererboks = new ListeBoks<>();
@@ -45,26 +52,23 @@ public class TestWindow extends JFrame implements ActionListener {
 	private ScriptClass sc;
 	private PopupVindu pop;
 	private JTextArea info;
-	private VinduLytter vl;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
 			vislærer, visfag, visstudieprog, lagre, leggtilfag, søkeknapp, rediger;
 	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode,
 			beskrivelse, studiepoeng, vurderingsform, lærer, søkefelt;
 	private Skole skolen;
 	private JPanel rammeverk, innhold, stud, lær, fag, studprog, vis;
-	private Dimension size;
-
+	private Dimension size = new Dimension(450,400);
+	private Border ramme = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+	
 	public TestWindow(String tittel) {
 
 		super(tittel);
 		//oppretter save-objektet
 		arkivet 	= new Archiver();
-		
 		//Oppretter gammelt objekt om det fins, eller nytt om vi ikke har et.
 		skolen 		= arkivet.readFromFile();
-
-		//TEST
-		//setter WindowListener
+		//Oppretter vinduslytter
 		vl = new VinduLytter(this);
 		
 		//script for å generere fag, studenter og lærere
@@ -72,19 +76,15 @@ public class TestWindow extends JFrame implements ActionListener {
 //		sc = new ScriptClass(skolen);
 		
 		rammeverk = new JPanel(new BorderLayout());
-		add(rammeverk);
-
-		size 		= new Dimension(500, 450);
-		
+		add(rammeverk);		
 		fyllRamme();
 		
-		setSize(700, 500);
+		pack();
 		setVisible(true);
 		setLocationRelativeTo(null);
 		setResizable(false);
 	}
 
-	
 	//getmetoder for windowlistener slik at det lagres info via system.exit
 	public Archiver getArkiv(){
 		return arkivet;
@@ -101,19 +101,24 @@ public class TestWindow extends JFrame implements ActionListener {
 		JPanel leggtil = new JPanel();
 		JPanel visning = new JPanel();
 		leggtil.setPreferredSize(new Dimension(700,50));
-		visning.setPreferredSize(new Dimension(150,450));
+		visning.setPreferredSize(new Dimension(170,400));
+		//leggtil.setBorder( new EmptyBorder( 3, 3, 3, 3 )) ;
+		leggtil.setBorder(ramme);
+		visning.setBorder(ramme);
+		//rammeverk.setBorder(ramme);
 		
-		søkefelt 		= new JTextField("Søk");
+		søkefelt = new JTextField("Søk");
 		søkefelt.setPreferredSize(Buttons.HALV);
-		søkefelt		.addActionListener(this);
+		søkefelt.addActionListener(this);
 		visning.add(søkefelt);
-		
+		søkeknapp = buttonGenerator.generateButton("Søk", visning, Buttons.HALV);
+		visning.add(Box.createRigidArea(Buttons.HALV));
+
 		nystudent = buttonGenerator.generateButton("Legg til student", leggtil, Buttons.HALV);
 		nylærer = buttonGenerator.generateButton("Legg til lærer", leggtil, Buttons.HALV);
 		nyttfag = buttonGenerator.generateButton("Legg til fag", leggtil, Buttons.HALV);
 		nyttstudieprog = buttonGenerator.generateButton("Legg til studieprogram", leggtil, Buttons.HALV);
 
-		søkeknapp = buttonGenerator.generateButton("søk", visning, Buttons.HALV);
 		visstudent = buttonGenerator.generateButton("Vis student", visning, Buttons.HALV);
 		vislærer = buttonGenerator.generateButton("Vis lærere", visning, Buttons.HALV);
 		visfag = buttonGenerator.generateButton("Vis fag", visning, Buttons.HALV);
@@ -136,18 +141,37 @@ public class TestWindow extends JFrame implements ActionListener {
 		studiepoeng		= new JTextField("studiepoeng", 20);
 		lærer			= new JTextField("lærer", 20);
 		
-		info 			= new JTextArea(20, 25);
+		info 			= new JTextArea(16, 34);
 		
 		
 		lagre = buttonGenerator.generateButton("Lagre", Buttons.HEL);
 		leggtilfag = buttonGenerator.generateButton("Legg til fag", Buttons.HEL);
 	
 		innhold = new JPanel();
-		vis("");
-		rammeverk.add(innhold, BorderLayout.WEST);
+		innhold.setBorder( ramme);
+		vis("\n\n\n\n\n                 Velkommen til vår studieadmininistrasjon!\n" +
+				"                                     Her er alt mulig!");
+		rammeverk.add(innhold, BorderLayout.CENTER);
 		revalidate();
 	}
 	
+	//Viser resultat av søk o.l
+	public void vis(JList<?> liste) {
+		vis = new JPanel();
+		vis.setPreferredSize(size);
+		vis.add(new JScrollPane(liste));
+		rediger = buttonGenerator.generateButton("Rediger", vis, Buttons.HEL);
+		innhold(vis);
+	}
+	public void vis(String tekst) {
+		vis = new JPanel();
+		vis.setPreferredSize(size);
+		info = new JTextArea(16, 34);
+		info.setText(tekst);
+		info.setEditable(false);
+		vis.add(new JScrollPane(info));
+		innhold(vis);
+	}
 	//Resetter tekstfeltene
 	public void refresh(){
 		
@@ -163,23 +187,22 @@ public class TestWindow extends JFrame implements ActionListener {
 		studiepoeng		.setText("studiepoeng");
 		lærer			.setText("lærer");
 	}
-
 	//Oppdaterer innholdspanelet
 	public void innhold(Component c){
 		refresh();
 		innhold.removeAll();
 		innhold.add(c);
 		innhold.updateUI();
-		info.setEditable(false);
 		revalidate();
 	}
 	
 	//Metoder for å vise relevante felter for registrering av objekter
 	public void student() {
 		stud = new JPanel();
+		//stud.setLayout(new BoxLayout(stud, BoxLayout.PAGE_AXIS));
 		stud.setPreferredSize(size);
-		info = new JTextArea(8,25);
-		
+		info = new JTextArea(8,32);
+
 		stud.add(info);
 		stud.add(navn);
 		stud.add(epost);
@@ -192,7 +215,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	public void lærer() {
 		lær = new JPanel();
 		lær.setPreferredSize(size);
-		info = new JTextArea(8,25);
+		info = new JTextArea(8,32);
 
 		lær.add(info);
 		lær.add(navn);
@@ -206,7 +229,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	public void fag() {
 		fag = new JPanel();
 		fag.setPreferredSize(size);
-		info = new JTextArea(8,25);
+		info = new JTextArea(8,32);
 		
 		fag.add(info);
 		fag.add(navn);
@@ -222,7 +245,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	public void studieprog() {
 		studprog = new JPanel();
 		studprog.setPreferredSize(size);
-		info = new JTextArea(8,25);
+		info = new JTextArea(8,32);
 
 		studprog.add(info);
 		studprog.add(navn);
@@ -233,40 +256,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		innhold(studprog);
 	}
 	
-	//Viser resultat av søk o.l
-	public void vis(JList<?> liste) {
-		vis = new JPanel();
-		vis.setPreferredSize(size);
-
-		vis.add(new JScrollPane(info));
-		//comment ut panelRefresh her for å få normalt display av info igjen.
-		panelRefresh(liste);
-		innhold(vis);
-	}
 	
-	public void vis(String tekst) {
-		vis = new JPanel();
-		vis.setPreferredSize(size);
-		
-		info = new JTextArea(20, 25);
-		info.setText(tekst);
-
-		vis.add(new JScrollPane(info));
-		innhold(vis);
-	}
-	
-	//Listeboks funker kind-of, men vi må redefinere toStrings for å bruke de saklig.
-	//trenger å jobbe med plassering innenfor hovedpanelet.
-	private JPanel panelRefresh(JList<?> liste){
-		
-		vis = new JPanel();
-		vis.setPreferredSize(size);
-		
-		vis.add(new JScrollPane(liste));
-		rediger = buttonGenerator.generateButton("Rediger", vis, Buttons.HEL);
-		return vis;
-	}
-
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == nystudent) {
 			student();
@@ -281,16 +271,16 @@ public class TestWindow extends JFrame implements ActionListener {
 			studieprog();
 		}
 		if (e.getSource() == visstudent) {
-			vis(skolen.getStudentene().toString());
+			vis(studentboks.listiFy(skolen.getStudentene().visAlle()));
 		}
 		if (e.getSource() == vislærer) {
-			vis(skolen.getLærerne().toString());
+			vis(laererboks.listiFy(skolen.getLærerne().visAlle()));
 		}
 		if (e.getSource() == visfag) {
-			vis(skolen.getFagene().toString());
+			vis(fagboks.listiFy(skolen.getFagene().visAlle()));
 		}
 		if (e.getSource() == visstudieprog) {
-			vis(skolen.getStudieprogrammene().toString());
+			vis(studieboks.listiFy(skolen.getStudieprogrammene().visAlle()));
 		}
 		
 		//Lagring av objekter

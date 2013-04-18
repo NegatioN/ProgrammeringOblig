@@ -45,6 +45,15 @@ public class StudieprogramListe implements Serializable{
 		return sp;
 	}
 	
+	//Returnerer liste over alle studieprogram
+	public ArrayList<Studieprogram> visAlle() {
+		ArrayList<Studieprogram> programmene = new ArrayList<>();
+		for(Studieprogram sp : register){
+			programmene.add(sp);
+		}
+		return programmene;
+	}
+	
 	//Skriver ut all info om studieprogrammene
 	public String toString() {
 		String stringen = new String();

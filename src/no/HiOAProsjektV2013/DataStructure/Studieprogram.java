@@ -44,12 +44,16 @@ public class Studieprogram implements Serializable{
 	public String getNavn() {
 		return navn;
 	}
+	
+	public void setNavn(String navn) {
+		this.navn = navn;
+	}
 
 	// toString returnerer en liste av alle fag i studieprogrammet.
 	// kan være nødvendig å flytte en sånn metode til window slik at hver
 	// getFagkode blir en egen knapp.
 	public String toString() {
-		String stringen = "Navn: " + navn;
+		String stringen = navn;
 		
 		return stringen;
 	}

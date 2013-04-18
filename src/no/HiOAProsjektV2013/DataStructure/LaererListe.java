@@ -61,6 +61,15 @@ public class LaererListe extends PersonListe<Laerer> implements Serializable{
 		}		
 		return lærerne;
 	}
+
+	//Returnerer liste over alle lærere
+	public ArrayList<Laerer> visAlle() {
+		ArrayList<Laerer> lærerne = new ArrayList<>();
+		for(Laerer l : register){
+			lærerne.add(l);
+		}
+		return lærerne;
+	}
 	
 	public String toString() {
 		String stringen = new String();

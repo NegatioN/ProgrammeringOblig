@@ -16,10 +16,14 @@ public class Laerer extends Person implements Serializable{
 		return kontorNr;
 	}
 	
+	public void setKontor(String kontorNr){
+		this.kontorNr = kontorNr;
+	}
+	
 	public String toString(){
 		String stringen = new String();
-		stringen = 	"Navn: " + getfNavn() + " " + geteNavn() +  
-					"- KontorNr: " + kontorNr;
+		stringen = 	getfNavn() + " " + geteNavn() +  
+					" - KontorNr: " + kontorNr;
 		return stringen;
 	}
 }

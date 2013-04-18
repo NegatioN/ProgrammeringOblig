@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -19,56 +18,36 @@ import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 
-public class PopupVindu {
-
-	private JFrame vindu;
+public class PopupVindu extends JFrame{
+	
+	private static final long serialVersionUID = 1073L;
 	private Dimension size = new Dimension(300, 350);
-	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode, beskrivelse, studiepoeng, vurderingsform, lærer;
+	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode, beskrivelse, studiepoeng, vurderingsform, lærer, fag;
 	private JPanel panelet;
 	private lytter ly = new lytter();
 	private Buttons button = new Buttons(ly);
 	private Object aktiv;
 
 	public PopupVindu(JFrame ramme, Object o){
-		vindu = new JFrame("Info-display");	
+		super("Info-display");	
 		
 		if(o instanceof Student)
-			vindu.add(generateWindow((Student) o));		
+			add(fyllVindu((Student) o));		
 		else if(o instanceof Laerer)
-			vindu.add(generateWindow((Laerer) o));		
+			add(fyllVindu((Laerer) o));		
 		else if(o instanceof Fag)
-			vindu.add(generateWindow((Fag) o));	
+			add(fyllVindu((Fag) o));	
 		else if(o instanceof Studieprogram)
-			vindu.add(generateWindow((Studieprogram) o));	
+			add(fyllVindu((Studieprogram) o));	
 		
-		vindu.setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
-		vindu.setSize(size);
-		vindu.setResizable(false);
-		vindu.setLocationRelativeTo(ramme);
-		vindu.setVisible(true);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setSize(size);
+		setResizable(false);
+		setLocationRelativeTo(ramme);
+		setVisible(true);
 	}
 	
-	/*public Component generateWindow(JList liste){
-		panelet = new JPanel();
-		
-		navn	 		= new JTextField("navn", 20);
-		epost	 		= new JTextField("e-post", 20);
-		tlf		 		= new JTextField("tlf", 20);
-		adresse			= new JTextField("adresse", 20);
-		start			= new JTextField("startdato", 20);
-		kontorNr		= new JTextField("kontorNr", 20);
-		fagkode			= new JTextField("fagkode", 20);
-		beskrivelse		= new JTextField("beskrivelse", 20);
-		vurderingsform	= new JTextField("vurderingsform", 20);
-		studiepoeng		= new JTextField("studiepoeng", 20);
-		lærer			= new JTextField("lærer", 20);
-		
-		
-		return panelet;
-	}*/
-	//trenger ikke ta inn lista som parameter, kan hentes fra objeketet.
-	
-	public Component generateWindow(Student s){
+	public Component fyllVindu(Student s){
 		aktiv = s;
 		
 		DateFormat formatter = new SimpleDateFormat("dd-MMM-yy");
@@ -87,11 +66,14 @@ public class PopupVindu {
 		tlf		 		= new JTextField(studTlf, 20);
 		adresse			= new JTextField(studAdresse, 20);
 		start			= new JTextField(formatter.format(startdato), 20);
+		//fag				= new JTextField(s.getFagene().toString());
+		fagkode 		= new JTextField("Legg til fag med Enter", 20); //Skal bli jcombobox!
+		
+		fagkode.addActionListener(ly);
 		
 		navn.setEditable(false);
-		epost.setEditable(true);
-		tlf.setEditable(true);
 		start.setEditable(false);
+		//fag.setEditable(false);
 
 		panelet = new JPanel();
 		panelet.setSize(size);
@@ -100,12 +82,13 @@ public class PopupVindu {
 		panelet.add(tlf);
 		panelet.add(adresse);
 		panelet.add(start);
+		panelet.add(fagkode);
 		button.generateButton("Lagre", panelet, Buttons.HEL);
 //		panelet.add(liste);
 		
 		return panelet;
 	}
-	public Component generateWindow(Laerer l){
+	public Component fyllVindu(Laerer l){
 		aktiv = l;
 		
 		String n = l.getfNavn() +" "+ l.geteNavn();
@@ -133,7 +116,7 @@ public class PopupVindu {
 		
 		return panelet;
 	}
-	public Component generateWindow(Fag f){
+	public Component fyllVindu(Fag f){
 		aktiv = f;
 		
 		String n = f.getNavn();
@@ -151,11 +134,9 @@ public class PopupVindu {
 		lærer			= new JTextField(l, 20);
 		
 		
-		navn			.setEditable(true);
+		navn			.setEditable(false);
 		fagkode			.setEditable(false);
-		beskrivelse		.setEditable(true);
-		studiepoeng		.setEditable(true);
-		vurderingsform	.setEditable(true);
+		studiepoeng		.setEditable(false);
 		lærer			.setEditable(false);
 
 		panelet = new JPanel();
@@ -171,36 +152,61 @@ public class PopupVindu {
 		
 		return panelet;
 	}
-	
-	public Component generateWindow(Studieprogram sp){
+	public Component fyllVindu(Studieprogram sp){
 		aktiv = sp;
 		
 		String n = sp.getNavn();
 		
 		navn	 		= new JTextField(n, 20);
-
-		navn.setEditable(false);
+		fagkode 		= new JTextField(n, 20);
+		//navn.setEditable(false);
 		
 		panelet = new JPanel();
 		panelet.setSize(size);
 		panelet.add(navn);
 		
 		button.generateButton("Lagre", panelet, Buttons.HEL);
-		
+		button.generateButton("Legg til fag", panelet, Buttons.HEL);
 		return panelet;
 	}
 	
 	private class lytter implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if(aktiv instanceof Student){
-				((Student) aktiv).setAdresse(adresse.getText());
+				if(e.getSource() == fagkode){
+					System.out.println("Yey");
+					return;
+				}
+				try{
+					int nr = Integer.parseInt(tlf.getText());
+					
+					((Student) aktiv).setAdresse(adresse.getText());
+					((Student) aktiv).setTlf(nr);
+					((Student) aktiv).setEpost(epost.getText());
+					
+				}catch (NumberFormatException nfe){
+					System.out.println("Feil Nummerformat");
+				}
 			} else if(aktiv instanceof Laerer){
-				
+				try{
+					int nr = Integer.parseInt(tlf.getText());
+					
+					((Laerer) aktiv).setTlf(nr);
+					((Laerer) aktiv).setEpost(epost.getText());
+					((Laerer) aktiv).setKontor(kontorNr.getText());
+
+				}catch (NumberFormatException nfe){
+					System.out.println("Feil Nummerformat");
+				}
 			} else if(aktiv instanceof Fag){
+				((Fag) aktiv).setBeskrivelse(beskrivelse.getText());
+				((Fag) aktiv).setVurderingsform(vurderingsform.getText());
+				//((Fag) aktiv).setLærer(lærer.getText());
 				
 			} else if(aktiv instanceof Studieprogram){
-
+				((Studieprogram) aktiv).setNavn(navn.getText());
 			}
+			dispose();
 		}
 	}
 	

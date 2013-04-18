@@ -87,6 +87,15 @@ public class FagListe implements Serializable{
 		return true;
 	}
 	
+	//Returnerer liste over alle Fag
+	public ArrayList<Fag> visAlle() {
+		ArrayList<Fag> fagene = new ArrayList<>();
+		for(Fag f : register){
+			fagene.add(f);
+		}
+		return fagene;
+	}
+	
 	public String toString() {
 		String stringen = new String();
 

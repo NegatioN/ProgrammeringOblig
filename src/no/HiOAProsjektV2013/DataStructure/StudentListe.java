@@ -177,6 +177,15 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 	public int getStudentnummer(){
 		return studentNummer;
 	}
+	
+	//Returnerer liste over alle Fag
+	public ArrayList<Student> visAlle() {
+		ArrayList<Student> studentene = new ArrayList<>();
+		for(Student s : register){
+			studentene.add(s);
+		}
+		return studentene;
+	}
 
 	public String toString() {
 		String stringen = new String();

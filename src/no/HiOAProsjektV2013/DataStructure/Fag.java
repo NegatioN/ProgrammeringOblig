@@ -152,15 +152,7 @@ public class Fag implements Serializable{
 	
 	public String toString(){
 		String stringen = new String();
-		stringen = 	"Fagkode: " + fagkode + 
-					"\nNavn: " + navn + 
-					"\nBeskrivelse: " + beskrivelse + 
-					"\nVurderingsform: " + vurderingsform + 
-					"\nStudiepoeng: " + studiepoeng +
-					"\nLærer: " + lærer.geteNavn();
-					//"\nArbeidskrav: " + krav.toString() +
-					//"\nEksamener: " + eksamener.toString();
-		
+		stringen = 	navn +" - "+  fagkode;
 		return stringen;
 	}
 }

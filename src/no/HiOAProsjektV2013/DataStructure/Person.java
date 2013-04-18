@@ -46,4 +46,12 @@ public class Person implements Serializable{
 		return eNavn;
 	}
 	
+	public void setEpost(String epost){
+		this.epost = epost;
+	}
+
+	public void setTlf(int telefonNr){
+		this.telefonNr = telefonNr;
+	}
+	
 }
