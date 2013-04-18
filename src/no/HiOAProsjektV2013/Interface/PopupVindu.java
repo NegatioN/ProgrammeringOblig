@@ -11,30 +11,27 @@ import java.util.Date;
 
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-//import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import no.HiOAProsjektV2013.DataStructure.Fag;
 import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 
-public class PopupVindu implements ListSelectionListener{
+public class PopupVindu {
 
 	private JFrame vindu;
-	private String title = "Info-display";
 	private Dimension size = new Dimension(300, 350);
-	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode;
-	//beskrivelse, studiepoeng, vurderingsform, lærer;
+	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode, beskrivelse, studiepoeng, vurderingsform, lærer;
 	private JPanel panelet;
 	private lytter ly = new lytter();
 	private Buttons button = new Buttons(ly);
+	private Object aktiv;
 
 	public PopupVindu(JFrame ramme, Object o){
-		vindu = new JFrame(title);	
+		vindu = new JFrame("Info-display");	
+		
 		if(o instanceof Student)
 			vindu.add(generateWindow((Student) o));		
 		else if(o instanceof Laerer)
@@ -43,7 +40,6 @@ public class PopupVindu implements ListSelectionListener{
 			vindu.add(generateWindow((Fag) o));	
 		else if(o instanceof Studieprogram)
 			vindu.add(generateWindow((Studieprogram) o));	
-		
 		
 		vindu.setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
 		vindu.setSize(size);
@@ -71,7 +67,10 @@ public class PopupVindu implements ListSelectionListener{
 		return panelet;
 	}*/
 	//trenger ikke ta inn lista som parameter, kan hentes fra objeketet.
+	
 	public Component generateWindow(Student s){
+		aktiv = s;
+		
 		DateFormat formatter = new SimpleDateFormat("dd-MMM-yy");
 		String studNavn = s.getfNavn() +" "+ s.geteNavn();
 		String studEpost = s.getEpost();
@@ -107,14 +106,12 @@ public class PopupVindu implements ListSelectionListener{
 		return panelet;
 	}
 	public Component generateWindow(Laerer l){
+		aktiv = l;
+		
 		String n = l.getfNavn() +" "+ l.geteNavn();
 		String e = l.getEpost();
 		String t = l.getTelefonNr() + "";
 		String k = l.getKontor();
-		
-//		Arbeidskrav[] fagene = s.getFagene();
-//		JList<Arbeidskrav> liste = new JList<>();
-//		liste.setListData(fagene);
 		
 		navn	 		= new JTextField(n, 20);
 		epost	 		= new JTextField(e, 20);
@@ -133,30 +130,78 @@ public class PopupVindu implements ListSelectionListener{
 		panelet.add(tlf);
 		panelet.add(kontorNr);
 		button.generateButton("Lagre", panelet, Buttons.HEL);
-//		panelet.add(liste);
 		
 		return panelet;
 	}
 	public Component generateWindow(Fag f){
+		aktiv = f;
+		
+		String n = f.getNavn();
+		String fk = f.getFagkode();
+		String b = f.getBeskrivelse() + "";
+		int sp = f.getStudiepoeng();
+		String vf = f.getVurderingsform();
+		String l = f.getLærer().getfNavn() +" "+ f.getLærer().geteNavn();
+		
+		navn	 		= new JTextField(n, 20);
+		fagkode	 		= new JTextField(fk, 20);
+		beskrivelse		= new JTextField(b, 20);
+		studiepoeng		= new JTextField(""+sp, 20);
+		vurderingsform	= new JTextField(vf, 20);
+		lærer			= new JTextField(l, 20);
+		
+		
+		navn			.setEditable(true);
+		fagkode			.setEditable(false);
+		beskrivelse		.setEditable(true);
+		studiepoeng		.setEditable(true);
+		vurderingsform	.setEditable(true);
+		lærer			.setEditable(false);
+
 		panelet = new JPanel();
-		navn	 		= new JTextField("FAG", 20);
+		panelet.setSize(size);
+		panelet.add(navn);
+		panelet.add(fagkode);
+		panelet.add(beskrivelse);
+		panelet.add(studiepoeng);
+		panelet.add(vurderingsform);
+		panelet.add(lærer);
+
+		button.generateButton("Lagre", panelet, Buttons.HEL);
+		
 		return panelet;
 	}
+	
 	public Component generateWindow(Studieprogram sp){
+		aktiv = sp;
+		
+		String n = sp.getNavn();
+		
+		navn	 		= new JTextField(n, 20);
+
+		navn.setEditable(false);
+		
 		panelet = new JPanel();
-		navn	 		= new JTextField("STUDPROG", 20);
+		panelet.setSize(size);
+		panelet.add(navn);
+		
+		button.generateButton("Lagre", panelet, Buttons.HEL);
+		
 		return panelet;
 	}
 	
 	private class lytter implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
+			if(aktiv instanceof Student){
+				((Student) aktiv).setAdresse(adresse.getText());
+			} else if(aktiv instanceof Laerer){
+				
+			} else if(aktiv instanceof Fag){
+				
+			} else if(aktiv instanceof Studieprogram){
 
+			}
 		}
-	}
-
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		//hva skjer når listene blir selecta i indre vindu?
 	}
 	
 }

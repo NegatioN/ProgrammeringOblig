@@ -149,37 +149,10 @@ public class Student extends Person implements Serializable{
 	public Date getStart() {
 		return start;
 	}
-	public String toString(){
-		String stringen = new String();
-				
-		stringen = "StudentNr: " + studentnummer + 
-					" Navn: " + getfNavn() + " " + geteNavn() + 
-					" E-post: " + getEpost() + 
-					" Tlf: " + getTelefonNr() + 
-					" Adresse: " + adresse + 
-					" Startdato: " + new SimpleDateFormat("dd. MMM yyyy").format(start);
-		
-		return stringen;
+	public String toString(){	
+		return "S" + studentnummer + " - " + getfNavn() + " " + geteNavn();
 	}
 	
-	public String[] toStringArray(){
-		String[] stringene = new String[7];
-		stringene[0] =  ""+studentnummer;
-		stringene[1] = 	getfNavn() + " " + geteNavn();
-		stringene[2] = 	getEpost();
-		stringene[3] =  ""+getTelefonNr();
-		stringene[4] = 	adresse;
-		stringene[5] = 	""+start;
-		
-		//må legge inn arbeidskrav i faget før vi kan reference.
-		if(!kravListe.isEmpty()){
-			for(Arbeidskrav fag : kravListe){
-				stringene[6] += fag.getFagkode() + "\n";
-			}
-		}
-		
-		return stringene;
-	}
 	public Arbeidskrav[] getFagene(){
 		return (Arbeidskrav[]) kravListe.toArray();
 	}

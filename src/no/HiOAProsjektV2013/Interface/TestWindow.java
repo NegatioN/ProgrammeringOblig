@@ -411,7 +411,7 @@ public class TestWindow extends JFrame implements ActionListener {
 						vis(listen);
 					}
 				} catch (NullPointerException npe) {
-					npe.printStackTrace();
+					vis("Ingen treff");
 				}
 			}
 
