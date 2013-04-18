@@ -10,6 +10,9 @@ import javax.swing.JPanel;
 //for å unngå kodeduplisering
 public class Buttons {
 
+	public static Dimension HALV = new Dimension(140, 25);
+	public static Dimension HEL = new Dimension(260, 25);
+
 	private ActionListener al;
 	//fill med button-opprettelseting.
 	public Buttons(ActionListener al){

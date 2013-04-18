@@ -43,7 +43,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private ListeBoks<Fag> fagboks = new ListeBoks<>();
 	private ListeBoks<Studieprogram> studieboks = new ListeBoks<>();
 	private ScriptClass sc;
-	private IndreVindu innerWindow;
+	private PopupVindu pop;
 	private JTextArea info;
 	private VinduLytter vl;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
@@ -109,7 +109,6 @@ public class TestWindow extends JFrame implements ActionListener {
 		søkefelt.setPreferredSize(halvknapp);
 		søkefelt		.addActionListener(this);
 		visning.add(søkefelt);
-		
 		
 		nystudent = buttonGenerator.generateButton("Legg til student", leggtil, halvknapp);
 		nylærer = buttonGenerator.generateButton("Legg til lærer", leggtil, halvknapp);
@@ -426,7 +425,17 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		if (e.getSource() == rediger){
 			if(studentboks.getValgt() != null){
-				
+				pop = new PopupVindu(this, (Student) studentboks.getValgt());
+				studentboks.setValgt(null);
+			} else if(laererboks.getValgt() != null){
+				pop = new PopupVindu(this, (Laerer) laererboks.getValgt());
+				laererboks.setValgt(null);
+			} else if(fagboks.getValgt() != null){
+				pop = new PopupVindu(this, (Fag) fagboks.getValgt());
+				fagboks.setValgt(null);
+			} else if(studieboks.getValgt() != null){
+				pop = new PopupVindu(this, (Studieprogram) studieboks.getValgt());
+				studieboks.setValgt(null);
 			}
 		}
 	}
