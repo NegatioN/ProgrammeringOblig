@@ -26,4 +26,13 @@ public class Laerer extends Person implements Serializable{
 					" - KontorNr: " + kontorNr;
 		return stringen;
 	}
+	
+	public String fullString(){
+		String stringen = new String();
+		stringen = 	"Navn: " + getfNavn() + " " + geteNavn() + 
+					"\nE-post: " + getEpost() + 
+					"\nTlf: " + getTelefonNr() + 
+					"\nKontorNr: " + kontorNr;
+		return stringen;
+	}
 }

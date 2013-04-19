@@ -7,14 +7,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import no.HiOAProsjektV2013.DataStructure.Fag;
 import no.HiOAProsjektV2013.DataStructure.Laerer;
+import no.HiOAProsjektV2013.DataStructure.Skole;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 
@@ -27,9 +31,16 @@ public class PopupVindu extends JFrame{
 	private lytter ly = new lytter();
 	private Buttons button = new Buttons(ly);
 	private Object aktiv;
-
-	public PopupVindu(JFrame ramme, Object o){
+	private Skole skolen;
+	private Fag valgtFag;
+	private Laerer valgtLærer;
+	private JButton leggtil;
+	private JComboBox<Fag> velgfag;
+	
+	public PopupVindu(Component ramme, Object o, Skole skolen){
 		super("Info-display");	
+		
+		this.skolen = skolen;
 		
 		if(o instanceof Student)
 			add(fyllVindu((Student) o));		
@@ -158,20 +169,50 @@ public class PopupVindu extends JFrame{
 		String n = sp.getNavn();
 		
 		navn	 		= new JTextField(n, 20);
-		fagkode 		= new JTextField(n, 20);
+		
+		String fagene = "";
+		for(Fag f : sp.getFagene()){
+			if(fagene != "")
+				fagene += ", ";
+			fagene += f.getNavn();
+		}
+		
+		fag		 		= new JTextField(fagene, 20);
+
+		
+		//Midlertidig!!!
+		Fag[] f = new Fag[20];
+		int i = 0;
+		for(Fag fag: skolen.getFagene().visAlle()){
+			f[i++] = fag;
+		}
+		velgfag = new JComboBox<Fag>(f);
+		
 		//navn.setEditable(false);
 		
 		panelet = new JPanel();
 		panelet.setSize(size);
 		panelet.add(navn);
+		panelet.add(fag);
+		panelet.add(velgfag);
+		
 		
 		button.generateButton("Lagre", panelet, Buttons.HEL);
-		button.generateButton("Legg til fag", panelet, Buttons.HEL);
+		leggtil = button.generateButton("Legg til fag", panelet, Buttons.HEL);
 		return panelet;
 	}
 	
 	private class lytter implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == leggtil) {
+				try{
+					valgtFag = (Fag)velgfag.getSelectedItem();
+					((Studieprogram) aktiv).addFag(valgtFag);
+					//info.setText(skolen.getStudieprogrammene().findByNavn(navn.getText()).toString());
+				} catch (NullPointerException npe){
+					//info.setText("Ugyldig fagkode");
+				}
+			} else{
 			if(aktiv instanceof Student){
 				if(e.getSource() == fagkode){
 					System.out.println("Yey");
@@ -207,7 +248,7 @@ public class PopupVindu extends JFrame{
 				((Studieprogram) aktiv).setNavn(navn.getText());
 			}
 			dispose();
-		}
+			}
 	}
-	
+	}
 }

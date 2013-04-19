@@ -107,30 +107,40 @@ public class Skole implements Serializable{
 
 	//tror vi må gjøre søkene separate om vi skal ha ut objektlister.
 	// Virker som det kan være lurt å kun returnere søk basert på aktivert tab eller en eller annen restriction
-	private ArrayList<Student> navnSøk(String input){ //Utfører alle søk som tar imot navn, og returnerer en string (SKAL RETURNERE OBJEKT)
+	private ArrayList<?> navnSøk(String input){ //Utfører alle søk som tar imot navn, og returnerer en string (SKAL RETURNERE OBJEKT)
 		ArrayList<Student> studenter = new ArrayList<>();
-		
+		ArrayList<Laerer> lærere = new ArrayList<>();
+		ArrayList<Fag> fag = new ArrayList<>();
+		ArrayList<Studieprogram> studieprog = new ArrayList<>();
+
 		//Tekstsøk
-//		for(Laerer l : getLærerne().findByNavn(input)){
-//			resultat += "\n" + l.getfNavn() +" "+ l.geteNavn();
-//		}
-		
 		for(Student s : getStudentene().findByNavn(input)){
 			studenter.add(s);
 		}
 		
-//		for(Fag f : getFagene().findByNavn(input)){
-//			resultat += "\n" + f.getNavn() +" "+ f.getFagkode();
-//		}
-//		
-//		for(Studieprogram sp : getStudieprogrammene().findByNavn(input)){
-//			resultat += "\n" + sp.getNavn();
-//		}
+		for(Laerer l : getLærerne().findByNavn(input)){
+			lærere.add(l);
+		}
 		
-		if(studenter.isEmpty())
+		for(Fag f : getFagene().findByNavn(input)){
+			fag.add(f);
+		}
+		
+		for(Studieprogram sp : getStudieprogrammene().findByNavn(input)){
+			studieprog.add(sp);
+		}
+		
+		if(!studenter.isEmpty())
+			return studenter;
+		else if(!lærere.isEmpty())
+			return lærere;
+		else if(!fag.isEmpty())
+			return fag;
+		else if(!studieprog.isEmpty())
+			return studieprog;
+		else
 			return null;
-		
-		return studenter;
+
 	}
 	
 	public String årSøk(){

@@ -153,6 +153,27 @@ public class Student extends Person implements Serializable{
 		return "S" + studentnummer + " - " + getfNavn() + " " + geteNavn();
 	}
 	
+	public String fullString(){	
+		String stringen = new String();
+		
+		stringen = "StudentNr: " + studentnummer + 
+					"\nNavn: " + getfNavn() + " " + geteNavn() + 
+					"\nE-post: " + getEpost() + 
+					"\nTlf: " + getTelefonNr() + 
+					"\nAdresse: " + adresse + 
+					"\nStartdato: " + new SimpleDateFormat("dd. MMM yyyy").format(start) +
+					"\nFag: ";
+		
+		//må legge inn arbeidskrav i faget før vi kan reference.
+		/*if(!fagListe.isEmpty()){
+		for(Fag fag : fagListe){
+			stringen += fag.getFagkode() + "\n";
+		}
+		}*/
+		
+		return stringen;
+	}
+	
 	public Arbeidskrav[] getFagene(){
 		return (Arbeidskrav[]) kravListe.toArray();
 	}

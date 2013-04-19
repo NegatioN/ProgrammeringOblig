@@ -3,7 +3,6 @@ package no.HiOAProsjektV2013.Interface;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
@@ -14,10 +13,8 @@ import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -44,19 +41,18 @@ public class TestWindow extends JFrame implements ActionListener {
 
 	private Archiver arkivet;
 	private VinduLytter vl;
+	private Skole skolen;
 	private Buttons buttonGenerator = new Buttons(this);
-	private ListeBoks<Student> studentboks = new ListeBoks<>();
-	private ListeBoks<Laerer> laererboks = new ListeBoks<>();
-	private ListeBoks<Fag> fagboks = new ListeBoks<>();
-	private ListeBoks<Studieprogram> studieboks = new ListeBoks<>();
-	private ScriptClass sc;
+	private ListeBoks<Student> studentboks;
+	private ListeBoks<Laerer> laererboks;
+	private ListeBoks<Fag> fagboks;
+	private ListeBoks<Studieprogram> studieboks;
 	private PopupVindu pop;
 	private JTextArea info;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
 			vislærer, visfag, visstudieprog, lagre, leggtilfag, søkeknapp, rediger;
 	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode,
 			beskrivelse, studiepoeng, vurderingsform, lærer, søkefelt;
-	private Skole skolen;
 	private JPanel rammeverk, innhold, stud, lær, fag, studprog, vis;
 	private Dimension size = new Dimension(450,400);
 	private Border ramme = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
@@ -71,9 +67,13 @@ public class TestWindow extends JFrame implements ActionListener {
 		//Oppretter vinduslytter
 		vl = new VinduLytter(this);
 		
+		studentboks = new ListeBoks<>(skolen);
+		laererboks = new ListeBoks<>(skolen);
+		fagboks = new ListeBoks<>(skolen);
+		studieboks = new ListeBoks<>(skolen);
 		//script for å generere fag, studenter og lærere
 		//kommenter den ut etter 1 generate
-//		sc = new ScriptClass(skolen);
+//		ScriptClass sc = new ScriptClass(skolen);
 		
 		rammeverk = new JPanel(new BorderLayout());
 		add(rammeverk);		
@@ -141,7 +141,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		studiepoeng		= new JTextField("studiepoeng", 20);
 		lærer			= new JTextField("lærer", 20);
 		
-		info 			= new JTextArea(16, 34);
+		info 			= new JTextArea();
 		
 		
 		lagre = buttonGenerator.generateButton("Lagre", Buttons.HEL);
@@ -154,54 +154,13 @@ public class TestWindow extends JFrame implements ActionListener {
 		rammeverk.add(innhold, BorderLayout.CENTER);
 		revalidate();
 	}
-	
-	//Viser resultat av søk o.l
-	public void vis(JList<?> liste) {
-		vis = new JPanel();
-		vis.setPreferredSize(size);
-		vis.add(new JScrollPane(liste));
-		rediger = buttonGenerator.generateButton("Rediger", vis, Buttons.HEL);
-		innhold(vis);
-	}
-	public void vis(String tekst) {
-		vis = new JPanel();
-		vis.setPreferredSize(size);
-		info = new JTextArea(16, 34);
-		info.setText(tekst);
-		info.setEditable(false);
-		vis.add(new JScrollPane(info));
-		innhold(vis);
-	}
-	//Resetter tekstfeltene
-	public void refresh(){
 		
-		navn			.setText("navn");
-		epost			.setText("epost");
-		tlf				.setText("tlf");
-		adresse			.setText("adresse");
-		start			.setText("startdato");
-		kontorNr		.setText("kontoNr");
-		fagkode			.setText("fagkode");
-		beskrivelse		.setText("beskrivelse");
-		vurderingsform	.setText("vurderingsform");
-		studiepoeng		.setText("studiepoeng");
-		lærer			.setText("lærer");
-	}
-	//Oppdaterer innholdspanelet
-	public void innhold(Component c){
-		refresh();
-		innhold.removeAll();
-		innhold.add(c);
-		innhold.updateUI();
-		revalidate();
-	}
-	
 	//Metoder for å vise relevante felter for registrering av objekter
 	public void student() {
 		stud = new JPanel();
 		//stud.setLayout(new BoxLayout(stud, BoxLayout.PAGE_AXIS));
 		stud.setPreferredSize(size);
-		info = new JTextArea(8,32);
+		info = new JTextArea(10,32);
 
 		stud.add(info);
 		stud.add(navn);
@@ -215,7 +174,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	public void lærer() {
 		lær = new JPanel();
 		lær.setPreferredSize(size);
-		info = new JTextArea(8,32);
+		info = new JTextArea(10,32);
 
 		lær.add(info);
 		lær.add(navn);
@@ -256,7 +215,54 @@ public class TestWindow extends JFrame implements ActionListener {
 		innhold(studprog);
 	}
 	
+	//Viser resultat av søk o.l
+	public void vis(JList<?> liste) {
+		vis = new JPanel();
+		vis.setPreferredSize(size);
+		vis.add(new JScrollPane(liste));
+		rediger = buttonGenerator.generateButton("Rediger", vis, Buttons.HEL);
+		innhold(vis);
+	}
+	public void vis(JPanel p) {
+		rediger = buttonGenerator.generateButton("Rediger", Buttons.HEL);
+		//p.add(rediger, BorderLayout.SOUTH);
+		innhold(p);
+	}
+	public void vis(String tekst) {
+		vis = new JPanel();
+		vis.setPreferredSize(size);
+		info = new JTextArea(16, 34);
+		info.setText(tekst);
+		info.setEditable(false);
+		vis.add(new JScrollPane(info));
+		innhold(vis);
+	}
+	//Resetter tekstfeltene
+	public void refresh(){
+		
+		navn			.setText("navn");
+		epost			.setText("epost");
+		tlf				.setText("tlf");
+		adresse			.setText("adresse");
+		start			.setText("startdato");
+		kontorNr		.setText("kontoNr");
+		fagkode			.setText("fagkode");
+		beskrivelse		.setText("beskrivelse");
+		vurderingsform	.setText("vurderingsform");
+		studiepoeng		.setText("studiepoeng");
+		lærer			.setText("lærer");
+	}
+	//Oppdaterer innholdspanelet
+	public void innhold(Component c){
+		refresh();
+		innhold.removeAll();
+		innhold.add(c);
+		innhold.updateUI();
+		revalidate();
+	}
 	
+	
+	@SuppressWarnings("unchecked")
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == nystudent) {
 			student();
@@ -271,16 +277,16 @@ public class TestWindow extends JFrame implements ActionListener {
 			studieprog();
 		}
 		if (e.getSource() == visstudent) {
-			vis(studentboks.listiFy(skolen.getStudentene().visAlle()));
+			vis(studentboks.visResultat(studentboks.listiFy(skolen.getStudentene().visAlle())));
 		}
 		if (e.getSource() == vislærer) {
-			vis(laererboks.listiFy(skolen.getLærerne().visAlle()));
+			vis(laererboks.visResultat(laererboks.listiFy(skolen.getLærerne().visAlle())));
 		}
 		if (e.getSource() == visfag) {
-			vis(fagboks.listiFy(skolen.getFagene().visAlle()));
+			vis(fagboks.visResultat(fagboks.listiFy(skolen.getFagene().visAlle())));
 		}
 		if (e.getSource() == visstudieprog) {
-			vis(studieboks.listiFy(skolen.getStudieprogrammene().visAlle()));
+			vis(studieboks.visResultat(studieboks.listiFy(skolen.getStudieprogrammene().visAlle())));
 		}
 		
 		//Lagring av objekter
@@ -369,57 +375,32 @@ public class TestWindow extends JFrame implements ActionListener {
 		// optimaliseres slik at vi ikke looper HELE datastrukturen vår hver
 		// gang.
 		if (e.getSource() == søkefelt || e.getSource() == søkeknapp) {
-			ArrayList<Student> studentene = skolen.getStudentene().findByNavn(
-					søkefelt.getText());
-			ArrayList<Laerer> lærerne = skolen.getLærerne().findByNavn(
-					søkefelt.getText());
-			ArrayList<Fag> fagene = skolen.getFagene().findByNavn(
-					søkefelt.getText());
-			ArrayList<Studieprogram> studieprogrammene = skolen
-					.getStudieprogrammene().findByNavn(søkefelt.getText());
-			if (studentene.size() > 0) {
-				JList<Student> listen = studentboks.listiFy(studentene);
-				vis(listen);
-			} else if (lærerne.size() > 0) {
-				JList<Laerer> listen = laererboks.listiFy(lærerne);
-				vis(listen);
-			} else if (fagene.size() > 0) {
-				JList<Fag> listen = fagboks.listiFy(fagene);
-				vis(listen);
-			} else if (studieprogrammene.size() > 0) {
-				JList<Studieprogram> listen = studieboks.listiFy(studieprogrammene);
-				vis(listen);
-			} else {
-				//sjekker søket for hvilken liste som kom ut av navnsøk. Vi remaker nok denne, så orker ikke implemente hele.
-				try {
-					ArrayList<?> arrayen = skolen.søk(søkefelt.getText());
-					if (arrayen.get(0) instanceof Student) {
-						JList<Student> listen = studentboks.listiFy((ArrayList<Student>) arrayen);
-						vis(listen);
-					} else if (arrayen.get(0) instanceof Fag) {
-						JList<Fag> listen = fagboks.listiFy((ArrayList<Fag>) arrayen);
-						vis(listen);
-					}
-				} catch (NullPointerException npe) {
-					vis("Ingen treff");
+			
+			//Oppretter en arraylist av typen som returneres av søk-metoden
+			ArrayList<?> resultat = skolen.søk(søkefelt.getText());
+			
+			//Sjekker at søket ikke returnerte null eller tom list, sjekker så hva slags objekt første element i listen er,
+			//og viser et displayvindu av riktig type
+			if(!(resultat == null || resultat.isEmpty())){
+				
+				if(resultat.get(0) instanceof Student){
+					JList<Student> listen = studentboks.listiFy((ArrayList<Student>) resultat);
+					vis(studentboks.visResultat(listen));
+					
+				} else if(resultat.get(0) instanceof Laerer){
+					JList<Laerer> listen = laererboks.listiFy((ArrayList<Laerer>) resultat);
+					vis(laererboks.visResultat(listen));
+					
+				} else if(resultat.get(0) instanceof Fag){
+					JList<Fag> listen = fagboks.listiFy((ArrayList<Fag>) resultat);
+					vis(fagboks.visResultat(listen));
+					
+				} else if(resultat.get(0) instanceof Studieprogram){
+					JList<Studieprogram> listen = studieboks.listiFy((ArrayList<Studieprogram>) resultat);
+					vis(studieboks.visResultat(listen));
 				}
-			}
-
-		}
-		
-		if (e.getSource() == rediger){
-			if(studentboks.getValgt() != null){
-				pop = new PopupVindu(this, (Student) studentboks.getValgt());
-				studentboks.setValgt(null);
-			} else if(laererboks.getValgt() != null){
-				pop = new PopupVindu(this, (Laerer) laererboks.getValgt());
-				laererboks.setValgt(null);
-			} else if(fagboks.getValgt() != null){
-				pop = new PopupVindu(this, (Fag) fagboks.getValgt());
-				fagboks.setValgt(null);
-			} else if(studieboks.getValgt() != null){
-				pop = new PopupVindu(this, (Studieprogram) studieboks.getValgt());
-				studieboks.setValgt(null);
+			} else{
+				vis("Ingen treff");
 			}
 		}
 	}
