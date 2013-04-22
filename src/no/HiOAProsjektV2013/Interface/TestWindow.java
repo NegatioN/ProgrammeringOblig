@@ -288,16 +288,16 @@ public class TestWindow extends JFrame implements ActionListener {
 			studieprog();
 		}
 		if (e.getSource() == visstudent) {
-			vis(studentboks.visResultat(studentboks.listiFy(skolen.getStudentene().visAlle())));
+			vis(studentboks.visResultat(studentboks.listify(skolen.getStudentene().visAlle())));
 		}
 		if (e.getSource() == vislærer) {
-			vis(laererboks.visResultat(laererboks.listiFy(skolen.getLærerne().visAlle())));
+			vis(laererboks.visResultat(laererboks.listify(skolen.getLærerne().visAlle())));
 		}
 		if (e.getSource() == visfag) {
-			vis(fagboks.visResultat(fagboks.listiFy(skolen.getFagene().visAlle())));
+			vis(fagboks.visResultat(fagboks.listify(skolen.getFagene().visAlle())));
 		}
 		if (e.getSource() == visstudieprog) {
-			vis(studieboks.visResultat(studieboks.listiFy(skolen.getStudieprogrammene().visAlle())));
+			vis(studieboks.visResultat(studieboks.listify(skolen.getStudieprogrammene().visAlle())));
 		}
 		
 		//Lagring av objekter
@@ -342,12 +342,6 @@ public class TestWindow extends JFrame implements ActionListener {
 		else if (innhold.getComponent(0).equals(fag)) {
 				try{
 					int poeng = Integer.parseInt(studiepoeng.getText());
-<<<<<<< HEAD
-					
-//					Laerer læreren = 
-					Laerer læreren = skolen.getLærerne().findByNavn(lærer.getText()).get(0);
-=======
->>>>>>> sletting av objekter, comboboxer og registrering av eksamen lagt til
 					
 					info.setText(skolen.getFagene().addFag(navn.getText(), 
 							fagkode.getText(),
@@ -397,19 +391,19 @@ public class TestWindow extends JFrame implements ActionListener {
 			if(!(resultat == null || resultat.isEmpty())){
 				
 				if(resultat.get(0) instanceof Student){
-					JList<Student> listen = studentboks.listiFy((ArrayList<Student>) resultat);
+					JList<Student> listen = studentboks.listify((ArrayList<Student>) resultat);
 					vis(studentboks.visResultat(listen));
 					
 				} else if(resultat.get(0) instanceof Laerer){
-					JList<Laerer> listen = laererboks.listiFy((ArrayList<Laerer>) resultat);
+					JList<Laerer> listen = laererboks.listify((ArrayList<Laerer>) resultat);
 					vis(laererboks.visResultat(listen));
 					
 				} else if(resultat.get(0) instanceof Fag){
-					JList<Fag> listen = fagboks.listiFy((ArrayList<Fag>) resultat);
+					JList<Fag> listen = fagboks.listify((ArrayList<Fag>) resultat);
 					vis(fagboks.visResultat(listen));
 					
 				} else if(resultat.get(0) instanceof Studieprogram){
-					JList<Studieprogram> listen = studieboks.listiFy((ArrayList<Studieprogram>) resultat);
+					JList<Studieprogram> listen = studieboks.listify((ArrayList<Studieprogram>) resultat);
 					vis(studieboks.visResultat(listen));
 				}
 			} else{

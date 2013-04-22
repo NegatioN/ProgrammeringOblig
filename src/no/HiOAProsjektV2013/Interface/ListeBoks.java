@@ -81,6 +81,7 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 		});
 		
 		return combo;
+	}
 	
 	private void visInfo(Object o){
 		if(o instanceof Student)
