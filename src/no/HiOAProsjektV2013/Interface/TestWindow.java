@@ -333,6 +333,8 @@ public class TestWindow extends JFrame implements ActionListener {
 		else if (innhold.getComponent(0).equals(fag)) {
 				try{
 					int poeng = Integer.parseInt(studiepoeng.getText());
+					
+//					Laerer læreren = 
 					Laerer læreren = skolen.getLærerne().findByNavn(lærer.getText()).get(0);
 					
 					info.setText(skolen.getFagene().addFag(navn.getText(), 

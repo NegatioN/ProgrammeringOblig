@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -52,7 +53,7 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 	}
 
 	//gjør om arraylisten til en JList
-	public JList<E> listiFy(ArrayList<E> array){
+	public JList<E> listify(ArrayList<E> array){
 		JList<E> listen = new JList<>();
 		@SuppressWarnings("unchecked")
 		E[] tilArray = (E[]) array.toArray();
@@ -65,6 +66,20 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 		
 		return listen;
 	}
+	public JComboBox<E> combify(ArrayList<E> array){
+		E[] tilArray = (E[]) array.toArray();
+		JComboBox<E> combo = new JComboBox<>(tilArray);
+		combo.setSelectedIndex(0);
+		combo.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				JComboBox<?> boks = (JComboBox<?>) e.getSource();
+				int i = boks.getSelectedIndex();
+				//GJØR MER STUFF
+			}
+			
+		});
+		
+		return combo;
 	
 	private void visInfo(Object o){
 		if(o instanceof Student)
