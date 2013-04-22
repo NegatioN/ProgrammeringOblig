@@ -1,6 +1,7 @@
 package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -163,10 +164,12 @@ public class Fag implements Serializable{
 					"\nBeskrivelse: " + beskrivelse + 
 					"\nVurderingsform: " + vurderingsform + 
 					"\nStudiepoeng: " + studiepoeng +
-					"\nLærer: " + lærer.geteNavn();
+					"\nLærer: " + lærer.geteNavn() + "\nEksamener: " ;
 					//"\nArbeidskrav: " + krav.toString() +
-					//"\nEksamener: " + eksamener.toString();
-	
+		for(Eksamen e: eksamener){
+			stringen += new SimpleDateFormat("dd. MMM yyyy").format(e.getDato()) + " ";
+		}
+		
 		return stringen;
 	}
 }

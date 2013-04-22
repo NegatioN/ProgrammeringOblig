@@ -41,8 +41,9 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 	public JPanel visResultat(JList<E> liste){
 		vis = new JPanel(new BorderLayout());
 		info = new JTextArea(10,32);
-		//info.setBorder(BorderFactory.createLoweredBevelBorder());
+		info.setBorder(BorderFactory.createLoweredBevelBorder());
 		info.setEditable(false);
+		info.setLineWrap(true);
 		JButton rediger = new JButton("Rediger"); 
 		rediger.addActionListener(this);
 		

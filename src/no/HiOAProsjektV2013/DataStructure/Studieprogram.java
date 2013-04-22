@@ -13,9 +13,18 @@ public class Studieprogram implements Serializable{
 	public Studieprogram(String navn) {
 		this.navn = navn;
 	}
-
+	
+	private boolean harFaget(Fag fag){
+		for(Fag checkFag : fagIProgrammet){
+			if(fag.equals(checkFag))
+				return true;
+		}
+		return false;
+	}
+	
 	public void addFag(Fag fag) {
-		fagIProgrammet.add(fag);
+		if(!harFaget(fag))
+			fagIProgrammet.add(fag);
 	}
 
 	public List<Fag> getFagene()

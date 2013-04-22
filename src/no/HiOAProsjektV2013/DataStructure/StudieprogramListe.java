@@ -45,6 +45,10 @@ public class StudieprogramListe implements Serializable{
 		return sp;
 	}
 	
+	public void removeStudieprogram(Studieprogram studprog){
+		register.remove(studprog);
+	}
+	
 	//Returnerer liste over alle studieprogram
 	public ArrayList<Studieprogram> visAlle() {
 		ArrayList<Studieprogram> programmene = new ArrayList<>();

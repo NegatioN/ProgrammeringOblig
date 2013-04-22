@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,17 +26,16 @@ import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 public class PopupVindu extends JFrame{
 	
 	private static final long serialVersionUID = 1073L;
-	private Dimension size = new Dimension(300, 350);
-	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode, beskrivelse, studiepoeng, vurderingsform, lærer, fag;
+	private Dimension size = new Dimension(350, 400);
+	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode, beskrivelse, studiepoeng, vurderingsform, fag, eksamensdato;
 	private JPanel panelet;
 	private lytter ly = new lytter();
 	private Buttons button = new Buttons(ly);
 	private Object aktiv;
 	private Skole skolen;
-	private Fag valgtFag;
-	private Laerer valgtLærer;
-	private JButton leggtil;
-	private JComboBox<Fag> velgfag;
+	private JButton leggtil, fjernFag, slett, eksamen;
+	private JComboBox<Fag> velgFag;
+	private JComboBox<Laerer> velgLærer;
 	
 	public PopupVindu(Component ramme, Object o, Skole skolen){
 		super("Info-display");	
@@ -78,9 +78,11 @@ public class PopupVindu extends JFrame{
 		adresse			= new JTextField(studAdresse, 20);
 		start			= new JTextField(formatter.format(startdato), 20);
 		//fag				= new JTextField(s.getFagene().toString());
-		fagkode 		= new JTextField("Legg til fag med Enter", 20); //Skal bli jcombobox!
 		
-		fagkode.addActionListener(ly);
+		Fag[] fagA = new Fag[skolen.getFagene().visAlle().size()];
+		skolen.getFagene().visAlle().toArray(fagA);
+		velgFag = new JComboBox<Fag>(fagA);
+		velgFag.setPreferredSize(Buttons.HEL);
 		
 		navn.setEditable(false);
 		start.setEditable(false);
@@ -93,10 +95,14 @@ public class PopupVindu extends JFrame{
 		panelet.add(tlf);
 		panelet.add(adresse);
 		panelet.add(start);
-		panelet.add(fagkode);
+		panelet.add(velgFag);
 		button.generateButton("Lagre", panelet, Buttons.HEL);
 //		panelet.add(liste);
 		
+		leggtil = button.generateButton("Legg til fag", panelet, Buttons.HEL);
+		fjernFag = button.generateButton("Fjern fag", panelet, Buttons.HEL);
+		slett = button.generateButton("Slett Student", panelet, Buttons.HEL);
+
 		return panelet;
 	}
 	public Component fyllVindu(Laerer l){
@@ -124,7 +130,8 @@ public class PopupVindu extends JFrame{
 		panelet.add(tlf);
 		panelet.add(kontorNr);
 		button.generateButton("Lagre", panelet, Buttons.HEL);
-		
+		slett = button.generateButton("Slett lærer", panelet, Buttons.HEL);
+
 		return panelet;
 	}
 	public Component fyllVindu(Fag f){
@@ -135,20 +142,24 @@ public class PopupVindu extends JFrame{
 		String b = f.getBeskrivelse() + "";
 		int sp = f.getStudiepoeng();
 		String vf = f.getVurderingsform();
-		String l = f.getLærer().getfNavn() +" "+ f.getLærer().geteNavn();
 		
 		navn	 		= new JTextField(n, 20);
 		fagkode	 		= new JTextField(fk, 20);
 		beskrivelse		= new JTextField(b, 20);
 		studiepoeng		= new JTextField(""+sp, 20);
 		vurderingsform	= new JTextField(vf, 20);
-		lærer			= new JTextField(l, 20);
+		eksamensdato 	= new JTextField("eksamensdato", 20);
+		eksamensdato.addActionListener(ly);
 		
-		
+		Laerer[] lærerA = new Laerer[skolen.getLærerne().visAlle().size()];
+		skolen.getLærerne().visAlle().toArray(lærerA);
+		velgLærer = new JComboBox<Laerer>(lærerA);
+		velgLærer.setSelectedItem(f.getLærer());
+		velgLærer.setPreferredSize(Buttons.HEL);
+
 		navn			.setEditable(false);
 		fagkode			.setEditable(false);
 		studiepoeng		.setEditable(false);
-		lærer			.setEditable(false);
 
 		panelet = new JPanel();
 		panelet.setSize(size);
@@ -157,18 +168,18 @@ public class PopupVindu extends JFrame{
 		panelet.add(beskrivelse);
 		panelet.add(studiepoeng);
 		panelet.add(vurderingsform);
-		panelet.add(lærer);
-
-		button.generateButton("Lagre", panelet, Buttons.HEL);
+		panelet.add(velgLærer);
 		
+		button.generateButton("Lagre", panelet, Buttons.HEL);
+		eksamen = button.generateButton("Legg til eksamen", panelet, Buttons.HEL);
+		slett = button.generateButton("Slett fag", panelet, Buttons.HEL);
+
 		return panelet;
 	}
 	public Component fyllVindu(Studieprogram sp){
 		aktiv = sp;
 		
 		String n = sp.getNavn();
-		
-		navn	 		= new JTextField(n, 20);
 		
 		String fagene = "";
 		for(Fag f : sp.getFagene()){
@@ -177,28 +188,28 @@ public class PopupVindu extends JFrame{
 			fagene += f.getNavn();
 		}
 		
-		fag		 		= new JTextField(fagene, 20);
-
+		Fag[] fagA = new Fag[skolen.getFagene().visAlle().size()];
+		skolen.getFagene().visAlle().toArray(fagA);
+		velgFag = new JComboBox<Fag>(fagA);
+		velgFag.setPreferredSize(Buttons.HEL);
 		
-		//Midlertidig!!!
-		Fag[] f = new Fag[20];
-		int i = 0;
-		for(Fag fag: skolen.getFagene().visAlle()){
-			f[i++] = fag;
-		}
-		velgfag = new JComboBox<Fag>(f);
+		navn	 		= new JTextField(n, 20);
+		fag		 		= new JTextField(fagene, 20);
 		
 		//navn.setEditable(false);
-		
+		fag.setEditable(false);
+
 		panelet = new JPanel();
 		panelet.setSize(size);
 		panelet.add(navn);
 		panelet.add(fag);
-		panelet.add(velgfag);
+		panelet.add(velgFag);
 		
 		
 		button.generateButton("Lagre", panelet, Buttons.HEL);
 		leggtil = button.generateButton("Legg til fag", panelet, Buttons.HEL);
+		fjernFag = button.generateButton("Fjern fag", panelet, Buttons.HEL);
+		slett = button.generateButton("Slett studieprogram", panelet, Buttons.HEL);
 		return panelet;
 	}
 	
@@ -206,13 +217,52 @@ public class PopupVindu extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == leggtil) {
 				try{
-					valgtFag = (Fag)velgfag.getSelectedItem();
-					((Studieprogram) aktiv).addFag(valgtFag);
-					//info.setText(skolen.getStudieprogrammene().findByNavn(navn.getText()).toString());
+					if(aktiv instanceof Student)
+						((Student) aktiv).addFag((Fag)velgFag.getSelectedItem());
+					else if(aktiv instanceof Studieprogram)
+						((Studieprogram) aktiv).addFag((Fag)velgFag.getSelectedItem());
+					
 				} catch (NullPointerException npe){
-					//info.setText("Ugyldig fagkode");
 				}
-			} else{
+			} else if(e.getSource() == fjernFag) {
+				try{
+					if(aktiv instanceof Student)
+						((Student) aktiv).addFag((Fag)velgFag.getSelectedItem());
+					else if(aktiv instanceof Studieprogram)
+						((Studieprogram) aktiv).fjernFag(((Fag)velgFag.getSelectedItem()));
+						
+					} catch (NullPointerException npe){
+				}
+			} else if(e.getSource() == slett){
+				if(aktiv instanceof Student)
+					skolen.getStudentene().removeStudent((Student)aktiv);
+				else if(aktiv instanceof Laerer)
+					skolen.getLærerne().removeLærer((Laerer)aktiv);
+				else if(aktiv instanceof Fag)
+					skolen.getFagene().removeFag((Fag)aktiv);
+				else if(aktiv instanceof Studieprogram)
+					skolen.getStudieprogrammene().removeStudieprogram((Studieprogram)aktiv);
+				dispose();
+			} else if(e.getSource() == eksamen){
+				panelet.remove(eksamen);
+				panelet.remove(slett);
+				panelet.add(eksamensdato);
+				panelet.add(slett);
+				panelet.revalidate();
+			} else if(e.getSource() == eksamensdato){
+				try {
+					DateFormat formatter = new SimpleDateFormat("dd.MMM.yy"); //Setter inputformat for dato
+					Date date = (Date) formatter.parse(eksamensdato.getText());
+					((Fag)aktiv).addEksamen(date);
+					eksamensdato.setText("Eksamen lagret");
+				} catch (ParseException pe) {
+					eksamensdato.setText("Feil datoformat");
+				}
+				panelet.revalidate();
+			}
+			
+			
+			else{
 			if(aktiv instanceof Student){
 				if(e.getSource() == fagkode){
 					System.out.println("Yey");
@@ -242,7 +292,7 @@ public class PopupVindu extends JFrame{
 			} else if(aktiv instanceof Fag){
 				((Fag) aktiv).setBeskrivelse(beskrivelse.getText());
 				((Fag) aktiv).setVurderingsform(vurderingsform.getText());
-				//((Fag) aktiv).setLærer(lærer.getText());
+				((Fag) aktiv).setLærer((Laerer)velgLærer.getSelectedItem());
 				
 			} else if(aktiv instanceof Studieprogram){
 				((Studieprogram) aktiv).setNavn(navn.getText());
