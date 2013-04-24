@@ -163,7 +163,7 @@ public class Student extends Person implements Serializable{
 					"\nAdresse: " + adresse + 
 					"\nStartdato: " + new SimpleDateFormat("dd. MMM yyyy").format(start) +
 					"\nFag: ";
-		
+	
 		//må legge inn arbeidskrav i faget før vi kan reference.
 		/*if(!fagListe.isEmpty()){
 		for(Fag fag : fagListe){
@@ -180,5 +180,6 @@ public class Student extends Person implements Serializable{
 	public Fag[] getFagene(){
 		return (Fag[])fagListe.toArray();
 	}
+
 
 }

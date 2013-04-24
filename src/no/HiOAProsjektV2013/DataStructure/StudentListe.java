@@ -2,9 +2,12 @@ package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+
+import no.HiOAProsjektV2013.Main.StudentSammenligner;
 
 public class StudentListe extends PersonListe<Student> implements Serializable{
 
@@ -13,17 +16,32 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 	private static int studentNummer = 100000;
 
 	private List<Student> register;
+	private List<Student> sortertRegister;
 
 	public StudentListe() {
 		register = new LinkedList<Student>();
+		sortertRegister = new ArrayList<Student>();
 	}
 
 	// legger til en ny student UANSETT og incrementer studentnummer
 	public Student addStudent(String navn, String epost, int tlf, String adresse,
 			Date start) {
 		Student s = new Student(navn, epost, tlf, adresse, newId(), start);
+		//legger til pointer til studentobjekt til liste i kronologisk rekkefølge, og i liste som sorteres på navn.
 		register.add(s);
+		settInnSortert(s);
 		return s;
+	}
+	private void settInnSortert(Student s){
+		int pos = Collections.binarySearch(sortertRegister, s,new StudentSammenligner());
+		if(pos < 0)
+			sortertRegister.add(s);
+		//setter inn på sortert plass
+		sortertRegister.add(pos, s);
+	}
+	//sorterer listen vår basert på etternavn, deretter fornavn.
+	private void sorter(){
+		Collections.sort(sortertRegister, new StudentSammenligner());
 	}
 	
 	public void removeStudent(Student student){
@@ -48,6 +66,7 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 	//finner studenter basert på navn
 	public ArrayList<Student> findByNavn(String navn){
 		String[] navnene = nameSplitter(navn);
+//		int pos = Collections.binarySearch(sortertRegister, new StudentSammenligner());
 		
 		ArrayList<Student> fornavn = findByFornavn(navnene[Person.FORNAVN]);
 		ArrayList<Student> etternavn = findByEtternavn(navnene[Person.ETTERNAVN]);
