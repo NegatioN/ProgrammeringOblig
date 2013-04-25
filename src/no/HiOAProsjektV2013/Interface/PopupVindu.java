@@ -251,7 +251,7 @@ public class PopupVindu extends JFrame{
 				panelet.revalidate();
 			} else if(e.getSource() == eksamensdato){
 				try {
-					DateFormat formatter = new SimpleDateFormat("dd.MMM.yy"); //Setter inputformat for dato
+					DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); //Setter inputformat for dato
 					Date date = (Date) formatter.parse(eksamensdato.getText());
 					((Fag)aktiv).addEksamen(date);
 					eksamensdato.setText("Eksamen lagret");

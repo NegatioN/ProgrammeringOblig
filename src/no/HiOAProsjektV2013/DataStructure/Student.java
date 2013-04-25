@@ -12,11 +12,11 @@ public class Student extends Person implements Serializable{
 	private String adresse;
 	private int studentnummer;
 	private Date start, slutt;
-	//Listen med arbeidskrav representerer alle fagene studenten tar
+	//Listen med arbeidskrav representerer alle fagListe studenten tar
 	//finner fag studenten har ved å liste opp .getFagkode() fra kravene.
-	private List<Arbeidskrav> kravListe = new LinkedList<>();
 	private List<EksamensDeltaker> eksamener = new LinkedList<>();
 	private List<Fag> fagListe = new LinkedList<>();
+	private List<Arbeidskrav> kravListe = new LinkedList<>();
 	private boolean avsluttet = false;
 	private Studieprogram sp = null;
 	
@@ -46,16 +46,17 @@ public class Student extends Person implements Serializable{
 	//Sjekker gjennom arbeidskravene etter fagkode.
 	public boolean harFaget(String fagkode){
 		
-		for(Arbeidskrav krav : kravListe){
-			if(fagkode.equalsIgnoreCase(krav.getFagkode()))
+		for(Fag f : fagListe){
+			if(f.getFagkode() == fagkode)
 				return true;
 		}
 		
 		return false;
 	}
+	
 	private boolean harFaget(Fag fag){
-		for(Fag checkFag : fagListe){
-			if(fag.equals(checkFag))
+		for(Fag f : fagListe){
+			if(fag.equals(f))
 				return true;
 		}
 		return false;
@@ -165,11 +166,10 @@ public class Student extends Person implements Serializable{
 					"\nFag: ";
 	
 		//må legge inn arbeidskrav i faget før vi kan reference.
-		/*if(!fagListe.isEmpty()){
+		//if(!fagListe.isEmpty()){
 		for(Fag fag : fagListe){
 			stringen += fag.getFagkode() + "\n";
 		}
-		}*/
 		
 		return stringen;
 	}
@@ -177,7 +177,8 @@ public class Student extends Person implements Serializable{
 	public Arbeidskrav[] getKravene(){
 		return (Arbeidskrav[]) kravListe.toArray();
 	}
-	public Fag[] getFagene(){
+	
+	public Fag[] getfagListe(){
 		return (Fag[])fagListe.toArray();
 	}
 
