@@ -100,7 +100,8 @@ public class Skole implements Serializable{
 			return studentNrSøk(input);
 		}
 		else if (input.matches(navnRegex)){ //Sjekker om det er søkt på navn (student, lærer, fag og studieprogram)
-			return navnSøk(input);
+			return getStudentene().findByNavn(input);
+//			return navnSøk(input);
 		}
 		return null;
 	}

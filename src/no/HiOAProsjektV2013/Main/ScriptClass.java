@@ -20,7 +20,6 @@ public class ScriptClass {
 		generateLaerer();
 		generateFag();
 		generateKrav();
-		addFagStudent();
 		
 	}
 	

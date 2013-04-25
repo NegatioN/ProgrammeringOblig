@@ -21,7 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.border.*;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
 
 import no.HiOAProsjektV2013.DataStructure.Fag;
 import no.HiOAProsjektV2013.DataStructure.Laerer;
@@ -29,6 +30,7 @@ import no.HiOAProsjektV2013.DataStructure.Skole;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 import no.HiOAProsjektV2013.Main.Archiver;
+import no.HiOAProsjektV2013.Main.ScriptClass;
 
 public class TestWindow extends JFrame implements ActionListener {
 
