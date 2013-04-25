@@ -27,6 +27,7 @@ public class StudentSammenligner implements Comparator<Student>, Serializable{
 	}
 
 	@Override
+	//sorterer kun på etternavn atm.
 	public int compare(Student s1, Student s2) {
 		String s1f = s1.getfNavn();
 		String s1e = s1.geteNavn();
@@ -34,9 +35,8 @@ public class StudentSammenligner implements Comparator<Student>, Serializable{
 		String s2e = s2.geteNavn();
 		
 		int d = kollator.compare(s1e, s2e);
-		if(d != 0)
-			return d;
-		return kollator.compare(s1f, s2f);
+
+		return d;
 	}
 
 }

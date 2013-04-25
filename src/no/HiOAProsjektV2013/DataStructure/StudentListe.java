@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -115,18 +116,14 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 			}
 
 		}// end while
-		Student temp = sortertRegister.get(searchStart);
-		studentene.add(temp);
 		try {
 			// legger til alle studentene fra searchStart til første bokstav
 			// ikke lengre er det samme.
-			while (true) {
-				if(firstLetter == sortertRegister.get(searchStart).geteNavn().charAt(0)){
-				System.out.println("her går ting riktig - " + searchStart);
-				Student temp = sortertRegister.get(searchStart);
-				System.out.println("temp " + temp.toString());
-				studentene.add(temp);
-				searchStart++;
+			Iterator iterator = sortertRegister.listIterator(searchStart);
+			while (iterator.hasNext()) {
+				Student temp = (Student) iterator.next();
+				if(firstLetter == temp.geteNavn().charAt(0)){
+					studentene.add(temp);
 				}else{
 					break;
 				}
