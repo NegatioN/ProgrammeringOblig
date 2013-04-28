@@ -8,7 +8,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import no.HiOAProsjektV2013.Main.StudentSammenligner;
+import no.HiOAProsjektV2013.Main.EtternavnSammenligner;
+import no.HiOAProsjektV2013.Main.FornavnSammenligner;
 
 public class StudentListe extends PersonListe<Student> implements Serializable{
 
@@ -16,12 +17,15 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 
 	private static int studentNummer = 100000;
 
+	private final int FØRSTE = 0, FORNAVN = 2000, ETTERNAVN = 3000;
+	
 	private List<Student> register;
-	private ArrayList<Student> sortertRegister;
+	private ArrayList<Student> etternavnRegister, fornavnRegister;
 
 	public StudentListe() {
 		register = new LinkedList<Student>();
-		sortertRegister = new ArrayList<Student>();
+		etternavnRegister = new ArrayList<Student>();
+		fornavnRegister = new ArrayList<Student>();
 	}
 
 	// legger til en ny student UANSETT og incrementer studentnummer
@@ -36,22 +40,23 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 	private void settInnSortert(Student s){
 		int pos = 0;
 		try{
-		pos = Collections.binarySearch(sortertRegister, s,new StudentSammenligner());
+			//gir såvidt jeg forstår en negativ verdi av der det skal settes inn HVIS den ikke finner en som er .equals
+		pos = Collections.binarySearch(etternavnRegister, s,new EtternavnSammenligner());
 		}catch(NullPointerException npe){
 			npe.printStackTrace();
 		}
-		if(pos < 0)
-			pos = 0;
-		//setter inn på sortert plass
-		sortertRegister.add(pos, s);
-	}
-	//sorterer listen vår basert på etternavn, deretter fornavn.
-	private void sorter(){
-		Collections.sort(sortertRegister, new StudentSammenligner());
+		pos = (Math.abs(pos) - 1);
+		//setter inn på sortert plass for etternavn
+		etternavnRegister.add(pos, s);
+		
+		pos = Collections.binarySearch(fornavnRegister, s, new FornavnSammenligner());
+		pos = (Math.abs(pos) - 1);
+		fornavnRegister.add(pos,s);
 	}
 	
 	public void removeStudent(Student student){
 		register.remove(student);
+		etternavnRegister.remove(student);
 	}
 	
 	//tar inn date eleven sluttet og studenten.
@@ -72,7 +77,7 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 	//finner studenter basert på navn
 //	public ArrayList<Student> findByNavn(String navn){
 //		String[] navnene = nameSplitter(navn);
-////		int pos = Collections.binarySearch(sortertRegister, new StudentSammenligner());
+////		int pos = Collections.binarySearch(etternavnRegister, new StudentSammenligner());
 //		
 //		ArrayList<Student> fornavn = findByFornavn(navnene[Person.FORNAVN]);
 //		ArrayList<Student> etternavn = findByEtternavn(navnene[Person.ETTERNAVN]);
@@ -81,11 +86,10 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 //	}
 
 	public ArrayList<Student> findByNavn(String input) {
-		ArrayList<Student> studentene = new ArrayList<>();
-		System.out.println(sortertRegister.toString());
-		System.out.println(register.toString());
-		char firstLetter = input.charAt(0);
-		int max = (sortertRegister.size() - 1);
+		System.out.println(etternavnRegister.toString());
+		System.out.println("Ikke sortert: " + register.toString());
+		char firstLetter = input.charAt(FØRSTE);
+		int max = (etternavnRegister.size() - 1);
 		int min = 0;
 		int mid;
 		int searchStart = 0;
@@ -93,47 +97,66 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 		
 		while (min <= max) {
 			mid = (max + min) / 2;
-			System.out.println(mid + "mid");
-			tempstudent = sortertRegister.get(mid);
+			tempstudent = etternavnRegister.get(mid);
 			// finner plassen i arrayen hvor vi skal starte sekvensiellt søk.
-			System.out.println(tempstudent.toString());
-			if (firstLetter == tempstudent.geteNavn().charAt(0)) {
-				System.out.println("match");
-				searchStart = sortertRegister.indexOf(tempstudent);
-				System.out.println(searchStart + "");
+			if (firstLetter == tempstudent.geteNavn().charAt(FØRSTE)) {
+				searchStart = etternavnRegister.indexOf(tempstudent);
 				// ruller oss tilbake til starten av denne bokstavens forekomst.
-				while (firstLetter == sortertRegister.get(searchStart-1)
-						.geteNavn().charAt(0)) {				
+				while (firstLetter == etternavnRegister.get(searchStart-1)
+						.geteNavn().charAt(FØRSTE)) {				
 					searchStart--;
 				}
 				break;
-			} else if (firstLetter < tempstudent.geteNavn().charAt(0)) {
+			} else if (firstLetter < tempstudent.geteNavn().charAt(FØRSTE)) {
 				max = mid - 1;
-				System.out.println("higher");
-			} else if (firstLetter > tempstudent.geteNavn().charAt(0)) {
+			} else if (firstLetter > tempstudent.geteNavn().charAt(FØRSTE)) {
 				min = mid + 1;
-				System.out.println("lower");
 			}
 
 		}// end while
-		try {
-			// legger til alle studentene fra searchStart til første bokstav
-			// ikke lengre er det samme.
-			Iterator iterator = sortertRegister.listIterator(searchStart);
-			while (iterator.hasNext()) {
-				Student temp = (Student) iterator.next();
-				if(firstLetter == temp.geteNavn().charAt(0)){
-					studentene.add(temp);
-				}else{
-					break;
+		ArrayList<Student> studentene = samler(searchStart, input, etternavnRegister, firstLetter, ETTERNAVN);
+//		ArrayList<Student> studenteneF = samler(searchStart, input, fornavnRegister, firstLetter, FORNAVN);
+		return studentene;
+	}
+	private ArrayList<Student> samler(int start, String input, ArrayList<Student> sortedList, char first, int qualifier){
+		ArrayList<Student> studentene = new ArrayList<>();
+		if (qualifier == ETTERNAVN) {
+			try {
+				// legger til alle studentene fra searchStart til første bokstav
+				// ikke lengre er det samme.
+				Iterator iterator = sortedList.listIterator(start);
+				while (iterator.hasNext()) {
+					Student temp = (Student) iterator.next();
+					if (first != temp.geteNavn().charAt(FØRSTE)) {
+						break;
+					} else if (temp.geteNavn().contains(input)) {
+						studentene.add(temp);
+					}
 				}
+			}// hvis arrayen er tom, eller ikke befolket med personer med gitt
+				// bokstav som start.
+			catch (NullPointerException npe) {
+				npe.printStackTrace();
 			}
-		}// hvis arrayen er tom, eller ikke befolket med personer med gitt
-			// bokstav som start.
-		catch (NullPointerException npe) {
-			npe.printStackTrace();
+		}else if(qualifier == FORNAVN){
+			try {
+				// legger til alle studentene fra searchStart til første bokstav
+				// ikke lengre er det samme.
+				Iterator iterator = sortedList.listIterator(start);
+				while (iterator.hasNext()) {
+					Student temp = (Student) iterator.next();
+					if (first != temp.getfNavn().charAt(FØRSTE)) {
+						break;
+					} else if (temp.getfNavn().contains(input)) {
+						studentene.add(temp);
+					}
+				}
+			}// hvis arrayen er tom, eller ikke befolket med personer med gitt
+				// bokstav som start.
+			catch (NullPointerException npe) {
+				npe.printStackTrace();
+			}
 		}
-
 		return studentene;
 	}
 	
@@ -282,15 +305,6 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 			stringen += s.toString() + "\n\n";
 		}
 		return stringen;
-	}
-	public void setSortert(){
-		System.out.println(sortertRegister.toString());
-		for(Student s : register)
-			sortertRegister.add(s);
-		sorter();
-	}
-	public ArrayList<Student> getSortert(){
-		return sortertRegister;
 	}
 
 }

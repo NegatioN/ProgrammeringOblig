@@ -1,13 +1,14 @@
 package no.HiOAProsjektV2013.Main;
 
 import java.io.Serializable;
+import java.text.Collator;
 import java.text.ParseException;
 import java.text.RuleBasedCollator;
 import java.util.Comparator;
 
 import no.HiOAProsjektV2013.DataStructure.Student;
 
-public class StudentSammenligner implements Comparator<Student>, Serializable{
+public class EtternavnSammenligner implements Comparator<Student>, Serializable{
 	
 	private static final long serialVersionUID = 1001L;
 	
@@ -18,16 +19,16 @@ public class StudentSammenligner implements Comparator<Student>, Serializable{
 	
 	private RuleBasedCollator kollator;
 	
-	public StudentSammenligner(){
+	public EtternavnSammenligner(){
 		try{
 			kollator = new RuleBasedCollator(rekkefølge);
+			kollator.setStrength(Collator.PRIMARY);
 		}catch(ParseException e){
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	//sorterer kun på etternavn atm.
 	public int compare(Student s1, Student s2) {
 		String s1f = s1.getfNavn();
 		String s1e = s1.geteNavn();
@@ -35,6 +36,10 @@ public class StudentSammenligner implements Comparator<Student>, Serializable{
 		String s2e = s2.geteNavn();
 		
 		int d = kollator.compare(s1e, s2e);
+		System.out.println("1: " + s1e + " 2: " + s2e);
+		System.out.println(d);
+		if(d == 0)
+			return kollator.compare(s1f, s2f);
 
 		return d;
 	}
