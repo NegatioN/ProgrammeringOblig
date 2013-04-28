@@ -37,7 +37,9 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 		settInnSortert(s);
 		return s;
 	}
+	//et current litt urealistisk problem er at den gir litt blankt F i skikkelig sortering når folk har identisk navn. og dette føkker opp søket.
 	private void settInnSortert(Student s){
+		
 		int pos = 0;
 		try{
 			//gir såvidt jeg forstår en negativ verdi av der det skal settes inn HVIS den ikke finner en som er .equals
@@ -45,13 +47,25 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 		}catch(NullPointerException npe){
 			npe.printStackTrace();
 		}
-		pos = (Math.abs(pos) - 1);
 		//setter inn på sortert plass for etternavn
-		etternavnRegister.add(pos, s);
-		
+		if(pos == 0)
+			etternavnRegister.add(s);
+		else{
+		pos = (Math.abs(pos) - 1);
+			etternavnRegister.add(pos, s);
+		}
+		try{
 		pos = Collections.binarySearch(fornavnRegister, s, new FornavnSammenligner());
 		pos = (Math.abs(pos) - 1);
-		fornavnRegister.add(pos,s);
+		}catch(NullPointerException e){
+			e.printStackTrace();
+		}
+		if(pos == 0)
+			fornavnRegister.add(s);
+		else{
+		pos = (Math.abs(pos) - 1);
+			fornavnRegister.add(pos, s);
+		}
 	}
 	
 	public void removeStudent(Student student){
@@ -74,21 +88,14 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 		
 		return studentene;
 	}
-	//finner studenter basert på navn
-//	public ArrayList<Student> findByNavn(String navn){
-//		String[] navnene = nameSplitter(navn);
-////		int pos = Collections.binarySearch(etternavnRegister, new StudentSammenligner());
-//		
-//		ArrayList<Student> fornavn = findByFornavn(navnene[Person.FORNAVN]);
-//		ArrayList<Student> etternavn = findByEtternavn(navnene[Person.ETTERNAVN]);
-//		ArrayList<Student> studentene = super.findByNavn(fornavn, etternavn);
-//		return studentene;
-//	}
 
+	//fungerer currently ikke om du skriver inn en liten bokstav først i søket. 
+	//finner studentene basert på fornavn/etternavn og samler begge søkene til en arraylist.
 	public ArrayList<Student> findByNavn(String input) {
+		System.out.println(fornavnRegister.toString());
 		System.out.println(etternavnRegister.toString());
-		System.out.println("Ikke sortert: " + register.toString());
 		char firstLetter = input.charAt(FØRSTE);
+		firstLetter = Character.toUpperCase(firstLetter);
 		int max = (etternavnRegister.size() - 1);
 		int min = 0;
 		int mid;
@@ -113,18 +120,47 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 				min = mid + 1;
 			}
 
-		}// end while
-		ArrayList<Student> studentene = samler(searchStart, input, etternavnRegister, firstLetter, ETTERNAVN);
-//		ArrayList<Student> studenteneF = samler(searchStart, input, fornavnRegister, firstLetter, FORNAVN);
+		}// end while for etternavn
+		ArrayList<Student> studenteneEtternavn = looper(searchStart, input, etternavnRegister, firstLetter, ETTERNAVN);
+		
+		searchStart = 0;
+		min = 0;
+		max = (fornavnRegister.size() -1);
+		while (min <= max) {
+			mid = (max + min) / 2;
+			tempstudent = fornavnRegister.get(mid);
+			// finner plassen i arrayen hvor vi skal starte sekvensiellt søk.
+			if (firstLetter == tempstudent.getfNavn().charAt(FØRSTE)) {
+				searchStart = fornavnRegister.indexOf(tempstudent);
+				// ruller oss tilbake til starten av denne bokstavens forekomst.
+				while (firstLetter == fornavnRegister.get(searchStart-1)
+						.getfNavn().charAt(FØRSTE)) {				
+					searchStart--;
+				}
+				break;
+			} else if (firstLetter < tempstudent.getfNavn().charAt(FØRSTE)) {
+				max = mid - 1;
+			} else if (firstLetter > tempstudent.getfNavn().charAt(FØRSTE)) {
+				min = mid + 1;
+			}
+
+		}// end while for fornavn
+		ArrayList<Student> studenteneFornavn = looper(searchStart, input, fornavnRegister, firstLetter, FORNAVN);
+		
+		ArrayList<Student> studentene = samler(studenteneFornavn, studenteneEtternavn);
+		
 		return studentene;
 	}
-	private ArrayList<Student> samler(int start, String input, ArrayList<Student> sortedList, char first, int qualifier){
+	//looper gjennom alle med samme forbokstav som input sekvensiellt. Enten i fornavnslista eller etternavn.
+	private ArrayList<Student> looper(int start, String input, ArrayList<Student> sortedList, char first, int qualifier){
 		ArrayList<Student> studentene = new ArrayList<>();
+		Iterator iterator;
+		long startTime = System.currentTimeMillis();
 		if (qualifier == ETTERNAVN) {
 			try {
 				// legger til alle studentene fra searchStart til første bokstav
 				// ikke lengre er det samme.
-				Iterator iterator = sortedList.listIterator(start);
+				iterator = sortedList.listIterator(start);
 				while (iterator.hasNext()) {
 					Student temp = (Student) iterator.next();
 					if (first != temp.geteNavn().charAt(FØRSTE)) {
@@ -142,7 +178,7 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 			try {
 				// legger til alle studentene fra searchStart til første bokstav
 				// ikke lengre er det samme.
-				Iterator iterator = sortedList.listIterator(start);
+				iterator = sortedList.listIterator(start);
 				while (iterator.hasNext()) {
 					Student temp = (Student) iterator.next();
 					if (first != temp.getfNavn().charAt(FØRSTE)) {
@@ -157,32 +193,51 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 				npe.printStackTrace();
 			}
 		}
+		long endTime = System.currentTimeMillis();
+		long delta = endTime - startTime;
+		Date bl = new Date(delta);
+		System.out.println(delta);
+		return studentene;
+	}
+	private ArrayList<Student> samler(ArrayList<Student> fornavn, ArrayList<Student> etternavn){
+		ArrayList<Student> studentene = fornavn;
+		try{
+		for(Student s : etternavn){
+			if(!studentene.contains(s))
+				studentene.add(s);
+		}
+		}catch(NullPointerException e){
+			e.printStackTrace();
+		}
+		
 		return studentene;
 	}
 	
-	//delmetode for å gå gjennom registeret i studentlista.
-	private ArrayList<Student> findByFornavn(String fnavn){
-		ArrayList<Student> studentene = new ArrayList<>();
-		
-		
-		for(Student s : register){
-			if(s.getfNavn().equalsIgnoreCase(fnavn)){
-				studentene.add(s);
-			}
-		}		
-		return studentene;
-	}
-	//delmetode for å gå gjennom registeret i studentlista.
-	private ArrayList<Student> findByEtternavn(String enavn){
-		ArrayList<Student> studentene = new ArrayList<>();
-		
-		for(Student s : register){
-			if(s.geteNavn().equalsIgnoreCase(enavn)){
-				studentene.add(s);
-			}
-		}		
-		return studentene;
-	}
+	
+	
+//	//delmetode for å gå gjennom registeret i studentlista.
+//	private ArrayList<Student> findByFornavn(String fnavn){
+//		ArrayList<Student> studentene = new ArrayList<>();
+//		
+//		
+//		for(Student s : register){
+//			if(s.getfNavn().equalsIgnoreCase(fnavn)){
+//				studentene.add(s);
+//			}
+//		}		
+//		return studentene;
+//	}
+//	//delmetode for å gå gjennom registeret i studentlista.
+//	private ArrayList<Student> findByEtternavn(String enavn){
+//		ArrayList<Student> studentene = new ArrayList<>();
+//		
+//		for(Student s : register){
+//			if(s.geteNavn().equalsIgnoreCase(enavn)){
+//				studentene.add(s);
+//			}
+//		}		
+//		return studentene;
+//	}
 	
 	//metoden skal gjøre et binærsøk gjennom studentlista som er i rekkefølge på studentNr
 	public Student findStudentByStudentNr(String studNr){

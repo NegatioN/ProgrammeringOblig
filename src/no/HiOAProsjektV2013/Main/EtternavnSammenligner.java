@@ -36,8 +36,6 @@ public class EtternavnSammenligner implements Comparator<Student>, Serializable{
 		String s2e = s2.geteNavn();
 		
 		int d = kollator.compare(s1e, s2e);
-		System.out.println("1: " + s1e + " 2: " + s2e);
-		System.out.println(d);
 		if(d == 0)
 			return kollator.compare(s1f, s2f);
 

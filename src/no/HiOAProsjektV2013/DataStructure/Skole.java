@@ -100,8 +100,7 @@ public class Skole implements Serializable{
 			return studentNrSøk(input);
 		}
 		else if (input.matches(navnRegex)){ //Sjekker om det er søkt på navn (student, lærer, fag og studieprogram)
-			return getStudentene().findByNavn(input);
-//			return navnSøk(input);
+			return navnSøk(input);
 		}
 		return null;
 	}
@@ -115,9 +114,7 @@ public class Skole implements Serializable{
 		ArrayList<Studieprogram> studieprog = new ArrayList<>();
 
 		//Tekstsøk
-		for(Student s : getStudentene().findByNavn(input)){
-			studenter.add(s);
-		}
+		studenter = getStudentene().findByNavn(input);
 		
 		for(Laerer l : getLærerne().findByNavn(input)){
 			lærere.add(l);
