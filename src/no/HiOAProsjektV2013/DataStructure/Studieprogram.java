@@ -1,6 +1,7 @@
 package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ public class Studieprogram implements Serializable{
 	private static final long serialVersionUID = 1060L;
 	private String navn;
 	private List<Fag> fagIProgrammet = new LinkedList<>();
+	private ArrayList<Student> studenterIProgrammet = new ArrayList<>();
 
 	public Studieprogram(String navn) {
 		this.navn = navn;
@@ -58,9 +60,6 @@ public class Studieprogram implements Serializable{
 		this.navn = navn;
 	}
 
-	// toString returnerer en liste av alle fag i studieprogrammet.
-	// kan være nødvendig å flytte en sånn metode til window slik at hver
-	// getFagkode blir en egen knapp.
 	public String toString() {
 		String stringen = navn;
 		
@@ -75,5 +74,14 @@ public class Studieprogram implements Serializable{
 			}
 		}
 		return stringen;
+	}
+	public void addStudent(Student s){
+		studenterIProgrammet.add(s);
+	}
+	public void removeStudent(Student s){
+		studenterIProgrammet.remove(s);
+	}
+	public ArrayList<Student> getStudenter(){
+		return studenterIProgrammet;
 	}
 }

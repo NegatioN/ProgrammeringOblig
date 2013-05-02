@@ -48,7 +48,7 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 			npe.printStackTrace();
 		}
 		//setter inn på sortert plass for etternavn
-		if(pos == 0)
+		if(etternavnRegister.isEmpty())
 			etternavnRegister.add(s);
 		else{
 		pos = (Math.abs(pos) - 1);
@@ -60,10 +60,10 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 		}catch(NullPointerException e){
 			e.printStackTrace();
 		}
-		if(pos == 0)
+		if(fornavnRegister.isEmpty())
 			fornavnRegister.add(s);
 		else{
-		pos = (Math.abs(pos) - 1);
+		pos = (Math.abs(pos));
 			fornavnRegister.add(pos, s);
 		}
 	}
@@ -109,9 +109,13 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 			if (firstLetter == tempstudent.geteNavn().charAt(FØRSTE)) {
 				searchStart = etternavnRegister.indexOf(tempstudent);
 				// ruller oss tilbake til starten av denne bokstavens forekomst.
-				while (firstLetter == etternavnRegister.get(searchStart-1)
-						.geteNavn().charAt(FØRSTE)) {				
-					searchStart--;
+				try{
+					while (firstLetter == etternavnRegister
+							.get(searchStart - 1).geteNavn().charAt(FØRSTE)) {
+						searchStart--;
+					}
+				}catch(ArrayIndexOutOfBoundsException e){
+					//fortsetter med uendret searchStart
 				}
 				break;
 			} else if (firstLetter < tempstudent.geteNavn().charAt(FØRSTE)) {
@@ -121,6 +125,7 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 			}
 
 		}// end while for etternavn
+
 		ArrayList<Student> studenteneEtternavn = looper(searchStart, input, etternavnRegister, firstLetter, ETTERNAVN);
 		
 		searchStart = 0;
@@ -133,9 +138,11 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 			if (firstLetter == tempstudent.getfNavn().charAt(FØRSTE)) {
 				searchStart = fornavnRegister.indexOf(tempstudent);
 				// ruller oss tilbake til starten av denne bokstavens forekomst.
-				while (firstLetter == fornavnRegister.get(searchStart-1)
-						.getfNavn().charAt(FØRSTE)) {				
-					searchStart--;
+				if (searchStart != 0) {
+					while (firstLetter == fornavnRegister.get(searchStart - 1)
+							.getfNavn().charAt(FØRSTE)) {
+						searchStart--;
+					}
 				}
 				break;
 			} else if (firstLetter < tempstudent.getfNavn().charAt(FØRSTE)) {
@@ -155,7 +162,6 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 	private ArrayList<Student> looper(int start, String input, ArrayList<Student> sortedList, char first, int qualifier){
 		ArrayList<Student> studentene = new ArrayList<>();
 		Iterator iterator;
-		long startTime = System.currentTimeMillis();
 		if (qualifier == ETTERNAVN) {
 			try {
 				// legger til alle studentene fra searchStart til første bokstav
@@ -193,10 +199,6 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 				npe.printStackTrace();
 			}
 		}
-		long endTime = System.currentTimeMillis();
-		long delta = endTime - startTime;
-		Date bl = new Date(delta);
-		System.out.println(delta);
 		return studentene;
 	}
 	private ArrayList<Student> samler(ArrayList<Student> fornavn, ArrayList<Student> etternavn){
@@ -280,11 +282,10 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 	
 	public ArrayList<Student> findStudentByFag(Fag fag) {
 		ArrayList<Student> studentene = new ArrayList<>();
-		String fagkode = fag.getFagkode();
 		for(Student s : register){
 			// sjekker hver students arbeidskrav for fagkoden, og ser om de har
 			// faget.
-			if (s.harFaget(fagkode))
+			if (s.harFaget(fag))
 				studentene.add(s);
 		}
 		// returnerer en liste med alle studentene i faget
@@ -326,7 +327,7 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 	// en viss dato.
 	public ArrayList<Student> findStudentByStudieprogramByÅr(Studieprogram sp,
 			Date dato) {
-		ArrayList<Student> checkStudenter = findStudentByStudieprogram(sp);
+		ArrayList<Student> checkStudenter = sp.getStudenter();
 		ArrayList<Student> studentene = new ArrayList<>();
 
 		for (Student s : checkStudenter) {
@@ -340,6 +341,7 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 	public void setStudentNrCount(int studnr){
 		studentNummer = studnr;
 	}
+	//brukes til lagring av variabelen i Archiver-klassen
 	public int getStudentnummer(){
 		return studentNummer;
 	}

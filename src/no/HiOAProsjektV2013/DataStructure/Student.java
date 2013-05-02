@@ -31,7 +31,14 @@ public class Student extends Person implements Serializable{
 	}
 
 	public void setStudieprogram(Studieprogram studieprogram){
+		//try-blokken gjør at en student kun kan være registrert på 1 studieprogram. Kan hende det er relevant med flere.
+		try{
+			sp.removeStudent(this);
+		}catch(NullPointerException e){
+			e.printStackTrace();
+		}
 		sp = studieprogram;
+		sp.addStudent(this);
 	}
 	public Studieprogram getStudieprogram(){
 		return sp;
@@ -54,7 +61,7 @@ public class Student extends Person implements Serializable{
 		return false;
 	}
 	
-	private boolean harFaget(Fag fag){
+	public boolean harFaget(Fag fag){
 		for(Fag f : fagListe){
 			if(fag.equals(f))
 				return true;

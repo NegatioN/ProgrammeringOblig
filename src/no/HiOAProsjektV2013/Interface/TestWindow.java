@@ -40,6 +40,8 @@ public class TestWindow extends JFrame implements ActionListener {
 	}
 
 	private static final long serialVersionUID = 1L;
+	//checkbox burde sette selectedValue til en av disse, og passe value inn i search
+	public static final int LÆRER = 30, STUDENT = 40, FAG = 50, STUDIEPROGRAM = 60;
 
 	private Archiver arkivet;
 	private VinduLytter vl;
@@ -60,6 +62,8 @@ public class TestWindow extends JFrame implements ActionListener {
 	private Border ramme = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 	private JComboBox<Fag> velgFag;
 	private JComboBox<Laerer> velgLærer;
+	//endre
+	private int selectedValue = 1;
 
 	public TestWindow(String tittel) {
 
@@ -386,7 +390,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		if (e.getSource() == søkefelt || e.getSource() == søkeknapp) {
 			
 			//Oppretter en arraylist av typen som returneres av søk-metoden
-			ArrayList<?> resultat = skolen.søk(søkefelt.getText());
+			ArrayList<?> resultat = skolen.søk(søkefelt.getText(), selectedValue);
 			
 			//Sjekker at søket ikke returnerte null eller tom list, sjekker så hva slags objekt første element i listen er,
 			//og viser et displayvindu av riktig type

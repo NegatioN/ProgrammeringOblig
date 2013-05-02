@@ -36,8 +36,13 @@ public class EtternavnSammenligner implements Comparator<Student>, Serializable{
 		String s2e = s2.geteNavn();
 		
 		int d = kollator.compare(s1e, s2e);
-		if(d == 0)
-			return kollator.compare(s1f, s2f);
+		if(d == 0){
+			d = kollator.compare(s1f, s2f);
+			//hvis hele navnet er identisk, plasser 1 spot før forrige instans.
+			if(d == 0){
+				return -1;
+			}
+		}
 
 		return d;
 	}

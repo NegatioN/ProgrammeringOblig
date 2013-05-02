@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import no.HiOAProsjektV2013.Interface.TestWindow;
+
 //	Klassen fungerer som en samling av alle datastrukturer for skolesystemet
 //	Dette for å unngå clutter i hovedklassen/vindusklassen som skal lage og holde datastrukturen
 public class Skole implements Serializable{
@@ -88,7 +90,21 @@ public class Skole implements Serializable{
 	
 	//****************SØØØØØØØØØØK SØKEMETODER SØØØØØØØØØØK****************//
 	
-	public ArrayList<?> søk(String input){ //Sjekker inputen i søkefeltet og utfører relevante søk
+	public ArrayList<?> søk(String input, int qualifier){ //Sjekker inputen i søkefeltet og utfører relevante søk
+		if(qualifier == TestWindow.FAG){
+			ArrayList<Fag> fagene = fagSøk(input);
+			return fagene;
+		}else if(qualifier == TestWindow.STUDENT){
+			ArrayList<Student> studentene = studentSøk(input);
+			return studentene;
+		}else if(qualifier == TestWindow.LÆRER){
+			ArrayList<Laerer> lærerne = lærerSøk(input);
+			return lærerne;
+		}else if(qualifier == TestWindow.STUDIEPROGRAM){
+			ArrayList<Studieprogram> studiene = studieSøk(input);
+			return studiene;
+		}
+		
 		
 		if(input.matches(arRegex)){ //Sjekker om det er søkt på år
 			//split input og sjekk neste paramenter for hvordan søket skal håndteres.
@@ -103,6 +119,37 @@ public class Skole implements Serializable{
 			return navnSøk(input);
 		}
 		return null;
+	}
+	//remade metoder som skal brukes om qualifier-int slår til, slik at ikke ALLE søk skjer hver gang.
+	private ArrayList<Fag> fagSøk(String input){
+		if(input.matches(fagkodeRegex)){
+			return fagkodeSøk(input);
+		}
+		ArrayList<Fag> fagene = new ArrayList<>();
+		for(Fag f : getFagene().findByNavn(input)){
+			fagene.add(f);
+		}
+		return fagene;
+	}
+	private ArrayList<Student> studentSøk(String input){
+		if(input.matches(studentNrRegex))
+			return studentNrSøk(input);
+		ArrayList<Student> studentene = getStudentene().findByNavn(input);		
+		return studentene;
+	}
+	private ArrayList<Laerer> lærerSøk(String input){
+		ArrayList<Laerer> lærerne = new ArrayList<>();
+		for(Laerer l : getLærerne().findByNavn(input)){
+			lærerne.add(l);
+		}
+		return lærerne;
+	}
+	private ArrayList<Studieprogram> studieSøk(String input){
+		ArrayList<Studieprogram> studiene = new ArrayList<>();
+		for(Studieprogram sp : getStudieprogrammene().findByNavn(input)){
+			studiene.add(sp);
+		}
+		return studiene;
 	}
 
 	//tror vi må gjøre søkene separate om vi skal ha ut objektlister.

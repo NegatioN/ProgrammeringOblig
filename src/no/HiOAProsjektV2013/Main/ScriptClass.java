@@ -17,18 +17,19 @@ public class ScriptClass {
 	public ScriptClass(Skole skolen){
 		this.skolen = skolen;
 		generateStudent();
-		generateLaerer();
-		generateFag();
-		generateKrav();
+//		generateLaerer();
+//		generateFag();
+//		generateKrav();
 		
 	}
 	
 	public void generateStudent(){
-		for(int i = 0; i < 70; i++){
-			if(i%3 == 0)
-				stud1 = skolen.getStudentene().addStudent("Joakim Rishaug", "Joaimrishaug@gmail.com", 95153437, "Her 25", new Date());
-			stud2 = skolen.getStudentene().addStudent("Lars-Erik Kasin", "lekasin@gmail.com", 12345678, "Her 2", new Date());
+		for(int i = 0;i<70;i++){
+			stud1 = skolen.getStudentene().addStudent("Joakim Rishaug", "Joaimrishaug@gmail.com", 95153437, "Her 25", new Date());
+			if(i%3==0)
+				stud2 = skolen.getStudentene().addStudent("Lars-Erik Kasin", "lekasin@gmail.com", 12345678, "Her 2", new Date());
 		}
+
 //		stud1 = skolen.getStudentene().addStudent("Joakim Rishaug", "Joaimrishaug@gmail.com", 95153437, "Her 25", new Date());
 //		stud2 = skolen.getStudentene().addStudent("Lars-Erik Kasin", "lekasin@gmail.com", 12345678, "Her 2", new Date());
 //		stud3 = skolen.getStudentene().addStudent("Herp Derp", "Herp@gmail.com", 12345678, "Camp 25", new Date());
