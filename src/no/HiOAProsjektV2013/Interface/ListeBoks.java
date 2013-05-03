@@ -28,7 +28,6 @@ import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 //endre til overload constructors på "Listiyfy"? for å ikke opprette mange typeparameteriserte objekter i testwindow?
 public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 	private final int ROWCOUNT = 10;
-	private Dimension størrelse = new Dimension(300,300);
 	private Object valgt;
 	private JPanel vis;
 	private JTextArea info;
@@ -68,6 +67,7 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 		return listen;
 	}
 	public JComboBox<E> combify(ArrayList<E> array){
+		//vi vet det er E som kommer inn, og kan derfor caste trygt til E[]
 		E[] tilArray = (E[]) array.toArray();
 		JComboBox<E> combo = new JComboBox<>(tilArray);
 		combo.setSelectedIndex(0);

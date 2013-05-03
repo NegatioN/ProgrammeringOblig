@@ -11,7 +11,7 @@ import java.util.List;
 import no.HiOAProsjektV2013.Main.EtternavnSammenligner;
 import no.HiOAProsjektV2013.Main.FornavnSammenligner;
 
-public class StudentListe extends PersonListe<Student> implements Serializable{
+public class StudentListe implements Serializable{
 
 	private static final long serialVersionUID = 1020L;
 
@@ -216,31 +216,6 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 	}
 	
 	
-	
-//	//delmetode for å gå gjennom registeret i studentlista.
-//	private ArrayList<Student> findByFornavn(String fnavn){
-//		ArrayList<Student> studentene = new ArrayList<>();
-//		
-//		
-//		for(Student s : register){
-//			if(s.getfNavn().equalsIgnoreCase(fnavn)){
-//				studentene.add(s);
-//			}
-//		}		
-//		return studentene;
-//	}
-//	//delmetode for å gå gjennom registeret i studentlista.
-//	private ArrayList<Student> findByEtternavn(String enavn){
-//		ArrayList<Student> studentene = new ArrayList<>();
-//		
-//		for(Student s : register){
-//			if(s.geteNavn().equalsIgnoreCase(enavn)){
-//				studentene.add(s);
-//			}
-//		}		
-//		return studentene;
-//	}
-	
 	//metoden skal gjøre et binærsøk gjennom studentlista som er i rekkefølge på studentNr
 	public Student findStudentByStudentNr(String studNr){
 		//input har en s, og 6 tall
@@ -311,15 +286,9 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 		}
 		return studentene;
 	}
-
+	//plukker alle studenter som ligger lagret på et spesifikt studie
 	public ArrayList<Student> findStudentByStudieprogram(Studieprogram sp) {
-		ArrayList<Student> studentene = new ArrayList<>();
-		// går gjennom studentlista og tar ut alle med gitt studieprogram
-		for(Student s : register){
-			if (s.getStudieprogram().equals(sp)) {
-				studentene.add(s);
-			}
-		}
+		ArrayList<Student> studentene = sp.getStudenter();
 		return studentene;
 	}
 

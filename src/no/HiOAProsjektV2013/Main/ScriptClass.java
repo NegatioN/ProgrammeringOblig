@@ -24,9 +24,9 @@ public class ScriptClass {
 	}
 	
 	public void generateStudent(){
-		for(int i = 0;i<70;i++){
+		for(int i = 0;i<7000;i++){
 			stud1 = skolen.getStudentene().addStudent("Joakim Rishaug", "Joaimrishaug@gmail.com", 95153437, "Her 25", new Date());
-			if(i%3==0)
+			if(i%1000==0)
 				stud2 = skolen.getStudentene().addStudent("Lars-Erik Kasin", "lekasin@gmail.com", 12345678, "Her 2", new Date());
 		}
 

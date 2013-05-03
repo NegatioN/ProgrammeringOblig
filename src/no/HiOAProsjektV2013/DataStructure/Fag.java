@@ -100,12 +100,12 @@ public class Fag implements Serializable{
 	public int[] findKarakterDistribusjon(Date dato) {
 		int[] karakterene = new int[6];
 		Eksamen e = findEksamenByDate(dato);
-		if (e == null)
-			return karakterene;
 		// gir alle elementene i arrayen en verdi sånn at vi ser 0-verdier
 		for (int i : karakterene) {
 			i = 0;
 		}
+		if (e == null)
+			return karakterene;
 		List<EksamensDeltaker> deltakerne = e.getDeltakere();
 		for (EksamensDeltaker ed : deltakerne) {
 			// legger bare til en i arrayen som represeenterer antall av hver

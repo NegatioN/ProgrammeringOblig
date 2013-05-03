@@ -18,7 +18,8 @@ public class EksamensDeltaker implements Serializable{
 		oppmeldt = true;
 	}
 	public void setKarakter(char k){
-		karakter = k;
+		char process = Character.toUpperCase(k);
+		karakter = process;
 	}
 	public char getKarakter(){
 		return karakter;

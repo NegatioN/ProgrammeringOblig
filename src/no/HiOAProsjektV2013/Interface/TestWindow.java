@@ -46,7 +46,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private Archiver arkivet;
 	private VinduLytter vl;
 	private Skole skolen;
-	private Buttons buttonGenerator = new Buttons(this);
+	private Buttons buttonGenerator;
 	private ListeBoks<Student> studentboks;
 	private ListeBoks<Laerer> laererboks;
 	private ListeBoks<Fag> fagboks;
@@ -63,11 +63,12 @@ public class TestWindow extends JFrame implements ActionListener {
 	private JComboBox<Fag> velgFag;
 	private JComboBox<Laerer> velgLærer;
 	//endre
-	private int selectedValue = 1;
+	protected int selectedValue = 1;
 
 	public TestWindow(String tittel) {
 
 		super(tittel);
+		buttonGenerator = new Buttons(this);
 		//oppretter save-objektet
 		arkivet 	= new Archiver();
 		//Oppretter gammelt objekt om det fins, eller nytt om vi ikke har et.
@@ -276,6 +277,9 @@ public class TestWindow extends JFrame implements ActionListener {
 		innhold.add(c);
 		innhold.updateUI();
 		revalidate();
+	}
+	public void setSelectedValue(int i){
+		selectedValue = i;
 	}
 	
 	
