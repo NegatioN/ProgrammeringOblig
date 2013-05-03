@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import no.HiOAProsjektV2013.Main.EtternavnSammenligner;
 import no.HiOAProsjektV2013.Main.FornavnSammenligner;
@@ -89,7 +90,6 @@ public class StudentListe implements Serializable{
 		return studentene;
 	}
 
-	//fungerer currently ikke om du skriver inn en liten bokstav først i søket. 
 	//finner studentene basert på fornavn/etternavn og samler begge søkene til en arraylist.
 	public ArrayList<Student> findByNavn(String input) {
 		System.out.println(fornavnRegister.toString());
@@ -138,11 +138,13 @@ public class StudentListe implements Serializable{
 			if (firstLetter == tempstudent.getfNavn().charAt(FØRSTE)) {
 				searchStart = fornavnRegister.indexOf(tempstudent);
 				// ruller oss tilbake til starten av denne bokstavens forekomst.
-				if (searchStart != 0) {
+				try{
 					while (firstLetter == fornavnRegister.get(searchStart - 1)
 							.getfNavn().charAt(FØRSTE)) {
 						searchStart--;
 					}
+				}catch(ArrayIndexOutOfBoundsException ex){
+					break;
 				}
 				break;
 			} else if (firstLetter < tempstudent.getfNavn().charAt(FØRSTE)) {
@@ -169,9 +171,11 @@ public class StudentListe implements Serializable{
 				iterator = sortedList.listIterator(start);
 				while (iterator.hasNext()) {
 					Student temp = (Student) iterator.next();
+					//pattern lages slik at vi kan søke med contains på all type input.
+					Pattern mønster = Pattern.compile(Pattern.quote(input), Pattern.CASE_INSENSITIVE);
 					if (first != temp.geteNavn().charAt(FØRSTE)) {
 						break;
-					} else if (temp.geteNavn().contains(input)) {
+					} else if(mønster.matcher(temp.geteNavn()).find()){
 						studentene.add(temp);
 					}
 				}
@@ -187,9 +191,10 @@ public class StudentListe implements Serializable{
 				iterator = sortedList.listIterator(start);
 				while (iterator.hasNext()) {
 					Student temp = (Student) iterator.next();
+					Pattern mønster = Pattern.compile(Pattern.quote(input), Pattern.CASE_INSENSITIVE);
 					if (first != temp.getfNavn().charAt(FØRSTE)) {
 						break;
-					} else if (temp.getfNavn().contains(input)) {
+					} else if(mønster.matcher(temp.getfNavn()).find()){
 						studentene.add(temp);
 					}
 				}
