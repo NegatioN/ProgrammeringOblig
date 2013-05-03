@@ -31,5 +31,17 @@ public class Arbeidskrav implements Serializable{
 	public String getFagkode(){
 		return fagkode;
 	}
+	
+	public String toString(){
+		String stringen = "";
+		for(Krav krav : register){
+			stringen += krav.getBeskrivelse() + "\n";
+		}
+		return stringen;
+	}
+	
+	public List<Krav> getKrav(){
+		return register;
+	}
 
 }

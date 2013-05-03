@@ -225,8 +225,9 @@ public class TestWindow extends JFrame implements ActionListener {
 		studprog.setPreferredSize(size);
 		
 		studprog.add(navn);
-		studprog.add(velgFag);
 		studprog.add(lagre);
+		studprog.add(Box.createRigidArea(buttonGenerator.HEL));
+		studprog.add(velgFag);
 		studprog.add(leggtilfag);
 
 		vis(studprog);
