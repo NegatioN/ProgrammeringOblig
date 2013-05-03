@@ -13,7 +13,6 @@ import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -23,10 +22,10 @@ import no.HiOAProsjektV2013.DataStructure.Skole;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 
-public class PopupVindu extends JFrame{
+public class PopupVindu extends JPanel{
 	
 	private static final long serialVersionUID = 1073L;
-	private Dimension size = new Dimension(350, 400);
+	private Dimension size = new Dimension(290, 390);
 	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode, beskrivelse, studiepoeng, vurderingsform, fag, eksamensdato;
 	private JPanel panelet;
 	private lytter ly = new lytter();
@@ -36,10 +35,10 @@ public class PopupVindu extends JFrame{
 	private JButton leggtil, fjernFag, slett, eksamen;
 	private JComboBox<Fag> velgFag;
 	private JComboBox<Laerer> velgLærer;
+	private TestWindow vindu;
 	
-	public PopupVindu(Component ramme, Object o, Skole skolen){
-		super("Info-display");	
-		
+	public PopupVindu(TestWindow vindu, Object o, Skole skolen){
+		this.vindu = vindu;
 		this.skolen = skolen;
 		
 		if(o instanceof Student)
@@ -51,11 +50,9 @@ public class PopupVindu extends JFrame{
 		else if(o instanceof Studieprogram)
 			add(fyllVindu((Studieprogram) o));	
 		
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setSize(size);
-		setResizable(false);
-		setLocationRelativeTo(ramme);
+		setPreferredSize(size);
 		setVisible(true);
+		vindu.display(this);
 	}
 	
 	public Component fyllVindu(Student s){
@@ -89,7 +86,7 @@ public class PopupVindu extends JFrame{
 		//fag.setEditable(false);
 
 		panelet = new JPanel();
-		panelet.setSize(size);
+		panelet.setPreferredSize(size);
 		panelet.add(navn);
 		panelet.add(epost);
 		panelet.add(tlf);
@@ -124,7 +121,7 @@ public class PopupVindu extends JFrame{
 		kontorNr.setEditable(true);
 
 		panelet = new JPanel();
-		panelet.setSize(size);
+		panelet.setPreferredSize(size);
 		panelet.add(navn);
 		panelet.add(epost);
 		panelet.add(tlf);
@@ -162,7 +159,7 @@ public class PopupVindu extends JFrame{
 		studiepoeng		.setEditable(false);
 
 		panelet = new JPanel();
-		panelet.setSize(size);
+		panelet.setPreferredSize(size);
 		panelet.add(navn);
 		panelet.add(fagkode);
 		panelet.add(beskrivelse);
@@ -200,7 +197,7 @@ public class PopupVindu extends JFrame{
 		fag.setEditable(false);
 
 		panelet = new JPanel();
-		panelet.setSize(size);
+		panelet.setPreferredSize(size);
 		panelet.add(navn);
 		panelet.add(fag);
 		panelet.add(velgFag);
@@ -242,7 +239,9 @@ public class PopupVindu extends JFrame{
 					skolen.getFagene().removeFag((Fag)aktiv);
 				else if(aktiv instanceof Studieprogram)
 					skolen.getStudieprogrammene().removeStudieprogram((Studieprogram)aktiv);
-				dispose();
+				
+				vindu.setText(aktiv.toString() + " ble fjernet fra systemet.");
+				vindu.display();
 			} else if(e.getSource() == eksamen){
 				panelet.remove(eksamen);
 				panelet.remove(slett);
@@ -260,10 +259,10 @@ public class PopupVindu extends JFrame{
 				}
 				panelet.revalidate();
 			}
-			
-			
 			else{
+				
 			if(aktiv instanceof Student){
+				Student s = (Student) aktiv;
 				if(e.getSource() == fagkode){
 					System.out.println("Yey");
 					return;
@@ -271,33 +270,39 @@ public class PopupVindu extends JFrame{
 				try{
 					int nr = Integer.parseInt(tlf.getText());
 					
-					((Student) aktiv).setAdresse(adresse.getText());
-					((Student) aktiv).setTlf(nr);
-					((Student) aktiv).setEpost(epost.getText());
+					s.setAdresse(adresse.getText());
+					s.setTlf(nr);
+					s.setEpost(epost.getText());
 					
 				}catch (NumberFormatException nfe){
 					System.out.println("Feil Nummerformat");
 				}
+				vindu.setText(s.fullString());
 			} else if(aktiv instanceof Laerer){
+				Laerer l = (Laerer) aktiv;
 				try{
 					int nr = Integer.parseInt(tlf.getText());
 					
-					((Laerer) aktiv).setTlf(nr);
-					((Laerer) aktiv).setEpost(epost.getText());
-					((Laerer) aktiv).setKontor(kontorNr.getText());
+					l.setTlf(nr);
+					l.setEpost(epost.getText());
+					l.setKontor(kontorNr.getText());
 
 				}catch (NumberFormatException nfe){
 					System.out.println("Feil Nummerformat");
 				}
+				vindu.setText(l.fullString());
 			} else if(aktiv instanceof Fag){
-				((Fag) aktiv).setBeskrivelse(beskrivelse.getText());
-				((Fag) aktiv).setVurderingsform(vurderingsform.getText());
-				((Fag) aktiv).setLærer((Laerer)velgLærer.getSelectedItem());
-				
+				Fag f = (Fag) aktiv;
+				f.setBeskrivelse(beskrivelse.getText());
+				f.setVurderingsform(vurderingsform.getText());
+				f.setLærer((Laerer)velgLærer.getSelectedItem());
+				vindu.setText(f.fullString());
 			} else if(aktiv instanceof Studieprogram){
-				((Studieprogram) aktiv).setNavn(navn.getText());
+				Studieprogram sp = (Studieprogram) aktiv;
+				sp.setNavn(navn.getText());
+				vindu.setText(sp.fullString());
 			}
-			dispose();
+			vindu.display();
 			}
 	}
 	}
