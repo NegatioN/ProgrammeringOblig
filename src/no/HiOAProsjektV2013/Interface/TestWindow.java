@@ -47,10 +47,10 @@ public class TestWindow extends JFrame implements ActionListener {
 	private VinduLytter vl;
 	private Skole skolen;
 	private Buttons buttonGenerator;
-	private ListeBoks<Student> studentboks;
-	private ListeBoks<Laerer> laererboks;
-	private ListeBoks<Fag> fagboks;
-	private ListeBoks<Studieprogram> studieboks;
+	private ListeBoks<Student> studentboks = new ListeBoks<>(this);
+	private ListeBoks<Laerer> laererboks = new ListeBoks<>(this);
+	private ListeBoks<Fag> fagboks = new ListeBoks<>(this);
+	private ListeBoks<Studieprogram> studieboks = new ListeBoks<>(this);
 	private PopupVindu pop;
 	private JTextArea info;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
