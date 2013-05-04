@@ -185,8 +185,8 @@ public class Student extends Person implements Serializable{
 		return (Arbeidskrav[]) kravListe.toArray();
 	}
 	
-	public Fag[] getfagListe(){
-		return (Fag[])fagListe.toArray();
+	public List<Fag> getfagListe(){
+		return fagListe;
 	}
 
 

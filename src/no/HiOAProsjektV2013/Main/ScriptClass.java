@@ -19,30 +19,38 @@ public class ScriptClass {
 		generateStudent();
 		generateLaerer();
 		generateFag();
-		generateKrav();
+		generateStudProg();
+//		generateKrav();
 		
 	}
 	
 	public void generateStudent(){
-//		for(int i = 0;i<7000;i++){
-//			stud1 = skolen.getStudentene().addStudent("Joakim Rishaug", "Joaimrishaug@gmail.com", 95153437, "Her 25", new Date());
-//			if(i%1000==0)
-//				stud2 = skolen.getStudentene().addStudent("Lars-Erik Kasin", "lekasin@gmail.com", 12345678, "Her 2", new Date());
-//		}
+		for(int i = 0;i<20;i++){
+			stud1 = skolen.getStudentene().addStudent("Joakim Rishaug", "Joaimrishaug@gmail.com", 95153437, "Her 25", new Date());
+			stud2 = skolen.getStudentene().addStudent("Lars-Erik Kasin", "lekasin@gmail.com", 12345678, "Her 2", new Date());
+			stud3 = skolen.getStudentene().addStudent("Herp Derp", "Herp@gmail.com", 12345678, "Camp 25", new Date());
+			skolen.getStudentene().addStudent("Jon Jensen", "jon@gmail.com", 32131123, "Veien 22", new Date());
+			skolen.getStudentene().addStudent("Eva Jensen", "ej93@gmail.com", 44112231, "Veien 22", new Date());
+			skolen.getStudentene().addStudent("Stig Rishaug", "ilike@gmail.com", 98123823, "Storet 40", new Date());
 
-		stud1 = skolen.getStudentene().addStudent("Joakim Rishaug", "Joaimrishaug@gmail.com", 95153437, "Her 25", new Date());
-		stud2 = skolen.getStudentene().addStudent("Lars-Erik Kasin", "lekasin@gmail.com", 12345678, "Her 2", new Date());
-		stud3 = skolen.getStudentene().addStudent("Herp Derp", "Herp@gmail.com", 12345678, "Camp 25", new Date());
+		}
 	}
 	public void generateLaerer(){
 		skolen.getLærerne().addLærer("Eva Hadler", "Hadlers@gonna.haddle", 48586939, "Haddleoffice-255");
-		skolen.getLærerne().addLærer("Sindre Duvedahl", "duve@mailbag.com", 48586939, "Haddleoffice-253");
+		skolen.getLærerne().addLærer("Sindre Duvedahl", "duve@mailbag.com", 98228831, "Haddleoffice-253");
+		skolen.getLærerne().addLærer("Jorunn Thatcher", "jord@database.com", 41212332, "Haddleoffice-123");
+
 	}
 	public void generateFag(){
 		ArrayList<Laerer> lærer = skolen.getLærerne().findByNavn("Eva");
 		fag1 = skolen.getFagene().addFag("Faget", "fage1000", "Kult fag", "Skriftlig", 10, lærer.get(0));
 		fag2 = skolen.getFagene().addFag("Fysikk", "FYSK1000", "Kult fag", "Skriftlig", 10, lærer.get(0));
 		fag3 = skolen.getFagene().addFag("Programmering", "prog1000", "Kult fag", "Skriftlig", 10, lærer.get(0));
+	}
+	
+	public void generateStudProg(){
+		skolen.getStudieprogrammene().addStudProg("Dataingeniør");
+		skolen.getStudieprogrammene().addStudProg("Anvendt datateknologi");
 	}
 	public void generateKrav(){
 		fag1.addKrav("Oblig 1");
