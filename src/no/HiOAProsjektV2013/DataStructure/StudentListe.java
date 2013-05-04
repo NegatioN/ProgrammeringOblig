@@ -2,8 +2,10 @@ package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -169,10 +171,10 @@ public class StudentListe implements Serializable{
 				// legger til alle studentene fra searchStart til første bokstav
 				// ikke lengre er det samme.
 				iterator = sortedList.listIterator(start);
+				Pattern mønster = Pattern.compile(Pattern.quote(input), Pattern.CASE_INSENSITIVE);
 				while (iterator.hasNext()) {
 					Student temp = (Student) iterator.next();
 					//pattern lages slik at vi kan søke med contains på all type input.
-					Pattern mønster = Pattern.compile(Pattern.quote(input), Pattern.CASE_INSENSITIVE);
 					if (first != temp.geteNavn().charAt(FØRSTE)) {
 						break;
 					} else if(mønster.matcher(temp.geteNavn()).find()){
@@ -188,10 +190,11 @@ public class StudentListe implements Serializable{
 			try {
 				// legger til alle studentene fra searchStart til første bokstav
 				// ikke lengre er det samme.
+				Pattern mønster = Pattern.compile(Pattern.quote(input), Pattern.CASE_INSENSITIVE);
 				iterator = sortedList.listIterator(start);
 				while (iterator.hasNext()) {
 					Student temp = (Student) iterator.next();
-					Pattern mønster = Pattern.compile(Pattern.quote(input), Pattern.CASE_INSENSITIVE);
+
 					if (first != temp.getfNavn().charAt(FØRSTE)) {
 						break;
 					} else if(mønster.matcher(temp.getfNavn()).find()){
@@ -272,21 +275,23 @@ public class StudentListe implements Serializable{
 		return studentene;
 	}
 
-	public ArrayList<Student> findStudentByStart(Date dato) {
+	public ArrayList<Student> findStudentByStart(int år) {
 		ArrayList<Student> studentene = new ArrayList<>();
 		for(Student s : register){
-			if (s.getStart().equals(dato))
+			if(s.getStart().getYear() == år){
 				studentene.add(s);
+			}
 		}
 		return studentene;
 	}
 
-	public ArrayList<Student> findStudentBySlutt(Date dato) {
+	public ArrayList<Student> findStudentBySlutt(int år) {
 		ArrayList<Student> studentene = new ArrayList<>();
-		for(Student s : register){
+		for (Student s : register) {
 			if (s.isAvsluttet()) {
-				if (s.getSlutt().equals(dato))
+				if (s.getSlutt().getYear() == år) {
 					studentene.add(s);
+				}
 			}
 		}
 		return studentene;
