@@ -64,6 +64,13 @@ public class TestWindow extends JFrame implements ActionListener {
 	private JComboBox<Laerer> velgLærer;
 	//endre
 	protected int selectedValue = 1;
+	
+	private String fagkodeRegex = "\\D{4}\\d{4}";
+	private String studentNrRegex = "s\\d{6}";
+	private String årRegex = "\\d{4}";
+	private String mobRegex = "\\d{8}";
+	private String mailRegex = "\\S+@\\S+.\\S+";
+	private String adresseRegex = "\\s+";
 
 	public TestWindow(String tittel) {
 
@@ -315,6 +322,15 @@ public class TestWindow extends JFrame implements ActionListener {
 				DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); //Setter inputformat for startdato
 				try {
 					int nr = Integer.parseInt(tlf.getText());
+					//regex-checks på input.
+					if(!tlf.getText().matches(mobRegex)){
+						tlf.setText("Feil nummerformat");
+						return;
+					}
+					else if(!epost.getText().matches(mailRegex)){
+						epost.setText("Feil epost-format.");
+						return;
+					}
 					Date date = (Date) formatter.parse(start.getText());
 					
 					info.setText(skolen.getStudentene().addStudent(navn.getText(), 
@@ -324,9 +340,9 @@ public class TestWindow extends JFrame implements ActionListener {
 							date).fullString());
 					
 				} catch (NumberFormatException nfe){
-					info.setText("Feil nummerformat");
+					tlf.setText("Feil nummerformat");
 				} catch (ParseException pe) {
-					info.setText("Feil datoformat");
+					start.setText("Feil datoformat");
 				}
 				
 			} 
@@ -348,6 +364,10 @@ public class TestWindow extends JFrame implements ActionListener {
 		else if (innhold.getComponent(0).equals(fag)) {
 				try{
 					int poeng = Integer.parseInt(studiepoeng.getText());
+					if(!fagkode.getText().matches(fagkodeRegex)){
+						fagkode.setText("Feil kodeformat.");
+						return;
+					}
 					
 					info.setText(skolen.getFagene().addFag(navn.getText(), 
 							fagkode.getText(),
@@ -357,7 +377,7 @@ public class TestWindow extends JFrame implements ActionListener {
 							(Laerer)velgLærer.getSelectedItem()).fullString());
 					
 				}catch (NumberFormatException nfe){
-					info.setText("Feil nummerformat");
+					fagkode.setText("Feil kodeformat");
 				}catch (NullPointerException nfe){
 					info.setText("Nullpointer-feil");
 				}catch (IndexOutOfBoundsException iobe){
