@@ -35,16 +35,13 @@ import no.HiOAProsjektV2013.DataStructure.Skole;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 import no.HiOAProsjektV2013.Main.Archiver;
+import no.HiOAProsjektV2013.Main.ScriptClass;
 
 /*
  * Hovedvinduet i programmet. Inneholder mesteparten av interfacen.
  * LE, skriv litt mer her xD
  */
 public class TestWindow extends JFrame implements ActionListener {
-
-	public static void main(String[] args) {
-		TestWindow tw = new TestWindow("StudieAdministrasjon");
-	}
 
 	private static final long serialVersionUID = 1L;
 	//checkbox burde sette selectedValue til en av disse, og passe value inn i search
@@ -62,7 +59,6 @@ public class TestWindow extends JFrame implements ActionListener {
 	private JTextArea info;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
 			vislærer, visfag, visstudieprog, lagre, leggtilfag, settiprog, søkeknapp, avansert;
-			vislærer, visfag, visstudieprog, lagre, leggtilfag, søkeknapp, avansert, rediger;
 	private JRadioButton studentCheck, lærerCheck, fagCheck, studieCheck;
 	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode,
 			beskrivelse, studiepoeng, vurderingsform, søkefelt;
@@ -73,7 +69,6 @@ public class TestWindow extends JFrame implements ActionListener {
 	private JComboBox<Laerer> velgLærer;
 	private JComboBox<Studieprogram> velgProg;
 	//endre
-	protected int selectedValue = 1;
 	private int selectedValue = STUDENT;
 	
 	private final String fagkodeRegex = "\\D{4}\\d{4}";

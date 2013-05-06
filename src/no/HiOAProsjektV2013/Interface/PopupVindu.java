@@ -241,7 +241,7 @@ public class PopupVindu extends JPanel{
 	}
 	public void visFag(){
 		faginfo.removeAll();
-		if(studentFag.getSelectedIndex() == -1)
+		if(studentFag == null || studentFag.getSelectedIndex() == -1)
 			faginfo.setBorder(BorderFactory.createTitledBorder("Ingen fag"));
 		else
 			visFag((Fag)studentFag.getSelectedItem());

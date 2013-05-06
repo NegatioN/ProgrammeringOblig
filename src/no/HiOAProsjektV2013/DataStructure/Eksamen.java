@@ -57,7 +57,7 @@ public class Eksamen implements Serializable{
 			if(ed.getDeltaker() == student)
 				return;
 		}
-		EksamensDeltaker ny = new EksamensDeltaker(student);
+		EksamensDeltaker ny = new EksamensDeltaker(student, fag);
 		deltakere.add(ny);
 	}
 	
