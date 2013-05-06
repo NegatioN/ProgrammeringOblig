@@ -168,8 +168,9 @@ public class Fag implements Serializable{
 					"\nBeskrivelse: " + beskrivelse + 
 					"\nVurderingsform: " + vurderingsform + 
 					"\nStudiepoeng: " + studiepoeng +
-					"\nLærer: " + lærer.geteNavn() + "\nEksamener: " +
-					"\nArbeidskrav: " + krav.toString();
+					"\nLærer: " + lærer.geteNavn() + 
+					"\nArbeidskrav: " + krav.toString() +
+					"\nEksamener: ";
 		for(Eksamen e: eksamener){
 			stringen += new SimpleDateFormat("dd. MMM yyyy").format(e.getDato()) + " ";
 		}

@@ -61,6 +61,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private PopupVindu pop;
 	private JTextArea info;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
+			vislærer, visfag, visstudieprog, lagre, leggtilfag, settiprog, søkeknapp, avansert;
 			vislærer, visfag, visstudieprog, lagre, leggtilfag, søkeknapp, avansert, rediger;
 	private JRadioButton studentCheck, lærerCheck, fagCheck, studieCheck;
 	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode,
@@ -70,6 +71,9 @@ public class TestWindow extends JFrame implements ActionListener {
 	private Border ramme = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 	private JComboBox<Fag> velgFag;
 	private JComboBox<Laerer> velgLærer;
+	private JComboBox<Studieprogram> velgProg;
+	//endre
+	protected int selectedValue = 1;
 	private int selectedValue = STUDENT;
 	
 	private final String fagkodeRegex = "\\D{4}\\d{4}";
@@ -274,9 +278,14 @@ public class TestWindow extends JFrame implements ActionListener {
 		velgLærer = new JComboBox<Laerer>(lærerA);
 		velgLærer.setPreferredSize(Buttons.HEL);
 		
+		Studieprogram[] progA = new Studieprogram[skolen.getStudieprogrammene().visAlle().size()];
+		skolen.getStudieprogrammene().visAlle().toArray(progA);
+		velgProg = new JComboBox<Studieprogram>(progA);
+		velgProg.setPreferredSize(Buttons.HEL);
+		
 		lagre = buttonGenerator.generateButton("Lagre", Buttons.HEL);
 		leggtilfag = buttonGenerator.generateButton("Legg til fag", Buttons.HEL);
-	
+		settiprog = buttonGenerator.generateButton("Velg studieprogram", Buttons.HEL);
 		innhold = new JPanel();
 		innhold.setBorder( ramme);
 		
@@ -295,6 +304,10 @@ public class TestWindow extends JFrame implements ActionListener {
 		stud.add(adresse);
 		stud.add(start);
 		stud.add(lagre);
+		stud.add(Box.createRigidArea(Buttons.HEL));
+		stud.add(velgProg);
+		stud.add(settiprog);
+		
 		vis(stud);
 	}
 	public void lærer() {
@@ -329,7 +342,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		studprog.add(navn);
 		studprog.add(lagre);
-		studprog.add(Box.createRigidArea(buttonGenerator.HEL));
+		studprog.add(Box.createRigidArea(Buttons.HEL));
 		studprog.add(velgFag);
 		studprog.add(leggtilfag);
 
@@ -515,6 +528,23 @@ public class TestWindow extends JFrame implements ActionListener {
 				}
 			}
 		}
+		
+		//Legg til fagene fra et studieprogram til en registrert student
+		if (e.getSource() == settiprog) {
+			if(innhold.getComponent(0).equals(stud)){ //TRENGER EN SJEKK FOR Å SE OM DET ER REGISTRERT NY STUDENT
+				try{
+					Student s =	skolen.getStudentene().findStudentByStudentNr("s" + (skolen.getStudentene().getStudentnummer() - 1));
+					for(Fag f : ((Studieprogram) velgProg.getSelectedItem()).getFagene()){
+						s.addFag(f);
+					}
+					info.setText(s.fullString());
+				} catch (NullPointerException npe){
+					npe.printStackTrace();
+				}
+			}
+		}
+		
+		//***************************** Søk **************************************
 		
 		// søker på fritekst-søk, gjennom navn på alle tingene. Tror dette må
 		// optimaliseres slik at vi ikke looper HELE datastrukturen vår hver

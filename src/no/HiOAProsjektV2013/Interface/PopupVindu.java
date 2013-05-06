@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -214,8 +215,7 @@ public class PopupVindu extends JPanel{
 	
 	public void visFag(Fag f){
 		faginfo.removeAll();
-		faginfo.setBackground(Color.WHITE);
-		faginfo.add(new JLabel("  " + f.getNavn()));
+		faginfo.setBorder(BorderFactory.createTitledBorder(f.getNavn()));
 
 		for(Krav krav : f.getKrav().getKrav()){
 			JCheckBox cb = new JCheckBox(krav.getBeskrivelse());
@@ -225,6 +225,12 @@ public class PopupVindu extends JPanel{
 		JCheckBox cb = new JCheckBox("Oppmeldt til eksamen");
 		cb.setSelected(((Student)aktiv).innfriddKrav(f));
 		faginfo.add(cb);
+		faginfo.updateUI();
+	}
+	
+	public void visFag(){
+		faginfo.removeAll();
+		faginfo.setBorder(BorderFactory.createTitledBorder("Ingen fag"));
 		faginfo.updateUI();
 	}
 	
@@ -252,7 +258,7 @@ public class PopupVindu extends JPanel{
 		if(fagB.length > 0)
 			visFag(fagB[0]);
 		else
-			fagpanel.add(new JLabel("Ingen fag"));
+			visFag();
 		
 		fagpanel.add(faginfo);		
 		fjernFag = button.generateButton("Fjern fag", fagpanel, Buttons.HEL);
@@ -277,20 +283,25 @@ public class PopupVindu extends JPanel{
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == leggtil) {
 				try{
-					if(aktiv instanceof Student)
+					if(aktiv instanceof Student){
 						((Student) aktiv).addFag((Fag)velgFag.getSelectedItem());
-					else if(aktiv instanceof Studieprogram)
+						vindu.display(fagPanel());
+					}
+					else if(aktiv instanceof Studieprogram){
 						((Studieprogram) aktiv).addFag((Fag)velgFag.getSelectedItem());
+						
+					}
 					
 				} catch (NullPointerException npe){
 					System.out.println("Nullpointerfeil");
 				}
-				vindu.display(fagPanel());
 				
 			} else if(e.getSource() == fjernFag) {
 				try{
-					if(aktiv instanceof Student)
+					if(aktiv instanceof Student){
 						((Student) aktiv).removeFag((Fag)studentFag.getSelectedItem());
+						vindu.display(fagPanel());
+					}
 					else if(aktiv instanceof Studieprogram)
 						((Studieprogram) aktiv).fjernFag(((Fag)velgFag.getSelectedItem()));
 					
