@@ -17,29 +17,15 @@ public abstract class PersonListe<E> implements Serializable{
 	// gjennom etter fornavn og etternavn i StudentListe og LaererListe
 	public ArrayList<E> findByNavn(ArrayList<E> fornavn, ArrayList<E> etternavn){
 		ArrayList<E> folkene = fornavn;
-		//slik at listen ikke automatisk blir tom om det ikke finnes noen folk med gitt fornavn
-		if(folkene.isEmpty()){
-			for(E person : etternavn){
-				folkene.add(person);
-			}
-		}else{
-			ArrayList<Integer> valueHolder = new ArrayList<>();
-			int counter = 0;
-			for(E person : etternavn){
-				for(E eksisterendeFolk : folkene){
-					if(!eksisterendeFolk.equals(person))
-						valueHolder.add(counter);
-				}
-				counter++;
-			}
-			//må ha en loop utenfor slik at folkene-lista ikke endrer seg MENS den looper, og gir concurrentmodException.
-			//hvis vi folk som ikke eksisterer fra før
-			if(!valueHolder.isEmpty()){
-				for(Integer i : valueHolder){
-					folkene.add(etternavn.get(i));
-				}
-			}
+		try{
+		for(E s : etternavn){
+			if(!folkene.contains(s))
+				folkene.add(s);
 		}
+		}catch(NullPointerException e){
+			e.printStackTrace();
+		}
+		
 		return folkene;
 	}
 

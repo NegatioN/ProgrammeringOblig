@@ -14,13 +14,13 @@ import java.util.regex.Pattern;
 import no.HiOAProsjektV2013.Main.EtternavnSammenligner;
 import no.HiOAProsjektV2013.Main.FornavnSammenligner;
 
-public class StudentListe implements Serializable{
+public class StudentListe extends PersonListe<Student> implements Serializable{
 
 	private static final long serialVersionUID = 1020L;
 
 	private static int studentNummer = 100000;
 
-	private final int FØRSTE = 0, FORNAVN = 2000, ETTERNAVN = 3000;
+	private final int FØRSTE = 0, ANDRE = 1, FORNAVN = 2000, ETTERNAVN = 3000;
 	
 	private List<Student> register;
 	private ArrayList<Student> etternavnRegister, fornavnRegister;
@@ -94,10 +94,15 @@ public class StudentListe implements Serializable{
 
 	//finner studentene basert på fornavn/etternavn og samler begge søkene til en arraylist.
 	public ArrayList<Student> findByNavn(String input) {
-		System.out.println(fornavnRegister.toString());
-		System.out.println(etternavnRegister.toString());
-		char firstLetter = input.charAt(FØRSTE);
-		firstLetter = Character.toUpperCase(firstLetter);
+		
+		String[] navn = super.nameSplitter(input);
+		System.out.println(navn[0] + "\t" + navn[1]);
+		
+		char fFirstLetter = navn[FØRSTE].charAt(FØRSTE);
+		fFirstLetter = Character.toUpperCase(fFirstLetter);
+		char eFirstLetter = navn[ANDRE].charAt(FØRSTE);
+		eFirstLetter = Character.toUpperCase(eFirstLetter);
+		
 		int max = (etternavnRegister.size() - 1);
 		int min = 0;
 		int mid;
@@ -108,11 +113,11 @@ public class StudentListe implements Serializable{
 			mid = (max + min) / 2;
 			tempstudent = etternavnRegister.get(mid);
 			// finner plassen i arrayen hvor vi skal starte sekvensiellt søk.
-			if (firstLetter == tempstudent.geteNavn().charAt(FØRSTE)) {
+			if (eFirstLetter == tempstudent.geteNavn().charAt(FØRSTE)) {
 				searchStart = etternavnRegister.indexOf(tempstudent);
 				// ruller oss tilbake til starten av denne bokstavens forekomst.
 				try{
-					while (firstLetter == etternavnRegister
+					while (eFirstLetter == etternavnRegister
 							.get(searchStart - 1).geteNavn().charAt(FØRSTE)) {
 						searchStart--;
 					}
@@ -120,15 +125,15 @@ public class StudentListe implements Serializable{
 					//fortsetter med uendret searchStart
 				}
 				break;
-			} else if (firstLetter < tempstudent.geteNavn().charAt(FØRSTE)) {
+			} else if (eFirstLetter < tempstudent.geteNavn().charAt(FØRSTE)) {
 				max = mid - 1;
-			} else if (firstLetter > tempstudent.geteNavn().charAt(FØRSTE)) {
+			} else if (eFirstLetter > tempstudent.geteNavn().charAt(FØRSTE)) {
 				min = mid + 1;
 			}
 
 		}// end while for etternavn
 
-		ArrayList<Student> studenteneEtternavn = looper(searchStart, input, etternavnRegister, firstLetter, ETTERNAVN);
+		ArrayList<Student> studenteneEtternavn = looper(searchStart, navn[ANDRE], etternavnRegister, eFirstLetter, ETTERNAVN);
 		
 		searchStart = 0;
 		min = 0;
@@ -137,11 +142,11 @@ public class StudentListe implements Serializable{
 			mid = (max + min) / 2;
 			tempstudent = fornavnRegister.get(mid);
 			// finner plassen i arrayen hvor vi skal starte sekvensiellt søk.
-			if (firstLetter == tempstudent.getfNavn().charAt(FØRSTE)) {
+			if (fFirstLetter == tempstudent.getfNavn().charAt(FØRSTE)) {
 				searchStart = fornavnRegister.indexOf(tempstudent);
 				// ruller oss tilbake til starten av denne bokstavens forekomst.
 				try{
-					while (firstLetter == fornavnRegister.get(searchStart - 1)
+					while (fFirstLetter == fornavnRegister.get(searchStart - 1)
 							.getfNavn().charAt(FØRSTE)) {
 						searchStart--;
 					}
@@ -149,16 +154,16 @@ public class StudentListe implements Serializable{
 					break;
 				}
 				break;
-			} else if (firstLetter < tempstudent.getfNavn().charAt(FØRSTE)) {
+			} else if (fFirstLetter < tempstudent.getfNavn().charAt(FØRSTE)) {
 				max = mid - 1;
-			} else if (firstLetter > tempstudent.getfNavn().charAt(FØRSTE)) {
+			} else if (fFirstLetter > tempstudent.getfNavn().charAt(FØRSTE)) {
 				min = mid + 1;
 			}
 
 		}// end while for fornavn
-		ArrayList<Student> studenteneFornavn = looper(searchStart, input, fornavnRegister, firstLetter, FORNAVN);
+		ArrayList<Student> studenteneFornavn = looper(searchStart, navn[FØRSTE], fornavnRegister, fFirstLetter, FORNAVN);
 		
-		ArrayList<Student> studentene = samler(studenteneFornavn, studenteneEtternavn);
+		ArrayList<Student> studentene = super.findByNavn(studenteneFornavn, studenteneEtternavn);
 		
 		return studentene;
 	}
@@ -207,19 +212,6 @@ public class StudentListe implements Serializable{
 				npe.printStackTrace();
 			}
 		}
-		return studentene;
-	}
-	private ArrayList<Student> samler(ArrayList<Student> fornavn, ArrayList<Student> etternavn){
-		ArrayList<Student> studentene = fornavn;
-		try{
-		for(Student s : etternavn){
-			if(!studentene.contains(s))
-				studentene.add(s);
-		}
-		}catch(NullPointerException e){
-			e.printStackTrace();
-		}
-		
 		return studentene;
 	}
 	

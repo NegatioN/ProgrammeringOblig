@@ -17,8 +17,10 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -30,7 +32,6 @@ import no.HiOAProsjektV2013.DataStructure.Skole;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 import no.HiOAProsjektV2013.Main.Archiver;
-import no.HiOAProsjektV2013.Main.ScriptClass;
 
 public class TestWindow extends JFrame implements ActionListener {
 
@@ -65,16 +66,19 @@ public class TestWindow extends JFrame implements ActionListener {
 	//endre
 	protected int selectedValue = 1;
 	
-	private String fagkodeRegex = "\\D{4}\\d{4}";
-	private String studentNrRegex = "s\\d{6}";
-	private String årRegex = "\\d{4}";
-	private String mobRegex = "\\d{8}";
-	private String mailRegex = "\\S+@\\S+.\\S+";
-	private String adresseRegex = "\\s+";
+	private final String fagkodeRegex = "\\D{4}\\d{4}";
+	private final String studentNrRegex = "s\\d{6}";
+	private final String årRegex = "\\d{4}";
+	private final String mobRegex = "\\d{8}";
+	private final String mailRegex = "\\S+@\\S+.\\S+";
+	private final String adresseRegex = "\\s+";
+	
+	private JMenuBar meny;
 
 	public TestWindow(String tittel) {
 
 		super(tittel);
+		//oppretter buttongeneratoren som sparer linjer på gjentagende oppgaver.
 		buttonGenerator = new Buttons(this);
 		//oppretter save-objektet
 		arkivet 	= new Archiver();
@@ -91,10 +95,60 @@ public class TestWindow extends JFrame implements ActionListener {
 		add(rammeverk);
 		fyllRamme();
 		
+		//setter inn meny
+		populateMenu();
+		
 		pack();
 		setVisible(true);
 		setLocationRelativeTo(null);
 		setResizable(false);
+
+	}
+	//fyller meny-baren
+	private void populateMenu(){
+		meny = new JMenuBar();
+		
+		JMenu fil = new JMenu("Fil");
+		fil.setMnemonic('F');
+		
+		JMenuItem save = new JMenuItem("Save");
+		save.setMnemonic('S');
+		//anonym actionlistener som lagrer fila
+		save.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				arkivet.writeToFile(skolen);
+				//må endres til å reflektere utfall.
+				setText("Filen er lagret");
+			}
+		});
+		fil.add(save);
+		
+		JMenu om = new JMenu("Om");
+		om.setMnemonic('O');
+		
+		JMenuItem omOss = new JMenuItem("Om oss");
+		omOss.setMnemonic('S');
+		omOss.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				
+			}
+		});
+		JMenuItem omProgrammet = new JMenuItem("Om Programmet");
+		omProgrammet.setMnemonic('P');
+		omProgrammet.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				
+			}
+		});
+		
+		om.add(omProgrammet);
+		om.add(omOss);
+		
+		meny.add(fil);
+		meny.add(om);
+		
+		
+		setJMenuBar(meny);
 	}
 
 	//getmetoder for windowlistener slik at det lagres info via system.exit
