@@ -1,6 +1,8 @@
 package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -51,8 +53,12 @@ public class Eksamen implements Serializable{
 	
 	//lager eksamensdeltakeren og legger til i listen
 	public void addDeltaker(Student student){
-		EksamensDeltaker ed = new EksamensDeltaker(student, fag);
-		deltakere.add(ed);
+		for(EksamensDeltaker ed : deltakere){
+			if(ed.getDeltaker() == student)
+				return;
+		}
+		EksamensDeltaker ny = new EksamensDeltaker(student);
+		deltakere.add(ny);
 	}
 	
 	public void addOppmeldteStudenter(ArrayList<Student> studentene, Fag faget){
@@ -62,5 +68,9 @@ public class Eksamen implements Serializable{
 			}
 	}
 	
+	public String toString(){
+		DateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
+		return formatter.format(dato);
+	}
 	
 }

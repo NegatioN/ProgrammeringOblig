@@ -52,6 +52,10 @@ public class Fag implements Serializable{
 	public Eksamen getRecentEksamen() {	
 		return eksamener.get(eksamener.size()-1);
 	}
+	
+	public List<Eksamen> getEksamener(){
+		return eksamener;
+	}
 
 	public Laerer getLærer() {
 		return lærer;

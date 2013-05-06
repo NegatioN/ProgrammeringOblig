@@ -307,6 +307,8 @@ public class TestWindow extends JFrame implements ActionListener {
 		stud.add(Box.createRigidArea(Buttons.HEL));
 		stud.add(velgProg);
 		stud.add(settiprog);
+		velgProg.setVisible(false);
+		settiprog.setVisible(false);
 		
 		vis(stud);
 	}
@@ -345,7 +347,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		studprog.add(Box.createRigidArea(Buttons.HEL));
 		studprog.add(velgFag);
 		studprog.add(leggtilfag);
-
+		
 		vis(studprog);
 	}
 
@@ -457,13 +459,16 @@ public class TestWindow extends JFrame implements ActionListener {
 //					GregorianCalendar dato = new GregorianCalendar(datoTing[2], datoTing[1], datoTing[0]);
 //					System.out.println(dato.get(Calendar.YEAR) + " år " + dato.get(Calendar.MONTH) + " måned " + dato.get(Calendar.DATE) + " dag");
 					Date date = (Date) formatter.parse(start.getText());
-					
+
 					info.setText(skolen.getStudentene().addStudent(navn.getText(), 
 							epost.getText(), 
 							nr,
 							adresse.getText(), 
 							date).fullString());
-					
+
+					velgProg.setVisible(true);
+					settiprog.setVisible(true);
+
 				} catch (NumberFormatException nfe){
 					tlf.setText("Feil nummerformat");
 				} catch (ParseException pe) {

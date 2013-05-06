@@ -200,7 +200,8 @@ public class Student extends Person implements Serializable{
 	}
 	
 	public Arbeidskrav[] getKravene(){
-		return (Arbeidskrav[]) kravListe.toArray();
+		Arbeidskrav[] ak = new Arbeidskrav[kravListe.size()];
+		return (Arbeidskrav[]) kravListe.toArray(ak);
 	}
 	
 	public List<Fag> getfagListe(){
