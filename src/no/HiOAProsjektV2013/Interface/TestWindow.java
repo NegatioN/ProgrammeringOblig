@@ -20,6 +20,7 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -33,11 +34,14 @@ import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 import no.HiOAProsjektV2013.Main.Archiver;
 
+/*
+ * Hovedvinduet i programmet. Inneholder mesteparten av interfacen.
+ * LE, skriv litt mer her xD
+ */
 public class TestWindow extends JFrame implements ActionListener {
 
 	public static void main(String[] args) {
 		TestWindow tw = new TestWindow("StudieAdministrasjon");
-		tw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -71,7 +75,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private final String årRegex = "\\d{4}";
 	private final String mobRegex = "\\d{8}";
 	private final String mailRegex = "\\S+@\\S+.\\S+";
-	private final String adresseRegex = "\\s+";
+	private final String navnRegex = "\\S+\\s\\S+";
 	
 	private JMenuBar meny;
 
@@ -118,7 +122,7 @@ public class TestWindow extends JFrame implements ActionListener {
 			public void actionPerformed(ActionEvent e){
 				arkivet.writeToFile(skolen);
 				//må endres til å reflektere utfall.
-				setText("Filen er lagret");
+				JOptionPane.showMessageDialog(null, "Filen er lagret");
 			}
 		});
 		fil.add(save);
@@ -130,14 +134,16 @@ public class TestWindow extends JFrame implements ActionListener {
 		omOss.setMnemonic('S');
 		omOss.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				
+				JOptionPane.showMessageDialog(null, "BLABLABLA");
 			}
 		});
 		JMenuItem omProgrammet = new JMenuItem("Om Programmet");
 		omProgrammet.setMnemonic('P');
 		omProgrammet.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				
+				JOptionPane.showMessageDialog(null, "Programmet er laget for skoler av medium størrelse med behov for lagring av informasjon om" +
+						" sine studenter og ansatte.");
+
 			}
 		});
 		
@@ -383,6 +389,10 @@ public class TestWindow extends JFrame implements ActionListener {
 					}
 					else if(!epost.getText().matches(mailRegex)){
 						epost.setText("Feil epost-format.");
+						return;
+					}
+					else if(!navn.getText().matches(navnRegex)){
+						navn.setText("Fornavn og Etternavn");
 						return;
 					}
 					Date date = (Date) formatter.parse(start.getText());

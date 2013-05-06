@@ -6,15 +6,20 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+/*
+ * Klassen definerer en Eksamens-hendelse. Et fag kan ha mange eksamener over tid. 
+ * Eksamen inneholder en liste av alle eksamensdeltakerne.
+ */
 public class Eksamen implements Serializable{
 	
 	private static final long serialVersionUID = 1040L;
 	private Date dato;
 	private List<EksamensDeltaker> deltakere = new LinkedList<>();
+	private Fag fag;
 	
-	
-	public Eksamen(Date dato){
+	public Eksamen(Date dato, Fag fag){
 		this.dato = dato;
+		this.fag = fag;
 	}
 	
 	public Eksamen(Date dato, ArrayList<Student> studenter, Fag fag){
@@ -46,7 +51,7 @@ public class Eksamen implements Serializable{
 	
 	//lager eksamensdeltakeren og legger til i listen
 	public void addDeltaker(Student student){
-		EksamensDeltaker ed = new EksamensDeltaker(student);
+		EksamensDeltaker ed = new EksamensDeltaker(student, fag);
 		deltakere.add(ed);
 	}
 	

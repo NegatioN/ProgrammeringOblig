@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/*
+ * Liste over studieprogrammene. Inneholder søkenemetodene for studieprogram.
+ */
 public class StudieprogramListe implements Serializable{
 	
 	private static final long serialVersionUID = 1070L;

@@ -14,6 +14,10 @@ import java.util.regex.Pattern;
 import no.HiOAProsjektV2013.Main.EtternavnSammenligner;
 import no.HiOAProsjektV2013.Main.FornavnSammenligner;
 
+/*
+ * Klassen er en liste av studenter. Studentene er sortert på studentnummer, fornavn og etternavn.
+ * Inneholder søkemetodene for studenter. 
+ */
 public class StudentListe extends PersonListe<Student> implements Serializable{
 
 	private static final long serialVersionUID = 1020L;
@@ -40,7 +44,7 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 		settInnSortert(s);
 		return s;
 	}
-	//et current litt urealistisk problem er at den gir litt blankt F i skikkelig sortering når folk har identisk navn. og dette føkker opp søket.
+	//Setter inn studenten sortert i fornavnsregister og etternavnsregister. 
 	private void settInnSortert(Student s){
 		
 		int pos = 0;
@@ -63,6 +67,7 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 		}catch(NullPointerException e){
 			e.printStackTrace();
 		}
+		//setter inn på sortert plass for fornavn
 		if(fornavnRegister.isEmpty())
 			fornavnRegister.add(s);
 		else{

@@ -4,6 +4,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.Serializable;
 
+//fikser lagring av data når programmet lukkes.
 public class VinduLytter implements WindowListener, Serializable{
 	
 

@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/*
+ * Liste over lærerobjekter. Har søkemetoder for å finne lærere og et register av lærere.
+ */
 public class LaererListe extends PersonListe<Laerer> implements Serializable{
 
 	private static final long serialVersionUID = 1010L;

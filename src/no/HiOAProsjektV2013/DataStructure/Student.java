@@ -6,6 +6,10 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+/*
+ * Klassen representerer en student og er det største objektet i programmet.
+ * Et objekt er åpenbart en student på skolen, og har mange fag, eksamener og fag-krav og et studieprogram.
+ */
 public class Student extends Person implements Serializable{
 	
 	private static final long serialVersionUID = 1021L;
@@ -26,7 +30,7 @@ public class Student extends Person implements Serializable{
 		this.adresse = adresse;
 		this.studentnummer = studentnummer;
 		this.start = start;
-		//sluttÅr settes lik -1 til studenten avslutter
+		//sluttÅr settes lik null til studenten avslutter
 		slutt = null;
 	}
 
@@ -46,6 +50,20 @@ public class Student extends Person implements Serializable{
 	
 	public void setEksamen(EksamensDeltaker ed){
 		eksamener.add(ed);
+	}
+	
+	//har studenten overskredet 3 forsøk for denne eksamenen?
+	public boolean maksForsøkOverskredet(Fag fag){
+		int counter = 0;
+		for(EksamensDeltaker deltaker: eksamener){
+			if(fag.equals(deltaker.getFag()))
+				counter++;
+		}
+		if(counter >= 3){
+			return true;
+		}
+		
+		return false;
 	}
 	
 	

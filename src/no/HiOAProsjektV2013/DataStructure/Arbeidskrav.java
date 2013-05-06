@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+// Klassen definerer en liste av krav i et fag-objekt slik at en student kan ta eksamen
 public class Arbeidskrav implements Serializable{
 
 	private static final long serialVersionUID = 1050L;

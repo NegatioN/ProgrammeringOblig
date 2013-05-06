@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/*
+ * Liste over fag, med diverse metoder for å søke på fagene.
+ */
 public class FagListe implements Serializable{
 
 	private static final long serialVersionUID = 1030L;

@@ -8,6 +8,7 @@ import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Skole;
 import no.HiOAProsjektV2013.DataStructure.Student;
 
+//oppretter objekter.
 public class ScriptClass {
 
 	private Skole skolen;

@@ -20,8 +20,9 @@ import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 
-//tingene her må legges i main-vindus-klassen
-//endre til overload constructors på "Listiyfy"? for å ikke opprette mange typeparameteriserte objekter i testwindow?
+/*
+ * Klassen lager listene for de forskjellige objekttypene med type-parameter og legger til en actionlistener og listselectionlistener.
+ */
 public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 
 	private final int ROWCOUNT = 20;

@@ -6,6 +6,10 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+/*
+ * Klassen er et fag på skolen. Faget inneholder eksamener, krav og faglærer.
+ * Inneholder også i tillegg informasjon om faget.
+ */
 public class Fag implements Serializable{
 
 	
@@ -35,7 +39,7 @@ public class Fag implements Serializable{
 	}
 
 	public void addEksamen(Date dato) {
-		Eksamen e = new Eksamen(dato);
+		Eksamen e = new Eksamen(dato, this);
 		addEksamen(e);
 	}
 

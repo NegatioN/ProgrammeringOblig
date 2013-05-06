@@ -5,6 +5,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+
+/*
+ * Klassen representerer et studieprogram, og inneholder en liste av fag som er assosiert med studieprogrammet.
+ * Dette gjør det lettere å opprette studenter med fag på seg, enn å individuelt legge på fag.
+ * Inneholder også en liste over studenter som nå går programmet.
+ */
 public class Studieprogram implements Serializable{
 
 	private static final long serialVersionUID = 1060L;

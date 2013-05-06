@@ -2,6 +2,10 @@ package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
 
+/*
+ * Klassen representerer en lærer ved skolen.
+ * Inneholder personinfo fra Person-klassen og annen info som kontornummer.
+ */
 public class Laerer extends Person implements Serializable{
 	
 	private static final long serialVersionUID = 1011L;

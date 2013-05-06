@@ -10,6 +10,9 @@ import java.io.ObjectOutputStream;
 
 import no.HiOAProsjektV2013.DataStructure.Skole;
 
+/*
+ * Klassen lagrer og leser data fra/til fil.
+ */
 public class Archiver {
 
 	private Skole skolen;

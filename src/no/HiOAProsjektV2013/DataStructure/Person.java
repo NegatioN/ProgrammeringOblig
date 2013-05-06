@@ -2,11 +2,16 @@ package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
 
-public class Person implements Serializable{
+/*
+ * Objektet representerer en person, og blir brukt i både Student og Lærer.
+ * Holder på fornavn, etternavn, epost, telefonnummer. 
+ */
+
+abstract public class Person implements Serializable{
 	
 
 	private static final long serialVersionUID = 1022L;
-	private String fNavn, eNavn = null, epost;
+	private String fNavn, eNavn, epost;
 	private int telefonNr;
 	
 	//variable for posisjon i string-arrayen av navn
@@ -28,6 +33,8 @@ public class Person implements Serializable{
 		
 		if(alleNavn.length >= KUNETNAVNSKREVET)
 		this.eNavn = alleNavn[alleNavn.length - ETTERNAVN];
+		else
+			eNavn = fNavn;
 	}
 
 	public int getTelefonNr() {

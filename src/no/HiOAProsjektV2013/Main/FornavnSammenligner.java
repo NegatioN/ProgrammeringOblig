@@ -8,6 +8,7 @@ import java.util.Comparator;
 
 import no.HiOAProsjektV2013.DataStructure.Student;
 
+//Comparator for fornavn-sortering og søk.
 public class FornavnSammenligner implements Comparator<Student>, Serializable{
 
 	private static final long serialVersionUID = 1002L;
