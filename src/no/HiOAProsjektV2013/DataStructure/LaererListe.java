@@ -11,10 +11,12 @@ import java.util.List;
 public class LaererListe extends PersonListe<Laerer> implements Serializable{
 
 	private static final long serialVersionUID = 1010L;
-	private List<Laerer> register = new LinkedList<>();
+	private ArrayList<Laerer> fornavnRegister;
+	private ArrayList<Laerer> etternavnRegister;
 	
 	public LaererListe(){
-		
+		etternavnRegister = new ArrayList<Laerer>();
+		fornavnRegister = new ArrayList<Laerer>();
 	}
 	
 	public void addLærer(Laerer lærer){

@@ -13,6 +13,7 @@ import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -22,6 +23,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -60,6 +62,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private JTextArea info;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
 			vislærer, visfag, visstudieprog, lagre, leggtilfag, søkeknapp, avansert, rediger;
+	private JRadioButton studentCheck, lærerCheck, fagCheck, studieCheck;
 	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode,
 			beskrivelse, studiepoeng, vurderingsform, søkefelt;
 	private JPanel rammeverk, innhold, stud, lær, fag, studprog, display;
@@ -67,8 +70,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private Border ramme = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 	private JComboBox<Fag> velgFag;
 	private JComboBox<Laerer> velgLærer;
-	//endre
-	protected int selectedValue = 1;
+	private int selectedValue = STUDENT;
 	
 	private final String fagkodeRegex = "\\D{4}\\d{4}";
 	private final String studentNrRegex = "s\\d{6}";
@@ -76,6 +78,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private final String mobRegex = "\\d{8}";
 	private final String mailRegex = "\\S+@\\S+.\\S+";
 	private final String navnRegex = "\\S+\\s\\S+";
+	private final String datoRegex = "\\D";
 	
 	private JMenuBar meny;
 
@@ -156,6 +159,38 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		setJMenuBar(meny);
 	}
+	//kanskje kaste denne inn i testwindow pga at den må update selectedValue, og jeg er usikker på å ta inn et TestWindow her.
+	//for valuePassing til søk
+	private void generateButtonGroup(JPanel panel){
+		 ButtonGroup group = new ButtonGroup();
+		 lærerCheck = new JRadioButton("Lærere");
+		 studentCheck = new JRadioButton("Student");
+		 fagCheck = new JRadioButton("Fag");
+		 studieCheck = new JRadioButton("Studier");
+		 
+		 lærerCheck.setActionCommand(LÆRER+"");
+		 studentCheck.setActionCommand(STUDENT+"");
+		 fagCheck.setActionCommand(FAG+"");
+		 studieCheck.setActionCommand(STUDIEPROGRAM+"");
+		 
+		 lærerCheck.addActionListener(this);
+		 studentCheck.addActionListener(this);
+		 fagCheck.addActionListener(this);
+		 studieCheck.addActionListener(this);
+		 
+		 studentCheck.setSelected(true);
+		 
+		 
+		 group.add(studentCheck);
+		 group.add(lærerCheck);
+		 group.add(fagCheck);
+		 group.add(studieCheck);
+		 
+		 panel.add(studentCheck);
+		 panel.add(lærerCheck);
+		 panel.add(fagCheck);
+		 panel.add(studieCheck);
+	}
 
 	//getmetoder for windowlistener slik at det lagres info via system.exit
 	public Archiver getArkiv(){
@@ -191,6 +226,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		visning.add(søkefelt);
 		
 		søkeknapp 		= buttonGenerator.generateButton("Søk", visning, Buttons.HALV);
+		generateButtonGroup(visning);
 		avansert 		= buttonGenerator.generateButton("Avansert søk", visning, Buttons.HALV);
 		visning.add(Box.createRigidArea(Buttons.HALV));
 
@@ -347,6 +383,10 @@ public class TestWindow extends JFrame implements ActionListener {
 		//Nullstiller displayet
 		display();
 		setText(""); 
+		//setter selectedValue for programmet sånn at vi får filtrert hva vi søker mot.
+		if(e.getSource() == studentCheck || e.getSource() == lærerCheck || e.getSource() == fagCheck || e.getSource() == studieCheck)
+		selectedValue = Integer.parseInt(e.getActionCommand());
+		System.out.println(selectedValue);
 		
 		if (e.getSource() == nystudent) {
 			student();
@@ -395,6 +435,14 @@ public class TestWindow extends JFrame implements ActionListener {
 						navn.setText("Fornavn og Etternavn");
 						return;
 					}
+//					int[] datoTing = new int[3];
+//					String[] datoString = start.getText().split(datoRegex);
+//					int counter = 0;
+//					for(int tall : datoTing){
+//						tall = Integer.parseInt(datoString[counter++]);
+//					}
+//					GregorianCalendar dato = new GregorianCalendar(datoTing[2], datoTing[1], datoTing[0]);
+//					System.out.println(dato.get(Calendar.YEAR) + " år " + dato.get(Calendar.MONTH) + " måned " + dato.get(Calendar.DATE) + " dag");
 					Date date = (Date) formatter.parse(start.getText());
 					
 					info.setText(skolen.getStudentene().addStudent(navn.getText(), 

@@ -16,10 +16,10 @@ public class Student extends Person implements Serializable{
 	private String adresse;
 	private int studentnummer;
 	private Date start, slutt;
-	//Listen med arbeidskrav representerer alle fagListe studenten tar
-	//finner fag studenten har ved å liste opp .getFagkode() fra kravene.
 	private List<EksamensDeltaker> eksamener = new LinkedList<>();
+	//faglista er kun pointers
 	private List<Fag> fagListe = new LinkedList<>();
+	//kravlisten er de individuelle objektene som opprettes per student.
 	private List<Arbeidskrav> kravListe = new LinkedList<>();
 	private boolean avsluttet = false;
 	private Studieprogram sp = null;
