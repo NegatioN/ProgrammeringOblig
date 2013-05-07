@@ -2,6 +2,7 @@ package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,6 +22,7 @@ public class Fag implements Serializable{
 	private List<Eksamen> eksamener = new LinkedList<>();
 	private final int AKARAKTER = 0, BKARAKTER = 1, CKARAKTER = 2,
 			DKARAKTER = 3, EKARAKTER = 4, FKARAKTER = 5;
+	private ArrayList<Student> studenter;
 
 	public Fag(String navn, String fagkode, String beskrivelse,
 			String vurderingsform, int studiepoeng, Laerer lærer) {
@@ -32,6 +34,15 @@ public class Fag implements Serializable{
 		this.lærer = lærer;
 		this.studiepoeng = studiepoeng;
 		krav = new Arbeidskrav(this);
+		
+		studenter = new ArrayList<Student>();
+	}
+	
+	public void addStudent(Student s){
+		studenter.add(s);
+	}
+	public ArrayList<Student> getStudenter(){
+		return studenter;
 	}
 
 	public void addEksamen(Eksamen e) {

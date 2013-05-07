@@ -422,7 +422,7 @@ public class PopupVindu extends JPanel{
 			
 			else if(e.getSource() == oppmeldte){
 				ArrayList<Student> studentliste = vindu.getSkole().getStudentene().visAlle();
-				((Eksamen)velgEksamen.getSelectedItem()).addOppmeldteStudenter(studentliste, (Fag) aktiv);
+				((Eksamen)velgEksamen.getSelectedItem()).addOppmeldteStudenter(studentliste);
 				vindu.display(eksamensPanel());
 			}
 			

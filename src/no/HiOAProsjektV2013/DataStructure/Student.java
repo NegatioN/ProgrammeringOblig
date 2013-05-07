@@ -92,6 +92,7 @@ public class Student extends Person implements Serializable{
 		if(!harFaget(fag)){
 			kravListe.add(fag.makeKrav());
 			fagListe.add(fag);
+			fag.addStudent(this);
 		}
 		else{
 			return;

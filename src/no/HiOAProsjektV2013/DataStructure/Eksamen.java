@@ -30,7 +30,8 @@ public class Eksamen implements Serializable{
 	public Eksamen(Date dato, ArrayList<Student> studenter, Fag fag){
 		GregorianCalendar kalender = (GregorianCalendar) GregorianCalendar.getInstance();
 		kalender.setTime(dato);
-		addOppmeldteStudenter(studenter, fag);
+		this.fag = fag;
+		addOppmeldteStudenter(studenter);
 	}
 
 	public Date getDato() {
@@ -57,17 +58,19 @@ public class Eksamen implements Serializable{
 	
 	//lager eksamensdeltakeren og legger til i listen
 	public void addDeltaker(Student student){
-		for(EksamensDeltaker ed : deltakere){
-			if(ed.getDeltaker().equals(student))
+		for (EksamensDeltaker ed : deltakere) {
+			if (ed.getDeltaker().equals(student))
 				return;
 		}
-		EksamensDeltaker ny = new EksamensDeltaker(student, fag,dato);
-		deltakere.add(ny);
+		if (student.innfriddKrav(fag) && !student.maksForsøkOverskredet(fag)) {
+			EksamensDeltaker ny = new EksamensDeltaker(student, fag, dato);
+			deltakere.add(ny);
+		}
 	}
 	
-	public void addOppmeldteStudenter(ArrayList<Student> studentene, Fag faget){
+	public void addOppmeldteStudenter(ArrayList<Student> studentene){
 		for(Student studenten : studentene)
-			if(studenten.innfriddKrav(faget)){
+			if(studenten.innfriddKrav(fag) && !studenten.maksForsøkOverskredet(fag)){
 				addDeltaker(studenten);
 			}
 	}

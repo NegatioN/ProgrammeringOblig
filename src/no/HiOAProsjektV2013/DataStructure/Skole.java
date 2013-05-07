@@ -119,7 +119,7 @@ public class Skole implements Serializable{
 	public ArrayList<Student> findStudentMedFag(String input){		
 		Fag faget = fagSøk(input).get(0);
 		
-		ArrayList<Student> studentene = getStudentene().findStudentByFag(faget);
+		ArrayList<Student> studentene = faget.getStudenter();
 		
 		return studentene;
 	}
@@ -128,6 +128,12 @@ public class Skole implements Serializable{
 		int startÅr = Integer.parseInt(input);
 		ArrayList<Student> studentene = getStudentene().findStudentByStart(startÅr);
 		
+		return studentene;
+	}
+	//finner studenter med sluttåret brukeren søker på.
+	public ArrayList<Student> findStudentBySlutt(String input){
+		int sluttÅr = Integer.parseInt(input);
+		ArrayList<Student> studentene = getStudentene().findStudentBySlutt(sluttÅr);
 		return studentene;
 	}
 	//returnerer studiepoengene mellom år X og år Y for studenten.
@@ -172,42 +178,6 @@ public class Skole implements Serializable{
 	private ArrayList<Studieprogram> studieSøk(String input){
 		ArrayList<Studieprogram> studiene = getStudieprogrammene().findByNavn(input);
 		return studiene;
-	}
-
-	//tror vi må gjøre søkene separate om vi skal ha ut objektlister.
-	// Virker som det kan være lurt å kun returnere søk basert på aktivert tab eller en eller annen restriction
-	private ArrayList<?> navnSøk(String input){ //Utfører alle søk som tar imot navn, og returnerer en string (SKAL RETURNERE OBJEKT)
-		ArrayList<Student> studenter = new ArrayList<>();
-		ArrayList<Laerer> lærere = new ArrayList<>();
-		ArrayList<Fag> fag = new ArrayList<>();
-		ArrayList<Studieprogram> studieprog = new ArrayList<>();
-
-		//Tekstsøk
-		studenter = getStudentene().findByNavn(input);
-		
-		for(Laerer l : getLærerne().findByNavn(input)){
-			lærere.add(l);
-		}
-		
-		for(Fag f : getFagene().findByNavn(input)){
-			fag.add(f);
-		}
-		
-		for(Studieprogram sp : getStudieprogrammene().findByNavn(input)){
-			studieprog.add(sp);
-		}
-		
-		if(!studenter.isEmpty())
-			return studenter;
-		else if(!lærere.isEmpty())
-			return lærere;
-		else if(!fag.isEmpty())
-			return fag;
-		else if(!studieprog.isEmpty())
-			return studieprog;
-		else
-			return null;
-
 	}
 	
 	public String årSøk(){
