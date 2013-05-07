@@ -362,7 +362,7 @@ public class PopupVindu extends JPanel{
 					if(aktiv instanceof Student){
 						Fag f = (Fag)velgFag.getSelectedItem();
 						((Student) aktiv).addFag(f);
-						vindu.display(fagPanel());
+						vindu.cover(fagPanel());
 						visFag(f);
 					}
 					else if(aktiv instanceof Studieprogram){
@@ -429,18 +429,19 @@ public class PopupVindu extends JPanel{
 				kravbeskrivelse.setText("Arbeidskrav lagret");
 			} else if(e.getSource() == tilbake){
 				if(aktiv instanceof Student)
-					vindu.display(fyllVindu((Student)aktiv));
+					vindu.vis(); 
+//					vindu.display(fyllVindu((Student)aktiv));
 				else if(aktiv instanceof Fag){
 					vindu.display(fyllVindu((Fag)aktiv));
 				}
 			}
 			else{
-				vindu.display();
+				//vindu.display();
 
 				if(aktiv instanceof Student){
 					Student s = (Student) aktiv;
 					if(e.getSource() == visFag){
-						vindu.display(fagPanel());
+						vindu.cover(fagPanel());
 					}
 					try{
 						int nr = Integer.parseInt(tlf.getText());
