@@ -84,9 +84,11 @@ public class Fag implements Serializable{
 	public int getStudiepoeng() {
 		return studiepoeng;
 	}
-
+	
+	//kloner et krav og gir det til en student.
 	public Arbeidskrav getKrav() {
-		return krav;
+		Arbeidskrav kloneKrav = krav.clone(krav);
+		return kloneKrav;
 	}
 
 	public String getVurderingsform() {

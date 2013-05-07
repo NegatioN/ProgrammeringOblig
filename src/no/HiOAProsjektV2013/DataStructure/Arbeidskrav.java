@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Klassen definerer en liste av krav i et fag-objekt slik at en student kan ta eksamen
-public class Arbeidskrav implements Serializable{
+public class Arbeidskrav implements Serializable, Cloneable{
 
 	private static final long serialVersionUID = 1050L;
 	private String fagkode;
@@ -43,6 +43,10 @@ public class Arbeidskrav implements Serializable{
 	
 	public List<Krav> getKrav(){
 		return register;
+	}
+	public Arbeidskrav clone(Arbeidskrav krav){
+		Arbeidskrav kravet = krav.clone(krav);
+		return kravet;
 	}
 
 }

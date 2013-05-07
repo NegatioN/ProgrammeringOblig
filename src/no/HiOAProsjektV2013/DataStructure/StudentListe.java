@@ -23,8 +23,6 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 	private static final long serialVersionUID = 1020L;
 
 	private static int studentNummer = 100000;
-
-	private final int FØRSTE = 0, ANDRE = 1, FORNAVN = 2000, ETTERNAVN = 3000;
 	
 	private List<Student> register;
 	private ArrayList<Student> etternavnRegister, fornavnRegister;
