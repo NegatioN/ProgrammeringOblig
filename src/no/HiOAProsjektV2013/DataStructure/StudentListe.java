@@ -116,16 +116,6 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 		return studentNummer++;
 	}
 	
-	public ArrayList<Student> findStudentByFag(Fag fag) {
-		ArrayList<Student> studentene = new ArrayList<>();
-		for(Student s : register){
-			// sjekker hver av students fag for fagkoden.
-			if (s.harFaget(fag))
-				studentene.add(s);
-		}
-		// returnerer en liste med alle studentene i faget
-		return studentene;
-	}
 
 	public ArrayList<Student> findStudentByStart(int år) {
 		ArrayList<Student> studentene = new ArrayList<>();
@@ -154,20 +144,6 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 		return studentene;
 	}
 
-	// finner alle studentene i studieprogrammet, og velger ut de som startet i
-	// en viss dato.
-	public ArrayList<Student> findStudentByStudieprogramByÅr(Studieprogram sp,
-			Date dato) {
-		ArrayList<Student> checkStudenter = sp.getStudenter();
-		ArrayList<Student> studentene = new ArrayList<>();
-
-		for (Student s : checkStudenter) {
-			if (dato.equals(s.getStart()))
-				studentene.add(s);
-		}
-
-		return studentene;
-	}
 	//brukes KUN i loading av programmet slik at vi får overført verdien
 	public void setStudentNrCount(int studnr){
 		studentNummer = studnr;

@@ -95,7 +95,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		//script for å generere fag, studenter og lærere
 		//kommenter den ut etter 1 generate
-		ScriptClass sc = new ScriptClass(skolen);
+//		ScriptClass sc = new ScriptClass(skolen);
 		
 		rammeverk = new JPanel(new BorderLayout());
 		add(rammeverk);

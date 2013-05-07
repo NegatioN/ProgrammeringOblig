@@ -3,6 +3,7 @@ package no.HiOAProsjektV2013.DataStructure;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -122,39 +123,51 @@ public class Fag implements Serializable{
 
 	// returnerer en array av intverdier som representerer antall av hver
 	// karakter fra A = array[0] til F = array[6]
-	public int[] findKarakterDistribusjon(Date dato) {
+	public int[] findKarakterDistribusjon(int år) {
+		Eksamen e = findEksamenByDate(år);
+		int[] karakterene = findKarakterDistribusjon(e);
+		
+		return karakterene;
+	}
+	public int[] findKarakterDistribusjon(Eksamen e){
 		int[] karakterene = new int[6];
-		Eksamen e = findEksamenByDate(dato);
-		// gir alle elementene i arrayen en verdi sånn at vi ser 0-verdier
-		for (int i : karakterene) {
-			i = 0;
+		if (eksamener.contains(e)) {
+			for (int i : karakterene) {
+				i = 0;
+			}
+			if (e == null)
+				return karakterene;
+			List<EksamensDeltaker> deltakerne = e.getDeltakere();
+			for (EksamensDeltaker ed : deltakerne) {
+				// legger bare til en i arrayen som represeenterer antall av
+				// hver
+				// karakter.
+				char karakter = ed.getKarakter();
+				if (karakter == 'a' || karakter == 'A')
+					karakterene[AKARAKTER] += 1;
+				if (karakter == 'b' || karakter == 'B')
+					karakterene[BKARAKTER] += 1;
+				if (karakter == 'c' || karakter == 'C')
+					karakterene[CKARAKTER] += 1;
+				if (karakter == 'd' || karakter == 'D')
+					karakterene[DKARAKTER] += 1;
+				if (karakter == 'e' || karakter == 'E')
+					karakterene[EKARAKTER] += 1;
+				if (karakter == 'f' || karakter == 'F')
+					karakterene[FKARAKTER] += 1;
+			}
 		}
-		if (e == null)
-			return karakterene;
-		List<EksamensDeltaker> deltakerne = e.getDeltakere();
-		for (EksamensDeltaker ed : deltakerne) {
-			// legger bare til en i arrayen som represeenterer antall av hver
-			// karakter.
-			char karakter = ed.getKarakter();
-			if (karakter == 'a' || karakter == 'A')
-				karakterene[AKARAKTER] += 1;
-			if (karakter == 'b' || karakter == 'B')
-				karakterene[BKARAKTER] += 1;
-			if (karakter == 'c' || karakter == 'C')
-				karakterene[CKARAKTER] += 1;
-			if (karakter == 'd' || karakter == 'D')
-				karakterene[DKARAKTER] += 1;
-			if (karakter == 'e' || karakter == 'E')
-				karakterene[EKARAKTER] += 1;
-			if (karakter == 'f' || karakter == 'F')
-				karakterene[FKARAKTER] += 1;
-		}
-
 		return karakterene;
 	}
 	//returnerer double-verdi med strykprosenten i eksamen på gitt dato i dette bestemte faget.
-	public double findStrykProsentByDate(Date dato){
-		Eksamen e = findEksamenByDate(dato);
+	public double findStrykProsentByDate(int år){
+		Eksamen e = findEksamenByDate(år);
+		
+		double strykProsent = findStrykProsentEksamen(e);
+		return strykProsent;
+	}
+	//strykprosent for en gitt eksamen
+	public double findStrykProsentEksamen(Eksamen e){
 		List<EksamensDeltaker> deltakere = e.getDeltakere();
 		int antallStudenter = deltakere.size();
 		int antallStryk = 0;
@@ -168,9 +181,9 @@ public class Fag implements Serializable{
 		return strykProsent;
 	}
 
-	private Eksamen findEksamenByDate(Date dato) {
+	private Eksamen findEksamenByDate(int år) {
 		for (Eksamen e : eksamener) {
-			if (e.getDato().equals(dato))
+			if (e.getKalender().get(Calendar.YEAR) == år)
 				return e;
 		}
 		return null;

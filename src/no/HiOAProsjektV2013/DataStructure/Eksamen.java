@@ -37,6 +37,9 @@ public class Eksamen implements Serializable{
 	public Date getDato() {
 		return dato.getTime();
 	}
+	public GregorianCalendar getKalender(){
+		return dato;
+	}
 	public void setDato(Date dato) {
 		this.dato.setTime(dato);
 	}

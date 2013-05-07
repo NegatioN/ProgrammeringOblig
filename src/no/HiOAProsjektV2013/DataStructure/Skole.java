@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.List;
 
 import no.HiOAProsjektV2013.Interface.TestWindow;
 
@@ -123,6 +123,17 @@ public class Skole implements Serializable{
 		
 		return studentene;
 	}
+	
+	public ArrayList<Student> findStudentMedFagByÅr(String input, int år){
+		ArrayList<Student> studenter = new ArrayList<>();
+		
+		for(Student s : findStudentMedFag(input)){
+			if(s.getStart().get(Calendar.YEAR) == år){
+				studenter.add(s);
+			}
+		}
+		return studenter;
+	}
 	//finner studenter med startåret brukeren søker på.
 	public ArrayList<Student> findStudentByStart(String input){
 		int startÅr = Integer.parseInt(input);
@@ -154,7 +165,52 @@ public class Skole implements Serializable{
 		
 		return studiepoeng;
 	}
-	//remade metoder som skal brukes om qualifier-int slår til, slik at ikke ALLE søk skjer hver gang.
+	//finner alle studentene som har bestått kravene i det gitte faget
+	public ArrayList<Student> studenterKravBestått(Fag fag){
+		ArrayList<Student> studentene = new ArrayList<>();
+		
+		for(Student s : fag.getStudenter()){
+			if(s.innfriddKrav(fag))
+				studentene.add(s);
+		}
+		
+		return studentene;
+	}
+	//finner studentene ved studieprogram
+	public ArrayList<Student> findStudentsByStudieprogram(Studieprogram sp){
+		ArrayList<Student> studentene = getStudentene().findStudentByStudieprogram(sp);
+		return studentene;
+	}
+	//finner studentene ved studieprogrammet som startet i år X
+	public ArrayList<Student> findStudentByStudieprogramByStart(Studieprogram sp, int start){
+		ArrayList<Student> studentene = new ArrayList<>();
+		
+		for(Student s : getStudentene().findStudentByStudieprogram(sp)){
+			if(s.getStart().get(Calendar.YEAR) == start){
+				studentene.add(s);
+			}
+		}
+		return studentene;
+	}
+	//interfacemetoder for å finne strykprosent
+	public double findStrykProsent(Fag fag, int år){
+		double strykprosent = fag.findStrykProsentByDate(år);
+		return strykprosent;
+	}
+	public double findStrykProsent(Fag fag, Eksamen e){
+		double strykprosent = fag.findStrykProsentEksamen(e);
+		return strykprosent;
+	}
+	//interfacemetoder for å finne karakterfordeling
+	public int[] findKarakterDistribusjon(Fag fag, int år){
+		int[] karakterene = fag.findKarakterDistribusjon(år);
+		return karakterene;
+	}
+	public int[] findKarakterDistribusjon(Fag fag, Eksamen e){
+		int[] karakterene = fag.findKarakterDistribusjon(e);
+		return karakterene;
+	}
+	//private søkemetoder for vanlige søk i hovedmeny
 	private ArrayList<Fag> fagSøk(String input){
 		if(input.matches(fagkodeRegex)){
 			return fagkodeSøk(input);
@@ -200,5 +256,6 @@ public class Skole implements Serializable{
 		return fag;
 
 	}
+	
 
 }
