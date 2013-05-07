@@ -362,7 +362,8 @@ public class PopupVindu extends JPanel{
 					if(aktiv instanceof Student){
 						Fag f = (Fag)velgFag.getSelectedItem();
 						((Student) aktiv).addFag(f);
-						vindu.vis(fagPanel());
+						vindu.vis();
+						vindu.cover(fagPanel());
 						visFag(f);
 					}
 					else if(aktiv instanceof Studieprogram){
