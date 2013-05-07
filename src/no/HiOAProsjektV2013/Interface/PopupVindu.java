@@ -1,11 +1,8 @@
 package no.HiOAProsjektV2013.Interface;
 
-
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -17,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -26,8 +22,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 
 import no.HiOAProsjektV2013.DataStructure.Arbeidskrav;
 import no.HiOAProsjektV2013.DataStructure.Eksamen;
@@ -85,10 +79,6 @@ public class PopupVindu extends JPanel{
 		String studAdresse = s.getAdresse();
 		Date startdato = s.getStart();
 
-		//		Arbeidskrav[] fagene = s.getFagene();
-		//		JList<Arbeidskrav> liste = new JList<>();
-		//		liste.setListData(fagene);
-
 		navn	 		= new JTextField(studNavn, 20);
 		epost	 		= new JTextField(studEpost, 20);
 		tlf		 		= new JTextField(studTlf, 20);
@@ -108,8 +98,6 @@ public class PopupVindu extends JPanel{
 		visFag = button.generateButton("Vis fag", panelet, Buttons.HEL);
 		button.generateButton("Lagre", panelet, Buttons.HEL);
 		slett = button.generateButton("Slett Student", panelet, Buttons.HEL);
-
-		//		panelet.add(liste);
 
 		return panelet;
 	}
@@ -226,9 +214,11 @@ public class PopupVindu extends JPanel{
 	public void visFag(Fag f){
 		faginfo.removeAll();
 		faginfo.setBorder(BorderFactory.createTitledBorder(f.getNavn()));
-		aktivKrav = f.getKrav();
+		
+		aktivKrav = ((Student)aktiv).getFagKrav(f);
+		
 		checklytter cl = new checklytter();
-		for(Krav krav : f.getKrav().getKrav()){
+		for(Krav krav : aktivKrav.getKrav()){
 			JCheckBox cb = new JCheckBox(krav.getBeskrivelse());
 			faginfo.add(cb);
 			cb.setSelected(krav.isGodkjent());
@@ -287,11 +277,9 @@ public class PopupVindu extends JPanel{
 	public JPanel eksamensPanel(){
 		visepanel = new JPanel();
 		visepanel.setPreferredSize(size);
-
-		visepanel.add(new JLabel("Eksamener for " + ((Fag)aktiv).getNavn()));
 		
 		faginfo = new JPanel();
-		faginfo.setPreferredSize(new Dimension(260, 180));
+		faginfo.setPreferredSize(new Dimension(260, 210));
 		
 		combolytter cl = new combolytter();
 		Eksamen[] eks = new Eksamen[((Fag)aktiv).getEksamener().size()];
@@ -318,7 +306,7 @@ public class PopupVindu extends JPanel{
 	}
 	public void visEksamen(Eksamen e){
 		faginfo.removeAll();
-//		faginfo.setBorder(BorderFactory.createTitledBorder("Eksamen"));
+		faginfo.setBorder(BorderFactory.createTitledBorder("Eksamen for " + ((Fag)aktiv).getNavn()));
 
 		DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); //Setter inputformat for dato
 
@@ -333,10 +321,11 @@ public class PopupVindu extends JPanel{
 		}
 
 		JTable resultater = new JTable(celler, kolonnenavn);
-		resultater.setPreferredScrollableViewportSize(new Dimension(245, 195));
+		resultater.setPreferredScrollableViewportSize(new Dimension(245, 160));
 		faginfo.add(new JScrollPane(resultater));
 		faginfo.updateUI();
 	}
+	
 	private class combolytter implements ItemListener{
 		@Override
 		public void itemStateChanged(ItemEvent e) {

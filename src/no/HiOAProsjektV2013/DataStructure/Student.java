@@ -204,6 +204,14 @@ public class Student extends Person implements Serializable{
 		return (Arbeidskrav[]) kravListe.toArray(ak);
 	}
 	
+	public Arbeidskrav getFagKrav(Fag fag){
+		for( Arbeidskrav ak : kravListe){
+			if(ak.getFagkode() == fag.getFagkode())
+				return ak;
+		}
+		return null;
+	}
+	
 	public List<Fag> getfagListe(){
 		return fagListe;
 	}
