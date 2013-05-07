@@ -6,10 +6,11 @@ import java.text.ParseException;
 import java.text.RuleBasedCollator;
 import java.util.Comparator;
 
+import no.HiOAProsjektV2013.DataStructure.Person;
 import no.HiOAProsjektV2013.DataStructure.Student;
 
 //Comparator for fornavn-sortering og søk.
-public class FornavnSammenligner implements Comparator<Student>, Serializable{
+public class FornavnSammenligner implements Comparator<Person>, Serializable{
 
 	private static final long serialVersionUID = 1002L;
 	private String rekkefølge = "<\0<0<1<2<3<4<5<6<7<8<9"
@@ -29,15 +30,15 @@ public class FornavnSammenligner implements Comparator<Student>, Serializable{
 	}
 
 	@Override
-	public int compare(Student s1, Student s2) {
-		String s1f = s1.getfNavn();
-		String s1e = s1.geteNavn();
-		String s2f = s2.getfNavn();
-		String s2e = s2.geteNavn();
+	public int compare(Person p1, Person p2) {
+		String p1f = p1.getfNavn();
+		String p1e = p1.geteNavn();
+		String p2f = p2.getfNavn();
+		String p2e = p2.geteNavn();
 		
-		int d = kollator.compare(s1f, s2f);
+		int d = kollator.compare(p1f, p2f);
 		if(d == 0){
-			d = kollator.compare(s1e, s2e);
+			d = kollator.compare(p1e, p2e);
 			//hvis hele navnet er identisk, plasser 1 spot før forrige instans.
 			if(d == 0){
 				return -1;

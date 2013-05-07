@@ -6,10 +6,10 @@ import java.text.ParseException;
 import java.text.RuleBasedCollator;
 import java.util.Comparator;
 
-import no.HiOAProsjektV2013.DataStructure.Student;
+import no.HiOAProsjektV2013.DataStructure.Person;
 
 //Comparator for etternavn-sortering og søk.
-public class EtternavnSammenligner implements Comparator<Student>, Serializable{
+public class EtternavnSammenligner implements Comparator<Person>, Serializable{
 	
 	private static final long serialVersionUID = 1001L;
 	
@@ -30,15 +30,15 @@ public class EtternavnSammenligner implements Comparator<Student>, Serializable{
 	}
 
 	@Override
-	public int compare(Student s1, Student s2) {
-		String s1f = s1.getfNavn();
-		String s1e = s1.geteNavn();
-		String s2f = s2.getfNavn();
-		String s2e = s2.geteNavn();
+	public int compare(Person p1, Person p2) {
+		String p1f = p1.getfNavn();
+		String p1e = p1.geteNavn();
+		String p2f = p2.getfNavn();
+		String p2e = p2.geteNavn();
 		
-		int d = kollator.compare(s1e, s2e);
+		int d = kollator.compare(p1e, p2e);
 		if(d == 0){
-			d = kollator.compare(s1f, s2f);
+			d = kollator.compare(p1f, p2f);
 			//hvis hele navnet er identisk, plasser 1 spot før forrige instans.
 			if(d == 0){
 				return -1;

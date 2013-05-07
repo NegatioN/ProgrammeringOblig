@@ -46,34 +46,8 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 	}
 	//Setter inn studenten sortert i fornavnsregister og etternavnsregister. 
 	private void settInnSortert(Student s){
-		
-		int pos = 0;
-		try{
-			//gir såvidt jeg forstår en negativ verdi av der det skal settes inn HVIS den ikke finner en som er .equals
-		pos = Collections.binarySearch(etternavnRegister, s,new EtternavnSammenligner());
-		}catch(NullPointerException npe){
-			npe.printStackTrace();
-		}
-		//setter inn på sortert plass for etternavn
-		if(etternavnRegister.isEmpty())
-			etternavnRegister.add(s);
-		else{
-		pos = (Math.abs(pos) - 1);
-			etternavnRegister.add(pos, s);
-		}
-		try{
-		pos = Collections.binarySearch(fornavnRegister, s, new FornavnSammenligner());
-		pos = (Math.abs(pos) - 1);
-		}catch(NullPointerException e){
-			e.printStackTrace();
-		}
-		//setter inn på sortert plass for fornavn
-		if(fornavnRegister.isEmpty())
-			fornavnRegister.add(s);
-		else{
-		pos = (Math.abs(pos));
-			fornavnRegister.add(pos, s);
-		}
+		super.settInnSortert(s, fornavnRegister, new FornavnSammenligner());
+		super.settInnSortert(s, etternavnRegister, new EtternavnSammenligner());
 	}
 	
 	public void removeStudent(Student student){
@@ -96,134 +70,12 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 		
 		return studentene;
 	}
-
+	
+	//finner studentene basert på fornavn/etternavn og samler begge søkene til en arraylist.
 	public ArrayList<Student> findByNavn(String input){
 		ArrayList<Student> studentene = super.findByNavn(input, fornavnRegister, etternavnRegister);
 		return studentene;
 	}
-	
-	//finner studentene basert på fornavn/etternavn og samler begge søkene til en arraylist.
-//	public ArrayList<Student> findByNavn(String input) {
-//		
-//		String[] navn = super.nameSplitter(input);
-//		System.out.println(navn[0] + "\t" + navn[1]);
-//		
-//		char fFirstLetter = navn[FØRSTE].charAt(FØRSTE);
-//		fFirstLetter = Character.toUpperCase(fFirstLetter);
-//		char eFirstLetter = navn[ANDRE].charAt(FØRSTE);
-//		eFirstLetter = Character.toUpperCase(eFirstLetter);
-//		
-//		int max = (etternavnRegister.size() - 1);
-//		int min = 0;
-//		int mid;
-//		int searchStart = 0;
-//		Student tempstudent;
-//		
-//		while (min <= max) {
-//			mid = (max + min) / 2;
-//			tempstudent = etternavnRegister.get(mid);
-//			// finner plassen i arrayen hvor vi skal starte sekvensiellt søk.
-//			if (eFirstLetter == tempstudent.geteNavn().charAt(FØRSTE)) {
-//				searchStart = etternavnRegister.indexOf(tempstudent);
-//				// ruller oss tilbake til starten av denne bokstavens forekomst.
-//				try{
-//					while (eFirstLetter == etternavnRegister
-//							.get(searchStart - 1).geteNavn().charAt(FØRSTE)) {
-//						searchStart--;
-//					}
-//				}catch(ArrayIndexOutOfBoundsException e){
-//					//fortsetter med uendret searchStart
-//				}
-//				break;
-//			} else if (eFirstLetter < tempstudent.geteNavn().charAt(FØRSTE)) {
-//				max = mid - 1;
-//			} else if (eFirstLetter > tempstudent.geteNavn().charAt(FØRSTE)) {
-//				min = mid + 1;
-//			}
-//
-//		}// end while for etternavn
-//
-//		ArrayList<Student> studenteneEtternavn = looper(searchStart, navn[ANDRE], etternavnRegister, eFirstLetter, ETTERNAVN);
-//		
-//		searchStart = 0;
-//		min = 0;
-//		max = (fornavnRegister.size() -1);
-//		while (min <= max) {
-//			mid = (max + min) / 2;
-//			tempstudent = fornavnRegister.get(mid);
-//			// finner plassen i arrayen hvor vi skal starte sekvensiellt søk.
-//			if (fFirstLetter == tempstudent.getfNavn().charAt(FØRSTE)) {
-//				searchStart = fornavnRegister.indexOf(tempstudent);
-//				// ruller oss tilbake til starten av denne bokstavens forekomst.
-//				try{
-//					while (fFirstLetter == fornavnRegister.get(searchStart - 1)
-//							.getfNavn().charAt(FØRSTE)) {
-//						searchStart--;
-//					}
-//				}catch(ArrayIndexOutOfBoundsException ex){
-//					break;
-//				}
-//				break;
-//			} else if (fFirstLetter < tempstudent.getfNavn().charAt(FØRSTE)) {
-//				max = mid - 1;
-//			} else if (fFirstLetter > tempstudent.getfNavn().charAt(FØRSTE)) {
-//				min = mid + 1;
-//			}
-//
-//		}// end while for fornavn
-//		ArrayList<Student> studenteneFornavn = looper(searchStart, navn[FØRSTE], fornavnRegister, fFirstLetter, FORNAVN);
-//		
-//		ArrayList<Student> studentene = super.findByNavn(studenteneFornavn, studenteneEtternavn);
-//		
-//		return studentene;
-//	}
-//	//looper gjennom alle med samme forbokstav som input sekvensiellt. Enten i fornavnslista eller etternavn.
-//	private ArrayList<Student> looper(int start, String input, ArrayList<Student> sortedList, char first, int qualifier){
-//		ArrayList<Student> studentene = new ArrayList<>();
-//		Iterator iterator;
-//		if (qualifier == ETTERNAVN) {
-//			try {
-//				// legger til alle studentene fra searchStart til første bokstav
-//				// ikke lengre er det samme.
-//				iterator = sortedList.listIterator(start);
-//				Pattern mønster = Pattern.compile(Pattern.quote(input), Pattern.CASE_INSENSITIVE);
-//				while (iterator.hasNext()) {
-//					Student temp = (Student) iterator.next();
-//					//pattern lages slik at vi kan søke med contains på all type input.
-//					if (first != temp.geteNavn().charAt(FØRSTE)) {
-//						break;
-//					} else if(mønster.matcher(temp.geteNavn()).find()){
-//						studentene.add(temp);
-//					}
-//				}
-//			}// hvis arrayen er tom, eller ikke befolket med personer med gitt
-//				// bokstav som start.
-//			catch (NullPointerException npe) {
-//				npe.printStackTrace();
-//			}
-//		}else if(qualifier == FORNAVN){
-//			try {
-//				// legger til alle studentene fra searchStart til første bokstav
-//				// ikke lengre er det samme.
-//				Pattern mønster = Pattern.compile(Pattern.quote(input), Pattern.CASE_INSENSITIVE);
-//				iterator = sortedList.listIterator(start);
-//				while (iterator.hasNext()) {
-//					Student temp = (Student) iterator.next();
-//
-//					if (first != temp.getfNavn().charAt(FØRSTE)) {
-//						break;
-//					} else if(mønster.matcher(temp.getfNavn()).find()){
-//						studentene.add(temp);
-//					}
-//				}
-//			}// hvis arrayen er tom, eller ikke befolket med personer med gitt
-//				// bokstav som start.
-//			catch (NullPointerException npe) {
-//				npe.printStackTrace();
-//			}
-//		}
-//		return studentene;
-//	}
 	
 	
 	//metoden skal gjøre et binærsøk gjennom studentlista som er i rekkefølge på studentNr

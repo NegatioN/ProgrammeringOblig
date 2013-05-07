@@ -2,8 +2,13 @@ package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.regex.Pattern;
+
+import no.HiOAProsjektV2013.Main.EtternavnSammenligner;
+import no.HiOAProsjektV2013.Main.FornavnSammenligner;
 
 //abstrakt parent-class for å minimere kodeduplikasjon i StudentListe og LaererListe
 //FIKS NAVNSORTERING PÅ LÆRERE JOAKIM
@@ -17,7 +22,7 @@ public abstract class PersonListe<E> implements Serializable{
 		//
 	}
 
-	
+	//finner studentene basert på fornavn/etternavn og samler begge søkene til en arraylist.
 	public ArrayList<E> findByNavn(String input, ArrayList<E> fornavnRegister, ArrayList<E> etternavnRegister) {
 		
 		String[] navn = nameSplitter(input);
@@ -144,7 +149,7 @@ public abstract class PersonListe<E> implements Serializable{
 	
 	// parameterisert metode for å sette sammen listene man får etter å søke
 	// gjennom etter fornavn og etternavn i StudentListe og LaererListe
-	public ArrayList<E> findByNavn(ArrayList<E> fornavn, ArrayList<E> etternavn){
+	private ArrayList<E> findByNavn(ArrayList<E> fornavn, ArrayList<E> etternavn){
 		ArrayList<E> folkene = fornavn;
 		try{
 		for(E s : etternavn){
@@ -156,6 +161,25 @@ public abstract class PersonListe<E> implements Serializable{
 		}
 		
 		return folkene;
+	}
+	
+	public void settInnSortert(E person, ArrayList<E> register, Comparator regler){
+		
+		int pos = 0;
+		try{
+			//gir såvidt jeg forstår en negativ verdi av der det skal settes inn HVIS den ikke finner en som er .equals
+		pos = Collections.binarySearch(register, person,regler);
+		}catch(NullPointerException npe){
+			npe.printStackTrace();
+		}
+		//setter inn på sortert plass for etternavn
+		if(register.isEmpty())
+			register.add(person);
+		else{
+		pos = (Math.abs(pos) - 1);
+		System.out.println(pos);
+			register.add(pos, person);
+		}
 	}
 
 	//metoden deler opp et input-navn til fornavn og etternavn slik at det kan søkes på.
