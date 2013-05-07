@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /*
  * Liste over studieprogrammene. Inneholder søkenemetodene for studieprogram.
@@ -32,13 +33,14 @@ public class StudieprogramListe implements Serializable{
 		}
 		return null;
 	}
-	public ArrayList<Studieprogram> findByNavn(String navn){
-		ArrayList<Studieprogram> programmene = new ArrayList<>();
+	public ArrayList<Studieprogram> findByNavn(String input){
+		ArrayList<Studieprogram> studiene = new ArrayList<>();
+		Pattern mønster = Pattern.compile(Pattern.quote(input), Pattern.CASE_INSENSITIVE);
 		for(Studieprogram sp : register){
-			if(navn.equalsIgnoreCase(sp.getNavn()))
-				programmene.add(sp);
+			if(mønster.matcher(sp.getNavn()).find())
+				studiene.add(sp);
 		}
-		return programmene;
+		return studiene;
 	}
 	
 	//Legger til nytt studieprogram med gitt navn i listen studieprogrammene

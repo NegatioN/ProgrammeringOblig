@@ -77,7 +77,7 @@ public class PopupVindu extends JPanel{
 		String studEpost = s.getEpost();
 		String studTlf = s.getTelefonNr() + "";
 		String studAdresse = s.getAdresse();
-		Date startdato = s.getStart();
+		Date startdato = s.getStart().getTime();
 
 		navn	 		= new JTextField(studNavn, 20);
 		epost	 		= new JTextField(studEpost, 20);
@@ -361,13 +361,15 @@ public class PopupVindu extends JPanel{
 				try{
 					if(aktiv instanceof Student){
 						Fag f = (Fag)velgFag.getSelectedItem();
-						((Student) aktiv).addFag(f);
+						Student studenten = (Student) aktiv;
+						studenten.addFag(f);
 						vindu.vis();
 						vindu.cover(fagPanel());
 						visFag(f);
 					}
 					else if(aktiv instanceof Studieprogram){
-						((Studieprogram) aktiv).addFag((Fag)velgFag.getSelectedItem());
+						Studieprogram studiet = (Studieprogram) aktiv;
+						studiet.addFag((Fag)velgFag.getSelectedItem());
 					}
 					else if(aktiv instanceof Fag){
 						try {

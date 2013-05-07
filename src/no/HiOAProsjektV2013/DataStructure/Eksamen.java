@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,25 +16,28 @@ import java.util.List;
 public class Eksamen implements Serializable{
 	
 	private static final long serialVersionUID = 1040L;
-	private Date dato;
+	private GregorianCalendar dato;
 	private List<EksamensDeltaker> deltakere = new LinkedList<>();
 	private Fag fag;
 	
 	public Eksamen(Date dato, Fag fag){
-		this.dato = dato;
+		GregorianCalendar kalender = (GregorianCalendar) GregorianCalendar.getInstance();
+		kalender.setTime(dato);
+		this.dato = kalender;
 		this.fag = fag;
 	}
 	
 	public Eksamen(Date dato, ArrayList<Student> studenter, Fag fag){
-		this.dato = dato;
+		GregorianCalendar kalender = (GregorianCalendar) GregorianCalendar.getInstance();
+		kalender.setTime(dato);
 		addOppmeldteStudenter(studenter, fag);
 	}
 
 	public Date getDato() {
-		return dato;
+		return dato.getTime();
 	}
 	public void setDato(Date dato) {
-		this.dato = dato;
+		this.dato.setTime(dato);
 	}
 	public List<EksamensDeltaker> getDeltakere(){
 		return deltakere;
@@ -54,10 +58,10 @@ public class Eksamen implements Serializable{
 	//lager eksamensdeltakeren og legger til i listen
 	public void addDeltaker(Student student){
 		for(EksamensDeltaker ed : deltakere){
-			if(ed.getDeltaker() == student)
+			if(ed.getDeltaker().equals(student))
 				return;
 		}
-		EksamensDeltaker ny = new EksamensDeltaker(student, fag);
+		EksamensDeltaker ny = new EksamensDeltaker(student, fag,dato);
 		deltakere.add(ny);
 	}
 	

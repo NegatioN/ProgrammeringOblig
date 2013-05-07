@@ -1,7 +1,8 @@
 package no.HiOAProsjektV2013.Main;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import no.HiOAProsjektV2013.DataStructure.Fag;
 import no.HiOAProsjektV2013.DataStructure.Laerer;
@@ -26,13 +27,14 @@ public class ScriptClass {
 	}
 	
 	public void generateStudent(){
+		GregorianCalendar dato = (GregorianCalendar) GregorianCalendar.getInstance();
 		for(int i = 0;i<20;i++){
-			stud1 = skolen.getStudentene().addStudent("Joakim Rishaug", "Joaimrishaug@gmail.com", 95153437, "Her 25", new Date());
-			stud2 = skolen.getStudentene().addStudent("Lars-Erik Kasin", "lekasin@gmail.com", 12345678, "Her 2", new Date());
-			stud3 = skolen.getStudentene().addStudent("Herp Derp", "Herp@gmail.com", 12345678, "Camp 25", new Date());
-			skolen.getStudentene().addStudent("Jon Jensen", "jon@gmail.com", 32131123, "Veien 22", new Date());
-			skolen.getStudentene().addStudent("Eva Jensen", "ej93@gmail.com", 44112231, "Veien 22", new Date());
-			skolen.getStudentene().addStudent("Stig Rishaug", "ilike@gmail.com", 98123823, "Storet 40", new Date());
+			stud1 = skolen.getStudentene().addStudent("Joakim Rishaug", "Joaimrishaug@gmail.com", 95153437, "Her 25", dato);
+			stud2 = skolen.getStudentene().addStudent("Lars-Erik Kasin", "lekasin@gmail.com", 12345678, "Her 2", dato);
+			stud3 = skolen.getStudentene().addStudent("Herp Derp", "Herp@gmail.com", 12345678, "Camp 25", dato);
+			skolen.getStudentene().addStudent("Jon Jensen", "jon@gmail.com", 32131123, "Veien 22", dato);
+			skolen.getStudentene().addStudent("Eva Jensen", "ej93@gmail.com", 44112231, "Veien 22", dato);
+			skolen.getStudentene().addStudent("Stig Rishaug", "ilike@gmail.com", 98123823, "Storet 40", dato);
 
 		}
 	}

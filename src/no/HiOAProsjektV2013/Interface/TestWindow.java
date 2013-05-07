@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -45,7 +46,7 @@ public class TestWindow extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	//checkbox burde sette selectedValue til en av disse, og passe value inn i search
-	public static final int LÆRER = 30, STUDENT = 40, FAG = 50, STUDIEPROGRAM = 60;
+	public static final int LÆRER = 30, STUDENT = 40, FAG = 50, STUDIEPROGRAM = 60, FØRSTE = 0;
 
 	private Archiver arkivet;
 	private VinduLytter vl;
@@ -55,7 +56,6 @@ public class TestWindow extends JFrame implements ActionListener {
 	private ListeBoks<Laerer> laererboks = new ListeBoks<>(this);
 	private ListeBoks<Fag> fagboks = new ListeBoks<>(this);
 	private ListeBoks<Studieprogram> studieboks = new ListeBoks<>(this);
-	private PopupVindu pop;
 	private JTextArea info;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
 			vislærer, visfag, visstudieprog, lagre, leggtilfag, settiprog, søkeknapp, avansert;
@@ -95,7 +95,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		//script for å generere fag, studenter og lærere
 		//kommenter den ut etter 1 generate
-//		ScriptClass sc = new ScriptClass(skolen);
+		ScriptClass sc = new ScriptClass(skolen);
 		
 		rammeverk = new JPanel(new BorderLayout());
 		add(rammeverk);
@@ -370,7 +370,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	}
 	public void cover(Component c){
 		if(innhold.getComponentCount() < 2){
-			innhold.getComponent(0).setVisible(false);
+			innhold.getComponent(FØRSTE).setVisible(false);
 			innhold.add(c);
 			System.out.println(innhold.getComponentCount());
 			innhold.updateUI();
@@ -378,7 +378,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		}
 	}
 	public void vis(){
-		innhold.getComponent(0).setVisible(true);
+		innhold.getComponent(FØRSTE).setVisible(true);
 		innhold.remove(1);
 		innhold.updateUI();
 		revalidate();
@@ -411,7 +411,6 @@ public class TestWindow extends JFrame implements ActionListener {
 		//setter selectedValue for programmet sånn at vi får filtrert hva vi søker mot.
 		if(e.getSource() == studentCheck || e.getSource() == lærerCheck || e.getSource() == fagCheck || e.getSource() == studieCheck)
 		selectedValue = Integer.parseInt(e.getActionCommand());
-		System.out.println(selectedValue);
 		
 		if (e.getSource() == nystudent) {
 			student();
@@ -442,7 +441,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		//************************************************************************************************************************************
 		if (e.getSource() == lagre) {
 			
-			if (innhold.getComponent(0).equals(stud)) { //Sjekker hvilket panel som ligger i innhold-panelet
+			if (innhold.getComponent(FØRSTE).equals(stud)) { //Sjekker hvilket panel som ligger i innhold-panelet
 				
 				DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); //Setter inputformat for startdato
 				try {
@@ -460,21 +459,15 @@ public class TestWindow extends JFrame implements ActionListener {
 						navn.setText("Fornavn og Etternavn");
 						return;
 					}
-//					int[] datoTing = new int[3];
-//					String[] datoString = start.getText().split(datoRegex);
-//					int counter = 0;
-//					for(int tall : datoTing){
-//						tall = Integer.parseInt(datoString[counter++]);
-//					}
-//					GregorianCalendar dato = new GregorianCalendar(datoTing[2], datoTing[1], datoTing[0]);
-//					System.out.println(dato.get(Calendar.YEAR) + " år " + dato.get(Calendar.MONTH) + " måned " + dato.get(Calendar.DATE) + " dag");
 					Date date = (Date) formatter.parse(start.getText());
+					GregorianCalendar dato = (GregorianCalendar) GregorianCalendar.getInstance();
+					dato.setTime(date);
 
 					info.setText(skolen.getStudentene().addStudent(navn.getText(), 
 							epost.getText(), 
 							nr,
 							adresse.getText(), 
-							date).fullString());
+							dato).fullString());
 
 					velgProg.setVisible(true);
 					settiprog.setVisible(true);
@@ -487,7 +480,7 @@ public class TestWindow extends JFrame implements ActionListener {
 				
 			} 
 		
-			else if (innhold.getComponent(0).equals(lær)) {
+			else if (innhold.getComponent(FØRSTE).equals(lær)) {
 				try{
 					int nr = Integer.parseInt(tlf.getText());
 					
@@ -501,7 +494,7 @@ public class TestWindow extends JFrame implements ActionListener {
 				}
 			} 
 		
-		else if (innhold.getComponent(0).equals(fag)) {
+		else if (innhold.getComponent(FØRSTE).equals(fag)) {
 				try{
 					int poeng = Integer.parseInt(studiepoeng.getText());
 					if(!fagkode.getText().matches(fagkodeRegex)){
@@ -526,7 +519,7 @@ public class TestWindow extends JFrame implements ActionListener {
 				
 			} 
 		
-		else if (innhold.getComponent(0).equals(studprog)) {
+		else if (innhold.getComponent(FØRSTE).equals(studprog)) {
 				info.setText(skolen.getStudieprogrammene().addStudProg(navn.getText()).fullString());
 			}
 		}
@@ -534,7 +527,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		//************************************************************************************************************************************
 		
 		if (e.getSource() == leggtilfag) {
-			if(innhold.getComponent(0).equals(studprog)){
+			if(innhold.getComponent(FØRSTE).equals(studprog)){
 				try{
 					skolen.getStudieprogrammene().findEnByNavn(navn.getText()).addFag((Fag)velgFag.getSelectedItem());
 					info.setText(skolen.getStudieprogrammene().findEnByNavn(navn.getText()).fullString());
@@ -546,7 +539,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		//Legg til fagene fra et studieprogram til en registrert student
 		if (e.getSource() == settiprog) {
-			if(innhold.getComponent(0).equals(stud)){ //TRENGER EN SJEKK FOR Å SE OM DET ER REGISTRERT NY STUDENT
+			if(innhold.getComponent(FØRSTE).equals(stud)){ //TRENGER EN SJEKK FOR Å SE OM DET ER REGISTRERT NY STUDENT
 				try{
 					Student s =	skolen.getStudentene().findStudentByStudentNr("s" + (skolen.getStudentene().getStudentnummer() - 1));
 					for(Fag f : ((Studieprogram) velgProg.getSelectedItem()).getFagene()){
@@ -573,19 +566,19 @@ public class TestWindow extends JFrame implements ActionListener {
 			//og viser et displayvindu av riktig type
 			if(!(resultat == null || resultat.isEmpty())){
 				
-				if(resultat.get(0) instanceof Student){
+				if(resultat.get(FØRSTE) instanceof Student){
 					JList<Student> listen = studentboks.listify((ArrayList<Student>) resultat);
 					vis(studentboks.visResultat(listen));
 					
-				} else if(resultat.get(0) instanceof Laerer){
+				} else if(resultat.get(FØRSTE) instanceof Laerer){
 					JList<Laerer> listen = laererboks.listify((ArrayList<Laerer>) resultat);
 					vis(laererboks.visResultat(listen));
 					
-				} else if(resultat.get(0) instanceof Fag){
+				} else if(resultat.get(FØRSTE) instanceof Fag){
 					JList<Fag> listen = fagboks.listify((ArrayList<Fag>) resultat);
 					vis(fagboks.visResultat(listen));
 					
-				} else if(resultat.get(0) instanceof Studieprogram){
+				} else if(resultat.get(FØRSTE) instanceof Studieprogram){
 					JList<Studieprogram> listen = studieboks.listify((ArrayList<Studieprogram>) resultat);
 					vis(studieboks.visResultat(listen));
 				}

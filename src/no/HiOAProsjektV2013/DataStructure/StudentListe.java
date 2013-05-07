@@ -35,7 +35,7 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 
 	// legger til en ny student UANSETT og incrementer studentnummer
 	public Student addStudent(String navn, String epost, int tlf, String adresse,
-			Date start) {
+			GregorianCalendar start) {
 		Student s = new Student(navn, epost, tlf, adresse, newId(), start);
 		//legger til pointer til studentobjekt til liste i kronologisk rekkefølge, og i liste som sorteres på navn.
 		register.add(s);
@@ -55,7 +55,7 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 	}
 	
 	//tar inn date eleven sluttet og studenten.
-	public void avsluttStudent(Student student, Date dato){
+	public void avsluttStudent(Student student, GregorianCalendar dato){
 		student.setSlutt(dato);
 	}
 
@@ -119,8 +119,7 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 	public ArrayList<Student> findStudentByFag(Fag fag) {
 		ArrayList<Student> studentene = new ArrayList<>();
 		for(Student s : register){
-			// sjekker hver students arbeidskrav for fagkoden, og ser om de har
-			// faget.
+			// sjekker hver av students fag for fagkoden.
 			if (s.harFaget(fag))
 				studentene.add(s);
 		}
@@ -131,7 +130,7 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 	public ArrayList<Student> findStudentByStart(int år) {
 		ArrayList<Student> studentene = new ArrayList<>();
 		for(Student s : register){
-			if(s.getStart().getYear() == år){
+			if(s.getStart().get(Calendar.YEAR) == år){
 				studentene.add(s);
 			}
 		}
@@ -142,7 +141,7 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 		ArrayList<Student> studentene = new ArrayList<>();
 		for (Student s : register) {
 			if (s.isAvsluttet()) {
-				if (s.getSlutt().getYear() == år) {
+				if (s.getSlutt().get(Calendar.YEAR) == år) {
 					studentene.add(s);
 				}
 			}

@@ -1,6 +1,7 @@
 package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
+import java.util.GregorianCalendar;
 
 
 /*
@@ -14,8 +15,10 @@ public class EksamensDeltaker implements Serializable{
 	private char karakter = '\0';
 	private boolean oppmeldt;
 	private Fag fag;
+	private GregorianCalendar kalender;
 	
-	public EksamensDeltaker(Student deltakeren, Fag fag){
+	public EksamensDeltaker(Student deltakeren, Fag fag, GregorianCalendar kalender){
+		this.kalender = kalender;
 		this.deltakeren = deltakeren;
 		this.fag = fag;
 		//legger til denne eksamenen til deltakerens eksamensliste
@@ -43,6 +46,9 @@ public class EksamensDeltaker implements Serializable{
 	}
 	public Fag getFag(){
 		return fag;
+	}
+	public GregorianCalendar getDato(){
+		return kalender;
 	}
 	
 }

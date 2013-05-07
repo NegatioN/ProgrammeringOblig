@@ -3,6 +3,7 @@ package no.HiOAProsjektV2013.DataStructure;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class Student extends Person implements Serializable{
 	private static final long serialVersionUID = 1021L;
 	private String adresse;
 	private int studentnummer;
-	private Date start, slutt;
+	private GregorianCalendar start, slutt;
 	private List<EksamensDeltaker> eksamener = new LinkedList<>();
 	//faglista er kun pointers
 	private List<Fag> fagListe = new LinkedList<>();
@@ -25,7 +26,7 @@ public class Student extends Person implements Serializable{
 	private Studieprogram sp = null;
 	
 
-	public Student(String navn, String epost, int tlf, String adresse, int studentnummer, Date start) {
+	public Student(String navn, String epost, int tlf, String adresse, int studentnummer, GregorianCalendar start) {
 		super(navn, epost, tlf);
 		this.adresse = adresse;
 		this.studentnummer = studentnummer;
@@ -149,12 +150,12 @@ public class Student extends Person implements Serializable{
 	}
 
 
-	public Date getSlutt() {
+	public GregorianCalendar getSlutt() {
 		return slutt;
 	}
 
 
-	public void setSlutt(Date slutt) {
+	public void setSlutt(GregorianCalendar slutt) {
 		avsluttet = true;
 		this.slutt = slutt;
 	}
@@ -172,7 +173,7 @@ public class Student extends Person implements Serializable{
 	}
 
 
-	public Date getStart() {
+	public GregorianCalendar getStart() {
 		return start;
 	}
 	public String toString(){	
@@ -187,7 +188,7 @@ public class Student extends Person implements Serializable{
 					"\nE-post: " + getEpost() + 
 					"\nTlf: " + getTelefonNr() + 
 					"\nAdresse: " + adresse + 
-					"\nStartdato: " + new SimpleDateFormat("dd. MMM yyyy").format(start) +
+					"\nStartdato: " + new SimpleDateFormat("dd. MMM yyyy").format(start.getTime()) +
 					"\nFag: ";
 	
 		//må legge inn arbeidskrav i faget før vi kan reference.
@@ -199,9 +200,8 @@ public class Student extends Person implements Serializable{
 		return stringen;
 	}
 	
-	public Arbeidskrav[] getKravene(){
-		Arbeidskrav[] ak = new Arbeidskrav[kravListe.size()];
-		return (Arbeidskrav[]) kravListe.toArray(ak);
+	public List<Arbeidskrav> getKravene(){
+		return kravListe;
 	}
 	
 	public Arbeidskrav getFagKrav(Fag fag){
@@ -215,6 +215,8 @@ public class Student extends Person implements Serializable{
 	public List<Fag> getfagListe(){
 		return fagListe;
 	}
-
+	public List<EksamensDeltaker> getEksamener(){
+		return eksamener;
+	}
 
 }

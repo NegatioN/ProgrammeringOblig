@@ -5,7 +5,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import no.HiOAProsjektV2013.Interface.TestWindow;
 
@@ -91,6 +93,8 @@ public class Skole implements Serializable{
 	//****************SØØØØØØØØØØK SØKEMETODER SØØØØØØØØØØK****************//
 	
 	public ArrayList<?> søk(String input, int qualifier){ //Sjekker inputen i søkefeltet og utfører relevante søk
+//		System.out.println(studs.toString());
+		
 		if(qualifier == TestWindow.FAG){
 			ArrayList<Fag> fagene = fagSøk(input);
 			return fagene;
@@ -109,16 +113,40 @@ public class Skole implements Serializable{
 		if(input.matches(arRegex)){ //Sjekker om det er søkt på år
 			//split input og sjekk neste paramenter for hvordan søket skal håndteres.
 		}
-		else if (input.matches(fagkodeRegex)){ //Sjekker om det er søkt på fagkode	
-			return fagkodeSøk(input);
-		}
-		else if (input.matches(studentNrRegex)){ //Sjekker om det er søkt på studentNr
-			return studentNrSøk(input);
-		}
-		else if (input.matches(navnRegex)){ //Sjekker om det er søkt på navn (student, lærer, fag og studieprogram)
-			return navnSøk(input);
-		}
 		return null;
+	}
+	//finner studenter med faget bruker søker på
+	public ArrayList<Student> findStudentMedFag(String input){		
+		Fag faget = fagSøk(input).get(0);
+		
+		ArrayList<Student> studentene = getStudentene().findStudentByFag(faget);
+		
+		return studentene;
+	}
+	//finner studenter med startåret brukeren søker på.
+	public ArrayList<Student> findStudentByStart(String input){
+		int startÅr = Integer.parseInt(input);
+		ArrayList<Student> studentene = getStudentene().findStudentByStart(startÅr);
+		
+		return studentene;
+	}
+	//returnerer studiepoengene mellom år X og år Y for studenten.
+	public int findStudiepoengForStudIPeriode(Student s, String start, String slutt){
+		int startÅr = Integer.parseInt(start);
+		int sluttÅr = Integer.parseInt(slutt);
+		int studiepoeng = 0;
+		
+		for(EksamensDeltaker ed : s.getEksamener()){
+			int eksamensÅr = ed.getDato().get(Calendar.YEAR);
+			if(startÅr <= eksamensÅr && eksamensÅr <= sluttÅr){
+				char karakter = ed.getKarakter();
+				if(karakter != '\0' && karakter != 'F'){
+					studiepoeng += ed.getFag().getStudiepoeng();
+				}
+			}
+		}
+		
+		return studiepoeng;
 	}
 	//remade metoder som skal brukes om qualifier-int slår til, slik at ikke ALLE søk skjer hver gang.
 	private ArrayList<Fag> fagSøk(String input){
@@ -138,17 +166,11 @@ public class Skole implements Serializable{
 		return studentene;
 	}
 	private ArrayList<Laerer> lærerSøk(String input){
-		ArrayList<Laerer> lærerne = new ArrayList<>();
-		for(Laerer l : getLærerne().findByNavn(input)){
-			lærerne.add(l);
-		}
+		ArrayList<Laerer> lærerne = getLærerne().findByNavn(input);
 		return lærerne;
 	}
 	private ArrayList<Studieprogram> studieSøk(String input){
-		ArrayList<Studieprogram> studiene = new ArrayList<>();
-		for(Studieprogram sp : getStudieprogrammene().findByNavn(input)){
-			studiene.add(sp);
-		}
+		ArrayList<Studieprogram> studiene = getStudieprogrammene().findByNavn(input);
 		return studiene;
 	}
 

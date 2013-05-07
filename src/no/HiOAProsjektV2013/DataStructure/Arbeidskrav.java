@@ -48,9 +48,11 @@ public class Arbeidskrav implements Serializable, Cloneable{
 	public List<Krav> getKrav(){
 		return register;
 	}
+	//brukes i metoden for å klone en arbeidskrav-liste slik at hver student får en unik kravliste.
 	private void dropList(){
 		register = new ArrayList<>();
 	}
+	//kloner et arbeidskrav for en student, slik at fremgang i faget kan spores.
 	public Arbeidskrav clone(Arbeidskrav krav){
 		Arbeidskrav kravet = null;
 		try {
@@ -60,15 +62,11 @@ public class Arbeidskrav implements Serializable, Cloneable{
 			e.printStackTrace();
 		}
 		kravet.dropList();
-		int counter = 0;
 		
 		for(Krav minikrav : krav.getKrav()){
-			System.out.println(++counter);
 			Krav klonekrav = new Krav(minikrav);
 			kravet.addKrav(klonekrav);
 		}
-		System.out.println("Krav-hash " + krav.hashCode());
-		System.out.println("klone-hash " + kravet.hashCode());
 		return kravet;
 	}
 

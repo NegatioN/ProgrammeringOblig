@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /*
  * Liste over fag, med diverse metoder for å søke på fagene.
@@ -35,10 +36,11 @@ public class FagListe implements Serializable{
 	}
 	
 	//Finner et fag basert på navnet, kan returnere flere fag.
-	public ArrayList<Fag> findByNavn(String navn){
+	public ArrayList<Fag> findByNavn(String input){
+		Pattern mønster = Pattern.compile(Pattern.quote(input), Pattern.CASE_INSENSITIVE);
 		ArrayList<Fag> fagene = new ArrayList<>();
 		for(Fag f : register){
-			if(navn.equalsIgnoreCase(f.getNavn()))
+			if(mønster.matcher(f.getNavn()).find())
 				fagene.add(f);
 		}
 		return fagene;
