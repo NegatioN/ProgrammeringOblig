@@ -51,4 +51,8 @@ public class EksamensDeltaker implements Serializable{
 		return kalender;
 	}
 	
+	public String toString(){
+		return ""+deltakeren.getStudentnummer();
+	}
+	
 }

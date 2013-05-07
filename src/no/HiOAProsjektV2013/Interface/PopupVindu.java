@@ -22,6 +22,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
 
 import no.HiOAProsjektV2013.DataStructure.Arbeidskrav;
 import no.HiOAProsjektV2013.DataStructure.Eksamen;
@@ -50,6 +53,7 @@ public class PopupVindu extends JPanel{
 	private TestWindow vindu;
 	private JCheckBox oppmeldtCheck;
 	private Arbeidskrav aktivKrav;
+	private JTable resultater;
 
 	public PopupVindu(TestWindow vindu, Object o, Skole skolen){
 		this.vindu = vindu;
@@ -304,20 +308,24 @@ public class PopupVindu extends JPanel{
 		faginfo.removeAll();
 		faginfo.setBorder(BorderFactory.createTitledBorder("Eksamen for " + ((Fag)aktiv).getNavn()));
 
-		DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); //Setter inputformat for dato
-
-		String[] kolonnenavn = {"Dato", "StudentNr", "Karakter"};
-		Object[][] celler = new Object[e.getDeltakere().size()][3];
+		Object [][] celler = {{"", "", ""}};
 		
-		int rad = 0;
-		for(EksamensDeltaker ed: e.getDeltakere()){
-			celler[rad][0] = formatter.format(e.getDato());
-			celler[rad][1] = ed.getDeltaker();
-			celler[rad++][2] = ed.getKarakter();
-		}
+		if(!e.getDeltakere().isEmpty()){
+			celler = new Object[e.getDeltakere().size()][3];
+			DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); //Setter inputformat for dato
 
-		JTable resultater = new JTable(celler, kolonnenavn);
+			int rad = 0;
+			for(EksamensDeltaker ed: e.getDeltakere()){
+				celler[rad][0] = formatter.format(e.getDato());
+				celler[rad][1] = ed;
+				celler[rad++][2] = new String(""+ed.getKarakter());
+			}
+		}
+		
+		Tabellmodell modell = new Tabellmodell(e, celler);
+		resultater = new JTable(modell);
 		resultater.setPreferredScrollableViewportSize(new Dimension(390, 200));
+//		modell.addTableModelListener(tl);
 		faginfo.add(new JScrollPane(resultater));
 		faginfo.updateUI();
 	}
@@ -347,6 +355,66 @@ public class PopupVindu extends JPanel{
 		return visepanel;
 	}
 
+	private class Tabellmodell extends AbstractTableModel{
+
+		private static final long serialVersionUID = 100110L;
+		
+		Eksamen e;
+		private String[] kolonnenavn = {"Dato", "StudentNr", "Karakter"};
+		private Object[][] celler;
+
+		public Tabellmodell(Eksamen e, Object[][] celler){
+			this.e = e;
+			this.celler = celler;
+			this.addTableModelListener(new tabellytter());
+		}
+	
+	    public Object getValueAt(int rad, int kolonne){
+	    	return celler[rad][kolonne];
+	    }
+	    
+	    public String getColumnName(int kolonne) {
+	        return kolonnenavn[kolonne];
+	    }
+	    
+	    public int getRowCount() { 
+	    	return celler.length; 
+	    }
+	    
+	    public int getColumnCount() {
+	    	return celler[0].length;
+	    }
+
+	    public boolean isCellEditable(int rad, int kolonne){ 
+	    	switch (kolonne) {
+	    	case 2:
+	    		return true;
+	    	default:
+	    		return false;
+	    	}
+	    }
+	    
+	    public void setValueAt(Object value, int rad, int kolonne) {
+	        celler[rad][kolonne] = value;
+	        fireTableCellUpdated(rad, kolonne);
+	    }
+
+	    //For å informere tabellmodellen om kolonnenes datatyper.
+	    public Class getColumnClass(int kolonne) {
+	    	return celler[0][kolonne].getClass();
+	    }
+	}
+	private class tabellytter implements TableModelListener{
+
+		@Override
+		public void tableChanged(TableModelEvent e) {
+			EksamensDeltaker ed = (EksamensDeltaker)resultater.getValueAt(e.getFirstRow(), e.getColumn()-1);
+			char k = (resultater.getValueAt(e.getFirstRow(), e.getColumn())).toString().charAt(0);
+			ed.setKarakter(k);
+			vindu.cover(eksamensPanel());
+		}
+		
+	}
 	private class combolytter implements ItemListener{
 		@Override
 		public void itemStateChanged(ItemEvent e) {
