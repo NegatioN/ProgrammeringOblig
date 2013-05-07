@@ -86,10 +86,14 @@ public class Fag implements Serializable{
 	}
 	
 	//kloner et krav og gir det til en student.
-	public Arbeidskrav getKrav() {
+	public Arbeidskrav makeKrav() {
 		Arbeidskrav kloneKrav = krav.clone(krav);
 		return kloneKrav;
 	}
+	public Arbeidskrav getKrav(){
+		return krav;
+	}
+	
 
 	public String getVurderingsform() {
 		return vurderingsform;

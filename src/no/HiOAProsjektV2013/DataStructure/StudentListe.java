@@ -51,6 +51,7 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 	public void removeStudent(Student student){
 		register.remove(student);
 		etternavnRegister.remove(student);
+		fornavnRegister.remove(student);
 	}
 	
 	//tar inn date eleven sluttet og studenten.

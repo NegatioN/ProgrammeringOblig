@@ -14,6 +14,10 @@ public class Arbeidskrav implements Serializable, Cloneable{
 	public Arbeidskrav(Fag fag) {
 		fagkode = fag.getFagkode();
 	}
+	public Arbeidskrav(Arbeidskrav krav){
+		fagkode = krav.getFagkode();
+		
+	}
 
 	// Sjekker at alle arbeidskrav i listen er innfridd. Hvis ikke alle er
 	// innfridd returners false
@@ -44,8 +48,27 @@ public class Arbeidskrav implements Serializable, Cloneable{
 	public List<Krav> getKrav(){
 		return register;
 	}
+	private void dropList(){
+		register = new ArrayList<>();
+	}
 	public Arbeidskrav clone(Arbeidskrav krav){
-		Arbeidskrav kravet = krav.clone(krav);
+		Arbeidskrav kravet = null;
+		try {
+			kravet = (Arbeidskrav) krav.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		kravet.dropList();
+		int counter = 0;
+		
+		for(Krav minikrav : krav.getKrav()){
+			System.out.println(++counter);
+			Krav klonekrav = new Krav(minikrav);
+			kravet.addKrav(klonekrav);
+		}
+		System.out.println("Krav-hash " + krav.hashCode());
+		System.out.println("klone-hash " + kravet.hashCode());
 		return kravet;
 	}
 

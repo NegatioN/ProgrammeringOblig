@@ -16,6 +16,10 @@ public class Krav implements Serializable{
 		this.beskrivelse = beskrivelse;
 		godkjent = false;
 	}
+	public Krav(Krav krav){
+		this.beskrivelse = krav.getBeskrivelse();
+		this.godkjent = krav.isGodkjent();
+	}
 
 	public boolean isGodkjent() {
 		return godkjent;

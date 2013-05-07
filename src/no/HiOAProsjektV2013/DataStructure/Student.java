@@ -89,7 +89,7 @@ public class Student extends Person implements Serializable{
 	//legger til krav i kravlista til studenten, men kun hvis det ikke finnes.
 	public void addFag(Fag fag){
 		if(!harFaget(fag)){
-			kravListe.add(fag.getKrav());
+			kravListe.add(fag.makeKrav());
 			fagListe.add(fag);
 		}
 		else{
