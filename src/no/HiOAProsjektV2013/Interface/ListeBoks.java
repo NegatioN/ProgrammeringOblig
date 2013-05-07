@@ -2,6 +2,7 @@ package no.HiOAProsjektV2013.Interface;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
@@ -25,9 +27,10 @@ import no.HiOAProsjektV2013.DataStructure.Studieprogram;
  */
 public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 
-	private final int ROWCOUNT = 20;
+	private final int ROWCOUNT = 18;
 	private Object valgt;
 	private JPanel vis;
+	private JButton rediger, slett;
 	private TestWindow tw;
 	
 	public ListeBoks(TestWindow tw){
@@ -36,12 +39,14 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 	
 	public JPanel visResultat(JList<E> liste){
 		vis = new JPanel(new BorderLayout());
+		JPanel knapper = new JPanel(new GridLayout(2,1));
 
-		JButton rediger = new JButton("Rediger"); 
-		rediger.addActionListener(this);
+		Buttons button = new Buttons(this);
+		rediger = button.generateButton("Rediger", knapper, Buttons.HEL);
+		slett = button.generateButton("Slett", knapper, Buttons.HEL);
 		
 		vis.add(new JScrollPane(liste), BorderLayout.CENTER);
-		vis.add(rediger, BorderLayout.SOUTH);
+		vis.add(knapper, BorderLayout.SOUTH);
 		return vis;
 	}
 
@@ -54,7 +59,7 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 		listen.setVisibleRowCount(ROWCOUNT);
 		listen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listen.addListSelectionListener(this);
-		listen.setFixedCellWidth(290);
+		listen.setFixedCellWidth(390);
 		//listen.setPreferredSize(størrelse);
 		
 		return listen;
@@ -77,6 +82,7 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 	}
 	
 	private void visInfo(Object o){
+		
 		tw.display();
 		if(o instanceof Student)
 			tw.setText(((Student) o).fullString());
@@ -105,6 +111,30 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		PopupVindu pop = new PopupVindu(tw, valgt, tw.getSkole());
+		if(e.getSource() == rediger){
+			PopupVindu pop = new PopupVindu(tw, valgt, tw.getSkole());
+		}
+		else if(e.getSource() == slett){
+			int svar = JOptionPane.showConfirmDialog(
+					tw,
+					"Er du sikker på at du vil slette?",
+					"Slette objekt?",
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.WARNING_MESSAGE);
+			if (svar == JOptionPane.YES_OPTION )
+			{
+				if(valgt instanceof Student)
+					tw.getSkole().getStudentene().removeStudent((Student)valgt);
+				else if(valgt instanceof Laerer)
+					tw.getSkole().getLærerne().removeLærer((Laerer)valgt);
+				else if(valgt instanceof Fag)
+					tw.getSkole().getFagene().removeFag((Fag)valgt);
+				else if(valgt instanceof Studieprogram)
+					tw.getSkole().getStudieprogrammene().removeStudieprogram((Studieprogram)valgt);
+
+				tw.setText(valgt.toString() + " ble fjernet fra systemet.");
+				tw.display();
+			}
+		}
 	}
 }

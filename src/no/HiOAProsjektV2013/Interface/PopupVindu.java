@@ -36,14 +36,14 @@ import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 public class PopupVindu extends JPanel{
 
 	private static final long serialVersionUID = 1073L;
-	private Dimension size = new Dimension(290, 390);
-	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode, beskrivelse, studiepoeng, vurderingsform, fag, eksamensdato, kravbeskrivelse;
-	private JPanel panelet, visepanel, faginfo;
+	private Dimension venstreSize = new Dimension(290, 600), høyreSize = new Dimension(400, 600), infoSize = new Dimension(400, 250);
+	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode, beskrivelse, studiepoeng, vurderingsform, fag, eksamensdato;
+	private JPanel panelet, visepanel, faginfo, kravinfo;
 	private lytter ly = new lytter();
 	private Buttons button = new Buttons(ly);
 	private Object aktiv;
 	private Skole skolen;
-	private JButton leggtil, fjernFag, slett, oppmeldte, arbeidskrav, visFag, visEksamen, tilbake;
+	private JButton leggtil, fjern, oppmeldte, lagreKrav, visFag, visEksamen, visKrav, tilbake;
 	private JComboBox<Fag> velgFag, studentFag;
 	private JComboBox<Laerer> velgLærer;
 	private JComboBox<Eksamen> velgEksamen;
@@ -64,7 +64,7 @@ public class PopupVindu extends JPanel{
 		else if(o instanceof Studieprogram)
 			add(fyllVindu((Studieprogram) o));	
 
-		setPreferredSize(size);
+		setPreferredSize(venstreSize);
 		setVisible(true);
 		vindu.display(this);
 	}
@@ -89,7 +89,7 @@ public class PopupVindu extends JPanel{
 		start.setEditable(false);
 
 		panelet = new JPanel();
-		panelet.setPreferredSize(size);
+		panelet.setPreferredSize(venstreSize);
 		panelet.add(navn);
 		panelet.add(epost);
 		panelet.add(tlf);
@@ -97,7 +97,6 @@ public class PopupVindu extends JPanel{
 		panelet.add(start);
 		visFag = button.generateButton("Vis fag", panelet, Buttons.HEL);
 		button.generateButton("Lagre", panelet, Buttons.HEL);
-		slett = button.generateButton("Slett Student", panelet, Buttons.HEL);
 
 		return panelet;
 	}
@@ -120,13 +119,12 @@ public class PopupVindu extends JPanel{
 		kontorNr.setEditable(true);
 
 		panelet = new JPanel();
-		panelet.setPreferredSize(size);
+		panelet.setPreferredSize(venstreSize);
 		panelet.add(navn);
 		panelet.add(epost);
 		panelet.add(tlf);
 		panelet.add(kontorNr);
 		button.generateButton("Lagre", panelet, Buttons.HEL);
-		slett = button.generateButton("Slett lærer", panelet, Buttons.HEL);
 
 		return panelet;
 	}
@@ -145,8 +143,7 @@ public class PopupVindu extends JPanel{
 		studiepoeng		= new JTextField(""+sp, 20);
 		vurderingsform	= new JTextField(vf, 20);
 		eksamensdato 	= new JTextField("Eksamensdato", 20);
-		kravbeskrivelse	= new JTextField("Arbeidskrav", 20);
-		kravbeskrivelse.addActionListener(ly);
+		beskrivelse		= new JTextField("Arbeidskrav", 20);
 
 		Laerer[] lærerA = new Laerer[skolen.getLærerne().visAlle().size()];
 		skolen.getLærerne().visAlle().toArray(lærerA);
@@ -159,7 +156,7 @@ public class PopupVindu extends JPanel{
 		studiepoeng		.setEditable(false);
 
 		panelet = new JPanel();
-		panelet.setPreferredSize(size);
+		panelet.setPreferredSize(venstreSize);
 		panelet.add(navn);
 		panelet.add(fagkode);
 		panelet.add(beskrivelse);
@@ -167,10 +164,10 @@ public class PopupVindu extends JPanel{
 		panelet.add(vurderingsform);
 		panelet.add(velgLærer);
 
+		visEksamen = button.generateButton("Vis Eksamener", panelet, Buttons.HEL);
+		visKrav = button.generateButton("Vis Arbeidskrav", panelet, Buttons.HEL);
+		
 		button.generateButton("Lagre", panelet, Buttons.HEL);
-		visEksamen = button.generateButton("Vis eksamener", panelet, Buttons.HEL);
-		arbeidskrav = button.generateButton("Legg til arbeidskrav", panelet, Buttons.HEL);
-		slett = button.generateButton("Slett fag", panelet, Buttons.HEL);
 
 		return panelet;
 	}
@@ -198,16 +195,14 @@ public class PopupVindu extends JPanel{
 		fag.setEditable(false);
 
 		panelet = new JPanel();
-		panelet.setPreferredSize(size);
+		panelet.setPreferredSize(venstreSize);
 		panelet.add(navn);
 		panelet.add(fag);
 		panelet.add(velgFag);
 
-
 		button.generateButton("Lagre", panelet, Buttons.HEL);
 		leggtil = button.generateButton("Legg til fag", panelet, Buttons.HEL);
-		fjernFag = button.generateButton("Fjern fag", panelet, Buttons.HEL);
-		slett = button.generateButton("Slett studieprogram", panelet, Buttons.HEL);
+		fjern = button.generateButton("Fjern fag", panelet, Buttons.HEL);
 		return panelet;
 	}
 
@@ -240,10 +235,10 @@ public class PopupVindu extends JPanel{
 	}
 	public JPanel fagPanel(){
 		visepanel = new JPanel();
-		visepanel.setPreferredSize(size);
+		visepanel.setPreferredSize(høyreSize);
 
 		faginfo = new JPanel(new GridLayout(5,1));
-		faginfo.setPreferredSize(new Dimension(260, 180));
+		faginfo.setPreferredSize(infoSize);
 
 		combolytter cl = new combolytter();
 		Fag[] fagB = new Fag[((Student) aktiv).getfagListe().size()];
@@ -265,7 +260,7 @@ public class PopupVindu extends JPanel{
 			visFag();
 
 		visepanel.add(faginfo);		
-		fjernFag = button.generateButton("Fjern fag", visepanel, Buttons.HEL);
+		fjern = button.generateButton("Fjern fag", visepanel, Buttons.HEL);
 
 		visepanel.add(velgFag);
 		leggtil = button.generateButton("Legg til fag", visepanel, Buttons.HEL);
@@ -276,10 +271,10 @@ public class PopupVindu extends JPanel{
 
 	public JPanel eksamensPanel(){
 		visepanel = new JPanel();
-		visepanel.setPreferredSize(size);
+		visepanel.setPreferredSize((høyreSize));
 		
 		faginfo = new JPanel();
-		faginfo.setPreferredSize(new Dimension(260, 210));
+		faginfo.setPreferredSize(infoSize);
 		
 		combolytter cl = new combolytter();
 		Eksamen[] eks = new Eksamen[((Fag)aktiv).getEksamener().size()];
@@ -298,6 +293,7 @@ public class PopupVindu extends JPanel{
 		visepanel.add(faginfo);
 		oppmeldte = button.generateButton("Legg til Oppmeldte", visepanel, Buttons.HEL);
 		visepanel.add(eksamensdato);
+		
 		leggtil = button.generateButton("Legg til Eksamen", visepanel, Buttons.HEL);
 		tilbake = button.generateButton("Tilbake", visepanel, Buttons.HEL);
 		
@@ -321,11 +317,36 @@ public class PopupVindu extends JPanel{
 		}
 
 		JTable resultater = new JTable(celler, kolonnenavn);
-		resultater.setPreferredScrollableViewportSize(new Dimension(245, 160));
+		resultater.setPreferredScrollableViewportSize(new Dimension(390, 200));
 		faginfo.add(new JScrollPane(resultater));
 		faginfo.updateUI();
 	}
 	
+	public JPanel kravPanel(Fag f){
+		visepanel = new JPanel();
+		visepanel.setPreferredSize(høyreSize);
+
+		aktivKrav = f.getKrav();
+
+		kravinfo = new JPanel();
+		kravinfo.setPreferredSize(infoSize);
+		kravinfo.setBorder(BorderFactory.createTitledBorder("Arbeidskrav for " + (f.getNavn())));
+		
+		for(Krav k : f.getKrav().getKrav()){
+			kravinfo.add(new JLabel(k.getBeskrivelse()));
+		}
+
+		visepanel.add(kravinfo);		
+		fjern = button.generateButton("Fjern krav", visepanel, Buttons.HEL);
+		
+		beskrivelse = new JTextField("Nytt arbeidskrav");
+		
+		lagreKrav = button.generateButton("Lagre krav", visepanel, Buttons.HEL);
+		tilbake = button.generateButton("Tilbake", visepanel, Buttons.HEL);
+
+		return visepanel;
+	}
+
 	private class combolytter implements ItemListener{
 		@Override
 		public void itemStateChanged(ItemEvent e) {
@@ -361,9 +382,7 @@ public class PopupVindu extends JPanel{
 				try{
 					if(aktiv instanceof Student){
 						Fag f = (Fag)velgFag.getSelectedItem();
-						Student studenten = (Student) aktiv;
-						studenten.addFag(f);
-						vindu.vis();
+						((Student) aktiv).addFag(f);
 						vindu.cover(fagPanel());
 						visFag(f);
 					}
@@ -377,7 +396,7 @@ public class PopupVindu extends JPanel{
 							Date date = (Date) formatter.parse(eksamensdato.getText());
 							((Fag)aktiv).addEksamen(date);
 							eksamensdato.setText("Eksamen lagret");
-							vindu.display(eksamensPanel());
+							vindu.cover(eksamensPanel());
 						} catch (ParseException pe) {
 							eksamensdato.setText("Feil datoformat");
 						}
@@ -386,66 +405,51 @@ public class PopupVindu extends JPanel{
 					System.out.println("Nullpointerfeil");
 				}
 
-			} else if(e.getSource() == fjernFag) {
+			} else if(e.getSource() == fjern) {
 				try{
 					if(aktiv instanceof Student){
 						((Student) aktiv).removeFag((Fag)studentFag.getSelectedItem());
-						vindu.display(fagPanel());
+						vindu.cover(fagPanel());
 					}
 					else if(aktiv instanceof Studieprogram)
 						((Studieprogram) aktiv).fjernFag(((Fag)velgFag.getSelectedItem()));
+					else if(aktiv instanceof Fag){
+						
+					}
+
 
 				} catch (NullPointerException npe){
 				}
-			} else if(e.getSource() == slett){
-				if(aktiv instanceof Student)
-					skolen.getStudentene().removeStudent((Student)aktiv);
-				else if(aktiv instanceof Laerer)
-					skolen.getLærerne().removeLærer((Laerer)aktiv);
-				else if(aktiv instanceof Fag)
-					skolen.getFagene().removeFag((Fag)aktiv);
-				else if(aktiv instanceof Studieprogram)
-					skolen.getStudieprogrammene().removeStudieprogram((Studieprogram)aktiv);
-
-				vindu.setText(aktiv.toString() + " ble fjernet fra systemet.");
-				vindu.display();
-			}
-			
-			else if(e.getSource() == arbeidskrav){
-				panelet.remove(eksamensdato);
-				panelet.remove(arbeidskrav);
-				panelet.remove(slett);
-				panelet.add(kravbeskrivelse);
-				panelet.add(slett);
-				panelet.updateUI();
 			}
 			
 			else if(e.getSource() == oppmeldte){
 				ArrayList<Student> studentliste = vindu.getSkole().getStudentene().visAlle();
-				((Eksamen)velgEksamen.getSelectedItem()).addOppmeldteStudenter(studentliste);
-				vindu.display(eksamensPanel());
+				((Eksamen)velgEksamen.getSelectedItem()).addOppmeldteStudenter(studentliste, (Fag) aktiv);
+				vindu.cover(eksamensPanel());
 			}
 			
-			else if(e.getSource() == kravbeskrivelse){
-				if(kravbeskrivelse.getText() != "Arbeidskrav lagret")
-					((Fag)aktiv).addKrav(kravbeskrivelse.getText());
-				kravbeskrivelse.setText("Arbeidskrav lagret");
-			} else if(e.getSource() == tilbake){
-				if(aktiv instanceof Student)
-					vindu.vis(); 
-//					vindu.display(fyllVindu((Student)aktiv));
-				else if(aktiv instanceof Fag){
-					vindu.display(fyllVindu((Fag)aktiv));
-				}
+			else if(e.getSource() == lagreKrav){
+				vindu.cover(kravPanel((Fag) aktiv));
+			} 
+			
+			else if(e.getSource() == tilbake){
+				vindu.vis();
+			} 
+			else if(e.getSource() == visEksamen){
+				vindu.cover(eksamensPanel());
+			}
+			else if(e.getSource() == visKrav){
+				vindu.cover(kravPanel((Fag) aktiv));
+			}
+			else if(e.getSource() == visFag){
+				vindu.cover(fagPanel());
 			}
 			else{
-				//vindu.display();
+				vindu.display();
+				vindu.vis();
 
 				if(aktiv instanceof Student){
 					Student s = (Student) aktiv;
-					if(e.getSource() == visFag){
-						vindu.cover(fagPanel());
-					}
 					try{
 						int nr = Integer.parseInt(tlf.getText());
 
@@ -474,9 +478,6 @@ public class PopupVindu extends JPanel{
 
 				} else if(aktiv instanceof Fag){
 					Fag f = (Fag) aktiv;
-					if(e.getSource() == visEksamen){
-						vindu.display(eksamensPanel());
-					}
 					
 					f.setBeskrivelse(beskrivelse.getText());
 					f.setVurderingsform(vurderingsform.getText());

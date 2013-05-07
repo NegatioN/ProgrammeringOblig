@@ -63,7 +63,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode,
 			beskrivelse, studiepoeng, vurderingsform, søkefelt;
 	private JPanel rammeverk, innhold, stud, lær, fag, studprog, display;
-	private Dimension size = new Dimension(300,400);
+	private Dimension innholdSize = new Dimension(300,500), toppSize = new Dimension(900,50), søkSize = new Dimension(170,400);
 	private Border ramme = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 	private JComboBox<Fag> velgFag;
 	private JComboBox<Laerer> velgLærer;
@@ -212,9 +212,9 @@ public class TestWindow extends JFrame implements ActionListener {
 		JPanel leggtil = new JPanel();
 		JPanel visning = new JPanel();
 		display = new JPanel();
-		leggtil.setPreferredSize(new Dimension(800,50));
-		visning.setPreferredSize(new Dimension(170,400));
-		display.setPreferredSize(size);
+		leggtil.setPreferredSize(toppSize);
+		visning.setPreferredSize(søkSize);
+		display.setPreferredSize(innholdSize);
 		leggtil.setBorder(ramme);
 		visning.setBorder(ramme);
 		display.setBorder(ramme);
@@ -291,7 +291,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	//Metoder for å vise relevante felter for registrering av objekter
 	public void student() {
 		stud = new JPanel();
-		stud.setPreferredSize(size);
+		stud.setPreferredSize(innholdSize);
 
 		stud.add(navn);
 		stud.add(epost);
@@ -309,7 +309,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	}
 	public void lærer() {
 		lær = new JPanel();
-		lær.setPreferredSize(size);
+		lær.setPreferredSize(innholdSize);
 
 		lær.add(navn);
 		lær.add(epost);
@@ -321,7 +321,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	}
 	public void fag() {
 		fag = new JPanel();
-		fag.setPreferredSize(size);
+		fag.setPreferredSize(innholdSize);
 		
 		fag.add(navn);
 		fag.add(fagkode);
@@ -335,7 +335,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	}
 	public void studieprog() {
 		studprog = new JPanel();
-		studprog.setPreferredSize(size);
+		studprog.setPreferredSize(innholdSize);
 		
 		studprog.add(navn);
 		studprog.add(lagre);
@@ -369,17 +369,16 @@ public class TestWindow extends JFrame implements ActionListener {
 		revalidate();
 	}
 	public void cover(Component c){
-		if(innhold.getComponentCount() < 2){
-			innhold.getComponent(FØRSTE).setVisible(false);
-			innhold.add(c);
-			System.out.println(innhold.getComponentCount());
-			innhold.updateUI();
-			revalidate();
-		}
+		vis();
+		innhold.getComponent(0).setVisible(false);
+		innhold.add(c);
+		innhold.updateUI();
+		revalidate();
 	}
 	public void vis(){
-		innhold.getComponent(FØRSTE).setVisible(true);
-		innhold.remove(1);
+		innhold.getComponent(0).setVisible(true);
+		if(innhold.getComponentCount() > 1)
+			innhold.remove(1);
 		innhold.updateUI();
 		revalidate();
 	}
@@ -543,6 +542,7 @@ public class TestWindow extends JFrame implements ActionListener {
 				try{
 					Student s =	skolen.getStudentene().findStudentByStudentNr("s" + (skolen.getStudentene().getStudentnummer() - 1));
 					for(Fag f : ((Studieprogram) velgProg.getSelectedItem()).getFagene()){
+						s.setStudieprogram((Studieprogram)velgProg.getSelectedItem());
 						s.addFag(f);
 					}
 					info.setText(s.fullString());
