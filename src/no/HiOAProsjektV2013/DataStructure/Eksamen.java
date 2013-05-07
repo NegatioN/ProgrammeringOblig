@@ -80,7 +80,7 @@ public class Eksamen implements Serializable{
 	
 	public String toString(){
 		DateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
-		return formatter.format(dato);
+		return formatter.format(dato.getTime());
 	}
 	
 }

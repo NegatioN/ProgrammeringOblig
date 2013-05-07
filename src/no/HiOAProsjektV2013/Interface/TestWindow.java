@@ -370,13 +370,13 @@ public class TestWindow extends JFrame implements ActionListener {
 	}
 	public void cover(Component c){
 		vis();
-		innhold.getComponent(0).setVisible(false);
+		innhold.getComponent(FØRSTE).setVisible(false);
 		innhold.add(c);
 		innhold.updateUI();
 		revalidate();
 	}
 	public void vis(){
-		innhold.getComponent(0).setVisible(true);
+		innhold.getComponent(FØRSTE).setVisible(true);
 		if(innhold.getComponentCount() > 1)
 			innhold.remove(1);
 		innhold.updateUI();

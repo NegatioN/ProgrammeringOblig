@@ -382,7 +382,8 @@ public class PopupVindu extends JPanel{
 				try{
 					if(aktiv instanceof Student){
 						Fag f = (Fag)velgFag.getSelectedItem();
-						((Student) aktiv).addFag(f);
+						Student s = (Student)aktiv;
+						s.addFag(f);
 						vindu.cover(fagPanel());
 						visFag(f);
 					}
@@ -402,6 +403,7 @@ public class PopupVindu extends JPanel{
 						}
 					}
 				} catch (NullPointerException npe){
+					npe.printStackTrace();
 					System.out.println("Nullpointerfeil");
 				}
 
