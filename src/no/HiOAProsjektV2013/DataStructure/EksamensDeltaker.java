@@ -13,7 +13,7 @@ public class EksamensDeltaker implements Serializable{
 	private static final long serialVersionUID = 1041L;
 	private Student deltakeren;
 	private char karakter = '\0';
-	private boolean oppmeldt;
+	private boolean oppmeldt, oppmøtt;
 	private Fag fag;
 	private GregorianCalendar kalender;
 	
@@ -28,6 +28,7 @@ public class EksamensDeltaker implements Serializable{
 	public void setKarakter(char k){
 		char process = Character.toUpperCase(k);
 		karakter = process;
+		setOppmøtt(true);
 	}
 	public char getKarakter(){
 		return karakter;
@@ -53,6 +54,12 @@ public class EksamensDeltaker implements Serializable{
 	
 	public String toString(){
 		return ""+deltakeren.getStudentnummer();
+	}
+	public boolean isOppmøtt() {
+		return oppmøtt;
+	}
+	public void setOppmøtt(boolean oppmøtt) {
+		this.oppmøtt = oppmøtt;
 	}
 	
 }

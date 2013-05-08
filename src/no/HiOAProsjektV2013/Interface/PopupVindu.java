@@ -17,6 +17,7 @@ import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -29,6 +30,9 @@ import javax.swing.JTextField;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 import no.HiOAProsjektV2013.DataStructure.Arbeidskrav;
 import no.HiOAProsjektV2013.DataStructure.Eksamen;
@@ -46,25 +50,23 @@ public class PopupVindu extends JPanel{
 	private Dimension venstreSize = new Dimension(290, 600), høyreSize = new Dimension(400, 600), infoSize = new Dimension(400, 250), tabellSize = new Dimension(385, 200);
 	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode, beskrivelse, studiepoeng, vurderingsform, studentNr, fag, eksamensdato;
 	private JPanel panelet, visepanel, faginfo, kravinfo;
+	private TestWindow vindu;
 	private lytter ly = new lytter();
 	private Buttons button = new Buttons(ly);
 	private Object aktiv;
-	private Skole skolen;
 	private JButton leggtil, fjern, oppmeldte, deltaker , lagreKrav, visFag, visEksamen, visKrav, tilbake;
 	private JComboBox<Fag> velgFag, studentFag;
 	private JComboBox<Laerer> velgLærer;
 	private JComboBox<Eksamen> velgEksamen;
 	private combolytter cl = new combolytter();
-	private TestWindow vindu;
-	private JCheckBox oppmeldtCheck;
-	private Arbeidskrav aktivKrav;
 	private JTable resultater;
+	private JCheckBox oppmeldtCheck;
 	private JList<Krav> kravListe;
+	private Arbeidskrav aktivKrav;
 	private DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); //Setter inputformat for dato
 	
-	public PopupVindu(TestWindow vindu, Object o, Skole skolen){
+	public PopupVindu(TestWindow vindu, Object o){
 		this.vindu = vindu;
-		this.skolen = skolen;
 
 		if(o instanceof Student)
 			add(fyllVindu((Student) o));		
@@ -99,7 +101,7 @@ public class PopupVindu extends JPanel{
 
 		velgFag = new JComboBox<Fag>();
 		velgFag.setPreferredSize(Buttons.HEL);
-		for(Fag f : skolen.getFagene().visAlle()) {
+		for(Fag f : vindu.getSkole().getFagene().visAlle()) {
 			velgFag.addItem((Fag)f);
 		}
 
@@ -167,7 +169,7 @@ public class PopupVindu extends JPanel{
 		velgLærer = new JComboBox<Laerer>();
 		velgLærer.setSelectedItem(f.getLærer());
 		velgLærer.setPreferredSize(Buttons.HEL);
-		for(Laerer l : skolen.getLærerne().visAlle()) {
+		for(Laerer l : vindu.getSkole().getLærerne().visAlle()) {
 			velgLærer.addItem((Laerer)l);
 		}
 
@@ -207,7 +209,7 @@ public class PopupVindu extends JPanel{
 
 		velgFag = new JComboBox<Fag>();
 		velgFag.setPreferredSize(Buttons.HEL);
-		for(Fag f : skolen.getFagene().visAlle()) {
+		for(Fag f : vindu.getSkole().getFagene().visAlle()) {
 			velgFag.addItem((Fag)f);
 		}
 
@@ -273,7 +275,7 @@ public class PopupVindu extends JPanel{
 		visepanel.add(studentFag);
 
 		if(studentFag.getItemCount() > 0)
-			visFag(studentFag.getItemAt(0));
+			visFag(studentFag.getItemAt(TestWindow.FØRSTE));
 		else
 			visFag();
 
@@ -329,7 +331,7 @@ public class PopupVindu extends JPanel{
 		visepanel.add(velgEksamen);
 
 		if(velgEksamen.getItemCount() > 0)
-			visEksamen(velgEksamen.getItemAt(0));
+			visEksamen(velgEksamen.getItemAt(TestWindow.FØRSTE));
 		else
 			visFag();
 
@@ -370,28 +372,13 @@ public class PopupVindu extends JPanel{
 		faginfo.add(new JScrollPane(resultater));
 		faginfo.updateUI();
 	}
-//	public void visEksamen(Student s){
-//		visepanel = new JPanel();
-//		visepanel.setPreferredSize((høyreSize));
-//
-//		faginfo = new JPanel();
-//		faginfo.setPreferredSize(infoSize);
-//		faginfo.setBorder(BorderFactory.createTitledBorder("Eksamener for " + s.geteNavn()));
-//
-//		Tabellmodell modell = new Tabellmodell(s);
-//		resultater = new JTable(modell);
-//		resultater.setPreferredScrollableViewportSize(tabellSize);
-//		faginfo.add(new JScrollPane(resultater));
-//
-//		vindu.cover(visepanel);
-//	}
 
 	private class Tabellmodell extends AbstractTableModel{
 
 		private static final long serialVersionUID = 100110L;
 
-		private String[] kolonnenavn = {"Fag", "Dato", "StudentNr", "Karakter"};
-		private Object[][] celler = {{"", "", "", ""}};
+		private String[] kolonnenavn = {"Fag", "Dato", "StudentNr", "Møtt", "Karakter"};
+		private Object[][] celler = {{"", "", "", "", ""}};
 
 		public Tabellmodell(Eksamen e){
 			if(!e.getDeltakere().isEmpty())
@@ -403,14 +390,15 @@ public class PopupVindu extends JPanel{
 		}
 		
 		private void fyllTabell(int lengde, LinkedList<EksamensDeltaker> eksamener){
-			celler = new Object[lengde][4];
+			celler = new Object[lengde][5];
 
 			int rad = 0;
 			for(EksamensDeltaker ed: eksamener){
 				celler[rad][0] = ed.getFag().getFagkode();
 				celler[rad][1] = formatter.format(ed.getDato().getTime());
 				celler[rad][2] = ed;
-				celler[rad++][3] = new String(""+ed.getKarakter());
+				celler[rad][3] = ed.isOppmøtt();
+				celler[rad++][4] = new String(""+ed.getKarakter());
 			}
 			
 			this.addTableModelListener(new tabellytter());
@@ -434,7 +422,8 @@ public class PopupVindu extends JPanel{
 
 		public boolean isCellEditable(int rad, int kolonne){ 
 			switch (kolonne) {
-			case 2:
+			case 3:
+			case 4:
 				return true;
 			default:
 				return false;
@@ -447,24 +436,34 @@ public class PopupVindu extends JPanel{
 		}
 
 		//For å informere tabellmodellen om kolonnenes datatyper.
+		@SuppressWarnings("unchecked")
 		public Class getColumnClass(int kolonne) {
 			return celler[0][kolonne].getClass();
 		}
 	}
 	private class tabellytter implements TableModelListener{
 		public void tableChanged(TableModelEvent e) {
-			EksamensDeltaker ed = (EksamensDeltaker)resultater.getValueAt(e.getFirstRow(), e.getColumn()-1);
-			String s = (resultater.getValueAt(e.getFirstRow(), e.getColumn())).toString();
-			char k = ed.getKarakter();
-			if(s.matches("[a-fA-F]")){
-				k = s.charAt(0);
-			} else if(s.matches("\0[a-fA-F]")){
-				k = s.charAt(1);
-			}
-			ed.setKarakter(k);
-			visEksamen((Eksamen)velgEksamen.getSelectedItem());
-		}
+			EksamensDeltaker ed = (EksamensDeltaker)resultater.getValueAt(e.getFirstRow(), 2);
 
+			if(e.getColumn() == 3)
+				ed.setOppmøtt((Boolean)resultater.getValueAt(e.getFirstRow(), 3));
+			else{
+				String s = (resultater.getValueAt(e.getFirstRow(), e.getColumn())).toString();
+				char k = ed.getKarakter();
+				if(s.matches("[a-fA-F]")){
+					k = s.charAt(TestWindow.FØRSTE);
+				} else if(s.matches("\0[a-fA-F]")){
+					k = s.charAt(1);
+				}
+				if(k != ed.getKarakter())
+					ed.setKarakter(k);
+			}
+			
+			if(velgEksamen != null)
+				visEksamen((Eksamen)velgEksamen.getSelectedItem());
+			else
+				vindu.cover(eksamensPanel((Student)aktiv));
+		}
 	}
 	private class combolytter implements ItemListener{
 		@Override
@@ -550,12 +549,12 @@ public class PopupVindu extends JPanel{
 			else if(e.getSource() == deltaker){
 				Student s = vindu.getSkole().getStudentene().findStudentByStudentNr(studentNr.getText());
 				((Eksamen)velgEksamen.getSelectedItem()).addDeltaker(s);
-				vindu.cover(eksamensPanel());
+				visEksamen((Eksamen)velgEksamen.getSelectedItem());
 			}
 			else if(e.getSource() == oppmeldte){
 				ArrayList<Student> studentliste = vindu.getSkole().getStudentene().visAlle();
 				((Eksamen)velgEksamen.getSelectedItem()).addOppmeldteStudenter(studentliste);
-				vindu.cover(eksamensPanel());
+				visEksamen((Eksamen)velgEksamen.getSelectedItem());
 			}
 
 			else if(e.getSource() == lagreKrav){

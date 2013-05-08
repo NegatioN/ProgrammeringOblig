@@ -112,7 +112,7 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == rediger){
-			PopupVindu pop = new PopupVindu(tw, valgt, tw.getSkole());
+			PopupVindu pop = new PopupVindu(tw, valgt);
 		}
 		else if(e.getSource() == slett){
 			int svar = JOptionPane.showConfirmDialog(
