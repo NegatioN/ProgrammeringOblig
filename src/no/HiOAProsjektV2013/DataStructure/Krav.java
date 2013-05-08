@@ -33,5 +33,8 @@ public class Krav implements Serializable{
 		return beskrivelse;
 	}
 	
+	public String toString() {
+		return beskrivelse;
+	}
 	
 }

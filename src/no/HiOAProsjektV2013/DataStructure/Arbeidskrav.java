@@ -33,6 +33,9 @@ public class Arbeidskrav implements Serializable, Cloneable{
 	public void addKrav(Krav krav) {
 		register.add(krav);
 	}
+	public void fjernKrav(Krav krav){
+		register.remove(krav);
+	}
 	public String getFagkode(){
 		return fagkode;
 	}
@@ -69,5 +72,4 @@ public class Arbeidskrav implements Serializable, Cloneable{
 		}
 		return kravet;
 	}
-
 }
