@@ -58,17 +58,6 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 	public void avsluttStudent(Student student, GregorianCalendar dato){
 		student.setSlutt(dato);
 	}
-
-	//finnes ved knapp i Studentinfo-display
-	public ArrayList<Student> findKravBeståttStudenter(Fag fag) {
-		ArrayList<Student> studentene = new ArrayList<>();
-		for(Student s : register){
-			if(s.innfriddKrav(fag))
-				studentene.add(s);
-		}
-		
-		return studentene;
-	}
 	
 	//finner studentene basert på fornavn/etternavn og samler begge søkene til en arraylist.
 	public ArrayList<Student> findByNavn(String input){

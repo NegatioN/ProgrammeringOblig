@@ -7,9 +7,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.regex.Pattern;
 
-import no.HiOAProsjektV2013.Main.EtternavnSammenligner;
-import no.HiOAProsjektV2013.Main.FornavnSammenligner;
-
 //abstrakt parent-class for å minimere kodeduplikasjon i StudentListe og LaererListe
 //FIKS NAVNSORTERING PÅ LÆRERE JOAKIM
 public abstract class PersonListe<E> implements Serializable{
@@ -28,10 +25,15 @@ public abstract class PersonListe<E> implements Serializable{
 		String[] navn = nameSplitter(input);
 		System.out.println(navn[0] + "\t" + navn[1]);
 		
-		char fFirstLetter = navn[FØRSTE].charAt(FØRSTE);
+		char fFirstLetter = '\0', eFirstLetter = '\0';
+		try{
+		fFirstLetter = navn[FØRSTE].charAt(FØRSTE);
 		fFirstLetter = Character.toUpperCase(fFirstLetter);
-		char eFirstLetter = navn[ANDRE].charAt(FØRSTE);
+		eFirstLetter = navn[ANDRE].charAt(FØRSTE);
 		eFirstLetter = Character.toUpperCase(eFirstLetter);
+		}catch(StringIndexOutOfBoundsException e){
+			e.printStackTrace();
+		}
 		
 		int max = (etternavnRegister.size() - 1);
 		int min = 0;

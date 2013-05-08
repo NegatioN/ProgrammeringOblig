@@ -93,7 +93,6 @@ public class Skole implements Serializable{
 	//****************SØØØØØØØØØØK SØKEMETODER SØØØØØØØØØØK****************//
 	
 	public ArrayList<?> søk(String input, int qualifier){ //Sjekker inputen i søkefeltet og utfører relevante søk
-//		System.out.println(studs.toString());
 		
 		if(qualifier == TestWindow.FAG){
 			ArrayList<Fag> fagene = fagSøk(input);
@@ -209,6 +208,19 @@ public class Skole implements Serializable{
 	public int[] findKarakterDistribusjon(Fag fag, Eksamen e){
 		int[] karakterene = fag.findKarakterDistribusjon(e);
 		return karakterene;
+	}
+	
+	//finner studenter med beståtte arbeidskrav i gitt fag. (som ikke har sluttet)
+	public ArrayList<Student> findKravBeståtteStudenter(Fag fag){
+		ArrayList<Student> studentene = new ArrayList<>();
+		
+		for(Student s : fag.getStudenter()){
+			if(!s.isAvsluttet()){
+				if(s.innfriddKrav(fag))
+					studentene.add(s);
+			}
+		}		
+		return studentene;
 	}
 	//private søkemetoder for vanlige søk i hovedmeny
 	private ArrayList<Fag> fagSøk(String input){

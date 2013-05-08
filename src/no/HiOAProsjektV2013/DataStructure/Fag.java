@@ -173,10 +173,11 @@ public class Fag implements Serializable{
 		int antallStryk = 0;
 		for(EksamensDeltaker ed : deltakere){
 			char karakter = ed.getKarakter();
-			if(karakter == 'f' || karakter == 'F')
+			if(karakter == 'f' || karakter == 'F'){
 				antallStryk++;
+			}
 		}
-		double strykProsent = (antallStryk/antallStudenter)*100;
+		double strykProsent = ((double)antallStryk/(double)antallStudenter)*100;
 		
 		return strykProsent;
 	}
