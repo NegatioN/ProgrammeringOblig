@@ -32,9 +32,11 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 	private JPanel vis;
 	private JButton rediger, slett;
 	private TestWindow tw;
+	private RightClickMenus popup;
 	
 	public ListeBoks(TestWindow tw){
 		this.tw = tw;
+		popup = new RightClickMenus(tw);
 	}
 	
 	public JPanel visResultat(JList<E> liste){
@@ -47,6 +49,7 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 		
 		vis.add(new JScrollPane(liste), BorderLayout.CENTER);
 		vis.add(knapper, BorderLayout.SOUTH);
+		
 		return vis;
 	}
 
@@ -59,6 +62,7 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 		listen.setVisibleRowCount(ROWCOUNT);
 		listen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listen.addListSelectionListener(this);
+		listen.addMouseListener(popup);
 		listen.setFixedCellWidth(390);
 		//listen.setPreferredSize(størrelse);
 		
@@ -73,7 +77,6 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 			public void actionPerformed(ActionEvent e) {
 				JComboBox<?> boks = (JComboBox<?>) e.getSource();
 				int i = boks.getSelectedIndex();
-				//GJØR MER STUFF
 			}
 			
 		});

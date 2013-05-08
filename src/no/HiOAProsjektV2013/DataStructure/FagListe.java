@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.swing.JOptionPane;
+
 /*
  * Liste over fag, med diverse metoder for å søke på fagene.
  */
@@ -69,6 +71,7 @@ public class FagListe implements Serializable{
 			register.add(faget);
 			return true;
 		}
+		JOptionPane.showMessageDialog(null, "Fagkoden er allerede i bruk. \nVennligst bruk en annen.");
 		return false;
 	}
 	

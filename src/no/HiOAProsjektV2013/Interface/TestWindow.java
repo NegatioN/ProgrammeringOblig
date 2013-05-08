@@ -71,13 +71,13 @@ public class TestWindow extends JFrame implements ActionListener {
 	//endre
 	private int selectedValue = STUDENT;
 	
-	private final String fagkodeRegex = "\\D{4}\\d{4}";
-	private final String studentNrRegex = "s\\d{6}";
-	private final String årRegex = "\\d{4}";
-	private final String mobRegex = "\\d{8}";
-	private final String mailRegex = "\\S+@\\S+.\\S+";
-	private final String navnRegex = "\\S+\\s\\S+";
-	private final String datoRegex = "\\D";
+	public static String fagkodeRegex = "\\D{4}\\d{4}";
+	public static String studentNrRegex = "s\\d{6}";
+	public static String årRegex = "\\d{4}";
+	public static String mobRegex = "\\d{8}";
+	public static String mailRegex = "\\S+@\\S+.\\S+";
+	public static final String navnRegex = "\\S+\\s\\S+";
+	public static final String datoRegex = "\\D";
 	
 	private JMenuBar meny;
 
@@ -157,6 +157,10 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		
 		setJMenuBar(meny);
+	}
+	public void listApplier(ArrayList<Student> studenter){
+		JList<Student> listen = studentboks.listify(studenter);
+		vis(studentboks.visResultat(listen));
 	}
 	//kanskje kaste denne inn i testwindow pga at den må update selectedValue, og jeg er usikker på å ta inn et TestWindow her.
 	//for valuePassing til søk

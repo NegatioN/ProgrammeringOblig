@@ -43,6 +43,7 @@ public class Fag implements Serializable{
 		studenter.add(s);
 	}
 	public ArrayList<Student> getStudenter(){
+		System.out.println(studenter.toString());
 		return studenter;
 	}
 

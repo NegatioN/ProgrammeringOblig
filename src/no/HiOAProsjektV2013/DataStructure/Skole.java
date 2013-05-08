@@ -122,6 +122,11 @@ public class Skole implements Serializable{
 		
 		return studentene;
 	}
+	public ArrayList<Student> findStudentMedFag(Fag fag){
+		ArrayList<Student> studentene = fag.getStudenter();
+		System.out.println(studentene.toString());
+		return studentene;
+	}
 	
 	public ArrayList<Student> findStudentMedFagByÅr(String input, int år){
 		ArrayList<Student> studenter = new ArrayList<>();

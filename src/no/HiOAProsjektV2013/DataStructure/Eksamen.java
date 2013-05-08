@@ -34,6 +34,9 @@ public class Eksamen implements Serializable{
 		addOppmeldteStudenter(studenter);
 	}
 
+	public Fag getFag(){
+		return fag;
+	}
 	public Date getDato() {
 		return dato.getTime();
 	}
