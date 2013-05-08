@@ -17,7 +17,7 @@ public class Eksamen implements Serializable{
 	
 	private static final long serialVersionUID = 1040L;
 	private GregorianCalendar dato;
-	private List<EksamensDeltaker> deltakere = new LinkedList<>();
+	private LinkedList<EksamensDeltaker> deltakere = new LinkedList<>();
 	private Fag fag;
 	
 	public Eksamen(Date dato, Fag fag){
@@ -43,7 +43,7 @@ public class Eksamen implements Serializable{
 	public void setDato(Date dato) {
 		this.dato.setTime(dato);
 	}
-	public List<EksamensDeltaker> getDeltakere(){
+	public LinkedList<EksamensDeltaker> getDeltakere(){
 		return deltakere;
 	}
 	

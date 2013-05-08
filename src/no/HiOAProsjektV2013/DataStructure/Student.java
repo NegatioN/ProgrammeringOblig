@@ -17,7 +17,7 @@ public class Student extends Person implements Serializable{
 	private String adresse;
 	private int studentnummer;
 	private GregorianCalendar start, slutt;
-	private List<EksamensDeltaker> eksamener = new LinkedList<>();
+	private LinkedList<EksamensDeltaker> eksamener = new LinkedList<>();
 	//faglista er kun pointers
 	private List<Fag> fagListe = new LinkedList<>();
 	//kravlisten er de individuelle objektene som opprettes per student.
@@ -216,7 +216,7 @@ public class Student extends Person implements Serializable{
 	public List<Fag> getfagListe(){
 		return fagListe;
 	}
-	public List<EksamensDeltaker> getEksamener(){
+	public LinkedList<EksamensDeltaker> getEksamener(){
 		return eksamener;
 	}
 

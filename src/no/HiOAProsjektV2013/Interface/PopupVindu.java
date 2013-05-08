@@ -3,6 +3,7 @@ package no.HiOAProsjektV2013.Interface;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -12,6 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -58,7 +60,8 @@ public class PopupVindu extends JPanel{
 	private Arbeidskrav aktivKrav;
 	private JTable resultater;
 	private JList<Krav> kravListe;
-
+	private DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); //Setter inputformat for dato
+	
 	public PopupVindu(TestWindow vindu, Object o, Skole skolen){
 		this.vindu = vindu;
 		this.skolen = skolen;
@@ -79,7 +82,6 @@ public class PopupVindu extends JPanel{
 	public Component fyllVindu(Student s){
 		aktiv = s;
 
-		DateFormat formatter = new SimpleDateFormat("dd-MMM-yy");
 		String studNavn = s.getfNavn() +" "+ s.geteNavn();
 		String studEpost = s.getEpost();
 		String studTlf = s.getTelefonNr() + "";
@@ -111,8 +113,9 @@ public class PopupVindu extends JPanel{
 		panelet.add(velgFag);
 		leggtil = button.generateButton("Legg til fag", panelet, Buttons.HEL);
 		panelet.add(Box.createRigidArea(Buttons.HEL));
-
+		
 		visFag = button.generateButton("Vis fag", panelet, Buttons.HEL);
+		visEksamen = button.generateButton("Vis Eksamener", panelet, Buttons.HEL);
 		button.generateButton("Lagre", panelet, Buttons.HEL);
 
 		return panelet;
@@ -184,8 +187,8 @@ public class PopupVindu extends JPanel{
 		leggtil = button.generateButton("Legg til Eksamen", panelet, Buttons.HEL);
 		panelet.add(Box.createRigidArea(Buttons.HEL));
 
-		visKrav = button.generateButton("Vis Arbeidskrav", panelet, Buttons.HEL);
 		visEksamen = button.generateButton("Vis Eksamener", panelet, Buttons.HEL);
+		visKrav = button.generateButton("Vis Arbeidskrav", panelet, Buttons.HEL);
 		button.generateButton("Lagre", panelet, Buttons.HEL);
 
 		return panelet;
@@ -340,6 +343,23 @@ public class PopupVindu extends JPanel{
 		visepanel.updateUI();
 		return visepanel;
 	}
+	public JPanel eksamensPanel(Student s){
+		visepanel = new JPanel();
+		visepanel.setPreferredSize((høyreSize));
+
+		faginfo = new JPanel();
+		faginfo.setPreferredSize(infoSize);
+		faginfo.setBorder(BorderFactory.createTitledBorder("Eksamener for " + s.getfNavn() + " " + s.geteNavn()));
+
+		Tabellmodell modell = new Tabellmodell(s);
+		resultater = new JTable(modell);
+		resultater.setPreferredScrollableViewportSize(tabellSize);
+		faginfo.add(new JScrollPane(resultater));
+
+		visepanel.add(faginfo);
+		tilbake = button.generateButton("Tilbake", visepanel, Buttons.HEL);
+		return visepanel;
+	}
 	public void visEksamen(Eksamen e){
 		faginfo.removeAll();
 		faginfo.setBorder(BorderFactory.createTitledBorder("Eksamen for " + ((Fag)aktiv).getNavn()));
@@ -350,32 +370,52 @@ public class PopupVindu extends JPanel{
 		faginfo.add(new JScrollPane(resultater));
 		faginfo.updateUI();
 	}
+//	public void visEksamen(Student s){
+//		visepanel = new JPanel();
+//		visepanel.setPreferredSize((høyreSize));
+//
+//		faginfo = new JPanel();
+//		faginfo.setPreferredSize(infoSize);
+//		faginfo.setBorder(BorderFactory.createTitledBorder("Eksamener for " + s.geteNavn()));
+//
+//		Tabellmodell modell = new Tabellmodell(s);
+//		resultater = new JTable(modell);
+//		resultater.setPreferredScrollableViewportSize(tabellSize);
+//		faginfo.add(new JScrollPane(resultater));
+//
+//		vindu.cover(visepanel);
+//	}
 
 	private class Tabellmodell extends AbstractTableModel{
 
 		private static final long serialVersionUID = 100110L;
 
-		Eksamen e;
-		private String[] kolonnenavn = {"Dato", "StudentNr", "Karakter"};
-		private Object[][] celler = {{"", "", ""}};
+		private String[] kolonnenavn = {"Fag", "Dato", "StudentNr", "Karakter"};
+		private Object[][] celler = {{"", "", "", ""}};
 
 		public Tabellmodell(Eksamen e){
-			this.e = e;
-			this.addTableModelListener(new tabellytter());
-
-			if(!e.getDeltakere().isEmpty()){
-				celler = new Object[e.getDeltakere().size()][3];
-				DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); //Setter inputformat for dato
-
-				int rad = 0;
-				for(EksamensDeltaker ed: e.getDeltakere()){
-					celler[rad][0] = formatter.format(e.getDato());
-					celler[rad][1] = ed;
-					celler[rad++][2] = new String(""+ed.getKarakter());
-				}
-			}
+			if(!e.getDeltakere().isEmpty())
+				fyllTabell(e.getDeltakere().size(), e.getDeltakere());
 		}
+		public Tabellmodell(Student s){
+			if(!s.getEksamener().isEmpty())
+				fyllTabell(s.getEksamener().size(), s.getEksamener());
+		}
+		
+		private void fyllTabell(int lengde, LinkedList<EksamensDeltaker> eksamener){
+			celler = new Object[lengde][4];
 
+			int rad = 0;
+			for(EksamensDeltaker ed: eksamener){
+				celler[rad][0] = ed.getFag().getFagkode();
+				celler[rad][1] = formatter.format(ed.getDato().getTime());
+				celler[rad][2] = ed;
+				celler[rad++][3] = new String(""+ed.getKarakter());
+			}
+			
+			this.addTableModelListener(new tabellytter());
+		}
+		
 		public Object getValueAt(int rad, int kolonne){
 			return celler[rad][kolonne];
 		}
@@ -473,7 +513,6 @@ public class PopupVindu extends JPanel{
 					}
 					else if(aktiv instanceof Fag){
 						try {
-							DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); //Setter inputformat for dato
 							Date date = (Date) formatter.parse(eksamensdato.getText());
 							Eksamen eks = new Eksamen(date, (Fag)aktiv);
 							((Fag)aktiv).addEksamen(eks);
@@ -528,7 +567,10 @@ public class PopupVindu extends JPanel{
 				vindu.vis();
 			} 
 			else if(e.getSource() == visEksamen){
-				vindu.cover(eksamensPanel());
+				if(aktiv instanceof Student)
+					vindu.cover(eksamensPanel((Student)aktiv));
+				else
+					vindu.cover(eksamensPanel());
 			}
 			else if(e.getSource() == visKrav){
 				vindu.cover(kravPanel((Fag) aktiv));
