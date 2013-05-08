@@ -125,7 +125,7 @@ public class Fag implements Serializable{
 	// returnerer en array av intverdier som representerer antall av hver
 	// karakter fra A = array[0] til F = array[6]
 	public int[] findKarakterDistribusjon(int år) {
-		Eksamen e = findEksamenByDate(år);
+		Eksamen e = findEksamenByÅr(år);
 		int[] karakterene = findKarakterDistribusjon(e);
 		
 		return karakterene;
@@ -161,8 +161,8 @@ public class Fag implements Serializable{
 		return karakterene;
 	}
 	//returnerer double-verdi med strykprosenten i eksamen på gitt dato i dette bestemte faget.
-	public double findStrykProsentByDate(int år){
-		Eksamen e = findEksamenByDate(år);
+	public double findStrykProsentByÅr(int år){
+		Eksamen e = findEksamenByÅr(år);
 		
 		double strykProsent = findStrykProsentEksamen(e);
 		return strykProsent;
@@ -183,7 +183,7 @@ public class Fag implements Serializable{
 		return strykProsent;
 	}
 
-	private Eksamen findEksamenByDate(int år) {
+	private Eksamen findEksamenByÅr(int år) {
 		for (Eksamen e : eksamener) {
 			if (e.getKalender().get(Calendar.YEAR) == år)
 				return e;

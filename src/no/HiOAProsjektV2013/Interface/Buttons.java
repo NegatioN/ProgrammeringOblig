@@ -21,7 +21,19 @@ public class Buttons implements ActionListener{
 	public Buttons( ActionListener al){
 		this.al = al;
 	}
-	
+	public JButton generateButton(String name, JPanel panelet, Dimension size, ActionListener actionListener){
+		JButton knapp = new JButton(name);
+		knapp.setPreferredSize(size);
+		knapp.addActionListener(actionListener);
+		panelet.add(knapp);
+		return knapp;
+	}
+	public JButton generateButton(String name, Dimension size, ActionListener actionListener){
+		JButton knapp = new JButton(name);
+		knapp.setPreferredSize(size);
+		knapp.addActionListener(actionListener);
+		return knapp;
+	}
 	public JButton generateButton(String name, JPanel panelet, Dimension size){
 		JButton knapp = new JButton(name);
 		knapp.setPreferredSize(size);

@@ -58,16 +58,17 @@ public class TestWindow extends JFrame implements ActionListener {
 	private ListeBoks<Studieprogram> studieboks = new ListeBoks<>(this);
 	private JTextArea info;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
-			vislærer, visfag, visstudieprog, lagre, leggtilfag, settiprog, søkeknapp, avansert;
+			vislærer, visfag, visstudieprog, lagre, leggtilfag, settiprog, søkeknapp, avansert, visAvansert, tilbake;
 	private JRadioButton studentCheck, lærerCheck, fagCheck, studieCheck;
-	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode,
-			beskrivelse, studiepoeng, vurderingsform, søkefelt;
+	private JTextField navn, epost, tlf, adresse, innDato, utDato, kontorNr, fagkode,
+			beskrivelse, studiepoeng, vurderingsform, søkefelt, innÅr, utÅr, studNr;
 	private JPanel rammeverk, innhold, stud, lær, fag, studprog, display;
 	private Dimension innholdSize = new Dimension(300,500), toppSize = new Dimension(900,50), søkSize = new Dimension(170,400);
 	private Border ramme = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 	private JComboBox<Fag> velgFag;
 	private JComboBox<Laerer> velgLærer;
 	private JComboBox<Studieprogram> velgProg;
+	private int type;
 	//endre
 	private int selectedValue = STUDENT;
 	
@@ -228,10 +229,9 @@ public class TestWindow extends JFrame implements ActionListener {
 		søkefelt.addActionListener(new søkelytter());
 		visning.add(søkefelt);
 		
-		søkeknapp 		= buttonGenerator.generateButton("Søk", visning, Buttons.HALV);
-		søkeknapp.addActionListener(new søkelytter());
+		søkeknapp 		= buttonGenerator.generateButton("Søk", visning, Buttons.HALV, new søkelytter());
 		generateButtonGroup(visning);
-		avansert 		= buttonGenerator.generateButton("Avansert søk", visning, Buttons.HALV);
+		visAvansert 		= buttonGenerator.generateButton("Avansert søk", visning, Buttons.HALV);
 		visning.add(Box.createRigidArea(Buttons.HALV));
 
 		nystudent 		= buttonGenerator.generateButton("Legg til student", leggtil, Buttons.HALV);
@@ -261,12 +261,16 @@ public class TestWindow extends JFrame implements ActionListener {
 		epost	 		= new JTextField("E-post", 20);
 		tlf		 		= new JTextField("Telefon", 20);
 		adresse			= new JTextField("Adresse", 20);
-		start			= new JTextField("Startdato", 20);
+		innDato			= new JTextField("Startdato", 20);
+		utDato			= new JTextField("Sluttdato", 20);
 		kontorNr		= new JTextField("Kontornummer", 20);
 		fagkode			= new JTextField("Fagkode", 20);
 		beskrivelse		= new JTextField("Beskrivelse", 20);
 		vurderingsform	= new JTextField("Vurderingsform", 20);
 		studiepoeng		= new JTextField("Studiepoeng", 20);
+		innÅr 			= new JTextField("År", 20);
+		utÅr			= new JTextField("År", 20);
+		studNr 			= new JTextField("StudentNr", 20);
 		
 		Fag[] fagA = new Fag[skolen.getFagene().visAlle().size()];
 		skolen.getFagene().visAlle().toArray(fagA);
@@ -283,10 +287,12 @@ public class TestWindow extends JFrame implements ActionListener {
 		velgProg = new JComboBox<Studieprogram>(progA);
 		velgProg.setPreferredSize(Buttons.HEL);
 		
-		lagre = buttonGenerator.generateButton("Lagre", Buttons.HEL);
-		lagre.addActionListener(new lagrelytter());
-		leggtilfag = buttonGenerator.generateButton("Legg til fag", Buttons.HEL);
-		settiprog = buttonGenerator.generateButton("Velg studieprogram", Buttons.HEL);
+		lagre 		= buttonGenerator.generateButton("Lagre", Buttons.HEL, new lagrelytter());
+		leggtilfag 	= buttonGenerator.generateButton("Legg til fag", Buttons.HEL);
+		settiprog 	= buttonGenerator.generateButton("Velg studieprogram", Buttons.HEL);
+		avansert 	= buttonGenerator.generateButton("Søk", Buttons.HEL, new søkelytter());
+		tilbake 	= buttonGenerator.generateButton("Tilbake", Buttons.HEL);
+
 		innhold = new JPanel();
 		innhold.setBorder( ramme);
 		
@@ -303,7 +309,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		stud.add(epost);
 		stud.add(tlf);
 		stud.add(adresse);
-		stud.add(start);
+		stud.add(innDato);
 		stud.add(lagre);
 		stud.add(Box.createRigidArea(Buttons.HEL));
 		stud.add(velgProg);
@@ -351,7 +357,59 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		vis(studprog);
 	}
+	public void avansert(int type){
+		JPanel søk = new JPanel();
+		søk.setPreferredSize(innholdSize);
+		
+		final int VELGSØK = 0, STUDENTFAG = 1, STUDENTPERIODE = 2, STUDENTPROGRAM = 3, POENGSTUDENT = 4, KARAKTER = 5;
+		
+		refresh();
+		
+		Buttons b = new Buttons(new søkelytter());
+		
+		switch(type){
+		case STUDENTFAG:
+			søk.add(velgFag);
+			søk.add(innÅr);
+			søk.add(avansert);
+			søk.add(tilbake);
+			break;
+		case STUDENTPERIODE:
+			søk.add(innÅr);
+			søk.add(utÅr);
+			søk.add(avansert);
+			søk.add(tilbake);
+			break;
+		case STUDENTPROGRAM:
+			søk.add(velgProg);
+			søk.add(innÅr);
+			søk.add(avansert);
+			søk.add(tilbake);
+			break;
+		case POENGSTUDENT:
+			søk.add(studNr);
+			søk.add(innÅr);
+			søk.add(utÅr);
+			søk.add(avansert);
+			søk.add(tilbake);
+			break;
+		case KARAKTER:
+			søk.add(velgFag);
+			søk.add(innDato);
+			søk.add(avansert);
+			søk.add(tilbake);
+			break;
+		default:
+			søk.add(b.generateButton("Finn studenter med fag", Buttons.HEL));
+			søk.add(b.generateButton("Finn studenter i periode", Buttons.HEL));
+			søk.add(b.generateButton("Finn studenter i studieprogram", Buttons.HEL));
+			søk.add(b.generateButton("Finn studiepoeng for student", Buttons.HEL));
+			søk.add(b.generateButton("Finn karakterfordeling", Buttons.HEL));
+		}
 
+		vis(søk);
+	}
+	
 	//Resetter tekstfeltene
 	public void refresh(){
 		
@@ -359,12 +417,16 @@ public class TestWindow extends JFrame implements ActionListener {
 		epost			.setText("E-post");
 		tlf				.setText("Telefon");
 		adresse			.setText("Adresse");
-		start			.setText("Startdato");
+		innDato			.setText("Startdato");
+		utDato			.setText("Sluttdato");
 		kontorNr		.setText("Kontornummer");
 		fagkode			.setText("Fagkode");
 		beskrivelse		.setText("Beskrivelse");
 		vurderingsform	.setText("Vurderingsform");
 		studiepoeng		.setText("Studiepoeng");
+		innÅr 			.setText("Startår");
+		utÅr			.setText("Sluttår");
+		studNr 			.setText("StudentNr");
 	}
 	//Oppdaterer innholdspanelet
 	public void vis(Component c){
@@ -441,6 +503,13 @@ public class TestWindow extends JFrame implements ActionListener {
 		if (e.getSource() == visstudieprog) {
 			vis(studieboks.visResultat(studieboks.listify(skolen.getStudieprogrammene().visAlle())));
 		}
+		
+		if (e.getSource() == visAvansert){
+			avansert(type = 0);
+		}
+		if (e.getSource() == tilbake){
+			avansert(type = 0);
+		}
 				
 		if (e.getSource() == leggtilfag) {
 			if(innhold.getComponent(FØRSTE).equals(studprog)){
@@ -471,6 +540,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	}
 	
 	private class søkelytter implements ActionListener{
+		@SuppressWarnings("unchecked")
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == søkefelt || e.getSource() == søkeknapp) {
 
@@ -501,6 +571,109 @@ public class TestWindow extends JFrame implements ActionListener {
 					vis(new JPanel());
 					setText("Ingen treff");
 				}
+			} 
+			
+			else if(e.getSource() == avansert){
+				String fk = fagkode.getText();
+				String n = navn.getText();
+				String inn = innÅr.getText();
+				String ut = utÅr.getText();
+				String nr = studNr.getText();
+				String d = innDato.getText();
+
+				switch(type){
+				case 1:
+					JList<Student> listen = null;
+//					if(fk.matches(fagkodeRegex)){
+						if(inn.matches(årRegex))
+							listen = studentboks.listify(skolen.findStudentMedFagByÅr(((Fag)velgFag.getSelectedItem()).getFagkode(),Integer.parseInt(inn)));
+						else
+							listen = studentboks.listify(skolen.findStudentMedFag(((Fag)velgFag.getSelectedItem()).getFagkode()));
+					vis(studentboks.visResultat(listen));
+//					}
+					break;
+				case 2:
+					listen = null;
+					if(inn.matches(årRegex)){
+						if(ut.matches(årRegex))
+							System.out.println("Lage en periodemetode");//listen = studentboks.listify(skolen.findStudentByPeriode(inn,ut);
+						else
+							listen = studentboks.listify(skolen.findStudentByStart(inn));
+					} else
+						listen = studentboks.listify(skolen.findStudentBySlutt(ut));
+					vis(studentboks.visResultat(listen));
+					break;
+				case 3:
+					listen = null;
+					Studieprogram sp = (Studieprogram)velgProg.getSelectedItem();
+					if(inn.matches(årRegex)){
+						listen = studentboks.listify(skolen.findStudentByStudieprogramByStart(sp, Integer.parseInt(inn)));
+					} else
+						listen = studentboks.listify(skolen.findStudentsByStudieprogram(sp.getNavn()));
+					if(listen != null)
+						vis(studentboks.visResultat(listen));
+					break;
+				case 4:
+					int poeng = 0;
+					if(nr.matches(studentNrRegex)){
+						Student s = skolen.getStudentene().findStudentByStudentNr(nr);
+						if(inn.matches(årRegex)){
+							if(ut.matches(årRegex))
+								poeng = skolen.findStudiepoengForStudIPeriode(s, inn, ut);
+							else
+								poeng = skolen.findStudiepoengForStudIPeriode(s, inn, "3000");
+						} else if(ut.matches(årRegex))
+							poeng = skolen.findStudiepoengForStudIPeriode(s, "1000", ut);
+						else
+							poeng = skolen.findStudiepoengForStudIPeriode(s, "1000", "3000");
+						setText("Studiepoeng for " + s.getfNavn() + " " + s.geteNavn() + ": " + poeng);
+					}
+					break;
+				case 5:
+//					if(fk.matches(fagkodeRegex)){
+						Fag f = (Fag)velgFag.getSelectedItem();
+						int[] karakterer = null;
+						if(d.matches(årRegex)){
+							 karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(d));
+							 setText("Karakterdistribusjon:  \nA: " + karakterer[0] + "\nB: " + karakterer[1] + "\nC: " + karakterer[2] + 
+									 						"\nD: " + karakterer[3] + "\nE: " + karakterer[4] + "\nF: " + karakterer[0] +
+									 						"\nStrykprosent: " + skolen.findStrykProsent(f, Integer.parseInt(d)));
+						} else if (d.matches(datoRegex)){
+							karakterer = skolen.findKarakterDistribusjon(f, f.getRecentEksamen());
+							 setText("Karakterdistribusjon:  \nA: " + karakterer[0] + "\nB: " + karakterer[1] + "\nC: " + karakterer[2] + 
+									 						"\nD: " + karakterer[3] + "\nE: " + karakterer[4] + "\nF: " + karakterer[0] +
+									 						"\nStrykprosent: " + skolen.findStrykProsent(f, f.getRecentEksamen()));
+						}
+//					}
+					break;
+				default:
+					avansert(0);
+				}
+
+			} else {
+
+				JButton knapp = (JButton)e.getSource();
+				
+				switch(knapp.getText()){
+				case "Finn studenter med fag":
+					type = 1;
+					break;
+				case "Finn studenter i periode":
+					type = 2;
+					break;
+				case "Finn studenter i studieprogram":
+					type = 3;				
+					break;
+				case "Finn studiepoeng for student":
+					type = 4;				
+					break;
+				case "Finn karakterfordeling":
+					type = 5;			
+					break;
+				default:
+					type = 0;
+				}
+				avansert(type);
 			}
 		}
 	}
@@ -527,7 +700,7 @@ public class TestWindow extends JFrame implements ActionListener {
 							navn.setText("Fornavn og Etternavn");
 							return;
 						}
-						Date date = (Date) formatter.parse(start.getText());
+						Date date = (Date) formatter.parse(innDato.getText());
 						GregorianCalendar dato = (GregorianCalendar) GregorianCalendar.getInstance();
 						dato.setTime(date);
 
@@ -543,7 +716,7 @@ public class TestWindow extends JFrame implements ActionListener {
 					} catch (NumberFormatException nfe){
 						tlf.setText("Feil nummerformat");
 					} catch (ParseException pe) {
-						start.setText("Feil datoformat");
+						innDato.setText("Feil datoformat");
 					}
 					
 				} 

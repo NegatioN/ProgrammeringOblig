@@ -151,6 +151,13 @@ public class Skole implements Serializable{
 		ArrayList<Student> studentene = getStudentene().findStudentBySlutt(sluttÅr);
 		return studentene;
 	}
+	//finner studenter som gikk på skolen i perioden brukeren søker på.
+//	public ArrayList<Student> findStudentByPeriode(String start, String slutt){
+//		int startÅr = Integer.parseInt(start);
+//		int sluttÅr = Integer.parseInt(slutt);
+//		ArrayList<Student> studentene = getStudentene().findStudentBySlutt(sluttÅr);
+//		return studentene;
+//	}
 	//returnerer studiepoengene mellom år X og år Y for studenten.
 	public int findStudiepoengForStudIPeriode(Student s, String start, String slutt){
 		int startÅr = Integer.parseInt(start);
@@ -169,19 +176,10 @@ public class Skole implements Serializable{
 		
 		return studiepoeng;
 	}
-	//finner alle studentene som har bestått kravene i det gitte faget
-	public ArrayList<Student> studenterKravBestått(Fag fag){
-		ArrayList<Student> studentene = new ArrayList<>();
-		
-		for(Student s : fag.getStudenter()){
-			if(s.innfriddKrav(fag))
-				studentene.add(s);
-		}
-		
-		return studentene;
-	}
+	
 	//finner studentene ved studieprogram
-	public ArrayList<Student> findStudentsByStudieprogram(Studieprogram sp){
+	public ArrayList<Student> findStudentsByStudieprogram(String navn){
+		Studieprogram sp = studieprogrammene.findEnByNavn(navn);
 		ArrayList<Student> studentene = getStudentene().findStudentByStudieprogram(sp);
 		return studentene;
 	}
@@ -198,8 +196,13 @@ public class Skole implements Serializable{
 	}
 	//interfacemetoder for å finne strykprosent
 	public double findStrykProsent(Fag fag, int år){
-		double strykprosent = fag.findStrykProsentByDate(år);
-		return strykprosent;
+		try{
+			double strykprosent = fag.findStrykProsentByÅr(år);
+			return strykprosent;
+		}
+		catch(NullPointerException npe){
+			return 0;
+		}
 	}
 	public double findStrykProsent(Fag fag, Eksamen e){
 		double strykprosent = fag.findStrykProsentEksamen(e);
@@ -227,6 +230,7 @@ public class Skole implements Serializable{
 		}		
 		return studentene;
 	}
+	
 	//private søkemetoder for vanlige søk i hovedmeny
 	private ArrayList<Fag> fagSøk(String input){
 		if(input.matches(fagkodeRegex)){
