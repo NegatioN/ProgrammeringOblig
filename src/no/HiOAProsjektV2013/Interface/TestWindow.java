@@ -64,7 +64,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private JTextField navn, epost, tlf, adresse, innDato, utDato, kontorNr, fagkode,
 			beskrivelse, studiepoeng, søkefelt,vurderingsform, innÅr, utÅr, studNr;
 	private JPanel rammeverk, innhold, stud, lær, fag, studprog, display;
-	private Dimension innholdSize = new Dimension(300,500), toppSize = new Dimension(900,50), søkSize = new Dimension(170,400);
+	public static Dimension innholdSize = new Dimension(300,500), toppSize = new Dimension(900,50), søkSize = new Dimension(170,400);
 	private Border ramme = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 	private JComboBox<Fag> velgFag;
 	private JComboBox<Laerer> velgLærer;
@@ -279,6 +279,11 @@ public class TestWindow extends JFrame implements ActionListener {
 		leggtilfag 		= buttonGenerator.generateButton("Legg til fag", Buttons.HEL);
 		avansert 		= buttonGenerator.generateButton("Søk", Buttons.HEL, new søkelytter());
 		tilbake 		= buttonGenerator.generateButton("Tilbake", Buttons.HEL);
+		
+		String[] vurderingsformer = {"Skriftlig", "Muntlig"};
+		vurderingsformBox = new JComboBox<>(vurderingsformer);
+		vurderingsformBox.setSelectedIndex(0);
+		vurderingsformBox.setPreferredSize(Buttons.HEL);
 		
 		Fag[] fagA = new Fag[skolen.getFagene().visAlle().size()];
 		skolen.getFagene().visAlle().toArray(fagA);
