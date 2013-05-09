@@ -2,8 +2,6 @@ package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 import no.HiOAProsjektV2013.Main.EtternavnSammenligner;
 import no.HiOAProsjektV2013.Main.FornavnSammenligner;

@@ -1,7 +1,6 @@
 package no.HiOAProsjektV2013.Interface;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

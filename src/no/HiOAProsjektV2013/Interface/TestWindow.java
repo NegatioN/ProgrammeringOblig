@@ -30,7 +30,6 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 
-import no.HiOAProsjektV2013.DataStructure.Eksamen;
 import no.HiOAProsjektV2013.DataStructure.Fag;
 import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Skole;
@@ -66,10 +65,10 @@ public class TestWindow extends JFrame implements ActionListener {
 	private JPanel rammeverk, innhold, stud, lær, fag, studprog, display;
 	private Dimension innholdSize = new Dimension(300,500), toppSize = new Dimension(900,50), søkSize = new Dimension(170,400);
 	private Border ramme = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
-	private JComboBox<Fag> velgFag;
-	private JComboBox<Laerer> velgLærer;
-	private JComboBox<Studieprogram> velgProg;
-	private JComboBox<String> vurderingsformBox;
+	private JComboBox<Fag> fagBox;
+	private JComboBox<Laerer> lærerBox;
+	private JComboBox<Studieprogram> progBox;
+	private JComboBox<String> vurderingBox;
 	private int type;
 	//endre
 	private int selectedValue = STUDENT;
@@ -280,20 +279,29 @@ public class TestWindow extends JFrame implements ActionListener {
 		avansert 		= buttonGenerator.generateButton("Søk", Buttons.HEL, new søkelytter());
 		tilbake 		= buttonGenerator.generateButton("Tilbake", Buttons.HEL);
 		
-		Fag[] fagA = new Fag[skolen.getFagene().visAlle().size()];
-		skolen.getFagene().visAlle().toArray(fagA);
-		velgFag = new JComboBox<Fag>(fagA);
-		velgFag.setPreferredSize(Buttons.HEL);
+		fagBox = new JComboBox<Fag>();
+		fagBox.setPreferredSize(Buttons.HEL);
+		for(Fag f : skolen.getFagene().visAlle()) {
+			fagBox.addItem(f);
+		}
 		
-		Laerer[] lærerA = new Laerer[skolen.getLærerne().visAlle().size()];
-		skolen.getLærerne().visAlle().toArray(lærerA);
-		velgLærer = new JComboBox<Laerer>(lærerA);
-		velgLærer.setPreferredSize(Buttons.HEL);
+		lærerBox = new JComboBox<Laerer>();
+		lærerBox.setPreferredSize(Buttons.HEL);
+		for(Laerer l : skolen.getLærerne().visAlle()) {
+			lærerBox.addItem(l);
+		}
 		
-		Studieprogram[] progA = new Studieprogram[skolen.getStudieprogrammene().visAlle().size()];
-		skolen.getStudieprogrammene().visAlle().toArray(progA);
-		velgProg = new JComboBox<Studieprogram>(progA);
-		velgProg.setPreferredSize(Buttons.HEL);
+		progBox = new JComboBox<Studieprogram>();
+		progBox.setPreferredSize(Buttons.HEL);
+		for(Studieprogram sp : skolen.getStudieprogrammene().visAlle()) {
+			progBox.addItem(sp);
+		}
+		
+		vurderingBox = new JComboBox<String>();
+		vurderingBox.setPreferredSize(Buttons.HEL);
+		vurderingBox.addItem("Muntlig");
+		vurderingBox.addItem("Skriftlig");
+		vurderingBox.addItem("Prosjekt");
 
 		innhold = new JPanel();
 		innhold.setBorder( ramme);
@@ -312,9 +320,9 @@ public class TestWindow extends JFrame implements ActionListener {
 		stud.add(tlf);
 		stud.add(adresse);
 		stud.add(innDato);
-		stud.add(velgProg);
+		stud.add(progBox);
 		stud.add(lagre);
-		velgProg.setSelectedIndex(-1);
+		progBox.setSelectedIndex(-1);
 		
 		vis(stud);
 	}
@@ -338,8 +346,8 @@ public class TestWindow extends JFrame implements ActionListener {
 		fag.add(fagkode);
 		fag.add(beskrivelse);
 		fag.add(studiepoeng);
-		fag.add(vurderingsformBox);
-		fag.add(velgLærer);
+		fag.add(vurderingBox);
+		fag.add(lærerBox);
 		fag.add(lagre);
 		
 		vis(fag);
@@ -351,9 +359,9 @@ public class TestWindow extends JFrame implements ActionListener {
 		studprog.add(navn);
 		studprog.add(lagre);
 		studprog.add(Box.createRigidArea(Buttons.HEL));
-		studprog.add(velgFag);
+		studprog.add(fagBox);
 		studprog.add(leggtilfag);
-		velgFag.setVisible(false);
+		fagBox.setVisible(false);
 		leggtilfag.setVisible(false);
 		vis(studprog);
 	}
@@ -361,7 +369,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		JPanel søk = new JPanel();
 		søk.setPreferredSize(innholdSize);
 		
-		final int VELGSØK = 0, STUDENTFAG = 1, STUDENTPERIODE = 2, STUDENTPROGRAM = 3, POENGSTUDENT = 4, KARAKTER = 5;
+		final int STUDENTFAG = 1, STUDENTPERIODE = 2, STUDENTPROGRAM = 3, POENGSTUDENT = 4, KARAKTER = 5;
 		
 		refresh();
 		
@@ -369,7 +377,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		switch(type){
 		case STUDENTFAG:
-			søk.add(velgFag);
+			søk.add(fagBox);
 			søk.add(innÅr = b.generateTextField("År", Buttons.LANG, new søkelytter()));
 			søk.add(avansert);
 			søk.add(tilbake);
@@ -381,7 +389,7 @@ public class TestWindow extends JFrame implements ActionListener {
 			søk.add(tilbake);
 			break;
 		case STUDENTPROGRAM:
-			søk.add(velgProg);
+			søk.add(progBox);
 			søk.add(innÅr);
 			søk.add(avansert);
 			søk.add(tilbake);
@@ -394,7 +402,7 @@ public class TestWindow extends JFrame implements ActionListener {
 			søk.add(tilbake);
 			break;
 		case KARAKTER:
-			søk.add(velgFag);
+			søk.add(fagBox);
 			søk.add(innDato = b.generateTextField("Dato", Buttons.LANG));
 			søk.add(avansert);
 			søk.add(tilbake);
@@ -423,7 +431,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		fagkode			.setText("Fagkode");
 		beskrivelse		.setText("Beskrivelse");
 		vurderingsform	.setText("Vurderingsform");
-		vurderingsformBox.setSelectedIndex(0);
+//		vurderingsformBox.setSelectedIndex(-1);
 		studiepoeng		.setText("Studiepoeng");
 		innÅr 			.setText("Startår");
 		utÅr			.setText("Sluttår");
@@ -479,7 +487,6 @@ public class TestWindow extends JFrame implements ActionListener {
 		display();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void actionPerformed(ActionEvent e) {
 		//Nullstiller displayet
 		display();
@@ -523,7 +530,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		if (e.getSource() == leggtilfag) {
 			if(innhold.getComponent(FØRSTE).equals(studprog)){
 				try{
-					skolen.getStudieprogrammene().findEnByNavn(navn.getText()).addFag((Fag)velgFag.getSelectedItem());
+					skolen.getStudieprogrammene().findEnByNavn(navn.getText()).addFag((Fag)fagBox.getSelectedItem());
 					info.setText(skolen.getStudieprogrammene().findEnByNavn(navn.getText()).fullString());
 				} catch (NullPointerException npe){
 					info.setText("Ugyldig fagkode");
@@ -567,8 +574,6 @@ public class TestWindow extends JFrame implements ActionListener {
 			} 
 			
 			else if(e.getSource() == avansert){
-				String fk = fagkode.getText();
-				String n = navn.getText();
 				String inn = innÅr.getText();
 				String ut = utÅr.getText();
 				String nr = studNr.getText();
@@ -579,9 +584,9 @@ public class TestWindow extends JFrame implements ActionListener {
 					JList<Student> listen = null;
 //					if(fk.matches(fagkodeRegex)){
 						if(inn.matches(årRegex))
-							listen = studentboks.listify(skolen.findStudentMedFagByÅr(((Fag)velgFag.getSelectedItem()).getFagkode(),Integer.parseInt(inn)));
+							listen = studentboks.listify(skolen.findStudentMedFagByÅr(((Fag)fagBox.getSelectedItem()).getFagkode(),Integer.parseInt(inn)));
 						else
-							listen = studentboks.listify(skolen.findStudentMedFag(((Fag)velgFag.getSelectedItem()).getFagkode()));
+							listen = studentboks.listify(skolen.findStudentMedFag(((Fag)fagBox.getSelectedItem()).getFagkode()));
 					vis(studentboks.visResultat(listen));
 //					}
 					break;
@@ -598,7 +603,7 @@ public class TestWindow extends JFrame implements ActionListener {
 					break;
 				case 3:
 					listen = null;
-					Studieprogram sp = (Studieprogram)velgProg.getSelectedItem();
+					Studieprogram sp = (Studieprogram)progBox.getSelectedItem();
 					if(inn.matches(årRegex)){
 						listen = studentboks.listify(skolen.findStudentByStudieprogramByStart(sp, Integer.parseInt(inn)));
 					} else
@@ -624,7 +629,7 @@ public class TestWindow extends JFrame implements ActionListener {
 					break;
 				case 5:
 //					if(fk.matches(fagkodeRegex)){
-						Fag f = (Fag)velgFag.getSelectedItem();
+						Fag f = (Fag)fagBox.getSelectedItem();
 						System.out.println(f.getFagkode());
 						int[] karakterer = null;
 						if(d.matches(årRegex)){
@@ -703,8 +708,8 @@ public class TestWindow extends JFrame implements ActionListener {
 								nr,
 								adresse.getText(), 
 								dato);
-						if(velgProg.getSelectedIndex() != -1)
-							s.setStudieprogram((Studieprogram)velgProg.getSelectedItem());
+						if(progBox.getSelectedIndex() != -1)
+							s.setStudieprogram((Studieprogram)progBox.getSelectedItem());
 						
 						setText(s.fullString());
 					} catch (NumberFormatException nfe){
@@ -740,9 +745,9 @@ public class TestWindow extends JFrame implements ActionListener {
 						info.setText(skolen.getFagene().addFag(navn.getText(), 
 								fagkode.getText(),
 								beskrivelse.getText(),
-								vurderingsformBox.getSelectedItem().toString(), 
+								vurderingBox.getSelectedItem().toString(), 
 								poeng, 
-								(Laerer)velgLærer.getSelectedItem()).fullString());
+								(Laerer)lærerBox.getSelectedItem()).fullString());
 						
 					}catch (NumberFormatException nfe){
 						fagkode.setText("Feil kodeformat");
@@ -756,7 +761,7 @@ public class TestWindow extends JFrame implements ActionListener {
 			
 			else if (innhold.getComponent(FØRSTE).equals(studprog)) {
 					info.setText(skolen.getStudieprogrammene().addStudProg(navn.getText()).fullString());
-					velgFag.setVisible(true);
+					fagBox.setVisible(true);
 					leggtilfag.setVisible(true);
 				}
 			}

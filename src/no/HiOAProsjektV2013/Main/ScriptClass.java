@@ -1,7 +1,6 @@
 package no.HiOAProsjektV2013.Main;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import no.HiOAProsjektV2013.DataStructure.Fag;
