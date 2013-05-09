@@ -227,14 +227,12 @@ public class TestWindow extends JFrame implements ActionListener {
 		visning.setBorder(ramme);
 		display.setBorder(ramme);
 		
-		søkefelt = new JTextField("Søk");
-		søkefelt.setPreferredSize(Buttons.HALV);
-		søkefelt.addActionListener(new søkelytter());
+		søkefelt		= buttonGenerator.generateTextField("Søk", Buttons.KORT, new søkelytter());
 		visning.add(søkefelt);
 		
 		søkeknapp 		= buttonGenerator.generateButton("Søk", visning, Buttons.HALV, new søkelytter());
 		generateButtonGroup(visning);
-		visAvansert 		= buttonGenerator.generateButton("Avansert søk", visning, Buttons.HALV);
+		visAvansert 	= buttonGenerator.generateButton("Avansert søk", visning, Buttons.HALV);
 		visning.add(Box.createRigidArea(Buttons.HALV));
 
 		nystudent 		= buttonGenerator.generateButton("Legg til student", leggtil, Buttons.HALV);
@@ -260,20 +258,26 @@ public class TestWindow extends JFrame implements ActionListener {
 		rammeverk.add(visning, BorderLayout.EAST);
 
 		//Oppretter objekter til registreringsfelter
-		navn	 		= new JTextField("Navn", 20);
-		epost	 		= new JTextField("E-post", 20);
-		tlf		 		= new JTextField("Telefon", 20);
-		adresse			= new JTextField("Adresse", 20);
-		innDato			= new JTextField("Startdato", 20);
-		utDato			= new JTextField("Sluttdato", 20);
-		kontorNr		= new JTextField("Kontornummer", 20);
-		fagkode			= new JTextField("Fagkode", 20);
-		beskrivelse		= new JTextField("Beskrivelse", 20);
-		vurderingsform	= new JTextField("Vurderingsform", 20);
-		studiepoeng		= new JTextField("Studiepoeng", 20);
-		innÅr 			= new JTextField("År", 20);
-		utÅr			= new JTextField("År", 20);
-		studNr 			= new JTextField("StudentNr", 20);
+		navn	 		= buttonGenerator.generateTextField("Navn", 20);
+		epost	 		= buttonGenerator.generateTextField("E-post", 20);
+		tlf		 		= buttonGenerator.generateTextField("Telefon", 20);
+		adresse			= buttonGenerator.generateTextField("Adresse", 20);
+		innDato			= buttonGenerator.generateTextField("Startdato", 20);
+		utDato			= buttonGenerator.generateTextField("Sluttdato", 20);
+		kontorNr		= buttonGenerator.generateTextField("Kontornummer", 20);
+		fagkode			= buttonGenerator.generateTextField("Fagkode", 20);
+		beskrivelse		= buttonGenerator.generateTextField("Beskrivelse", 20);
+		vurderingsform	= buttonGenerator.generateTextField("Vurderingsform", 20);
+		studiepoeng		= buttonGenerator.generateTextField("Studiepoeng", 20);
+		innÅr 			= buttonGenerator.generateTextField("Startår", 20);
+		utÅr			= buttonGenerator.generateTextField("Sluttår", 20);
+		studNr 			= buttonGenerator.generateTextField("StudentNr", 20);
+	
+		lagre 			= buttonGenerator.generateButton("Lagre", Buttons.HEL, new lagrelytter());
+		leggtilfag 		= buttonGenerator.generateButton("Legg til fag", Buttons.HEL);
+		settiprog 		= buttonGenerator.generateButton("Velg studieprogram", Buttons.HEL);
+		avansert 		= buttonGenerator.generateButton("Søk", Buttons.HEL, new søkelytter());
+		tilbake 		= buttonGenerator.generateButton("Tilbake", Buttons.HEL);
 		
 		Fag[] fagA = new Fag[skolen.getFagene().visAlle().size()];
 		skolen.getFagene().visAlle().toArray(fagA);
@@ -289,13 +293,6 @@ public class TestWindow extends JFrame implements ActionListener {
 		skolen.getStudieprogrammene().visAlle().toArray(progA);
 		velgProg = new JComboBox<Studieprogram>(progA);
 		velgProg.setPreferredSize(Buttons.HEL);
-		
-		lagre 		= buttonGenerator.generateButton("Lagre", Buttons.HEL, new lagrelytter());
-		leggtilfag 	= buttonGenerator.generateButton("Legg til fag", Buttons.HEL);
-		settiprog 	= buttonGenerator.generateButton("Velg studieprogram", Buttons.HEL);
-		avansert 	= buttonGenerator.generateButton("Søk", Buttons.HEL, new søkelytter());
-		tilbake 	= buttonGenerator.generateButton("Tilbake", Buttons.HEL);
-
 		innhold = new JPanel();
 		innhold.setBorder( ramme);
 		
@@ -357,7 +354,8 @@ public class TestWindow extends JFrame implements ActionListener {
 		studprog.add(Box.createRigidArea(Buttons.HEL));
 		studprog.add(velgFag);
 		studprog.add(leggtilfag);
-		
+		velgFag.setVisible(false);
+		leggtilfag.setVisible(false);
 		vis(studprog);
 	}
 	public void avansert(int type){
@@ -373,7 +371,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		switch(type){
 		case STUDENTFAG:
 			søk.add(velgFag);
-			søk.add(innÅr);
+			søk.add(b.generateTextField("År", Buttons.LANG, new søkelytter()));
 			søk.add(avansert);
 			søk.add(tilbake);
 			break;
@@ -398,7 +396,7 @@ public class TestWindow extends JFrame implements ActionListener {
 			break;
 		case KARAKTER:
 			søk.add(velgFag);
-			søk.add(innDato);
+			søk.add(b.generateTextField("Dato", Buttons.LANG));
 			søk.add(avansert);
 			søk.add(tilbake);
 			break;
@@ -765,6 +763,8 @@ public class TestWindow extends JFrame implements ActionListener {
 			
 			else if (innhold.getComponent(FØRSTE).equals(studprog)) {
 					info.setText(skolen.getStudieprogrammene().addStudProg(navn.getText()).fullString());
+					velgFag.setVisible(true);
+					leggtilfag.setVisible(true);
 				}
 			}
 		}

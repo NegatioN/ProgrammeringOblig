@@ -153,7 +153,7 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 		}
 		if(source == studieStudenter){
 			Studieprogram sp = (Studieprogram) curObject;
-			ArrayList<Student> studenter = tw.getSkole().findStudentsByStudieprogram(sp);
+			ArrayList<Student> studenter = tw.getSkole().findStudentsByStudieprogram(sp.getNavn());
 			if(!studenter.isEmpty())
 			tw.listApplier(studenter);
 			else

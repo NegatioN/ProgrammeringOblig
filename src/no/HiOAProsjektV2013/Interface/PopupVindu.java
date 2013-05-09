@@ -92,14 +92,11 @@ public class PopupVindu extends JPanel{
 		String studAdresse = s.getAdresse();
 		Date startdato = s.getStart().getTime();
 
-		navn	 		= new JTextField(studNavn, 20);
-		epost	 		= new JTextField(studEpost, 20);
-		tlf		 		= new JTextField(studTlf, 20);
-		adresse			= new JTextField(studAdresse, 20);
-		start			= new JTextField(formatter.format(startdato), 20);
-
-		navn.setEditable(false);
-		start.setEditable(false);
+		navn	 		= button.generateTextField(studNavn, 20, false);
+		epost	 		= button.generateTextField(studEpost, 20);
+		tlf		 		= button.generateTextField(studTlf, 20);
+		adresse			= button.generateTextField(studAdresse, 20);
+		start			= button.generateTextField(formatter.format(startdato), 20, false);
 
 		velgFag = new JComboBox<Fag>();
 		velgFag.setPreferredSize(Buttons.HEL);
@@ -132,15 +129,10 @@ public class PopupVindu extends JPanel{
 		String t = l.getTelefonNr() + "";
 		String k = l.getKontor();
 
-		navn	 		= new JTextField(n, 20);
-		epost	 		= new JTextField(e, 20);
-		tlf		 		= new JTextField(t, 20);
-		kontorNr		= new JTextField(k, 20);
-
-		navn.setEditable(false);
-		epost.setEditable(true);
-		tlf.setEditable(true);
-		kontorNr.setEditable(true);
+		navn	 		= button.generateTextField(n, 20, false);
+		epost	 		= button.generateTextField(e, 20);
+		tlf		 		= button.generateTextField(t, 20);
+		kontorNr		= button.generateTextField(k, 20);
 
 		panelet = new JPanel();
 		panelet.setPreferredSize(venstreSize);
@@ -161,12 +153,12 @@ public class PopupVindu extends JPanel{
 		int sp = f.getStudiepoeng();
 		String vf = f.getVurderingsform();
 
-		navn	 		= new JTextField(n, 20);
-		fagkode	 		= new JTextField(fk, 20);
-		beskrivelse		= new JTextField(b, 20);
-		studiepoeng		= new JTextField(""+sp, 20);
-		vurderingsform	= new JTextField(vf, 20);
-		eksamensdato 	= new JTextField("Eksamensdato", 20);
+		navn	 		= button.generateTextField(n, 20, false);
+		fagkode	 		= button.generateTextField(fk, 20, false);
+		beskrivelse		= button.generateTextField(b, 20, false);
+		studiepoeng		= button.generateTextField(""+sp, 20);
+		vurderingsform	= button.generateTextField(vf, 20);
+		eksamensdato 	= button.generateTextField("Eksamensdato", 20);
 
 		velgLærer = new JComboBox<Laerer>();
 		velgLærer.setSelectedItem(f.getLærer());
@@ -174,10 +166,6 @@ public class PopupVindu extends JPanel{
 		for(Laerer l : vindu.getSkole().getLærerne().visAlle()) {
 			velgLærer.addItem((Laerer)l);
 		}
-
-		navn			.setEditable(false);
-		fagkode			.setEditable(false);
-		studiepoeng		.setEditable(false);
 
 		panelet = new JPanel();
 		panelet.setPreferredSize(venstreSize);
@@ -215,11 +203,9 @@ public class PopupVindu extends JPanel{
 			velgFag.addItem((Fag)f);
 		}
 
-		navn	 		= new JTextField(n, 20);
-		fag		 		= new JTextField(fagene, 20);
+		navn	 		= button.generateTextField(n, 20);
+		fag		 		= button.generateTextField(fagene, 20, false);
 
-		//navn.setEditable(false);
-		fag.setEditable(false);
 
 		panelet = new JPanel();
 		panelet.setPreferredSize(venstreSize);
@@ -306,7 +292,7 @@ public class PopupVindu extends JPanel{
 		kravinfo.setBorder(BorderFactory.createTitledBorder("Arbeidskrav for " + (f.getNavn())));
 		kravinfo.add(kravListe);
 
-		beskrivelse	= new JTextField("Arbeidskrav", 20);
+		beskrivelse	= button.generateTextField("Arbeidskrav", 20);
 
 		visepanel.add(kravinfo);
 		visepanel.add(beskrivelse);
@@ -337,7 +323,7 @@ public class PopupVindu extends JPanel{
 		else
 			visFag();
 
-		studentNr = new JTextField("StudentNr",20);
+		studentNr = button.generateTextField("StudentNr",20);
 		visepanel.add(faginfo);
 		visepanel.add(studentNr);
 		deltaker = button.generateButton("Legg til deltaker", visepanel, Buttons.HEL);
