@@ -163,10 +163,8 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 			Eksamen eks = (Eksamen) curObject;
 			Fag f = eks.getFag();
 			int[] karakterer = tw.getSkole().findKarakterDistribusjon(f, eks);
-			tw.setText("Karakterdistribusjon:  \nA: " + karakterer[0] + "\nB: " + karakterer[1] + "\nC: " + karakterer[2] + 
-					 						"\nD: " + karakterer[3] + "\nE: " + karakterer[4] + "\nF: " + karakterer[0] +
-					 						"\nStrykprosent: " + tw.getSkole().findStrykProsent(f, eks));
-			tw.display();
+			double stryk = tw.getSkole().findStrykProsent(f, eks);
+			tw.displayKarakterer(karakterer, stryk);
 
 		}
 	}

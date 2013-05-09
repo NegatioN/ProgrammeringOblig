@@ -30,6 +30,7 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 
+import no.HiOAProsjektV2013.DataStructure.Eksamen;
 import no.HiOAProsjektV2013.DataStructure.Fag;
 import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Skole;
@@ -451,7 +452,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	public void setSelectedValue(int i){
 		selectedValue = i;
 	}
-	
+
 	//Oppdaterer display-panelet
 	public void display(Component c){
 		display.removeAll();
@@ -459,13 +460,21 @@ public class TestWindow extends JFrame implements ActionListener {
 		display.updateUI();
 		revalidate();
 	}
-	
 	//Får opp igjen displayet
 	public void display(){
 		display.removeAll();
 		display.add(info);
 		display.updateUI();
 		revalidate();
+	}
+	//Viser karakterdistribusjon i displayet
+	public void displayKarakterer(int[] karakterer, double stryk){
+		String distribusjon = "Karakterdistribusjon:\n";
+		for(int i = 0; i < 6; i++ )
+			distribusjon += (char)('A'+i) + ":" + karakterer[i] + "\n";
+		distribusjon += "\nStrykprosent: " + stryk;
+		setText(distribusjon);
+		display();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -617,15 +626,13 @@ public class TestWindow extends JFrame implements ActionListener {
 						System.out.println(f.getFagkode());
 						int[] karakterer = null;
 						if(d.matches(årRegex)){
-							 karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(d));
-							 setText("Karakterdistribusjon:  \nA: " + karakterer[0] + "\nB: " + karakterer[1] + "\nC: " + karakterer[2] + 
-									 						"\nD: " + karakterer[3] + "\nE: " + karakterer[4] + "\nF: " + karakterer[0] +
-									 						"\nStrykprosent: " + skolen.findStrykProsent(f, Integer.parseInt(d)));
+							karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(d));
+							double stryk = skolen.findStrykProsent(f, Integer.parseInt(d) );
+							displayKarakterer(karakterer, stryk);
 						} else if (d.matches(datoRegex)){
-							karakterer = skolen.findKarakterDistribusjon(f, f.getRecentEksamen());
-							 setText("Karakterdistribusjon:  \nA: " + karakterer[0] + "\nB: " + karakterer[1] + "\nC: " + karakterer[2] + 
-									 						"\nD: " + karakterer[3] + "\nE: " + karakterer[4] + "\nF: " + karakterer[0] +
-									 						"\nStrykprosent: " + skolen.findStrykProsent(f, f.getRecentEksamen()));
+							karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(d));
+							double stryk = skolen.findStrykProsent(f, Integer.parseInt(d) );
+							displayKarakterer(karakterer, stryk);
 						} else
 							JOptionPane.showMessageDialog(innhold, "Skriv inn år eller eksamensdato");
 						
