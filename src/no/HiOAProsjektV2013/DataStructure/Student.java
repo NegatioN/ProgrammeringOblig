@@ -113,6 +113,7 @@ public class Student extends Person implements Serializable{
 		if(krav != null){
 			kravListe.remove(krav);
 			fagListe.remove(fag);
+			fag.removeStudent(this);
 		}
 	}
 	

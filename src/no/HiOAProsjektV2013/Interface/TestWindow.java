@@ -61,13 +61,14 @@ public class TestWindow extends JFrame implements ActionListener {
 			vislærer, visfag, visstudieprog, lagre, leggtilfag, settiprog, søkeknapp, avansert, visAvansert, tilbake;
 	private JRadioButton studentCheck, lærerCheck, fagCheck, studieCheck;
 	private JTextField navn, epost, tlf, adresse, innDato, utDato, kontorNr, fagkode,
-			beskrivelse, studiepoeng, vurderingsform, søkefelt, innÅr, utÅr, studNr;
+			beskrivelse, studiepoeng, søkefelt,vurderingsform, innÅr, utÅr, studNr;
 	private JPanel rammeverk, innhold, stud, lær, fag, studprog, display;
 	private Dimension innholdSize = new Dimension(300,500), toppSize = new Dimension(900,50), søkSize = new Dimension(170,400);
 	private Border ramme = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 	private JComboBox<Fag> velgFag;
 	private JComboBox<Laerer> velgLærer;
 	private JComboBox<Studieprogram> velgProg;
+	private JComboBox<String> vurderingsformBox;
 	private int type;
 	//endre
 	private int selectedValue = STUDENT;
@@ -242,7 +243,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		nyttfag 		= buttonGenerator.generateButton("Legg til fag", leggtil, Buttons.HALV);
 		nyttstudieprog 	= buttonGenerator.generateButton("Legg til studieprogram", leggtil, new Dimension(200, 30));
 
-		visstudent 		= buttonGenerator.generateButton("Vis student", visning, Buttons.HALV);
+		visstudent 		= buttonGenerator.generateButton("Vis studenter", visning, Buttons.HALV);
 		vislærer 		= buttonGenerator.generateButton("Vis lærere", visning, Buttons.HALV);
 		visfag 			= buttonGenerator.generateButton("Vis fag", visning, Buttons.HALV);
 		visstudieprog 	= buttonGenerator.generateButton("Vis studieprogram", visning, Buttons.HALV);
@@ -274,6 +275,10 @@ public class TestWindow extends JFrame implements ActionListener {
 		innÅr 			= new JTextField("År", 20);
 		utÅr			= new JTextField("År", 20);
 		studNr 			= new JTextField("StudentNr", 20);
+		String[] vurderingsformer = {"Skriftlig", "Muntlig"};
+		vurderingsformBox = new JComboBox<>(vurderingsformer);
+		vurderingsformBox.setSelectedIndex(0);
+		vurderingsformBox.setPreferredSize(Buttons.HEL);
 		
 		Fag[] fagA = new Fag[skolen.getFagene().visAlle().size()];
 		skolen.getFagene().visAlle().toArray(fagA);
@@ -342,7 +347,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		fag.add(fagkode);
 		fag.add(beskrivelse);
 		fag.add(studiepoeng);
-		fag.add(vurderingsform);
+		fag.add(vurderingsformBox);
 		fag.add(velgLærer);
 		fag.add(lagre);
 		
@@ -426,6 +431,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		fagkode			.setText("Fagkode");
 		beskrivelse		.setText("Beskrivelse");
 		vurderingsform	.setText("Vurderingsform");
+		vurderingsformBox.setSelectedIndex(0);
 		studiepoeng		.setText("Studiepoeng");
 		innÅr 			.setText("Startår");
 		utÅr			.setText("Sluttår");
@@ -749,7 +755,7 @@ public class TestWindow extends JFrame implements ActionListener {
 						info.setText(skolen.getFagene().addFag(navn.getText(), 
 								fagkode.getText(),
 								beskrivelse.getText(),
-								vurderingsform.getText(), 
+								vurderingsformBox.getSelectedItem().toString(), 
 								poeng, 
 								(Laerer)velgLærer.getSelectedItem()).fullString());
 						
