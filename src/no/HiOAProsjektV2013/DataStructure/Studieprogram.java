@@ -83,6 +83,8 @@ public class Studieprogram implements Serializable{
 	}
 	public void addStudent(Student s){
 		studenterIProgrammet.add(s);
+		for(Fag f: fagIProgrammet)
+			s.addFag(f);
 	}
 	public void removeStudent(Student s){
 		studenterIProgrammet.remove(s);

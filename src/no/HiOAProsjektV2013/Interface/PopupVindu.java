@@ -13,6 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
@@ -48,7 +49,7 @@ public class PopupVindu extends JPanel{
 
 	private static final long serialVersionUID = 1073L;
 	private Dimension venstreSize = new Dimension(290, 600), høyreSize = new Dimension(400, 600), infoSize = new Dimension(400, 250), tabellSize = new Dimension(385, 200);
-	private JTextField navn, epost, tlf, adresse, start, kontorNr, fagkode, beskrivelse, studiepoeng, vurderingsform, studentNr, fag, eksamensdato;
+	private JTextField navn, epost, tlf, adresse, start, slutt, kontorNr, fagkode, beskrivelse, studiepoeng, vurderingsform, studentNr, fag, eksamensdato;
 	private JPanel panelet, visepanel, faginfo, kravinfo;
 	private TestWindow vindu;
 	private lytter ly = new lytter();
@@ -57,6 +58,7 @@ public class PopupVindu extends JPanel{
 	private JButton leggtil, fjern, oppmeldte, deltaker , lagreKrav, visFag, visEksamen, visKrav, tilbake;
 	private JComboBox<Fag> velgFag, studentFag;
 	private JComboBox<Laerer> velgLærer;
+	private JComboBox<Studieprogram> velgProg;
 	private JComboBox<Eksamen> velgEksamen;
 	private combolytter cl = new combolytter();
 	private JTable resultater;
@@ -92,18 +94,34 @@ public class PopupVindu extends JPanel{
 		String studAdresse = s.getAdresse();
 		Date startdato = s.getStart().getTime();
 
+
 		navn	 		= button.generateTextField(studNavn, 20, false);
 		epost	 		= button.generateTextField(studEpost, 20);
 		tlf		 		= button.generateTextField(studTlf, 20);
 		adresse			= button.generateTextField(studAdresse, 20);
 		start			= button.generateTextField(formatter.format(startdato), 20, false);
+		try{
+			Date sluttdato = s.getSlutt().getTime();
+			slutt 		= button.generateTextField(formatter.format(sluttdato), 20);
+		} catch(NullPointerException npe){
+			slutt 		= button.generateTextField("Sluttdato", 20);
+		}
 
 		velgFag = new JComboBox<Fag>();
 		velgFag.setPreferredSize(Buttons.HEL);
 		for(Fag f : vindu.getSkole().getFagene().visAlle()) {
 			velgFag.addItem((Fag)f);
 		}
-
+		Studieprogram[] progA = new Studieprogram[vindu.getSkole().getStudieprogrammene().visAlle().size()];
+		vindu.getSkole().getStudieprogrammene().visAlle().toArray(progA);
+		velgProg = new JComboBox<Studieprogram>(progA);
+		velgProg.setPreferredSize(Buttons.HEL);
+		try{
+			velgProg.setSelectedItem(s.getStudieprogram());
+		} catch(NullPointerException npe){
+			velgProg.setSelectedIndex(-1);
+		}
+		
 		panelet = new JPanel();
 		panelet.setPreferredSize(venstreSize);
 		panelet.add(navn);
@@ -111,6 +129,8 @@ public class PopupVindu extends JPanel{
 		panelet.add(tlf);
 		panelet.add(adresse);
 		panelet.add(start);
+		panelet.add(slutt);
+		panelet.add(velgProg);
 		panelet.add(velgFag);
 		leggtil = button.generateButton("Legg til fag", panelet, Buttons.HEL);
 		panelet.add(Box.createRigidArea(Buttons.HEL));
@@ -118,7 +138,7 @@ public class PopupVindu extends JPanel{
 		visFag = button.generateButton("Vis fag", panelet, Buttons.HEL);
 		visEksamen = button.generateButton("Vis Eksamener", panelet, Buttons.HEL);
 		button.generateButton("Lagre", panelet, Buttons.HEL);
-
+		
 		return panelet;
 	}
 	public Component fyllVindu(Laerer l){
@@ -189,7 +209,6 @@ public class PopupVindu extends JPanel{
 		aktiv = sp;
 
 		String n = sp.getNavn();
-
 		String fagene = "";
 		for(Fag f : sp.getFagene()){
 			if(fagene != "")
@@ -205,7 +224,6 @@ public class PopupVindu extends JPanel{
 
 		navn	 		= button.generateTextField(n, 20);
 		fag		 		= button.generateTextField(fagene, 20, false);
-
 
 		panelet = new JPanel();
 		panelet.setPreferredSize(venstreSize);
@@ -573,12 +591,25 @@ public class PopupVindu extends JPanel{
 
 				if(aktiv instanceof Student){
 					Student s = (Student) aktiv;
+					
+					try {
+						Date date;
+						date = (Date) formatter.parse(slutt.getText());
+						GregorianCalendar dato = (GregorianCalendar) GregorianCalendar.getInstance();
+						dato.setTime(date);
+						s.setSlutt(dato);
+					} catch (ParseException pe) {
+						
+					}
+				
 					try{
 						int nr = Integer.parseInt(tlf.getText());
-
+						
 						s.setAdresse(adresse.getText());
 						s.setTlf(nr);
 						s.setEpost(epost.getText());
+						if(velgProg.getSelectedIndex() != -1)
+							s.setStudieprogram((Studieprogram)velgProg.getSelectedItem());
 
 					}catch (NumberFormatException nfe){
 						System.out.println("Feil Nummerformat");

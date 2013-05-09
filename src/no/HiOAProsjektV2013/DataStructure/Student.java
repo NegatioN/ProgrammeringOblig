@@ -38,7 +38,8 @@ public class Student extends Person implements Serializable{
 	public void setStudieprogram(Studieprogram studieprogram){
 		//try-blokken gjør at en student kun kan være registrert på 1 studieprogram. Kan hende det er relevant med flere.
 		try{
-			sp.removeStudent(this);
+			if(sp != null)
+				sp.removeStudent(this);
 		}catch(NullPointerException e){
 			e.printStackTrace();
 		}

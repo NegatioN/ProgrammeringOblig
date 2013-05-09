@@ -58,7 +58,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private ListeBoks<Studieprogram> studieboks = new ListeBoks<>(this);
 	private JTextArea info;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
-			vislærer, visfag, visstudieprog, lagre, leggtilfag, settiprog, søkeknapp, avansert, visAvansert, tilbake;
+			vislærer, visfag, visstudieprog, lagre, leggtilfag, søkeknapp, avansert, visAvansert, tilbake;
 	private JRadioButton studentCheck, lærerCheck, fagCheck, studieCheck;
 	private JTextField navn, epost, tlf, adresse, innDato, utDato, kontorNr, fagkode,
 			beskrivelse, studiepoeng, vurderingsform, søkefelt, innÅr, utÅr, studNr;
@@ -275,7 +275,6 @@ public class TestWindow extends JFrame implements ActionListener {
 	
 		lagre 			= buttonGenerator.generateButton("Lagre", Buttons.HEL, new lagrelytter());
 		leggtilfag 		= buttonGenerator.generateButton("Legg til fag", Buttons.HEL);
-		settiprog 		= buttonGenerator.generateButton("Velg studieprogram", Buttons.HEL);
 		avansert 		= buttonGenerator.generateButton("Søk", Buttons.HEL, new søkelytter());
 		tilbake 		= buttonGenerator.generateButton("Tilbake", Buttons.HEL);
 		
@@ -293,6 +292,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		skolen.getStudieprogrammene().visAlle().toArray(progA);
 		velgProg = new JComboBox<Studieprogram>(progA);
 		velgProg.setPreferredSize(Buttons.HEL);
+
 		innhold = new JPanel();
 		innhold.setBorder( ramme);
 		
@@ -310,12 +310,9 @@ public class TestWindow extends JFrame implements ActionListener {
 		stud.add(tlf);
 		stud.add(adresse);
 		stud.add(innDato);
-		stud.add(lagre);
-		stud.add(Box.createRigidArea(Buttons.HEL));
 		stud.add(velgProg);
-		stud.add(settiprog);
-		velgProg.setVisible(false);
-		settiprog.setVisible(false);
+		stud.add(lagre);
+		velgProg.setSelectedIndex(-1);
 		
 		vis(stud);
 	}
@@ -522,22 +519,6 @@ public class TestWindow extends JFrame implements ActionListener {
 				}
 			}
 		}
-		
-		//Legg til fagene fra et studieprogram til en registrert student
-		if (e.getSource() == settiprog) {
-			if(innhold.getComponent(FØRSTE).equals(stud)){ //TRENGER EN SJEKK FOR Å SE OM DET ER REGISTRERT NY STUDENT
-				try{
-					Student s =	skolen.getStudentene().findStudentByStudentNr("s" + (skolen.getStudentene().getStudentnummer() - 1));
-					for(Fag f : ((Studieprogram) velgProg.getSelectedItem()).getFagene()){
-						s.setStudieprogram((Studieprogram)velgProg.getSelectedItem());
-						s.addFag(f);
-					}
-					info.setText(s.fullString());
-				} catch (NullPointerException npe){
-					npe.printStackTrace();
-				}
-			}
-		}
 	}
 	
 	private class søkelytter implements ActionListener{
@@ -689,31 +670,31 @@ public class TestWindow extends JFrame implements ActionListener {
 					try {
 						int nr = Integer.parseInt(tlf.getText());
 						//regex-checks på input.
-						if(!tlf.getText().matches(mobRegex)){
-							tlf.setText("Feil nummerformat");
+						if(!navn.getText().matches(navnRegex)){
+							navn.setText("Fornavn og Etternavn");
 							return;
 						}
 						else if(!epost.getText().matches(mailRegex)){
 							epost.setText("Feil epost-format.");
 							return;
 						}
-						else if(!navn.getText().matches(navnRegex)){
-							navn.setText("Fornavn og Etternavn");
+						else if(!tlf.getText().matches(mobRegex)){
+							tlf.setText("Feil nummerformat");
 							return;
 						}
 						Date date = (Date) formatter.parse(innDato.getText());
 						GregorianCalendar dato = (GregorianCalendar) GregorianCalendar.getInstance();
 						dato.setTime(date);
-
-						info.setText(skolen.getStudentene().addStudent(navn.getText(), 
+						
+						Student s = skolen.getStudentene().addStudent(navn.getText(), 
 								epost.getText(), 
 								nr,
 								adresse.getText(), 
-								dato).fullString());
-
-						velgProg.setVisible(true);
-						settiprog.setVisible(true);
-
+								dato);
+						if(velgProg.getSelectedIndex() != -1)
+							s.setStudieprogram((Studieprogram)velgProg.getSelectedItem());
+						
+						setText(s.fullString());
 					} catch (NumberFormatException nfe){
 						tlf.setText("Feil nummerformat");
 					} catch (ParseException pe) {
