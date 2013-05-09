@@ -3,7 +3,6 @@ package no.HiOAProsjektV2013.Interface;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -18,7 +17,6 @@ import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -31,9 +29,6 @@ import javax.swing.JTextField;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 
 import no.HiOAProsjektV2013.DataStructure.Arbeidskrav;
 import no.HiOAProsjektV2013.DataStructure.Eksamen;
@@ -41,7 +36,6 @@ import no.HiOAProsjektV2013.DataStructure.EksamensDeltaker;
 import no.HiOAProsjektV2013.DataStructure.Fag;
 import no.HiOAProsjektV2013.DataStructure.Krav;
 import no.HiOAProsjektV2013.DataStructure.Laerer;
-import no.HiOAProsjektV2013.DataStructure.Skole;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 
@@ -71,7 +65,7 @@ public class PopupVindu extends JPanel{
 	public PopupVindu(TestWindow vindu, Object o){
 		this.vindu = vindu;
 		popup = vindu.getRightClickMenu();
-
+		
 		if(o instanceof Student)
 			add(fyllVindu((Student) o));		
 		else if(o instanceof Laerer)
@@ -112,10 +106,13 @@ public class PopupVindu extends JPanel{
 		for(Fag f : vindu.getSkole().getFagene().visAlle()) {
 			velgFag.addItem((Fag)f);
 		}
-		Studieprogram[] progA = new Studieprogram[vindu.getSkole().getStudieprogrammene().visAlle().size()];
-		vindu.getSkole().getStudieprogrammene().visAlle().toArray(progA);
-		velgProg = new JComboBox<Studieprogram>(progA);
+
+		
+		velgProg = new JComboBox<Studieprogram>();
 		velgProg.setPreferredSize(Buttons.HEL);
+		for(Studieprogram sp : vindu.getSkole().getStudieprogrammene().visAlle()) {
+			velgProg.addItem(sp);
+		}
 		try{
 			velgProg.setSelectedItem(s.getStudieprogram());
 		} catch(NullPointerException npe){
@@ -444,8 +441,7 @@ public class PopupVindu extends JPanel{
 		}
 
 		//For å informere tabellmodellen om kolonnenes datatyper.
-		@SuppressWarnings("unchecked")
-		public Class getColumnClass(int kolonne) {
+		public Class<? extends Object> getColumnClass(int kolonne) {
 			return celler[0][kolonne].getClass();
 		}
 	}
