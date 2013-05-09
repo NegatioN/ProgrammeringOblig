@@ -9,6 +9,8 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 /*
  * Klassen definerer en Eksamens-hendelse. Et fag kan ha mange eksamener over tid. 
  * Eksamen inneholder en liste av alle eksamensdeltakerne.
@@ -71,6 +73,8 @@ public class Eksamen implements Serializable{
 		if (student.innfriddKrav(fag) && !student.maksForsøkOverskredet(fag)) {
 			EksamensDeltaker ny = new EksamensDeltaker(student, fag, dato);
 			deltakere.add(ny);
+		}else{
+			JOptionPane.showMessageDialog(null, "Studenten har ikke bestått krav, eller har overskredet antall forsøk.");
 		}
 	}
 	

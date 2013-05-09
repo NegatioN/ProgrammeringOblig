@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -181,6 +182,14 @@ public class Fag implements Serializable{
 		double strykProsent = ((double)antallStryk/(double)antallStudenter)*100;
 		
 		return strykProsent;
+	}
+	public Eksamen findEksamenByDate(GregorianCalendar calendar){
+		for(Eksamen e : eksamener){
+			if(calendar.equals(e.getKalender())){
+				return e;
+			}
+		}
+		return null;
 	}
 
 	private Eksamen findEksamenByÅr(int år) {

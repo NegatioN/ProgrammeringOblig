@@ -180,6 +180,9 @@ public class Skole implements Serializable{
 	//finner studentene ved studieprogram
 	public ArrayList<Student> findStudentsByStudieprogram(String navn){
 		Studieprogram sp = studieprogrammene.findEnByNavn(navn);
+		return findStudentsByStudieprogram(sp);
+	}
+	public ArrayList<Student> findStudentsByStudieprogram(Studieprogram sp){
 		ArrayList<Student> studentene = getStudentene().findStudentByStudieprogram(sp);
 		return studentene;
 	}

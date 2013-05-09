@@ -36,7 +36,7 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 	
 	public ListeBoks(TestWindow tw){
 		this.tw = tw;
-		popup = new RightClickMenus(tw);
+		popup = tw.getRightClickMenu();
 	}
 	
 	public JPanel visResultat(JList<E> liste){

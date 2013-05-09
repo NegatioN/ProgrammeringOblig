@@ -8,12 +8,14 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.JList;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
 import no.HiOAProsjektV2013.DataStructure.Eksamen;
+import no.HiOAProsjektV2013.DataStructure.EksamensDeltaker;
 import no.HiOAProsjektV2013.DataStructure.Fag;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
@@ -21,7 +23,8 @@ import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 public class RightClickMenus extends MouseAdapter implements ActionListener{
 
 	private JPopupMenu popMeny;
-	private JMenuItem eStrykPros, eKarDist, fagBeståttKrav, fagStudenter,studieStudenter;
+	private JMenu fagene;
+	private JMenuItem eStrykPros, eKarDist, fagBeståttKrav, fagStudenter,studieStudenter, fjernFagFraStud;
 	private Object curObject = null;
 	private TestWindow tw;
 	
@@ -45,6 +48,7 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 			popMeny.add(eStrykPros);
 			popMeny.add(eKarDist);
 		}
+		//finner alle studenter, og beståtte studenter for valgt fag.
 		else if(o instanceof Fag){
 			fagBeståttKrav = new JMenuItem("Finn studenter som har bestått kravene");
 			fagStudenter = new JMenuItem("Finn studenter med dette faget");
@@ -55,6 +59,7 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 			popMeny.add(fagBeståttKrav);
 			popMeny.add(fagStudenter);
 		}
+		//finner studenter for valgt studieprogram
 		else if(o instanceof Studieprogram){
 			studieStudenter = new JMenuItem("Finn studenter ved dette studieprogrammet");
 			
@@ -62,8 +67,38 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 			
 			popMeny.add(studieStudenter);
 		}
+		//lager en liste av menuitems for hvert fag, og fjerner valgt fag fra studenten.
 		else if(o instanceof Student){
+			final Student s = (Student) o;
+			fagene = new JMenu("Fjern fag fra student");
+			if(s.getfagListe() != null){
+				for (Fag fag : s.getfagListe()) {
+					final JMenuItem fagItem = new JMenuItem(fag.getFagkode());
+					fagItem.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							curObject = (tw.getSkole().søk(
+									fagItem.getActionCommand(), TestWindow.FAG)).get(0);
+							s.removeFag((Fag)curObject);
+						}
+					});
+					fagene.add(fagItem);
+				}
+			popMeny.add(fagene);
+			}
+		}
+		else if(o instanceof EksamensDeltaker){
+			eStrykPros = new JMenuItem("Finn Strykprosent i dette faget.");
+			eKarDist = new JMenuItem("Finn Karakterdistribusjon");
 			
+			eStrykPros.addActionListener(this);
+			eKarDist.addActionListener(this);
+			
+			popMeny.add(eStrykPros);
+			popMeny.add(eKarDist);
+			
+			EksamensDeltaker ed = ((EksamensDeltaker) o);
+			Eksamen e = ed.getFag().findEksamenByDate(ed.getDato());
+			curObject = e;
 		}
 		
 	}
@@ -84,10 +119,15 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 				Object o = lista.getSelectedValue();
 				System.out.println(o.toString());
 				curObject = o;
-				createPopMenu(o);
+				createPopMenu(curObject);
 			}
 			else if(comp instanceof JTable){
-				
+				JTable lista = (JTable) comp;
+				int row = lista.getSelectedRow();
+				if (row != -1) {
+					curObject = lista.getValueAt(row, 2);
+					createPopMenu(curObject);
+				}
 			}
 			try{
 			popMeny.show(e.getComponent(), e.getX(), e.getY());
@@ -101,7 +141,7 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 		Object source = e.getSource();
 		if(source == eStrykPros){
 			Eksamen eks = (Eksamen) curObject;
-			tw.setText(tw.getSkole().findStrykProsent(eks.getFag(), eks) + "");
+			JOptionPane.showMessageDialog(null, tw.getSkole().findStrykProsent(eks.getFag(), eks) + "");
 		}
 		if(source == fagStudenter){
 			Fag fag = (Fag) curObject;

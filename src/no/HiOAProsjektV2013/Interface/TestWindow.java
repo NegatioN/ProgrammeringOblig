@@ -36,7 +36,6 @@ import no.HiOAProsjektV2013.DataStructure.Skole;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 import no.HiOAProsjektV2013.Main.Archiver;
-import no.HiOAProsjektV2013.Main.ScriptClass;
 
 /*
  * Hovedvinduet i programmet. Inneholder mesteparten av interfacen.
@@ -52,6 +51,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private VinduLytter vl;
 	private Skole skolen;
 	private Buttons buttonGenerator;
+	private RightClickMenus popup = new RightClickMenus(this);
 	private ListeBoks<Student> studentboks = new ListeBoks<>(this);
 	private ListeBoks<Laerer> laererboks = new ListeBoks<>(this);
 	private ListeBoks<Fag> fagboks = new ListeBoks<>(this);
@@ -162,6 +162,9 @@ public class TestWindow extends JFrame implements ActionListener {
 	public void listApplier(ArrayList<Student> studenter){
 		JList<Student> listen = studentboks.listify(studenter);
 		vis(studentboks.visResultat(listen));
+	}
+	public RightClickMenus getRightClickMenu(){
+		return popup;
 	}
 	//kanskje kaste denne inn i testwindow pga at den må update selectedValue, og jeg er usikker på å ta inn et TestWindow her.
 	//for valuePassing til søk

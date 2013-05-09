@@ -64,9 +64,11 @@ public class PopupVindu extends JPanel{
 	private JList<Krav> kravListe;
 	private Arbeidskrav aktivKrav;
 	private DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); //Setter inputformat for dato
+	private RightClickMenus popup;
 	
 	public PopupVindu(TestWindow vindu, Object o){
 		this.vindu = vindu;
+		popup = vindu.getRightClickMenu();
 
 		if(o instanceof Student)
 			add(fyllVindu((Student) o));		
@@ -356,6 +358,7 @@ public class PopupVindu extends JPanel{
 		Tabellmodell modell = new Tabellmodell(s);
 		resultater = new JTable(modell);
 		resultater.setPreferredScrollableViewportSize(tabellSize);
+		resultater.addMouseListener(popup);
 		faginfo.add(new JScrollPane(resultater));
 
 		visepanel.add(faginfo);
@@ -369,6 +372,7 @@ public class PopupVindu extends JPanel{
 		Tabellmodell modell = new Tabellmodell(e);
 		resultater = new JTable(modell);
 		resultater.setPreferredScrollableViewportSize(tabellSize);
+		resultater.addMouseListener(popup);
 		faginfo.add(new JScrollPane(resultater));
 		faginfo.updateUI();
 	}

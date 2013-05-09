@@ -22,7 +22,7 @@ public class ScriptClass {
 		generateLaerer();
 		generateFag();
 		generateStudProg();
-//		generateKrav();
+		generateKrav();
 		
 	}
 	
