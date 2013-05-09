@@ -399,11 +399,11 @@ public class PopupVindu extends JPanel{
 		
 		private void fyllTabell(int lengde, LinkedList<EksamensDeltaker> eksamener){
 			celler = new Object[lengde][5];
-
 			int rad = 0;
 			for(EksamensDeltaker ed: eksamener){
+				Eksamen e = ed.getFag().findEksamenByDate(ed.getDato());
 				celler[rad][0] = ed.getFag().getFagkode();
-				celler[rad][1] = formatter.format(ed.getDato().getTime());
+				celler[rad][1] = e;
 				celler[rad][2] = ed;
 				celler[rad][3] = ed.isOppmøtt();
 				celler[rad++][4] = new String(""+ed.getKarakter());

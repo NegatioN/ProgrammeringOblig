@@ -368,7 +368,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		switch(type){
 		case STUDENTFAG:
 			søk.add(velgFag);
-			søk.add(b.generateTextField("År", Buttons.LANG, new søkelytter()));
+			søk.add(innÅr = b.generateTextField("År", Buttons.LANG, new søkelytter()));
 			søk.add(avansert);
 			søk.add(tilbake);
 			break;
@@ -393,7 +393,7 @@ public class TestWindow extends JFrame implements ActionListener {
 			break;
 		case KARAKTER:
 			søk.add(velgFag);
-			søk.add(b.generateTextField("Dato", Buttons.LANG));
+			søk.add(innDato = b.generateTextField("Dato", Buttons.LANG));
 			søk.add(avansert);
 			søk.add(tilbake);
 			break;
@@ -614,6 +614,7 @@ public class TestWindow extends JFrame implements ActionListener {
 				case 5:
 //					if(fk.matches(fagkodeRegex)){
 						Fag f = (Fag)velgFag.getSelectedItem();
+						System.out.println(f.getFagkode());
 						int[] karakterer = null;
 						if(d.matches(årRegex)){
 							 karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(d));
@@ -625,7 +626,9 @@ public class TestWindow extends JFrame implements ActionListener {
 							 setText("Karakterdistribusjon:  \nA: " + karakterer[0] + "\nB: " + karakterer[1] + "\nC: " + karakterer[2] + 
 									 						"\nD: " + karakterer[3] + "\nE: " + karakterer[4] + "\nF: " + karakterer[0] +
 									 						"\nStrykprosent: " + skolen.findStrykProsent(f, f.getRecentEksamen()));
-						}
+						} else
+							JOptionPane.showMessageDialog(innhold, "Skriv inn år eller eksamensdato");
+						
 //					}
 					break;
 				default:

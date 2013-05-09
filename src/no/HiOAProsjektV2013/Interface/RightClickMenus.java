@@ -125,7 +125,7 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 				JTable lista = (JTable) comp;
 				int row = lista.getSelectedRow();
 				if (row != -1) {
-					curObject = lista.getValueAt(row, 2);
+					curObject = lista.getValueAt(row, 1);
 					createPopMenu(curObject);
 				}
 			}
@@ -158,6 +158,16 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 			tw.listApplier(studenter);
 			else
 				JOptionPane.showMessageDialog(null, "Det er ingen studenter i studieprogrammet.");
+		}
+		if(source == eKarDist){
+			Eksamen eks = (Eksamen) curObject;
+			Fag f = eks.getFag();
+			int[] karakterer = tw.getSkole().findKarakterDistribusjon(f, eks);
+			tw.setText("Karakterdistribusjon:  \nA: " + karakterer[0] + "\nB: " + karakterer[1] + "\nC: " + karakterer[2] + 
+					 						"\nD: " + karakterer[3] + "\nE: " + karakterer[4] + "\nF: " + karakterer[0] +
+					 						"\nStrykprosent: " + tw.getSkole().findStrykProsent(f, eks));
+			tw.display();
+
 		}
 	}
 }
