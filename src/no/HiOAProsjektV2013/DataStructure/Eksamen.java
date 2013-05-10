@@ -22,9 +22,9 @@ public class Eksamen implements Serializable{
 	private LinkedList<EksamensDeltaker> deltakere = new LinkedList<>();
 	private Fag fag;
 	
-	public Eksamen(Date dato, Fag fag){
+	public Eksamen(GregorianCalendar dato, Fag fag){
 		GregorianCalendar kalender = (GregorianCalendar) GregorianCalendar.getInstance();
-		kalender.setTime(dato);
+		kalender = dato;
 		this.dato = kalender;
 		this.fag = fag;
 	}

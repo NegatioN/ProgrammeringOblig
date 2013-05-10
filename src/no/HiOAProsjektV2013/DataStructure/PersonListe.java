@@ -23,7 +23,6 @@ public abstract class PersonListe<E> implements Serializable{
 	public ArrayList<E> findByNavn(String input, ArrayList<E> fornavnRegister, ArrayList<E> etternavnRegister) {
 		
 		String[] navn = nameSplitter(input);
-		System.out.println(navn[0] + "\t" + navn[1]);
 		
 		char fFirstLetter = '\0', eFirstLetter = '\0';
 		try{
@@ -179,7 +178,6 @@ public abstract class PersonListe<E> implements Serializable{
 			register.add(person);
 		else{
 		pos = (Math.abs(pos) - 1);
-		System.out.println(pos);
 			register.add(pos, person);
 		}
 	}

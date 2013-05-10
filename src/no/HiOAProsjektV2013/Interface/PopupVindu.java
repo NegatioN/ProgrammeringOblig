@@ -38,6 +38,7 @@ import no.HiOAProsjektV2013.DataStructure.Krav;
 import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
+import no.HiOAProsjektV2013.Main.DateHandler;
 
 public class PopupVindu extends JPanel{
 
@@ -62,6 +63,7 @@ public class PopupVindu extends JPanel{
 	private DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); //Setter inputformat for dato
 	private RightClickMenus popup;
 	private JComboBox<String> vurderingBox = null;
+	private DateHandler dateHandler = new DateHandler();
 	
 	public PopupVindu(TestWindow vindu, Object o){
 		this.vindu = vindu;
@@ -176,7 +178,7 @@ public class PopupVindu extends JPanel{
 		beskrivelse		= button.generateTextField(b, 20, false);
 		studiepoeng		= button.generateTextField(""+sp, 20);
 		vurderingsform	= button.generateTextField(vf, 20, false);
-		eksamensdato 	= button.generateTextField("Eksamensdato", 20);
+		eksamensdato 	= button.generateTextField("dag/mnd/år", 20);
 
 		String[] boxitems =  {"Muntlig", "Skriftlig", "Prosjekt"};
 		vurderingBox = new JComboBox<String>(boxitems);
@@ -521,17 +523,19 @@ public class PopupVindu extends JPanel{
 						studiet.addFag((Fag)velgFag.getSelectedItem());
 					}
 					else if(aktiv instanceof Fag){
-						try {
-							Date date = (Date) formatter.parse(eksamensdato.getText());
-							Eksamen eks = new Eksamen(date, (Fag)aktiv);
+							GregorianCalendar dato = dateHandler.dateFixer(eksamensdato.getText(), null);
+							//hvis dato null er input invalid på en eller annen måte.
+							if(dato == null){
+								eksamensdato.setText("Feil dato-format.");
+								return;
+							}
+
+							Eksamen eks = new Eksamen(dato, (Fag)aktiv);
 							((Fag)aktiv).addEksamen(eks);
 							eksamensdato.setText("Eksamen lagret");
 							vindu.cover(eksamensPanel());
 							velgEksamen.setSelectedItem(eks);
 							visEksamen(eks);
-						} catch (ParseException pe) {
-							eksamensdato.setText("Feil datoformat");
-						}
 					}
 				} catch (NullPointerException npe){
 					npe.printStackTrace();

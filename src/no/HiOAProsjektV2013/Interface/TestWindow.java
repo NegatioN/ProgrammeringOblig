@@ -5,11 +5,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.swing.BorderFactory;
@@ -37,6 +33,7 @@ import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 import no.HiOAProsjektV2013.Main.Archiver;
 import no.HiOAProsjektV2013.Main.DateHandler;
+import no.HiOAProsjektV2013.Main.ScriptClass;
 
 /*
  * Hovedvinduet i programmet. Inneholder mesteparten av interfacen.
@@ -277,7 +274,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		epost	 		= buttonGenerator.generateTextField("E-post", 20);
 		tlf		 		= buttonGenerator.generateTextField("Telefon", 20);
 		adresse			= buttonGenerator.generateTextField("Adresse", 20);
-		innDato			= buttonGenerator.generateTextField("Dato: dag/mnd/år", 20);
+		innDato			= buttonGenerator.generateTextField("dag/mnd/år", 20);
 		utDato			= buttonGenerator.generateTextField("Sluttdato", 20);
 		kontorNr		= buttonGenerator.generateTextField("Kontornummer", 20);
 		fagkode			= buttonGenerator.generateTextField("Fagkode", 20);
@@ -646,14 +643,16 @@ public class TestWindow extends JFrame implements ActionListener {
 							karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(d));
 							double stryk = skolen.findStrykProsent(f, Integer.parseInt(d) );
 							displayKarakterer(karakterer, stryk);
-						} else if (d.matches(datoRegex)){
+						} else{
+							GregorianCalendar dato = dateHandler.dateFixer(d, null);
+							if(dato == null){
+								JOptionPane.showMessageDialog(innhold, "Skriv inn år eller eksamensdato");
+								return;
+							}
 							karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(d));
 							double stryk = skolen.findStrykProsent(f, Integer.parseInt(d) );
 							displayKarakterer(karakterer, stryk);
-						} else
-							JOptionPane.showMessageDialog(innhold, "Skriv inn år eller eksamensdato");
-						
-//					}
+						}
 					break;
 				default:
 					avansert(0);
@@ -710,11 +709,7 @@ public class TestWindow extends JFrame implements ActionListener {
 						}
 						//setter dato i følge input.
 						String dateString = innDato.getText();
-						//hvis dateString matcher dd/mm/YYYY eller dd/mm/YY
-						if (dateString.matches(dateRegex1)
-								|| dateString.matches(dateRegex2)) {
-							if (dateString.matches(dateRegex1) || dateString.matches(dateRegex2)) {
-								GregorianCalendar dato = dateHandler.dateFixer(dateString, null, dateRegex1);
+								GregorianCalendar dato = dateHandler.dateFixer(dateString, null);
 								//hvis dato null er input invalid på en eller annen måte.
 								if(dato == null){
 									innDato.setText("Feil dato-format:");
@@ -731,11 +726,7 @@ public class TestWindow extends JFrame implements ActionListener {
 									s.setStudieprogram((Studieprogram)progBox.getSelectedItem());
 								
 								setText(s.fullString());
-							}
-							} else {
-							innDato.setText("Feil dato-format:");
-							return;
-						}
+							
 					} catch (NumberFormatException nfe){
 						tlf.setText("Feil nummerformat");
 					}

@@ -55,7 +55,7 @@ public class Fag implements Serializable{
 		eksamener.add(e);
 	}
 
-	public void addEksamen(Date dato) {
+	public void addEksamen(GregorianCalendar dato) {
 		Eksamen e = new Eksamen(dato, this);
 		addEksamen(e);
 	}

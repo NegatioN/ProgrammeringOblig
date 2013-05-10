@@ -110,7 +110,6 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 			fagLedetAv.addActionListener(this);
 			
 			popMeny.add(fagLedetAv);
-			//findFagLedetAvLærer()
 		}
 		
 	}

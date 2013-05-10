@@ -75,19 +75,19 @@ public class Skole implements Serializable{
 		if(f != null)
 			f.addKrav(beskrivelse);
 	}
-	//prøver å legge til en eksamen til gitt fag basert på input. Kan feile.
-	public void addEksamenToFag(Fag fag, String dato){
-		DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); //Setter inputformat for startdato
-		try {
-			Date date = (Date) formatter.parse(dato);
-			fag.addEksamen(date);
-		} catch (NumberFormatException nfe){
-			System.out.println("NumberformatException i addEksamenToFag");
-		} catch (ParseException pe) {
-			System.out.println("ParseException i addEksamenToFag");
-		}
-		
-	}
+//	//prøver å legge til en eksamen til gitt fag basert på input. Kan feile.
+//	public void addEksamenToFag(Fag fag, String dato){
+//		DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); //Setter inputformat for startdato
+//		try {
+//			Date date = (Date) formatter.parse(dato);
+//			fag.addEksamen(date);
+//		} catch (NumberFormatException nfe){
+//			System.out.println("NumberformatException i addEksamenToFag");
+//		} catch (ParseException pe) {
+//			System.out.println("ParseException i addEksamenToFag");
+//		}
+//		
+//	}
 	
 	//****************SØØØØØØØØØØK SØKEMETODER SØØØØØØØØØØK****************//
 	
