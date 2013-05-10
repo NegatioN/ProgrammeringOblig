@@ -79,8 +79,8 @@ public class TestWindow extends JFrame implements ActionListener {
 	public static final String mailRegex = "\\S+@\\S+.\\S+";
 	public static final String navnRegex = "(?:([a-zA-ZæøåÆØÅ]+\\s+[a-zA-ZæøåÆØÅ]+\\s*)){1}(?:([a-zA-ZæøåÆØÅ]+\\s*))*";
 	public static final String datoRegex = "\\D";
-	public static final String dateRegex1 = "\\d{2}\\W\\d{2}\\W\\d{4}";
-	public static final String dateRegex2 = "\\d{2}\\W\\d{2}\\W\\d{2}";
+	public static final String dateRegex = "\\d{2}\\W\\d{2}\\W([\\d]{4}|[\\d]{2})";
+	public static final String datehandlerCheckRegex = "\\d{2}\\W\\d{2}\\W\\d{4})";
 	
 	private JMenuBar meny;
 

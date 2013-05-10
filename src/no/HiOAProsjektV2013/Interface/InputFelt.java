@@ -18,8 +18,8 @@ public class InputFelt extends JTextField implements FocusListener, ActionListen
 	public static final String årRegex = "\\d{4}";
 	public static final String mobRegex = "\\d{8}";
 	public static final String mailRegex = "\\S+@\\S+.\\S+";
-	public static final String navnRegex = "\\S+\\s\\S+";
-	public static final String datoRegex = "\\d{2}-\\w{4}-\\d{2}";
+	public static final String navnRegex = "(?:([a-zA-ZæøåÆØÅ]+\\s+[a-zA-ZæøåÆØÅ]+\\s*)){1}(?:([a-zA-ZæøåÆØÅ]+\\s*))*";
+	public static final String datoRegex = "\\d{2}\\W\\d{2}\\W([\\d]{4}|[\\d]{2})";
 	
 	public InputFelt(String tekst, int bredde){
 		super(tekst, bredde);

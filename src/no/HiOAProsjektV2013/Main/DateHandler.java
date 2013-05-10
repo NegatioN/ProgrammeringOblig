@@ -13,7 +13,7 @@ public class DateHandler {
 	
 	public GregorianCalendar dateFixer(String dateToBeConverted, String timeToBeConverted) {
 		//hvis ikke input matcher dd/mm/YYYY eller dd/mm/YY
-		if(!dateToBeConverted.matches(TestWindow.dateRegex1) && !dateToBeConverted.matches(TestWindow.dateRegex2))
+		if(!dateToBeConverted.matches(TestWindow.dateRegex))
 			return null;
 		String sHour;
 		int hour = 0;
@@ -26,7 +26,7 @@ public class DateHandler {
 		sDay = dateToBeConverted.substring(0, 2);
 		sMonth = dateToBeConverted.substring(3, 5);
 		//sjekker om hvilken regex som ble aktivert for å sende input til klassen.
-		if(dateToBeConverted.matches(TestWindow.dateRegex1)){
+		if(dateToBeConverted.matches(TestWindow.datehandlerCheckRegex)){
 		sYear = dateToBeConverted.substring(6, 10);
 		year = Integer.parseInt(sYear);
 		}else{
