@@ -57,6 +57,11 @@ public class LaererListe extends PersonListe<Laerer> implements Serializable{
 		}
 		return lærerne;
 	}
+	//finner fagene som denne lærern leder.
+	public ArrayList<Fag> findFagLedetAv(Laerer l){
+		ArrayList<Fag> fag = l.getFagene();
+		return fag;
+	}
 	
 	public String toString() {
 		String stringen = new String();

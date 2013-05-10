@@ -1,6 +1,7 @@
 package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /*
  * Klassen representerer en lærer ved skolen.
@@ -10,6 +11,7 @@ public class Laerer extends Person implements Serializable{
 	
 	private static final long serialVersionUID = 1011L;
 	private String kontorNr;
+	private ArrayList<Fag> fagene = new ArrayList<>();
 
 	public Laerer(String navn, String epost, int tlf, String kontorNr) {
 		super(navn, epost, tlf);
@@ -18,6 +20,15 @@ public class Laerer extends Person implements Serializable{
 
 	public String getKontor(){
 		return kontorNr;
+	}
+	public void addFag(Fag fag){
+		fagene.add(fag);
+	}
+	public void removeFag(Fag fag){
+		fagene.remove(fag);
+	}
+	public ArrayList<Fag> getFagene(){
+		return fagene;
 	}
 	
 	public void setKontor(String kontorNr){

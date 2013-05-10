@@ -17,6 +17,7 @@ import javax.swing.JTable;
 import no.HiOAProsjektV2013.DataStructure.Eksamen;
 import no.HiOAProsjektV2013.DataStructure.EksamensDeltaker;
 import no.HiOAProsjektV2013.DataStructure.Fag;
+import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 
@@ -24,7 +25,7 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 
 	private JPopupMenu popMeny;
 	private JMenu fagene;
-	private JMenuItem eStrykPros, eKarDist, fagBeståttKrav, fagStudenter,studieStudenter, fjernFagFraStud;
+	private JMenuItem eStrykPros, eKarDist, fagBeståttKrav, fagStudenter,studieStudenter, fagLedetAv;
 	private Object curObject = null;
 	private TestWindow tw;
 	
@@ -103,6 +104,14 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 			Eksamen e = ed.getFag().findEksamenByDate(ed.getDato());
 			curObject = e;
 		}
+		else if(o instanceof Laerer){
+			fagLedetAv = new JMenuItem("Finn fag ledet av lærer");
+			
+			fagLedetAv.addActionListener(this);
+			
+			popMeny.add(fagLedetAv);
+			//findFagLedetAvLærer()
+		}
 		
 	}
 
@@ -120,7 +129,6 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 			if(comp instanceof JList<?>){
 				JList<?> lista =(JList<?>) comp;
 				Object o = lista.getSelectedValue();
-				System.out.println(o.toString());
 				curObject = o;
 				createPopMenu(curObject);
 			}
@@ -146,11 +154,19 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 			Eksamen eks = (Eksamen) curObject;
 			JOptionPane.showMessageDialog(null, tw.getSkole().findStrykProsent(eks.getFag(), eks) + "");
 		}
+		if(source == fagBeståttKrav){
+			Fag fag = (Fag) curObject;
+			ArrayList<Student> studenter = tw.getSkole().findKravBeståtteStudenter(fag);
+			if(!studenter.isEmpty())
+				tw.listApplier(studenter, TestWindow.STUDENT);
+			else
+				JOptionPane.showMessageDialog(null, "Det er ingen studenter som har besått kravene enda");
+		}
 		if(source == fagStudenter){
 			Fag fag = (Fag) curObject;
 			ArrayList<Student> studenter = tw.getSkole().findStudentMedFag(fag);
 			if(!studenter.isEmpty())
-			tw.listApplier(studenter);
+			tw.listApplier(studenter, TestWindow.STUDENT);
 			else
 				JOptionPane.showMessageDialog(null, "Det er ingen studenter i faget.");
 		}
@@ -158,7 +174,7 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 			Studieprogram sp = (Studieprogram) curObject;
 			ArrayList<Student> studenter = tw.getSkole().findStudentsByStudieprogram(sp.getNavn());
 			if(!studenter.isEmpty())
-			tw.listApplier(studenter);
+			tw.listApplier(studenter, TestWindow.STUDENT);
 			else
 				JOptionPane.showMessageDialog(null, "Det er ingen studenter i studieprogrammet.");
 		}
@@ -169,6 +185,16 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 			double stryk = tw.getSkole().findStrykProsent(f, eks);
 			tw.displayKarakterer(karakterer, stryk);
 
+		}
+		if(source == fagLedetAv){
+			Laerer lærer = (Laerer) curObject;
+			ArrayList<Fag> fagene = tw.getSkole().fagLedetAv(lærer);
+			if(!fagene.isEmpty()){
+				tw.listApplier(fagene, TestWindow.FAG);
+			}else{
+				JOptionPane.showMessageDialog(null, "Læreren har ingen fag.");
+			}
+			
 		}
 	}
 }

@@ -36,6 +36,7 @@ import no.HiOAProsjektV2013.DataStructure.Skole;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 import no.HiOAProsjektV2013.Main.Archiver;
+import no.HiOAProsjektV2013.Main.DateHandler;
 
 /*
  * Hovedvinduet i programmet. Inneholder mesteparten av interfacen.
@@ -51,6 +52,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private VinduLytter vl;
 	private Skole skolen;
 	private Buttons buttonGenerator;
+	private DateHandler dateHandler;
 	private RightClickMenus popup = new RightClickMenus(this);
 	private ListeBoks<Student> studentboks = new ListeBoks<>(this);
 	private ListeBoks<Laerer> laererboks = new ListeBoks<>(this);
@@ -74,12 +76,15 @@ public class TestWindow extends JFrame implements ActionListener {
 	private int selectedValue = STUDENT;
 	
 	public static String fagkodeRegex = "\\D{4}\\d{4}";
-	public static String studentNrRegex = "s\\d{6}";
-	public static String årRegex = "\\d{4}";
-	public static String mobRegex = "\\d{8}";
-	public static String mailRegex = "\\S+@\\S+.\\S+";
+	public static final String studentNrRegex = "s\\d{6}";
+	public static final String årRegex = "\\d{4}";
+	public static final String mobRegex = "\\d{8}";
+	public static final String mailRegex = "\\S+@\\S+.\\S+";
 	public static final String navnRegex = "\\S+\\s\\S+";
 	public static final String datoRegex = "\\D";
+	public static final String dateRegex1 = "\\d{2}\\W\\d{2}\\W\\d{4}";
+	public static final String dateRegex2 = "\\d{2}\\W\\d{2}\\W\\d{2}";
+	
 	
 	private JMenuBar meny;
 
@@ -103,6 +108,8 @@ public class TestWindow extends JFrame implements ActionListener {
 		add(rammeverk);
 		fyllRamme();
 		
+		//lager dateHandler
+		dateHandler = new DateHandler();
 		//setter inn meny
 		populateMenu();
 		
@@ -160,9 +167,16 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		setJMenuBar(meny);
 	}
-	public void listApplier(ArrayList<Student> studenter){
-		JList<Student> listen = studentboks.listify(studenter);
+	//tar inn lister fra høyreclick-menyene.
+	public void listApplier(ArrayList<?> listeobjekter, int qualifier){
+		if(qualifier == STUDENT){
+		JList<Student> listen = studentboks.listify((ArrayList<Student>)listeobjekter);
 		vis(studentboks.visResultat(listen));
+		}
+		else if(qualifier == FAG){
+			JList<Fag> listen = fagboks.listify((ArrayList<Fag>)listeobjekter);
+			vis(fagboks.visResultat(listen));
+		}
 	}
 	public RightClickMenus getRightClickMenu(){
 		return popup;
@@ -263,7 +277,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		epost	 		= buttonGenerator.generateTextField("E-post", 20);
 		tlf		 		= buttonGenerator.generateTextField("Telefon", 20);
 		adresse			= buttonGenerator.generateTextField("Adresse", 20);
-		innDato			= buttonGenerator.generateTextField("Startdato", 20);
+		innDato			= buttonGenerator.generateTextField("Dato: dag/mnd/år", 20);
 		utDato			= buttonGenerator.generateTextField("Sluttdato", 20);
 		kontorNr		= buttonGenerator.generateTextField("Kontornummer", 20);
 		fagkode			= buttonGenerator.generateTextField("Fagkode", 20);
@@ -297,11 +311,9 @@ public class TestWindow extends JFrame implements ActionListener {
 			progBox.addItem(sp);
 		}
 		
-		vurderingBox = new JComboBox<String>();
+		String[] boxitems =  {"Muntlig", "Skriftlig", "Prosjekt"};
+		vurderingBox = new JComboBox<String>(boxitems);
 		vurderingBox.setPreferredSize(Buttons.HEL);
-		vurderingBox.addItem("Muntlig");
-		vurderingBox.addItem("Skriftlig");
-		vurderingBox.addItem("Prosjekt");
 
 		innhold = new JPanel();
 		innhold.setBorder( ramme);
@@ -425,13 +437,12 @@ public class TestWindow extends JFrame implements ActionListener {
 		epost			.setText("E-post");
 		tlf				.setText("Telefon");
 		adresse			.setText("Adresse");
-		innDato			.setText("Startdato");
+		innDato			.setText("dag/mnd/år");
 		utDato			.setText("Sluttdato");
 		kontorNr		.setText("Kontornummer");
 		fagkode			.setText("Fagkode");
 		beskrivelse		.setText("Beskrivelse");
 		vurderingsform	.setText("Vurderingsform");
-//		vurderingsformBox.setSelectedIndex(-1);
 		studiepoeng		.setText("Studiepoeng");
 		innÅr 			.setText("Startår");
 		utÅr			.setText("Sluttår");
@@ -630,7 +641,6 @@ public class TestWindow extends JFrame implements ActionListener {
 				case 5:
 //					if(fk.matches(fagkodeRegex)){
 						Fag f = (Fag)fagBox.getSelectedItem();
-						System.out.println(f.getFagkode());
 						int[] karakterer = null;
 						if(d.matches(årRegex)){
 							karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(d));
@@ -683,7 +693,6 @@ public class TestWindow extends JFrame implements ActionListener {
 				
 				if (innhold.getComponent(FØRSTE).equals(stud)) { //Sjekker hvilket panel som ligger i innhold-panelet
 					
-					DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); //Setter inputformat for startdato
 					try {
 						int nr = Integer.parseInt(tlf.getText());
 						//regex-checks på input.
@@ -699,23 +708,36 @@ public class TestWindow extends JFrame implements ActionListener {
 							tlf.setText("Feil nummerformat");
 							return;
 						}
-						Date date = (Date) formatter.parse(innDato.getText());
-						GregorianCalendar dato = (GregorianCalendar) GregorianCalendar.getInstance();
-						dato.setTime(date);
-						
-						Student s = skolen.getStudentene().addStudent(navn.getText(), 
-								epost.getText(), 
-								nr,
-								adresse.getText(), 
-								dato);
-						if(progBox.getSelectedIndex() != -1)
-							s.setStudieprogram((Studieprogram)progBox.getSelectedItem());
-						
-						setText(s.fullString());
+						//setter dato i følge input.
+						String dateString = innDato.getText();
+						//hvis dateString matcher dd/mm/YYYY eller dd/mm/YY
+						if (dateString.matches(dateRegex1)
+								|| dateString.matches(dateRegex2)) {
+							if (dateString.matches(dateRegex1) || dateString.matches(dateRegex2)) {
+								GregorianCalendar dato = dateHandler.dateFixer(dateString, null, dateRegex1);
+								//hvis dato null er input invalid på en eller annen måte.
+								if(dato == null){
+									innDato.setText("Feil dato-format:");
+									return;
+								}
+								
+								//oppretter Studentobjektet.
+								Student s = skolen.getStudentene().addStudent(navn.getText(), 
+										epost.getText(), 
+										nr,
+										adresse.getText(), 
+										dato);
+								if(progBox.getSelectedIndex() != -1)
+									s.setStudieprogram((Studieprogram)progBox.getSelectedItem());
+								
+								setText(s.fullString());
+							}
+							} else {
+							innDato.setText("Feil dato-format:");
+							return;
+						}
 					} catch (NumberFormatException nfe){
 						tlf.setText("Feil nummerformat");
-					} catch (ParseException pe) {
-						innDato.setText("Feil datoformat");
 					}
 					
 				} 

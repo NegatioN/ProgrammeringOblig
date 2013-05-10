@@ -61,6 +61,7 @@ public class PopupVindu extends JPanel{
 	private Arbeidskrav aktivKrav;
 	private DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); //Setter inputformat for dato
 	private RightClickMenus popup;
+	private JComboBox<String> vurderingBox = null;
 	
 	public PopupVindu(TestWindow vindu, Object o){
 		this.vindu = vindu;
@@ -163,7 +164,7 @@ public class PopupVindu extends JPanel{
 	}
 	public Component fyllVindu(Fag f){
 		aktiv = f;
-
+		
 		String n = f.getNavn();
 		String fk = f.getFagkode();
 		String b = f.getBeskrivelse() + "";
@@ -174,9 +175,14 @@ public class PopupVindu extends JPanel{
 		fagkode	 		= button.generateTextField(fk, 20, false);
 		beskrivelse		= button.generateTextField(b, 20, false);
 		studiepoeng		= button.generateTextField(""+sp, 20);
-		vurderingsform	= button.generateTextField(vf, 20);
+		vurderingsform	= button.generateTextField(vf, 20, false);
 		eksamensdato 	= button.generateTextField("Eksamensdato", 20);
 
+		String[] boxitems =  {"Muntlig", "Skriftlig", "Prosjekt"};
+		vurderingBox = new JComboBox<String>(boxitems);
+		vurderingBox.setPreferredSize(Buttons.HEL);
+		vurderingBox.setSelectedItem(f.getVurderingsform());
+		
 		velgLærer = new JComboBox<Laerer>();
 		velgLærer.setSelectedItem(f.getLærer());
 		velgLærer.setPreferredSize(Buttons.HEL);
@@ -190,7 +196,7 @@ public class PopupVindu extends JPanel{
 		panelet.add(fagkode);
 		panelet.add(beskrivelse);
 		panelet.add(studiepoeng);
-		panelet.add(vurderingsform);
+		panelet.add(vurderingBox);
 		panelet.add(velgLærer);
 		panelet.add(eksamensdato);
 		leggtil = button.generateButton("Legg til Eksamen", panelet, Buttons.HEL);
@@ -630,7 +636,7 @@ public class PopupVindu extends JPanel{
 					Fag f = (Fag) aktiv;
 
 					f.setBeskrivelse(beskrivelse.getText());
-					f.setVurderingsform(vurderingsform.getText());
+					f.setVurderingsform(vurderingBox.getSelectedItem().toString());
 					f.setLærer((Laerer)velgLærer.getSelectedItem());
 					vindu.setText(f.fullString());
 

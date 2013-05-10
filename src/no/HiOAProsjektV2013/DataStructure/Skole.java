@@ -123,7 +123,6 @@ public class Skole implements Serializable{
 	}
 	public ArrayList<Student> findStudentMedFag(Fag fag){
 		ArrayList<Student> studentene = fag.getStudenter();
-		System.out.println(studentene.toString());
 		return studentene;
 	}
 	
@@ -136,6 +135,10 @@ public class Skole implements Serializable{
 			}
 		}
 		return studenter;
+	}
+	//finner fagene som denne læreren har hovedansvar for.
+	public ArrayList<Fag> fagLedetAv(Laerer lærer){
+		return getLærerne().findFagLedetAv(lærer);
 	}
 	//finner studenter med startåret brukeren søker på.
 	public ArrayList<Student> findStudentByStart(String input){

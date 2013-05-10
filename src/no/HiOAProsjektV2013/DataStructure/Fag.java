@@ -33,7 +33,7 @@ public class Fag implements Serializable{
 		// alltid uppercase fagkode
 		this.fagkode = fagkode.toUpperCase();
 		this.vurderingsform = vurderingsform;
-		this.lærer = lærer;
+		setLærer(lærer);
 		this.studiepoeng = studiepoeng;
 		krav = new Arbeidskrav(this);
 		
@@ -79,7 +79,11 @@ public class Fag implements Serializable{
 	}
 
 	public void setLærer(Laerer lærer) {
+		if(this.lærer != null){
+			this.lærer.removeFag(this);
+		}
 		this.lærer = lærer;
+		this.lærer.addFag(this);
 	}
 
 	public String getNavn() {
