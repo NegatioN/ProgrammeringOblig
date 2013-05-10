@@ -59,7 +59,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
 			vislærer, visfag, visstudieprog, lagre, leggtilfag, søkeknapp, avansert, visAvansert, tilbake;
 	private JRadioButton studentCheck, lærerCheck, fagCheck, studieCheck;
-	private JTextField navn, epost, tlf, adresse, innDato, utDato, kontorNr, fagkode,
+	private JTextField navn, tittel, epost, tlf, adresse, innDato, utDato, kontorNr, fagkode,
 			beskrivelse, studiepoeng, søkefelt,vurderingsform, innÅr, utÅr, studNr;
 	private JPanel rammeverk, innhold, stud, lær, fag, studprog, display;
 	public static Dimension innholdSize = new Dimension(300,500), toppSize = new Dimension(900,50), søkSize = new Dimension(170,400);
@@ -72,12 +72,13 @@ public class TestWindow extends JFrame implements ActionListener {
 	//endre
 	private int selectedValue = STUDENT;
 	
-	public static String fagkodeRegex = "(\\D){4}\\d{4}";
+	public static final String fagkodeRegex = "\\D{4}\\d{4}";
 	public static final String studentNrRegex = "s\\d{6}";
 	public static final String årRegex = "\\d{4}";
 	public static final String mobRegex = "\\d{8}";
 	public static final String mailRegex = "\\S+@\\S+.\\S+";
 	public static final String navnRegex = "(?:([a-zA-ZæøåÆØÅ]+\\s+[a-zA-ZæøåÆØÅ]+\\s*)){1}(?:([a-zA-ZæøåÆØÅ]+\\s*))*";
+	public static final String tittelRegex = "(\\w+)||(\\w+\\s\\S+)";
 	public static final String datoRegex = "\\D";
 	public static final String dateRegex = "\\d{2}\\W\\d{2}\\W([\\d]{4}|[\\d]{2})";
 	public static final String datehandlerCheckRegex = "\\d{2}\\W\\d{2}\\W\\d{4})";
@@ -270,6 +271,7 @@ public class TestWindow extends JFrame implements ActionListener {
 
 		//Oppretter objekter til registreringsfelter
 		navn	 		= new InputFelt("Navn", 20, navnRegex);
+		tittel			= new InputFelt("Navn", 20, tittelRegex);
 		epost	 		= new InputFelt("E-post", 20, mailRegex);
 		tlf		 		= new InputFelt("Telefon", 20, mobRegex);
 		adresse			= new InputFelt("Adresse", 20);
@@ -349,7 +351,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		fag = new JPanel();
 		fag.setPreferredSize(innholdSize);
 		
-		fag.add(navn);
+		fag.add(tittel);
 		fag.add(fagkode);
 		fag.add(beskrivelse);
 		fag.add(studiepoeng);
@@ -363,7 +365,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		studprog = new JPanel();
 		studprog.setPreferredSize(innholdSize);
 		
-		studprog.add(navn);
+		studprog.add(tittel);
 		studprog.add(lagre);
 		studprog.add(Box.createRigidArea(Buttons.HEL));
 		studprog.add(fagBox);
@@ -429,6 +431,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	public void refresh(){
 		
 		navn			.setText("Navn");
+		tittel			.setText("Navn");
 		epost			.setText("E-post");
 		tlf				.setText("Telefon");
 		adresse			.setText("Adresse");
@@ -587,13 +590,11 @@ public class TestWindow extends JFrame implements ActionListener {
 				switch(type){
 				case 1:
 					JList<Student> listen = null;
-//					if(fk.matches(fagkodeRegex)){
 						if(inn.matches(årRegex))
 							listen = studentboks.listify(skolen.findStudentMedFagByÅr(((Fag)fagBox.getSelectedItem()).getFagkode(),Integer.parseInt(inn)));
 						else
 							listen = studentboks.listify(skolen.findStudentMedFag(((Fag)fagBox.getSelectedItem()).getFagkode()));
 					vis(studentboks.visResultat(listen));
-//					}
 					break;
 				case 2:
 					listen = null;
@@ -618,19 +619,17 @@ public class TestWindow extends JFrame implements ActionListener {
 					break;
 				case 4:
 					int poeng = 0;
-					if(nr.matches(studentNrRegex)){
-						Student s = skolen.getStudentene().findStudentByStudentNr(nr);
-						if(inn.matches(årRegex)){
-							if(ut.matches(årRegex))
-								poeng = skolen.findStudiepoengForStudIPeriode(s, inn, ut);
-							else
-								poeng = skolen.findStudiepoengForStudIPeriode(s, inn, "3000");
-						} else if(ut.matches(årRegex))
-							poeng = skolen.findStudiepoengForStudIPeriode(s, "1000", ut);
+					Student s = skolen.getStudentene().findStudentByStudentNr(nr);
+					if(inn.matches(årRegex)){
+						if(ut.matches(årRegex))
+							poeng = skolen.findStudiepoengForStudIPeriode(s, inn, ut);
 						else
-							poeng = skolen.findStudiepoengForStudIPeriode(s, "1000", "3000");
-						setText("Studiepoeng for " + s.getfNavn() + " " + s.geteNavn() + ": " + poeng);
-					}
+							poeng = skolen.findStudiepoengForStudIPeriode(s, inn, "3000");
+					} else if(ut.matches(årRegex))
+						poeng = skolen.findStudiepoengForStudIPeriode(s, "1000", ut);
+					else
+						poeng = skolen.findStudiepoengForStudIPeriode(s, "1000", "3000");
+					setText("Studiepoeng for " + s.getfNavn() + " " + s.geteNavn() + ": " + poeng);
 					break;
 				case 5:
 					Fag f = (Fag)fagBox.getSelectedItem();
@@ -685,19 +684,7 @@ public class TestWindow extends JFrame implements ActionListener {
 				
 				if (innhold.getComponent(FØRSTE).equals(stud)) { //Sjekker hvilket panel som ligger i innhold-panelet
 					
-						//regex-checks på input.
-						if(!navn.getText().matches(navnRegex)){
-							navn.setText("Fornavn og Etternavn");
-							return;
-						}
-						else if(!epost.getText().matches(mailRegex)){
-							epost.setText("Feil epost-format.");
-							return;
-						}
-						else if(!tlf.getText().matches(mobRegex)){
-							tlf.setText("Feil nummerformat");
-							return;
-						}
+
 						int nr = Integer.parseInt(tlf.getText());
 						//setter dato i følge input.
 						String dateString = innDato.getText();
@@ -739,10 +726,6 @@ public class TestWindow extends JFrame implements ActionListener {
 			else if (innhold.getComponent(FØRSTE).equals(fag)) {
 					try{
 						int poeng = Integer.parseInt(studiepoeng.getText());
-						if(!fagkode.getText().matches(fagkodeRegex)){
-							fagkode.setText("Feil kodeformat.");
-							return;
-						}
 						
 						info.setText(skolen.getFagene().addFag(navn.getText(), 
 								fagkode.getText(),
