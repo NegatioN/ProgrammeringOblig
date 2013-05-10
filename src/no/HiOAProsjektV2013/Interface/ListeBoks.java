@@ -6,12 +6,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -32,6 +34,7 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 	private JButton rediger, slett;
 	private TestWindow tw;
 	private RightClickMenus popup;
+	private JList<E> curList = null;
 	
 	public ListeBoks(TestWindow tw){
 		this.tw = tw;
@@ -44,7 +47,12 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 
 		Buttons button = new Buttons(this);
 		rediger = button.generateButton("Rediger", knapper, Buttons.HEL);
+		
+		Object o = liste.getSelectedValue();
+		
+		if(!(o instanceof Student)){
 		slett = button.generateButton("Slett", knapper, Buttons.HEL);
+		}
 		
 		vis.add(new JScrollPane(liste), BorderLayout.CENTER);
 		vis.add(knapper, BorderLayout.SOUTH);
@@ -54,15 +62,22 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 
 	//gjør om arraylisten til en JList
 	public JList<E> listify(ArrayList<E> array){
-		JList<E> listen = new JList<>();
-		@SuppressWarnings("unchecked")
 		E[] tilArray = (E[]) array.toArray();
-		listen.setListData(tilArray);
+		DefaultListModel<E> model = new DefaultListModel<>();
+		for(E object : tilArray){
+			model.addElement(object);
+		}
+		JList<E> listen = new JList<>(model);
+//		@SuppressWarnings("unchecked")
+//		E[] tilArray = (E[]) array.toArray();
+//		listen.setListData(tilArray);
 		listen.setVisibleRowCount(ROWCOUNT);
+		
 		listen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listen.addListSelectionListener(this);
 		listen.addMouseListener(popup);
 		listen.setFixedCellWidth(390);
+		listen.setSelectedIndex(0);
 		//listen.setPreferredSize(størrelse);
 		
 		return listen;
@@ -107,6 +122,7 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 			@SuppressWarnings("unchecked")
 			JList<E> lista = (JList<E>) e.getSource();
 			E valgtObjekt = lista.getSelectedValue();
+			curList = lista;
 			setValgt(valgtObjekt);
 			visInfo(valgtObjekt);
 	//	}
@@ -136,6 +152,9 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 
 				tw.setText(valgt.toString() + " ble fjernet fra systemet.");
 				tw.display();
+				//sørger for at lista mister det objektet som blir sletta fra datastrukturen.
+				DefaultListModel<E> model = (DefaultListModel<E>) curList.getModel();
+					model.removeElement(valgt);
 			}
 		}
 	}

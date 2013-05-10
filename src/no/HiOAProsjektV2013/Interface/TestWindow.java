@@ -72,12 +72,12 @@ public class TestWindow extends JFrame implements ActionListener {
 	//endre
 	private int selectedValue = STUDENT;
 	
-	public static String fagkodeRegex = "\\D{4}\\d{4}";
+	public static String fagkodeRegex = "(\\D){4}\\d{4}";
 	public static final String studentNrRegex = "s\\d{6}";
 	public static final String årRegex = "\\d{4}";
 	public static final String mobRegex = "\\d{8}";
 	public static final String mailRegex = "\\S+@\\S+.\\S+";
-	public static final String navnRegex = "\\S+\\s\\S+";
+	public static final String navnRegex = "(?:([a-zA-ZæøåÆØÅ]+\\s+[a-zA-ZæøåÆØÅ]+\\s*)){1}(?:([a-zA-ZæøåÆØÅ]+\\s*))*";
 	public static final String datoRegex = "\\D";
 	public static final String dateRegex1 = "\\d{2}\\W\\d{2}\\W\\d{4}";
 	public static final String dateRegex2 = "\\d{2}\\W\\d{2}\\W\\d{2}";
@@ -274,7 +274,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		epost	 		= buttonGenerator.generateTextField("E-post", 20);
 		tlf		 		= buttonGenerator.generateTextField("Telefon", 20);
 		adresse			= buttonGenerator.generateTextField("Adresse", 20);
-		innDato			= buttonGenerator.generateTextField("dag/mnd/år", 20);
+		innDato			= buttonGenerator.generateTextField("Startdato", 20);
 		utDato			= buttonGenerator.generateTextField("Sluttdato", 20);
 		kontorNr		= buttonGenerator.generateTextField("Kontornummer", 20);
 		fagkode			= buttonGenerator.generateTextField("Fagkode", 20);
@@ -434,7 +434,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		epost			.setText("E-post");
 		tlf				.setText("Telefon");
 		adresse			.setText("Adresse");
-		innDato			.setText("dag/mnd/år");
+		innDato			.setText("Startdato");
 		utDato			.setText("Sluttdato");
 		kontorNr		.setText("Kontornummer");
 		fagkode			.setText("Fagkode");
@@ -692,8 +692,6 @@ public class TestWindow extends JFrame implements ActionListener {
 				
 				if (innhold.getComponent(FØRSTE).equals(stud)) { //Sjekker hvilket panel som ligger i innhold-panelet
 					
-					try {
-						int nr = Integer.parseInt(tlf.getText());
 						//regex-checks på input.
 						if(!navn.getText().matches(navnRegex)){
 							navn.setText("Fornavn og Etternavn");
@@ -707,12 +705,14 @@ public class TestWindow extends JFrame implements ActionListener {
 							tlf.setText("Feil nummerformat");
 							return;
 						}
+						int nr = Integer.parseInt(tlf.getText());
 						//setter dato i følge input.
 						String dateString = innDato.getText();
 								GregorianCalendar dato = dateHandler.dateFixer(dateString, null);
 								//hvis dato null er input invalid på en eller annen måte.
 								if(dato == null){
 									innDato.setText("Feil dato-format:");
+									JOptionPane.showMessageDialog(null, "Eksempel på datoformatering: 01/10/1990.", "Beklager",  JOptionPane.ERROR_MESSAGE);
 									return;
 								}
 								
@@ -726,10 +726,6 @@ public class TestWindow extends JFrame implements ActionListener {
 									s.setStudieprogram((Studieprogram)progBox.getSelectedItem());
 								
 								setText(s.fullString());
-							
-					} catch (NumberFormatException nfe){
-						tlf.setText("Feil nummerformat");
-					}
 					
 				} 
 			
@@ -752,6 +748,7 @@ public class TestWindow extends JFrame implements ActionListener {
 						int poeng = Integer.parseInt(studiepoeng.getText());
 						if(!fagkode.getText().matches(fagkodeRegex)){
 							fagkode.setText("Feil kodeformat.");
+							JOptionPane.showMessageDialog(null, "En fagkode består av 4 bokstaver og 4 tall.", "Beklager",  JOptionPane.ERROR_MESSAGE);
 							return;
 						}
 						
