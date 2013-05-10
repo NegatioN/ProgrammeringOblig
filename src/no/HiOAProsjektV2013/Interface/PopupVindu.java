@@ -242,33 +242,6 @@ public class PopupVindu extends JPanel{
 		return panelet;
 	}
 
-	public void visFag(Fag f){
-		faginfo.removeAll();
-		faginfo.setBorder(BorderFactory.createTitledBorder(f.getNavn()));
-
-		aktivKrav = ((Student)aktiv).getFagKrav(f);
-
-		checklytter cl = new checklytter();
-		for(Krav krav : aktivKrav.getKrav()){
-			JCheckBox cb = new JCheckBox(krav.getBeskrivelse());
-			faginfo.add(cb);
-			cb.setSelected(krav.isGodkjent());
-			cb.addItemListener(cl);
-		}
-		oppmeldtCheck = new JCheckBox("Oppmeldt til eksamen");
-		oppmeldtCheck.setSelected(((Student)aktiv).innfriddKrav(f));
-		faginfo.add(oppmeldtCheck);
-		faginfo.updateUI();
-	}
-	public void visFag(){
-		faginfo.removeAll();
-		if(studentFag == null || studentFag.getSelectedIndex() == -1)
-			faginfo.setBorder(BorderFactory.createTitledBorder("Ingen fag"));
-		else
-			visFag((Fag)studentFag.getSelectedItem());
-
-		faginfo.updateUI();
-	}
 	public JPanel fagPanel(){
 		visepanel = new JPanel();
 		visepanel.setPreferredSize(høyreSize);
@@ -383,6 +356,33 @@ public class PopupVindu extends JPanel{
 		resultater.setPreferredScrollableViewportSize(tabellSize);
 		resultater.addMouseListener(popup);
 		faginfo.add(new JScrollPane(resultater));
+		faginfo.updateUI();
+	}
+	public void visFag(Fag f){
+		faginfo.removeAll();
+		faginfo.setBorder(BorderFactory.createTitledBorder(f.getNavn()));
+
+		aktivKrav = ((Student)aktiv).getFagKrav(f);
+
+		checklytter cl = new checklytter();
+		for(Krav krav : aktivKrav.getKrav()){
+			JCheckBox cb = new JCheckBox(krav.getBeskrivelse());
+			faginfo.add(cb);
+			cb.setSelected(krav.isGodkjent());
+			cb.addItemListener(cl);
+		}
+		oppmeldtCheck = new JCheckBox("Oppmeldt til eksamen");
+		oppmeldtCheck.setSelected(((Student)aktiv).innfriddKrav(f));
+		faginfo.add(oppmeldtCheck);
+		faginfo.updateUI();
+	}
+	public void visFag(){
+		faginfo.removeAll();
+		if(studentFag == null || studentFag.getSelectedIndex() == -1)
+			faginfo.setBorder(BorderFactory.createTitledBorder("Ingen fag"));
+		else
+			visFag((Fag)studentFag.getSelectedItem());
+
 		faginfo.updateUI();
 	}
 

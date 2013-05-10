@@ -46,6 +46,9 @@ public class StudieprogramListe implements Serializable{
 	//Legger til nytt studieprogram med gitt navn i listen studieprogrammene
 	public Studieprogram addStudProg(String navn) {
 		Studieprogram sp = new Studieprogram(navn);
+		for(Studieprogram program : register)
+			if(sp.getNavn().equals(program.getNavn()))
+				return program;
 		register.add(sp);
 		return sp;
 	}

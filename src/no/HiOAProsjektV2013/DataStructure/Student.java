@@ -190,14 +190,16 @@ public class Student extends Person implements Serializable{
 					"\nE-post: " + getEpost() + 
 					"\nTlf: " + getTelefonNr() + 
 					"\nAdresse: " + adresse + 
-					"\nStartdato: " + new SimpleDateFormat("dd. MMM yyyy").format(start.getTime()) +
-					"\nFag: ";
-	
-		//må legge inn arbeidskrav i faget før vi kan reference.
-		//if(!fagListe.isEmpty()){
-		for(Fag fag : fagListe){
-			stringen += fag.getFagkode() + "\n";
-		}
+					"\nStartdato: " + new SimpleDateFormat("dd. MMM yyyy").format(start.getTime());
+					if(slutt != null)
+						stringen += "\nSluttdato: " + new SimpleDateFormat("dd. MMM yyyy").format(slutt.getTime());
+					if(sp != null)
+						stringen += "\nStudieProgram: " + sp.getNavn();
+					
+					stringen += "\nFag:\n";
+					for(Fag fag : fagListe){
+						stringen += fag.getFagkode() + "\n";
+					}
 		
 		return stringen;
 	}

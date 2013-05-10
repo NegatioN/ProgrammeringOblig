@@ -82,7 +82,6 @@ public class TestWindow extends JFrame implements ActionListener {
 	public static final String dateRegex1 = "\\d{2}\\W\\d{2}\\W\\d{4}";
 	public static final String dateRegex2 = "\\d{2}\\W\\d{2}\\W\\d{2}";
 	
-	
 	private JMenuBar meny;
 
 	public TestWindow(String tittel) {
@@ -239,7 +238,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		visning.setBorder(ramme);
 		display.setBorder(ramme);
 		
-		søkefelt		= buttonGenerator.generateTextField("Søk", Buttons.KORT, new søkelytter());
+		søkefelt		= new InputFelt("Søk", Buttons.KORT, new søkelytter());
 		visning.add(søkefelt);
 		
 		søkeknapp 		= buttonGenerator.generateButton("Søk", visning, Buttons.HALV, new søkelytter());
@@ -270,20 +269,19 @@ public class TestWindow extends JFrame implements ActionListener {
 		rammeverk.add(visning, BorderLayout.EAST);
 
 		//Oppretter objekter til registreringsfelter
-		navn	 		= buttonGenerator.generateTextField("Navn", 20);
-		epost	 		= buttonGenerator.generateTextField("E-post", 20);
-		tlf		 		= buttonGenerator.generateTextField("Telefon", 20);
-		adresse			= buttonGenerator.generateTextField("Adresse", 20);
-		innDato			= buttonGenerator.generateTextField("Startdato", 20);
-		utDato			= buttonGenerator.generateTextField("Sluttdato", 20);
-		kontorNr		= buttonGenerator.generateTextField("Kontornummer", 20);
-		fagkode			= buttonGenerator.generateTextField("Fagkode", 20);
-		beskrivelse		= buttonGenerator.generateTextField("Beskrivelse", 20);
-		vurderingsform	= buttonGenerator.generateTextField("Vurderingsform", 20);
-		studiepoeng		= buttonGenerator.generateTextField("Studiepoeng", 20);
-		innÅr 			= buttonGenerator.generateTextField("Startår", 20);
-		utÅr			= buttonGenerator.generateTextField("Sluttår", 20);
-		studNr 			= buttonGenerator.generateTextField("StudentNr", 20);
+		navn	 		= new InputFelt("Navn", 20, navnRegex);
+		epost	 		= new InputFelt("E-post", 20, mailRegex);
+		tlf		 		= new InputFelt("Telefon", 20, mobRegex);
+		adresse			= new InputFelt("Adresse", 20);
+		innDato			= new InputFelt("Startdato", 20, datoRegex);
+		utDato			= new InputFelt("Sluttdato", 20, datoRegex);
+		kontorNr		= new InputFelt("Kontornummer", 20);
+		fagkode			= new InputFelt("Fagkode", 20, fagkodeRegex);
+		beskrivelse		= new InputFelt("Beskrivelse", 20);
+		studiepoeng		= new InputFelt("Studiepoeng", 20,  "\\d{2}");
+		innÅr 			= new InputFelt("Startår", 20,  årRegex);
+		utÅr			= new InputFelt("Sluttår", 20,  årRegex);
+		studNr 			= new InputFelt("StudentNr", 20,  studentNrRegex);
 	
 		lagre 			= buttonGenerator.generateButton("Lagre", Buttons.HEL, new lagrelytter());
 		leggtilfag 		= buttonGenerator.generateButton("Legg til fag", Buttons.HEL);
@@ -439,7 +437,6 @@ public class TestWindow extends JFrame implements ActionListener {
 		kontorNr		.setText("Kontornummer");
 		fagkode			.setText("Fagkode");
 		beskrivelse		.setText("Beskrivelse");
-		vurderingsform	.setText("Vurderingsform");
 		studiepoeng		.setText("Studiepoeng");
 		innÅr 			.setText("Startår");
 		utÅr			.setText("Sluttår");
@@ -636,23 +633,19 @@ public class TestWindow extends JFrame implements ActionListener {
 					}
 					break;
 				case 5:
-//					if(fk.matches(fagkodeRegex)){
-						Fag f = (Fag)fagBox.getSelectedItem();
-						int[] karakterer = null;
-						if(d.matches(årRegex)){
-							karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(d));
-							double stryk = skolen.findStrykProsent(f, Integer.parseInt(d) );
-							displayKarakterer(karakterer, stryk);
-						} else{
-							GregorianCalendar dato = dateHandler.dateFixer(d, null);
-							if(dato == null){
-								JOptionPane.showMessageDialog(innhold, "Skriv inn år eller eksamensdato");
-								return;
-							}
-							karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(d));
-							double stryk = skolen.findStrykProsent(f, Integer.parseInt(d) );
-							displayKarakterer(karakterer, stryk);
-						}
+					Fag f = (Fag)fagBox.getSelectedItem();
+					System.out.println(f.getFagkode());
+					int[] karakterer = null;
+					if(d.matches(årRegex)){
+						karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(d));
+						double stryk = skolen.findStrykProsent(f, Integer.parseInt(d) );
+						displayKarakterer(karakterer, stryk);
+					} else if (d.matches(datoRegex)){
+						karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(d));
+						double stryk = skolen.findStrykProsent(f, Integer.parseInt(d) );
+						displayKarakterer(karakterer, stryk);
+					} else
+						JOptionPane.showMessageDialog(innhold, "Skriv inn år eller eksamensdato");
 					break;
 				default:
 					avansert(0);
@@ -748,7 +741,6 @@ public class TestWindow extends JFrame implements ActionListener {
 						int poeng = Integer.parseInt(studiepoeng.getText());
 						if(!fagkode.getText().matches(fagkodeRegex)){
 							fagkode.setText("Feil kodeformat.");
-							JOptionPane.showMessageDialog(null, "En fagkode består av 4 bokstaver og 4 tall.", "Beklager",  JOptionPane.ERROR_MESSAGE);
 							return;
 						}
 						
