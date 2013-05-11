@@ -78,11 +78,12 @@ public class TestWindow extends JFrame implements ActionListener {
 	public static final String årRegex = "\\d{4}";
 	public static final String mobRegex = "\\d{8}";
 	public static final String mailRegex = "\\S+@\\S+.\\S+";
-	public static final String navnRegex = "(?:([a-zA-ZæøåÆØÅ]+\\s+[a-zA-ZæøåÆØÅ]+\\s*)){1}(?:([a-zA-ZæøåÆØÅ]+\\s*))*";
+	public static final String navnRegex = "(?:([a-zA-ZæøåÆØÅ']+\\s+[a-zA-ZæøåÆØÅ']+\\s*)){1}(?:([a-zA-ZæøåÆØÅ']+\\s*))*";
 	public static final String tittelRegex = "(\\w+)||(\\w+\\s\\S+)";
 	public static final String datoRegex = "\\D";
-	public static final String dateRegex = "(\\d{2}\\W\\d{2}\\W((\\d{4})||(\\d{2})))||(\\d{2}\\W\\w{3}\\W((\\d{4})||(\\d{2})))";
+	public static final String dateRegex = "(\\d{2}\\W\\d{2}\\W((\\d{4})||(\\d{2})))";
 	public static final String datehandlerCheckRegex = "\\d{2}\\W\\d{2}\\W\\d{4}";
+	public static final String sPoengRegex = "(\\d)||([01-5]\\d)||60";
 	
 	private JMenuBar meny;
 
@@ -283,7 +284,7 @@ public class TestWindow extends JFrame implements ActionListener {
 			kontorNr		= new InputFelt("Kontornummer", 20);
 			fagkode			= new InputFelt("Fagkode", 20, fagkodeRegex);
 			beskrivelse		= new InputFelt("Beskrivelse", 20);
-			studiepoeng		= new InputFelt("Studiepoeng", 20,  "\\d{2}");
+			studiepoeng		= new InputFelt("Studiepoeng", 20,  sPoengRegex);
 			innÅr 			= new InputFelt("Startår", 20,  årRegex);
 			utÅr			= new InputFelt("Sluttår", 20,  årRegex);
 			studNr 			= new InputFelt("StudentNr", 20,  studentNrRegex);

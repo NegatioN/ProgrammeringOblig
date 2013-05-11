@@ -61,7 +61,6 @@ public class Arbeidskrav implements Serializable, Cloneable{
 		try {
 			kravet = (Arbeidskrav) krav.clone();
 		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		kravet.dropList();

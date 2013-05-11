@@ -77,7 +77,10 @@ public class InputFelt extends JTextField implements FocusListener, ActionListen
 				feilmelding = "Fornavn og etternavn";
 				break;
 			case TestWindow.dateRegex :
-				feilmelding = "Kun på formen dd-MMM-åå";
+				feilmelding = "Kun på formen dd.mm.åå, eller dd.mm.åååå";
+				break;
+			case TestWindow.sPoengRegex:
+				feilmelding = "Kun tall mellom 0-60";
 				break;
 			default:
 				feilmelding = "Feil inputformat";
