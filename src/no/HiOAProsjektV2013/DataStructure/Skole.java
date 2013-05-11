@@ -1,12 +1,8 @@
 package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import no.HiOAProsjektV2013.Interface.TestWindow;
 
@@ -19,9 +15,6 @@ public class Skole implements Serializable{
 	private LaererListe lærerne = new LaererListe();
 	private FagListe fagene = new FagListe();
 	private StudentListe studentene = new StudentListe();
-	private String navnRegex = "\\D+";
-	private String fagkodeRegex = "\\w{4}\\d{4}";
-	private String studentNrRegex = "s\\d{6}";
 	private String arRegex = "\\d{4}";
 	
 	public Skole() {
@@ -238,7 +231,7 @@ public class Skole implements Serializable{
 	
 	//private søkemetoder for vanlige søk i hovedmeny
 	private ArrayList<Fag> fagSøk(String input){
-		if(input.matches(fagkodeRegex)){
+		if(input.matches(TestWindow.fagkodeRegex)){
 			return fagkodeSøk(input);
 		}
 		ArrayList<Fag> fagene = new ArrayList<>();
@@ -248,7 +241,7 @@ public class Skole implements Serializable{
 		return fagene;
 	}
 	private ArrayList<Student> studentSøk(String input){
-		if(input.matches(studentNrRegex))
+		if(input.matches(TestWindow.studentNrRegex))
 			return studentNrSøk(input);
 		ArrayList<Student> studentene = getStudentene().findByNavn(input);		
 		return studentene;

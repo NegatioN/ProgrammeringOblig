@@ -1,5 +1,6 @@
 package no.HiOAProsjektV2013.Interface;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -40,7 +41,12 @@ public class InputFelt extends JTextField implements FocusListener, ActionListen
 			addFocusListener(this);
 	}
 
+	public boolean sjekkInput(){
+		return getText().matches(regex);
+	}
+	
 	public void focusGained(FocusEvent e) {
+		setForeground(Color.BLACK);
 		if(getText().equals(tekst) || getText().equals(feilmelding))
 			setText("");
 	}
@@ -70,12 +76,13 @@ public class InputFelt extends JTextField implements FocusListener, ActionListen
 			case TestWindow.navnRegex :
 				feilmelding = "Fornavn og etternavn";
 				break;
-			case TestWindow.datoRegex :
+			case TestWindow.dateRegex :
 				feilmelding = "Kun på formen dd-MMM-åå";
 				break;
 			default:
 				feilmelding = "Feil inputformat";
 			}
+			setForeground(Color.RED);
 			setText(feilmelding);
 		} 
 	}

@@ -59,8 +59,9 @@ public class TestWindow extends JFrame implements ActionListener {
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
 			vislærer, visfag, visstudieprog, lagre, leggtilfag, søkeknapp, avansert, visAvansert, tilbake;
 	private JRadioButton studentCheck, lærerCheck, fagCheck, studieCheck;
-	private JTextField navn, tittel, epost, tlf, adresse, innDato, utDato, kontorNr, fagkode,
-			beskrivelse, studiepoeng, søkefelt,vurderingsform, innÅr, utÅr, studNr;
+	private InputFelt navn, tittel, epost, tlf, adresse, innDato, utDato, kontorNr, fagkode,
+			beskrivelse, studiepoeng, innÅr, utÅr, studNr;
+	private JTextField søkefelt;
 	private JPanel rammeverk, innhold, stud, lær, fag, studprog, display;
 	public static Dimension innholdSize = new Dimension(300,500), toppSize = new Dimension(900,50), søkSize = new Dimension(170,400);
 	private Border ramme = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
@@ -72,7 +73,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	//endre
 	private int selectedValue = STUDENT;
 	
-	public static final String fagkodeRegex = "\\D{4}\\d{4}";
+	public static final String fagkodeRegex = "\\w{4}\\d{4}";
 	public static final String studentNrRegex = "s\\d{6}";
 	public static final String årRegex = "\\d{4}";
 	public static final String mobRegex = "\\d{8}";
@@ -80,8 +81,8 @@ public class TestWindow extends JFrame implements ActionListener {
 	public static final String navnRegex = "(?:([a-zA-ZæøåÆØÅ]+\\s+[a-zA-ZæøåÆØÅ]+\\s*)){1}(?:([a-zA-ZæøåÆØÅ]+\\s*))*";
 	public static final String tittelRegex = "(\\w+)||(\\w+\\s\\S+)";
 	public static final String datoRegex = "\\D";
-	public static final String dateRegex = "\\d{2}\\W\\d{2}\\W([\\d]{4}|[\\d]{2})";
-	public static final String datehandlerCheckRegex = "\\d{2}\\W\\d{2}\\W\\d{4})";
+	public static final String dateRegex = "(\\d{2}\\W\\d{2}\\W((\\d{4})||(\\d{2})))||(\\d{2}\\W\\w{3}\\W((\\d{4})||(\\d{2})))";
+	public static final String datehandlerCheckRegex = "\\d{2}\\W\\d{2}\\W\\d{4}";
 	
 	private JMenuBar meny;
 
@@ -165,6 +166,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		setJMenuBar(meny);
 	}
 	//tar inn lister fra høyreclick-menyene.
+	@SuppressWarnings("unchecked")
 	public void listApplier(ArrayList<?> listeobjekter, int qualifier){
 		if(qualifier == STUDENT){
 		JList<Student> listen = studentboks.listify((ArrayList<Student>)listeobjekter);
@@ -270,21 +272,22 @@ public class TestWindow extends JFrame implements ActionListener {
 		rammeverk.add(visning, BorderLayout.EAST);
 
 		//Oppretter objekter til registreringsfelter
-		navn	 		= new InputFelt("Navn", 20, navnRegex);
-		tittel			= new InputFelt("Navn", 20, tittelRegex);
-		epost	 		= new InputFelt("E-post", 20, mailRegex);
-		tlf		 		= new InputFelt("Telefon", 20, mobRegex);
-		adresse			= new InputFelt("Adresse", 20);
-		innDato			= new InputFelt("Startdato", 20, datoRegex);
-		utDato			= new InputFelt("Sluttdato", 20, datoRegex);
-		kontorNr		= new InputFelt("Kontornummer", 20);
-		fagkode			= new InputFelt("Fagkode", 20, fagkodeRegex);
-		beskrivelse		= new InputFelt("Beskrivelse", 20);
-		studiepoeng		= new InputFelt("Studiepoeng", 20,  "\\d{2}");
-		innÅr 			= new InputFelt("Startår", 20,  årRegex);
-		utÅr			= new InputFelt("Sluttår", 20,  årRegex);
-		studNr 			= new InputFelt("StudentNr", 20,  studentNrRegex);
-	
+
+			navn	 		= new InputFelt("Navn", 20, navnRegex);
+			tittel			= new InputFelt("Navn", 20, tittelRegex);
+			epost	 		= new InputFelt("E-post", 20, mailRegex);
+			tlf		 		= new InputFelt("Telefon", 20, mobRegex);
+			adresse			= new InputFelt("Adresse", 20);
+			innDato			= new InputFelt("Startdato", 20, dateRegex);
+			utDato			= new InputFelt("Sluttdato", 20, dateRegex);
+			kontorNr		= new InputFelt("Kontornummer", 20);
+			fagkode			= new InputFelt("Fagkode", 20, fagkodeRegex);
+			beskrivelse		= new InputFelt("Beskrivelse", 20);
+			studiepoeng		= new InputFelt("Studiepoeng", 20,  "\\d{2}");
+			innÅr 			= new InputFelt("Startår", 20,  årRegex);
+			utÅr			= new InputFelt("Sluttår", 20,  årRegex);
+			studNr 			= new InputFelt("StudentNr", 20,  studentNrRegex);
+		
 		lagre 			= buttonGenerator.generateButton("Lagre", Buttons.HEL, new lagrelytter());
 		leggtilfag 		= buttonGenerator.generateButton("Legg til fag", Buttons.HEL);
 		avansert 		= buttonGenerator.generateButton("Søk", Buttons.HEL, new søkelytter());
@@ -318,7 +321,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		rammeverk.add(innhold, BorderLayout.CENTER);
 		revalidate();
 	}
-		
+	
 	//Metoder for å vise relevante felter for registrering av objekter
 	public void student() {
 		stud = new JPanel();
@@ -387,7 +390,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		switch(type){
 		case STUDENTFAG:
 			søk.add(fagBox);
-			søk.add(innÅr = b.generateTextField("År", Buttons.LANG, new søkelytter()));
+			søk.add(innÅr);
 			søk.add(avansert);
 			søk.add(tilbake);
 			break;
@@ -412,7 +415,7 @@ public class TestWindow extends JFrame implements ActionListener {
 			break;
 		case KARAKTER:
 			søk.add(fagBox);
-			søk.add(innDato = b.generateTextField("Dato", Buttons.LANG));
+			søk.add(innDato);
 			søk.add(avansert);
 			søk.add(tilbake);
 			break;
@@ -550,205 +553,199 @@ public class TestWindow extends JFrame implements ActionListener {
 	private class søkelytter implements ActionListener{
 		@SuppressWarnings("unchecked")
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == søkefelt || e.getSource() == søkeknapp) {
+			try{
+				if (e.getSource() == søkefelt || e.getSource() == søkeknapp) {
+					//Oppretter en arraylist av typen som returneres av søk-metoden
+					ArrayList<?> resultat = skolen.søk(søkefelt.getText(), selectedValue);
 
-				//Oppretter en arraylist av typen som returneres av søk-metoden
-				ArrayList<?> resultat = skolen.søk(søkefelt.getText(), selectedValue);
+					//Sjekker at søket ikke returnerte null eller tom list, sjekker så hva slags objekt første element i listen er,
+					//og viser et displayvindu av riktig type
+					if(!(resultat == null || resultat.isEmpty())){
 
-				//Sjekker at søket ikke returnerte null eller tom list, sjekker så hva slags objekt første element i listen er,
-				//og viser et displayvindu av riktig type
-				if(!(resultat == null || resultat.isEmpty())){
+						if(resultat.get(FØRSTE) instanceof Student){
+							JList<Student> listen = studentboks.listify((ArrayList<Student>) resultat);
+							vis(studentboks.visResultat(listen));
 
-					if(resultat.get(FØRSTE) instanceof Student){
-						JList<Student> listen = studentboks.listify((ArrayList<Student>) resultat);
-						vis(studentboks.visResultat(listen));
+						} else if(resultat.get(FØRSTE) instanceof Laerer){
+							JList<Laerer> listen = laererboks.listify((ArrayList<Laerer>) resultat);
+							vis(laererboks.visResultat(listen));
 
-					} else if(resultat.get(FØRSTE) instanceof Laerer){
-						JList<Laerer> listen = laererboks.listify((ArrayList<Laerer>) resultat);
-						vis(laererboks.visResultat(listen));
+						} else if(resultat.get(FØRSTE) instanceof Fag){
+							JList<Fag> listen = fagboks.listify((ArrayList<Fag>) resultat);
+							vis(fagboks.visResultat(listen));
 
-					} else if(resultat.get(FØRSTE) instanceof Fag){
-						JList<Fag> listen = fagboks.listify((ArrayList<Fag>) resultat);
-						vis(fagboks.visResultat(listen));
-
-					} else if(resultat.get(FØRSTE) instanceof Studieprogram){
-						JList<Studieprogram> listen = studieboks.listify((ArrayList<Studieprogram>) resultat);
-						vis(studieboks.visResultat(listen));
+						} else if(resultat.get(FØRSTE) instanceof Studieprogram){
+							JList<Studieprogram> listen = studieboks.listify((ArrayList<Studieprogram>) resultat);
+							vis(studieboks.visResultat(listen));
+						}
+					} else{
+						vis(new JPanel());
+						setText("Ingen treff");
 					}
-				} else{
-					vis(new JPanel());
-					setText("Ingen treff");
-				}
-			} 
-			
-			else if(e.getSource() == avansert){
-				String inn = innÅr.getText();
-				String ut = utÅr.getText();
-				String nr = studNr.getText();
-				String d = innDato.getText();
+				} 
 
-				switch(type){
-				case 1:
-					JList<Student> listen = null;
+				else if(e.getSource() == avansert){
+					String inn = innÅr.getText();
+					String ut = utÅr.getText();
+					String nr = studNr.getText();
+					String d = innDato.getText();
+
+					switch(type){
+					case 1:
+						JList<Student> listen = null;
 						if(inn.matches(årRegex))
 							listen = studentboks.listify(skolen.findStudentMedFagByÅr(((Fag)fagBox.getSelectedItem()).getFagkode(),Integer.parseInt(inn)));
 						else
 							listen = studentboks.listify(skolen.findStudentMedFag(((Fag)fagBox.getSelectedItem()).getFagkode()));
-					vis(studentboks.visResultat(listen));
-					break;
-				case 2:
-					listen = null;
-					if(inn.matches(årRegex)){
-						if(ut.matches(årRegex))
-							System.out.println("Lage en periodemetode");//listen = studentboks.listify(skolen.findStudentByPeriode(inn,ut);
-						else
-							listen = studentboks.listify(skolen.findStudentByStart(inn));
-					} else
-						listen = studentboks.listify(skolen.findStudentBySlutt(ut));
-					vis(studentboks.visResultat(listen));
-					break;
-				case 3:
-					listen = null;
-					Studieprogram sp = (Studieprogram)progBox.getSelectedItem();
-					if(inn.matches(årRegex)){
-						listen = studentboks.listify(skolen.findStudentByStudieprogramByStart(sp, Integer.parseInt(inn)));
-					} else
-						listen = studentboks.listify(skolen.findStudentsByStudieprogram(sp.getNavn()));
-					if(listen != null)
 						vis(studentboks.visResultat(listen));
-					break;
-				case 4:
-					int poeng = 0;
-					Student s = skolen.getStudentene().findStudentByStudentNr(nr);
-					if(inn.matches(årRegex)){
-						if(ut.matches(årRegex))
-							poeng = skolen.findStudiepoengForStudIPeriode(s, inn, ut);
+						break;
+					case 2:
+						listen = null;
+						if(inn.matches(årRegex)){
+							if(ut.matches(årRegex))
+								System.out.println("Lage en periodemetode");//listen = studentboks.listify(skolen.findStudentByPeriode(inn,ut);
+							else
+								listen = studentboks.listify(skolen.findStudentByStart(inn));
+						} else
+							listen = studentboks.listify(skolen.findStudentBySlutt(ut));
+						vis(studentboks.visResultat(listen));
+						break;
+					case 3:
+						listen = null;
+						Studieprogram sp = (Studieprogram)progBox.getSelectedItem();
+						if(inn.matches(årRegex)){
+							listen = studentboks.listify(skolen.findStudentByStudieprogramByStart(sp, Integer.parseInt(inn)));
+						} else
+							listen = studentboks.listify(skolen.findStudentsByStudieprogram(sp.getNavn()));
+						if(listen != null)
+							vis(studentboks.visResultat(listen));
+						break;
+					case 4:
+						int poeng = 0;
+						Student s = skolen.getStudentene().findStudentByStudentNr(nr);
+						if(inn.matches(årRegex)){
+							if(ut.matches(årRegex))
+								poeng = skolen.findStudiepoengForStudIPeriode(s, inn, ut);
+							else
+								poeng = skolen.findStudiepoengForStudIPeriode(s, inn, "3000");
+						} else if(ut.matches(årRegex))
+							poeng = skolen.findStudiepoengForStudIPeriode(s, "1000", ut);
 						else
-							poeng = skolen.findStudiepoengForStudIPeriode(s, inn, "3000");
-					} else if(ut.matches(årRegex))
-						poeng = skolen.findStudiepoengForStudIPeriode(s, "1000", ut);
-					else
-						poeng = skolen.findStudiepoengForStudIPeriode(s, "1000", "3000");
-					setText("Studiepoeng for " + s.getfNavn() + " " + s.geteNavn() + ": " + poeng);
-					break;
-				case 5:
-					Fag f = (Fag)fagBox.getSelectedItem();
-					System.out.println(f.getFagkode());
-					int[] karakterer = null;
-					if(d.matches(årRegex)){
-						karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(d));
-						double stryk = skolen.findStrykProsent(f, Integer.parseInt(d) );
-						displayKarakterer(karakterer, stryk);
-					} else if (d.matches(datoRegex)){
-						karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(d));
-						double stryk = skolen.findStrykProsent(f, Integer.parseInt(d) );
-						displayKarakterer(karakterer, stryk);
-					} else
-						JOptionPane.showMessageDialog(innhold, "Skriv inn år eller eksamensdato");
-					break;
-				default:
-					avansert(0);
-				}
+							poeng = skolen.findStudiepoengForStudIPeriode(s, "1000", "3000");
+						setText("Studiepoeng for " + s.getfNavn() + " " + s.geteNavn() + ": " + poeng);
+						break;
+					case 5:
+						Fag f = (Fag)fagBox.getSelectedItem();
+						int[] karakterer = null;
+						if(d.matches(årRegex)){
+							karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(d));
+							double stryk = skolen.findStrykProsent(f, Integer.parseInt(d) );
+							displayKarakterer(karakterer, stryk);
+						} else if (d.matches(dateRegex)){
+							karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(d));
+							double stryk = skolen.findStrykProsent(f, Integer.parseInt(d) );
+							displayKarakterer(karakterer, stryk);
+						} else
+							setText("Fyll inn nødvendige felter");
+						break;
+					default:
+						avansert(0);
+					}
 
-			} else {
+				} else {
 
-				JButton knapp = (JButton)e.getSource();
-				
-				switch(knapp.getText()){
-				case "Finn studenter med fag":
-					type = 1;
-					break;
-				case "Finn studenter i periode":
-					type = 2;
-					break;
-				case "Finn studenter i studieprogram":
-					type = 3;				
-					break;
-				case "Finn studiepoeng for student":
-					type = 4;				
-					break;
-				case "Finn karakterfordeling":
-					type = 5;			
-					break;
-				default:
-					type = 0;
+					JButton knapp = (JButton)e.getSource();
+
+					switch(knapp.getText()){
+					case "Finn studenter med fag":
+						type = 1;
+						break;
+					case "Finn studenter i periode":
+						type = 2;
+						break;
+					case "Finn studenter i studieprogram":
+						type = 3;				
+						break;
+					case "Finn studiepoeng for student":
+						type = 4;				
+						break;
+					case "Finn karakterfordeling":
+						type = 5;			
+						break;
+					default:
+						type = 0;
+					}
+					avansert(type);
 				}
-				avansert(type);
+			}catch (NumberFormatException nfe){
+				info.setText("Fyll ut all nødvendige felter");
+			}catch (NullPointerException nfe){
+				info.setText("Fyll ut all nødvendige felter");
 			}
 		}
 	}
 	
 	private class lagrelytter implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == lagre) {
-				
+			try{
 				if (innhold.getComponent(FØRSTE).equals(stud)) { //Sjekker hvilket panel som ligger i innhold-panelet
-					
+					int nr = Integer.parseInt(tlf.getText());
+					//setter dato i følge input.
+					String dateString = innDato.getText();
+					GregorianCalendar dato = dateHandler.dateFixer(dateString, null);
+					//hvis dato null er input invalid på en eller annen måte.
+					if(dato == null){
+						JOptionPane.showMessageDialog(null, "Eksempel på datoformatering: 01/10/1990.", "Beklager",  JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 
-						int nr = Integer.parseInt(tlf.getText());
-						//setter dato i følge input.
-						String dateString = innDato.getText();
-								GregorianCalendar dato = dateHandler.dateFixer(dateString, null);
-								//hvis dato null er input invalid på en eller annen måte.
-								if(dato == null){
-									innDato.setText("Feil dato-format:");
-									JOptionPane.showMessageDialog(null, "Eksempel på datoformatering: 01/10/1990.", "Beklager",  JOptionPane.ERROR_MESSAGE);
-									return;
-								}
-								
-								//oppretter Studentobjektet.
-								Student s = skolen.getStudentene().addStudent(navn.getText(), 
-										epost.getText(), 
-										nr,
-										adresse.getText(), 
-										dato);
-								if(progBox.getSelectedIndex() != -1)
-									s.setStudieprogram((Studieprogram)progBox.getSelectedItem());
-								
-								setText(s.fullString());
-					
+					//oppretter Studentobjektet.
+					Student s = skolen.getStudentene().addStudent(navn.getText(), 
+							epost.getText(), 
+							nr,
+							adresse.getText(), 
+							dato);
+					if(progBox.getSelectedIndex() != -1)
+						s.setStudieprogram((Studieprogram)progBox.getSelectedItem());
+
+					setText(s.fullString());
+
 				} 
-			
+
 				else if (innhold.getComponent(FØRSTE).equals(lær)) {
-					try{
-						int nr = Integer.parseInt(tlf.getText());
-						
-						info.setText(skolen.getLærerne().addLærer(navn.getText(), 
-									epost.getText(), 
-									nr,
-									kontorNr.getText()).fullString());
-						
-					}catch (NumberFormatException nfe){
-						info.setText("Feil nummerformat");
-					}
+					int nr = Integer.parseInt(tlf.getText());
+
+					info.setText(skolen.getLærerne().addLærer(navn.getText(), 
+							epost.getText(), 
+							nr,
+							kontorNr.getText()).fullString());
+
+
 				} 
-			
-			else if (innhold.getComponent(FØRSTE).equals(fag)) {
-					try{
-						int poeng = Integer.parseInt(studiepoeng.getText());
-						
-						info.setText(skolen.getFagene().addFag(navn.getText(), 
-								fagkode.getText(),
-								beskrivelse.getText(),
-								vurderingBox.getSelectedItem().toString(), 
-								poeng, 
-								(Laerer)lærerBox.getSelectedItem()).fullString());
-						
-					}catch (NumberFormatException nfe){
-						fagkode.setText("Feil kodeformat");
-					}catch (NullPointerException nfe){
-						info.setText("Nullpointer-feil");
-					}catch (IndexOutOfBoundsException iobe){
-						info.setText("Finner ikke lærer");
-					}
-					
+
+				else if (innhold.getComponent(FØRSTE).equals(fag)) {
+					int poeng = Integer.parseInt(studiepoeng.getText());
+
+					info.setText(skolen.getFagene().addFag(navn.getText(), 
+							fagkode.getText(),
+							beskrivelse.getText(),
+							vurderingBox.getSelectedItem().toString(), 
+							poeng, 
+							(Laerer)lærerBox.getSelectedItem()).fullString());
+
 				} 
-			
-			else if (innhold.getComponent(FØRSTE).equals(studprog)) {
+
+				else if (innhold.getComponent(FØRSTE).equals(studprog)) {
 					info.setText(skolen.getStudieprogrammene().addStudProg(navn.getText()).fullString());
 					fagBox.setVisible(true);
 					leggtilfag.setVisible(true);
 				}
+			}catch (NumberFormatException nfe){
+				info.setText("Fyll ut all nødvendige felter");
+			}catch (NullPointerException nfe){
+				info.setText("Fyll ut all nødvendige felter");
+			}catch (IndexOutOfBoundsException iobe){
+				info.setText("Fyll ut all nødvendige felter");
 			}
 		}
 	}

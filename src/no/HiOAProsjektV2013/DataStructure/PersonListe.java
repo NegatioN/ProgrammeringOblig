@@ -21,25 +21,25 @@ public abstract class PersonListe<E> implements Serializable{
 
 	//finner studentene basert på fornavn/etternavn og samler begge søkene til en arraylist.
 	public ArrayList<E> findByNavn(String input, ArrayList<E> fornavnRegister, ArrayList<E> etternavnRegister) {
-		
+
 		String[] navn = nameSplitter(input);
-		
+
 		char fFirstLetter = '\0', eFirstLetter = '\0';
 		try{
-		fFirstLetter = navn[FØRSTE].charAt(FØRSTE);
-		fFirstLetter = Character.toUpperCase(fFirstLetter);
-		eFirstLetter = navn[ANDRE].charAt(FØRSTE);
-		eFirstLetter = Character.toUpperCase(eFirstLetter);
+			fFirstLetter = navn[FØRSTE].charAt(FØRSTE);
+			fFirstLetter = Character.toUpperCase(fFirstLetter);
+			eFirstLetter = navn[ANDRE].charAt(FØRSTE);
+			eFirstLetter = Character.toUpperCase(eFirstLetter);
 		}catch(StringIndexOutOfBoundsException e){
 			e.printStackTrace();
 		}
-		
+
 		int max = (etternavnRegister.size() - 1);
 		int min = 0;
 		int mid;
 		int searchStart = 0;
 		E tempPerson;
-		
+
 		while (min <= max) {
 			mid = (max + min) / 2;
 			tempPerson = etternavnRegister.get(mid);
