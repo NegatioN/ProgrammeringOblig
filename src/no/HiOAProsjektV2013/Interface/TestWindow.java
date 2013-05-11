@@ -3,6 +3,8 @@ package no.HiOAProsjektV2013.Interface;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JMenu;
@@ -33,7 +36,6 @@ import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 import no.HiOAProsjektV2013.Main.Archiver;
 import no.HiOAProsjektV2013.Main.DateHandler;
-import no.HiOAProsjektV2013.Main.ScriptClass;
 
 /*
  * Hovedvinduet i programmet. Inneholder mesteparten av interfacen.
@@ -113,6 +115,13 @@ public class TestWindow extends JFrame implements ActionListener {
 		populateMenu();
 		
 		pack();
+		
+		//setter icon til framen
+		Image img = Toolkit.getDefaultToolkit().getImage("src/icon.png");
+		if(img == null)
+			System.out.println("DING");
+		this.setIconImage(img);
+		
 		setVisible(true);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -156,9 +165,27 @@ public class TestWindow extends JFrame implements ActionListener {
 
 			}
 		});
+		JMenuItem brukerveiledning = new JMenuItem("Brukerveiledning");
+		brukerveiledning.setMnemonic('B');
+		brukerveiledning.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				String userbeskrivelse = "Fra hovedmenyen kan du velge å lage nye studenter, lærere, fag og studieprogram. Når du velger en av disse, vil det komme frem nødvendige registreringsfelt. Registreringsfeltene vil hele tiden gi deg tilbakemelding på om det du har skrevet er tillatte verdier." +
+						"\n\nVidere er det muligheter for å søke på alle disse tingene i søkefeltet til høyre, hvor man kan søke på identiske treff, eller bare delvise treff. Man må velge hvilken type man skal søke etter i programmet ved hjelp av radioknappene under.\n\n" +
+						"Ved mer spesielle søk enn navn, fagkode og studentnummer må man søke ved hjelp av de avanserte søkene, som man finner en knapp til rett under." +
+						"\nDet er også knapper for å vise alle objekter av en type, som fag, lærere, studenter og studieprogram.\n\n" +
+						"Når en liste kommer opp, kan man høyreklikke på et valgt objekt for å få opp relevante alternativer for hva man kan gjøre med det. \nOm man ønsker videre handlinger med objektet, kan man trykke rediger-knappen under lista. Dette tar deg videre til et mer spesialisert område.";
+				JOptionPane optionPane = new limitedOptionPane();
+				optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+				optionPane.setMessage(userbeskrivelse);
+				JDialog dialog = optionPane.createDialog(null, "Brukerveiledning");
+				dialog.setVisible(true);
+			}
+		});
 		
 		om.add(omProgrammet);
 		om.add(omOss);
+		om.add(brukerveiledning);
+		
 		
 		meny.add(fil);
 		meny.add(om);
@@ -748,6 +775,16 @@ public class TestWindow extends JFrame implements ActionListener {
 			}catch (IndexOutOfBoundsException iobe){
 				info.setText("Fyll ut all nødvendige felter");
 			}
+		}
+	}
+	private class limitedOptionPane extends JOptionPane{
+		
+		public limitedOptionPane(){
+			//
+		}
+		
+		public int getMaxCharactersPerLineCount() {
+			return 85;
 		}
 	}
 }
