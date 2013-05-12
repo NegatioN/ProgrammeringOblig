@@ -76,7 +76,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	//endre
 	private int selectedValue = STUDENT;
 	
-	public static final String fagkodeRegex = "\\w{4}\\d{4}";
+	public static final String fagkodeRegex = "[\\wæøåÆØÅ]{4}\\d{4}";
 	public static final String studentNrRegex = "s\\d{6}";
 	public static final String årRegex = "\\d{4}";
 	public static final String mobRegex = "\\d{8}";
@@ -122,8 +122,6 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		//setter icon til framen
 		Image img = Toolkit.getDefaultToolkit().getImage("src/icon.png");
-		if(img == null)
-			System.out.println("DING");
 		this.setIconImage(img);
 		
 		setVisible(true);

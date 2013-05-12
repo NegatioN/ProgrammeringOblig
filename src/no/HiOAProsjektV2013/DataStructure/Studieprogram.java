@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 
 /*
  * Klassen representerer et studieprogram, og inneholder en liste av fag som er assosiert med studieprogrammet.
@@ -24,8 +26,11 @@ public class Studieprogram implements Serializable{
 	
 	private boolean harFaget(Fag fag){
 		for(Fag checkFag : fagIProgrammet){
-			if(fag.equals(checkFag))
+			if(fag.getFagkode().equals(checkFag.getFagkode())){
+				JOptionPane.showMessageDialog(null, this.getNavn() + " har faget " + fag.getFagkode() + " fra før.", "Feilmelding", JOptionPane.ERROR_MESSAGE);
 				return true;
+			}
+			System.out.println(this.getNavn() + " har fag ikke " + fag.getFagkode());
 		}
 		return false;
 	}

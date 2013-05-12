@@ -24,7 +24,7 @@ public class ScriptClass {
 			"Persson", "Hansen", "Lillemark", "Hole", "Potter", "Petrov", "Galgas"};
 	private String[] kravNavn = {"Obligatorisk Innlevering", "Muntlig fremføringg", "Multiple Choice"};
 	private String[] fagnavn = {"Programmering","Fysikk", "Økonomi", "Oprativsystem", "Algoritmer", "Matematikk"};
-	private String[] vurderingsform = {"Muntlig", "Skriftlig", "Innlevering"};
+	private String[] vurderingsform = {"Muntlig", "Skriftlig", "Prosjekt"};
 	private ArrayList<Fag> scriptFagene = new ArrayList<>();
 	private ArrayList<Studieprogram> scriptSp = new ArrayList<>();
 	private int counter = 0;
@@ -44,7 +44,7 @@ public class ScriptClass {
 	
 	public void generateStudent(){
 		int maxSp = scriptSp.size()-1;
-		for(int i = 0; i<1000;i++){
+		for(int i = 0; i<600;i++){
 			String fnavn = fornavn[randomTall(0, fornavn.length-1)];
 			String enavn = etternavn[randomTall(0, etternavn.length-1)];
 			String navn = fnavn + " " + enavn;
@@ -55,22 +55,22 @@ public class ScriptClass {
 		}
 	}
 	public void generateLaerer(){
-		if(counter < fagnavn.length){
+		while(counter < fagnavn.length){
 		String fnavn = fornavn[randomTall(0, fornavn.length-1)];
 		String enavn = etternavn[randomTall(0, etternavn.length-1)];
 		String navn = fnavn + " " + enavn;
 		String epost = fnavn+"."+enavn+"@gmail.com";
 		Laerer l = skolen.getLærerne().addLærer(navn, epost, numberRandomizer(), "PI-255");
-		scriptFagene.add(generateFag(l));
-		}else{
-			//nothing
+		Fag f = generateFag(l);
+		scriptFagene.add(f);
+		counter++;
 		}
 
 	}
 	private Fag generateFag(Laerer l){
 		
 		String fagnavnet = fagnavn[randomTall(0,fagnavn.length-1)];
-		String fagkode = fagnavnet.substring(0, 3) + 1000;
+		String fagkode = fagnavnet.substring(0, 4) + 1000;
 		Fag fag = skolen.getFagene().addFag(fagnavnet, fagkode, "Beskrivende tekst", vurderingsform[randomTall(0,vurderingsform.length-1)], randomTall(0,30), l);
 		
 		int antKrav = randomTall(0,5);
@@ -120,14 +120,12 @@ public class ScriptClass {
 		return tall;
 	}
 	private GregorianCalendar dateRandomizer(){
-		int day = randomTall(0,28);
+		int day = randomTall(1,28);
 		int month = randomTall(0,12);
 		int year = randomTall(1980, 2015);
 		
 		String date = day + "." + month + "." + year;
 		GregorianCalendar greg = dateHandler.dateFixer(date, null);
-		if(greg == null)
-			System.out.println("NULL");
 		return greg;
 	}
 	private int numberRandomizer(){

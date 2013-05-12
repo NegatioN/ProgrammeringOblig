@@ -42,12 +42,7 @@ public class DateHandler {
 		}
 		day = Integer.parseInt(daymonthyear[0]);
 		month = Integer.parseInt(daymonthyear[1]);
-		if(day == 0)
-			day = 1;
-		if(month == 0)
-			month = 1;
 			
-		System.out.println(day + "." + month + "." + year + " Datehandler");
 		
 		// true hvis month invalid value
 		if (month < 0 || month > 12) {

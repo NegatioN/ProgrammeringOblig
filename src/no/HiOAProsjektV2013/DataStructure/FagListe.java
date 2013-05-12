@@ -73,6 +73,8 @@ public class FagListe implements Serializable{
 			register.add(faget);
 			return true;
 		}
+		faget.getLærer().removeFag(faget);
+		faget = null;
 		JOptionPane.showMessageDialog(null, "Fagkoden er allerede i bruk. \nVennligst bruk en annen.");
 		return false;
 	}
