@@ -295,7 +295,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		info.setBorder(BorderFactory.createLoweredBevelBorder());
 		info.setEditable(false);
 		info.setLineWrap(true);
-		info.setText("\n\n\n\n\n Velkommen til vår studieadmininistrasjon!\n" +
+		setText("\n\n\n\n\n Velkommen til vår studieadmininistrasjon!\n" +
 				   "                       Her er alt mulig!");
 		
 		display.add(info);
@@ -573,10 +573,10 @@ public class TestWindow extends JFrame implements ActionListener {
 		if (e.getSource() == leggtilfag) {
 			if(innhold.getComponent(FØRSTE).equals(studprog)){
 				try{
-					skolen.getStudieprogrammene().findEnByNavn(navn.getText()).addFag((Fag)fagBox.getSelectedItem());
-					info.setText(skolen.getStudieprogrammene().findEnByNavn(navn.getText()).fullString());
+					skolen.getStudieprogrammene().findEnByNavn(tittel.getText()).addFag((Fag)fagBox.getSelectedItem());
+					setText(skolen.getStudieprogrammene().findEnByNavn(navn.getText()).fullString());
 				} catch (NullPointerException npe){
-					info.setText("Ugyldig fagkode");
+					setText("Fyll ut all nødvendige felter");
 				}
 			}
 		}
@@ -710,9 +710,9 @@ public class TestWindow extends JFrame implements ActionListener {
 					avansert(type);
 				}
 			}catch (NumberFormatException nfe){
-				info.setText("Fyll ut all nødvendige felter");
+				setText("Fyll ut all nødvendige felter");
 			}catch (NullPointerException nfe){
-				info.setText("Fyll ut all nødvendige felter");
+				setText("Fyll ut all nødvendige felter");
 			}
 		}
 	}
@@ -739,7 +739,6 @@ public class TestWindow extends JFrame implements ActionListener {
 							dato);
 					if(progBox.getSelectedIndex() != -1)
 						s.setStudieprogram((Studieprogram)progBox.getSelectedItem());
-
 					setText(s.fullString());
 
 				} 
@@ -747,37 +746,42 @@ public class TestWindow extends JFrame implements ActionListener {
 				else if (innhold.getComponent(FØRSTE).equals(lær)) {
 					int nr = Integer.parseInt(tlf.getText());
 
-					info.setText(skolen.getLærerne().addLærer(navn.getText(), 
+					Laerer l = skolen.getLærerne().addLærer(navn.getText(), 
 							epost.getText(), 
 							nr,
-							kontorNr.getText()).fullString());
-
+							kontorNr.getText());
+					setText(l.fullString());
+					lærerBox.addItem(l);
 
 				} 
 
 				else if (innhold.getComponent(FØRSTE).equals(fag)) {
 					int poeng = Integer.parseInt(studiepoeng.getText());
 
-					info.setText(skolen.getFagene().addFag(navn.getText(), 
+					Fag f = skolen.getFagene().addFag(tittel.getText(), 
 							fagkode.getText(),
 							beskrivelse.getText(),
 							vurderingBox.getSelectedItem().toString(), 
 							poeng, 
-							(Laerer)lærerBox.getSelectedItem()).fullString());
-
+							(Laerer)lærerBox.getSelectedItem());
+					
+					setText(f.fullString());
+					fagBox.addItem(f);
 				} 
 
 				else if (innhold.getComponent(FØRSTE).equals(studprog)) {
-					info.setText(skolen.getStudieprogrammene().addStudProg(navn.getText()).fullString());
+					Studieprogram sp = skolen.getStudieprogrammene().addStudProg(tittel.getText());
+					setText(sp.fullString());
+					progBox.addItem(sp);
 					fagBox.setVisible(true);
 					leggtilfag.setVisible(true);
 				}
 			}catch (NumberFormatException nfe){
-				info.setText("Fyll ut all nødvendige felter");
+				setText("Fyll ut all nødvendige felter");
 			}catch (NullPointerException nfe){
-				info.setText("Fyll ut all nødvendige felter");
+				setText("Fyll ut all nødvendige felter");
 			}catch (IndexOutOfBoundsException iobe){
-				info.setText("Fyll ut all nødvendige felter");
+				setText("Fyll ut all nødvendige felter");
 			}
 		}
 	}
