@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class InputFelt extends JTextField implements FocusListener, ActionListener{
@@ -13,7 +15,8 @@ public class InputFelt extends JTextField implements FocusListener, ActionListen
 	private static final long serialVersionUID = 101112L;
 	private String regex = ".*";
 	private String tekst, feilmelding;
-	
+	private JLabel l = new JLabel();
+
 	public InputFelt(String tekst, int bredde){
 		super(tekst, bredde);
 		this.tekst = tekst;
@@ -39,6 +42,16 @@ public class InputFelt extends JTextField implements FocusListener, ActionListen
 		setName(tekst);
 		if(editable)
 			addFocusListener(this);
+	}
+	
+	public JPanel getLab(){
+		l.setText(tekst);
+
+		JPanel p = new JPanel();
+		p.add(l);
+		p.add(this);
+		l.setLabelFor(this);
+		return p;
 	}
 
 	public boolean sjekkInput(){

@@ -25,7 +25,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
@@ -38,13 +37,14 @@ import no.HiOAProsjektV2013.DataStructure.Krav;
 import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
+import no.HiOAProsjektV2013.Interface.InputFelt;
 import no.HiOAProsjektV2013.Main.DateHandler;
 
 public class PopupVindu extends JPanel{
 
 	private static final long serialVersionUID = 1073L;
 	private Dimension venstreSize = new Dimension(290, 600), høyreSize = new Dimension(400, 600), infoSize = new Dimension(400, 250), tabellSize = new Dimension(385, 200);
-	private JTextField navn, epost, tlf, adresse, start, slutt, kontorNr, fagkode, beskrivelse, studiepoeng, vurderingsform, studentNr, fag, eksamensdato;
+	private InputFelt navn, epost, tlf, adresse, start, slutt, kontorNr, fagkode, beskrivelse, studiepoeng, vurderingsform, studentNr, fag, eksamensdato;
 	private JPanel panelet, visepanel, faginfo, kravinfo;
 	private TestWindow vindu;
 	private lytter ly = new lytter();
@@ -91,17 +91,16 @@ public class PopupVindu extends JPanel{
 		String studAdresse = s.getAdresse();
 		Date startdato = s.getStart().getTime();
 
-
-		navn	 		= button.generateTextField(studNavn, 20, false);
-		epost	 		= button.generateTextField(studEpost, 20);
-		tlf		 		= button.generateTextField(studTlf, 20);
-		adresse			= button.generateTextField(studAdresse, 20);
-		start			= button.generateTextField(formatter.format(startdato), 20, false);
+		navn	 		= new InputFelt(studNavn, 20, false);
+		epost	 		= new InputFelt(studEpost, 20, TestWindow.mailRegex);
+		tlf		 		= new InputFelt(studTlf, 20, TestWindow.mobRegex);
+		adresse			= new InputFelt(studAdresse, 20);
+		start			= new InputFelt(formatter.format(startdato), 20, false);
 		try{
 			Date sluttdato = s.getSlutt().getTime();
-			slutt 		= button.generateTextField(formatter.format(sluttdato), 20);
+			slutt 		= new InputFelt(formatter.format(sluttdato), 20, TestWindow.dateRegex);
 		} catch(NullPointerException npe){
-			slutt 		= button.generateTextField("Sluttdato", 20);
+			slutt 		= new InputFelt("Sluttdato", 20, TestWindow.dateRegex);
 		}
 
 		velgFag = new JComboBox<Fag>();
@@ -149,10 +148,10 @@ public class PopupVindu extends JPanel{
 		String t = l.getTelefonNr() + "";
 		String k = l.getKontor();
 
-		navn	 		= button.generateTextField(n, 20, false);
-		epost	 		= button.generateTextField(e, 20);
-		tlf		 		= button.generateTextField(t, 20);
-		kontorNr		= button.generateTextField(k, 20);
+		navn	 		= new InputFelt(n, 20, false);
+		epost	 		= new InputFelt(e, 20, TestWindow.mailRegex);
+		tlf		 		= new InputFelt(t, 20, TestWindow.mobRegex);
+		kontorNr		= new InputFelt(k, 20);
 
 		panelet = new JPanel();
 		panelet.setPreferredSize(venstreSize);
@@ -173,12 +172,12 @@ public class PopupVindu extends JPanel{
 		int sp = f.getStudiepoeng();
 		String vf = f.getVurderingsform();
 
-		navn	 		= button.generateTextField(n, 20, false);
-		fagkode	 		= button.generateTextField(fk, 20, false);
-		beskrivelse		= button.generateTextField(b, 20, false);
-		studiepoeng		= button.generateTextField(""+sp, 20);
-		vurderingsform	= button.generateTextField(vf, 20, false);
-		eksamensdato 	= button.generateTextField("dag/mnd/år", 20);
+		navn	 		= new InputFelt(n, 20, false);
+		fagkode	 		= new InputFelt(fk, 20, false);
+		beskrivelse		= new InputFelt(b, 20, false);
+		studiepoeng		= new InputFelt(""+sp, 20, "\\d{2}");
+		vurderingsform	= new InputFelt(vf, 20, false);
+		eksamensdato 	= new InputFelt("dag/mnd/år", 20, TestWindow.dateRegex);
 
 		String[] boxitems =  {"Muntlig", "Skriftlig", "Prosjekt"};
 		vurderingBox = new JComboBox<String>(boxitems);
@@ -227,8 +226,8 @@ public class PopupVindu extends JPanel{
 			velgFag.addItem((Fag)f);
 		}
 
-		navn	 		= button.generateTextField(n, 20);
-		fag		 		= button.generateTextField(fagene, 20, false);
+		navn	 		= new InputFelt(n, 20, TestWindow.tittelRegex);
+		fag		 		= new InputFelt(fagene, 20, false);
 
 		panelet = new JPanel();
 		panelet.setPreferredSize(venstreSize);
@@ -288,7 +287,7 @@ public class PopupVindu extends JPanel{
 		kravinfo.setBorder(BorderFactory.createTitledBorder("Arbeidskrav for " + (f.getNavn())));
 		kravinfo.add(kravListe);
 
-		beskrivelse	= button.generateTextField("Arbeidskrav", 20);
+		beskrivelse	= new InputFelt("Arbeidskrav", 20);
 
 		visepanel.add(kravinfo);
 		visepanel.add(beskrivelse);
@@ -319,7 +318,7 @@ public class PopupVindu extends JPanel{
 		else
 			visFag();
 
-		studentNr = button.generateTextField("StudentNr",20);
+		studentNr = new InputFelt("StudentNr", 20, TestWindow.studentNrRegex);
 		visepanel.add(faginfo);
 		visepanel.add(studentNr);
 		deltaker = button.generateButton("Legg til deltaker", visepanel, Buttons.HEL);
