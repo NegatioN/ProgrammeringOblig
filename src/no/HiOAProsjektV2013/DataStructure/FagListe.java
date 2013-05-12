@@ -20,6 +20,8 @@ public class FagListe implements Serializable{
 		
 	}
 	public void removeFag(Fag fag){
+		Laerer l = fag.getLærer();
+		l.removeFag(fag);
 		register.remove(fag);
 	}
 	

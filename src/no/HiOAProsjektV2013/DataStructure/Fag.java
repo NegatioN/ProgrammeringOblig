@@ -47,7 +47,6 @@ public class Fag implements Serializable{
 		studenter.remove(s);
 	}
 	public ArrayList<Student> getStudenter(){
-		System.out.println(studenter.toString());
 		return studenter;
 	}
 

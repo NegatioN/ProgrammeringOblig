@@ -13,26 +13,23 @@ public class DateHandler {
 	
 	public GregorianCalendar dateFixer(String dateToBeConverted, String timeToBeConverted) {
 		//hvis ikke input matcher dd/mm/YYYY eller dd/mm/YY
-		if(!dateToBeConverted.matches(TestWindow.dateRegex))
+		
+		if(!dateToBeConverted.matches(TestWindow.dateRegex)){
 			return null;
+		}
 		String sHour;
 		int hour = 0;
+		//hvis tid blir sendt med
 		if (timeToBeConverted != null) {
 			sHour = timeToBeConverted.substring(0, 2);
 			hour = Integer.parseInt(sHour);
 		}
-		String sDay, sMonth, sYear;
 		int day,month,year;
-		sDay = dateToBeConverted.substring(0, 2);
-		sMonth = dateToBeConverted.substring(3, 5);
-		//sjekker om hvilken regex som ble aktivert for å sende input til klassen.
-		if(dateToBeConverted.matches(TestWindow.datehandlerCheckRegex)){
-		sYear = dateToBeConverted.substring(6, 10);
-		year = Integer.parseInt(sYear);
-		}else{
-			sYear = dateToBeConverted.substring(6, 8);
-			year = Integer.parseInt(sYear);
-			//hvis input er dd/mm/yy og yy er over 70 antar vi at det er 1970+
+		
+		String[] daymonthyear = dateToBeConverted.split("\\W");
+
+		if(daymonthyear[2].matches("\\d{2}")){
+			year = Integer.parseInt(daymonthyear[2]);
 			if(year > 70){
 				year = year + 1900;
 			}
@@ -40,18 +37,28 @@ public class DateHandler {
 			else{
 				year = year + 2000;
 			}
+		}else{
+			year = Integer.parseInt(daymonthyear[2]);
 		}
-		day = Integer.parseInt(sDay);
-		month = Integer.parseInt(sMonth) - 1;
+		day = Integer.parseInt(daymonthyear[0]);
+		month = Integer.parseInt(daymonthyear[1]);
+		if(day == 0)
+			day = 1;
+		if(month == 0)
+			month = 1;
+			
+		System.out.println(day + "." + month + "." + year + " Datehandler");
+		
 		// true hvis month invalid value
-		if (month < 0 || month > 11) {
+		if (month < 0 || month > 12) {
 			return null;
 		}
 		int dayCheck = new GregorianCalendar(year, month, 1, hour, 0, 0)
 				.getActualMaximum(Calendar.DAY_OF_MONTH);
 		// true hvis day invalid value
-		if (day < 1 || day > dayCheck)
+		if (day < 1 || day > dayCheck){
 			return null;
+		}
 		
 		GregorianCalendar newDate = new GregorianCalendar(year, month, day,
 				hour, 0, 0);

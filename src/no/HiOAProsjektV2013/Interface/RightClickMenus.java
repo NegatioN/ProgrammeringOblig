@@ -151,7 +151,8 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 		Object source = e.getSource();
 		if(source == eStrykPros){
 			Eksamen eks = (Eksamen) curObject;
-			JOptionPane.showMessageDialog(null, tw.getSkole().findStrykProsent(eks.getFag(), eks) + "");
+			tw.setText("Eksamen " + eks.toString() + " har : " + tw.getSkole().findStrykProsent(eks.getFag(), eks) + "% stryk.");
+			tw.display();
 		}
 		if(source == fagBeståttKrav){
 			Fag fag = (Fag) curObject;

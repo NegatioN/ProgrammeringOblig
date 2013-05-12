@@ -2,6 +2,7 @@ package no.HiOAProsjektV2013.Main;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.Random;
 
 import no.HiOAProsjektV2013.DataStructure.Eksamen;
 import no.HiOAProsjektV2013.DataStructure.Fag;
@@ -14,77 +15,128 @@ import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 public class ScriptClass {
 
 	private Skole skolen;
-	private Fag fag1, fag2, fag3;
-	private Student stud1, stud2, stud3;
-	private Studieprogram sp1, sp2;
-	private Eksamen e1,e2,e3;
+	private Student stud1;
+	private Studieprogram sp1, sp2,sp3;
 	private DateHandler dateHandler = new DateHandler();
+	private String[] fornavn = {"Sondre", "Martin", "Lars", "Erik", "Joakim", "Eva", "Ole", "Markus", "Jenny",
+			"Martine", "Guro", "Line", "Harry", "Mikkel", "Kåre", "Petter"};
+	private String[] etternavn = {"Bogen", "Hage", "Larsen", "Vihovde", "Sturlason", "Void", "Hansen", 
+			"Persson", "Hansen", "Lillemark", "Hole", "Potter", "Petrov", "Galgas"};
+	private String[] kravNavn = {"Obligatorisk Innlevering", "Muntlig fremføringg", "Multiple Choice"};
+	private String[] fagnavn = {"Programmering","Fysikk", "Økonomi", "Oprativsystem", "Algoritmer", "Matematikk"};
+	private String[] vurderingsform = {"Muntlig", "Skriftlig", "Innlevering"};
+	private ArrayList<Fag> scriptFagene = new ArrayList<>();
+	private ArrayList<Studieprogram> scriptSp = new ArrayList<>();
+	private int counter = 0;
+	Random rand = new Random(); 
+
 	
 	public ScriptClass(Skole skolen){
 		this.skolen = skolen;
 		generateLaerer();
-		generateFag();
-		generateStudProg();
-		generateKrav();
 		generateEksamen();
+		generateStudProg();
 		generateStudent();
 		
 	}
 	
+	
+	
 	public void generateStudent(){
-		GregorianCalendar dato = (GregorianCalendar) GregorianCalendar.getInstance();
-		for(int i = 0;i<20;i++){
-			stud1 = skolen.getStudentene().addStudent("Joakim Rishaug", "Joaimrishaug@gmail.com", 95153437, "Her 25", dato);
-			stud2 = skolen.getStudentene().addStudent("Lars-Erik Kasin", "lekasin@gmail.com", 12345678, "Her 2", dato);
-			stud3 = skolen.getStudentene().addStudent("Herp Derp", "Herp@gmail.com", 12345678, "Camp 25", dato);
-			stud1.setStudieprogram(sp1);
-			stud2.setStudieprogram(sp2);
-			stud2.setStudieprogram(sp2);
-			skolen.getStudentene().addStudent("Jon Jensen", "jon@gmail.com", 32131123, "Veien 22", dato);
-			skolen.getStudentene().addStudent("Eva Jensen", "ej93@gmail.com", 44112231, "Veien 22", dato);
-			skolen.getStudentene().addStudent("Stig Rishaug", "ilike@gmail.com", 98123823, "Storet 40", dato);
-			skolen.getStudentene().addStudent("Yuri Spasiba", "Spasi@mail.com", 98123823, "Russia Central 22", dato);
-
+		int maxSp = scriptSp.size()-1;
+		for(int i = 0; i<1000;i++){
+			String fnavn = fornavn[randomTall(0, fornavn.length-1)];
+			String enavn = etternavn[randomTall(0, etternavn.length-1)];
+			String navn = fnavn + " " + enavn;
+			String epost = fnavn+"."+enavn+"@gmail.com";
+			stud1 = skolen.getStudentene().addStudent(navn, epost, numberRandomizer() , "Adresse " + randomTall(0,100), dateRandomizer());
+			stud1.setStudieprogram(scriptSp.get(randomTall(0,maxSp)));
+			
 		}
 	}
 	public void generateLaerer(){
-		skolen.getLærerne().addLærer("Eva Hadler", "Hadlers@gonna.haddle", 48586939, "Haddleoffice-255");
-		skolen.getLærerne().addLærer("Sindre Duvedahl", "duve@mailbag.com", 98228831, "Haddleoffice-253");
-		skolen.getLærerne().addLærer("Jorunn Thatcher", "jord@database.com", 41212332, "Haddleoffice-123");
+		if(counter < fagnavn.length){
+		String fnavn = fornavn[randomTall(0, fornavn.length-1)];
+		String enavn = etternavn[randomTall(0, etternavn.length-1)];
+		String navn = fnavn + " " + enavn;
+		String epost = fnavn+"."+enavn+"@gmail.com";
+		Laerer l = skolen.getLærerne().addLærer(navn, epost, numberRandomizer(), "PI-255");
+		scriptFagene.add(generateFag(l));
+		}else{
+			//nothing
+		}
 
 	}
-	public void generateFag(){
-		ArrayList<Laerer> lærer = skolen.getLærerne().findByNavn("Eva");
-		fag1 = skolen.getFagene().addFag("Faget", "fage1000", "Kult fag", "Skriftlig", 10, lærer.get(0));
-		fag2 = skolen.getFagene().addFag("Fysikk", "FYSK1000", "Kult fag", "Skriftlig", 10, lærer.get(0));
-		fag3 = skolen.getFagene().addFag("Programmering", "prog1000", "Kult fag", "Skriftlig", 10, lærer.get(0));
+	private Fag generateFag(Laerer l){
+		
+		String fagnavnet = fagnavn[randomTall(0,fagnavn.length-1)];
+		String fagkode = fagnavnet.substring(0, 3) + 1000;
+		Fag fag = skolen.getFagene().addFag(fagnavnet, fagkode, "Beskrivende tekst", vurderingsform[randomTall(0,vurderingsform.length-1)], randomTall(0,30), l);
+		
+		int antKrav = randomTall(0,5);
+		for(int i = 0; i<antKrav;i++){
+			generateKrav(fag);
+		}
+		
+		return fag;
 	}
-	public void generateEksamen(){
-		e1 = new Eksamen(dateHandler.dateFixer("20-10-98", null),fag1);
-		e2 = new Eksamen(dateHandler.dateFixer("20-10-98", null),fag2);
-		e3 = new Eksamen(dateHandler.dateFixer("20-10-98", null),fag3);
-		fag1.addEksamen(e1);
-		fag2.addEksamen(e2);
-		fag3.addEksamen(e3);
+	private void generateEksamen(){
+		for(Fag fag : scriptFagene){
+			for (int i = 0; i < 3; i++) {
+				Eksamen e = new Eksamen(dateRandomizer(), fag);
+				fag.addEksamen(e);
+			}
+		}
 	}
 	
 	public void generateStudProg(){
+		
+		
+		
 		sp1 = skolen.getStudieprogrammene().addStudProg("Dataingeniør");
 		sp2 = skolen.getStudieprogrammene().addStudProg("Anvendt datateknologi");
-		sp1.addFag(fag1);
-		sp2.addFag(fag2);
-		sp2.addFag(fag3);
-		sp1.addFag(fag3);
-	}
-	public void generateKrav(){
-		fag1.addKrav("Oblig 1");
-		fag2.addKrav("Muntlig fremføring");
-		fag3.addKrav("Aids");
+		sp3 = skolen.getStudieprogrammene().addStudProg("Samfunnsøkonomi");
+		scriptSp.add(sp1);
+		scriptSp.add(sp2);
+		scriptSp.add(sp3);
+		int maxfag = scriptFagene.size()-1;
 		
+		for(int i = 0; i<6;i++){
+			sp1.addFag(scriptFagene.get(randomTall(0,maxfag)));
+			sp2.addFag(scriptFagene.get(randomTall(0,maxfag)));
+			sp3.addFag(scriptFagene.get(randomTall(0,maxfag)));
+		}
 	}
-	public void addFagStudent(){
-		stud1.addFag(fag1);
-		stud2.addFag(fag2);
-		stud3.addFag(fag3);
+	private void generateKrav(Fag fag){
+		fag.addKrav(kravNavn[randomTall(0,kravNavn.length-1)]);		
 	}
+	
+	
+	//randomizers
+	private int randomTall(int fra, int til)
+	{
+		//+1 for å unngå nextint(0)
+		int tall = rand.nextInt(til-fra+1) + fra; 
+		return tall;
+	}
+	private GregorianCalendar dateRandomizer(){
+		int day = randomTall(0,28);
+		int month = randomTall(0,12);
+		int year = randomTall(1980, 2015);
+		
+		String date = day + "." + month + "." + year;
+		GregorianCalendar greg = dateHandler.dateFixer(date, null);
+		if(greg == null)
+			System.out.println("NULL");
+		return greg;
+	}
+	private int numberRandomizer(){
+		String number = "" + randomTall(1,9);
+		for(int i = 0;i<7;i++){
+			number += randomTall(0,9);
+		}
+		int tlfnummer = Integer.parseInt(number);
+		return tlfnummer;
+	}
+	
 }

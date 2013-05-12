@@ -36,6 +36,7 @@ import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 import no.HiOAProsjektV2013.Main.Archiver;
 import no.HiOAProsjektV2013.Main.DateHandler;
+import no.HiOAProsjektV2013.Main.ScriptClass;
 
 /*
  * Hovedvinduet i programmet. Inneholder mesteparten av interfacen.
@@ -82,9 +83,12 @@ public class TestWindow extends JFrame implements ActionListener {
 	public static final String mailRegex = "\\S+@\\S+.\\S+";
 	public static final String navnRegex = "(?:([a-zA-ZæøåÆØÅ']+\\s+[a-zA-ZæøåÆØÅ']+\\s*)){1}(?:([a-zA-ZæøåÆØÅ']+\\s*))*";
 	public static final String tittelRegex = "(\\w+)||(\\w+\\s\\S+)";
-	public static final String datoRegex = "\\D";
-	public static final String dateRegex = "(\\d{2}\\W\\d{2}\\W((\\d{4})||(\\d{2})))";
-	public static final String datehandlerCheckRegex = "\\d{2}\\W\\d{2}\\W\\d{4}";
+	public static final String dateRegex = "(\\d{1,2}\\W\\d{1,2}\\W((\\d{4})||(\\d{2})))";
+	public static final String datehandlerCheck4yRegex = "d{4}";
+	public static final String datehandlerCheck2d2mRegex = "\\d{2}\\W\\d{2}\\W\\d{4}";
+	public static final String datehandlerCheck1d1mRegex = "\\d{1}\\W\\d{1}\\W((\\d{4})||(\\d{2}))";
+	public static final String datehandlerCheck1d2mRegex = "\\d{1}\\W\\d{2}\\W((\\d{4})||(\\d{2}))";
+	public static final String datehandlerCheck2d1mRegex = "\\d{2}\\W\\d{1}\\W((\\d{4})||(\\d{2}))";
 	public static final String sPoengRegex = "(\\d)||([01-5]\\d)||60";
 	
 	private JMenuBar meny;
