@@ -3,6 +3,7 @@ package no.HiOAProsjektV2013.Interface;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -17,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -60,22 +62,23 @@ public class TestWindow extends JFrame implements ActionListener {
 	private ListeBoks<Studieprogram> studieboks = new ListeBoks<>(this);
 	private JTextArea info;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
-			vislærer, visfag, visstudieprog, lagre, leggtilfag, søkeknapp, avansert, visAvansert, tilbake;
+	vislærer, visfag, visstudieprog, lagre, leggtilfag, søkeknapp, avansert, visAvansert, tilbake;
 	private JRadioButton studentCheck, lærerCheck, fagCheck, studieCheck;
 	private InputFelt navn, tittel, epost, tlf, adresse, innDato, utDato, kontorNr, fagkode,
-			beskrivelse, studiepoeng, innÅr, utÅr, studNr;
+	beskrivelse, studiepoeng, innÅr, utÅr, studNr;
 	private JTextField søkefelt;
 	private JPanel rammeverk, innhold, stud, lær, fag, studprog, display;
-	public static Dimension innholdSize = new Dimension(300,500), toppSize = new Dimension(900,50), søkSize = new Dimension(170,400);
+	public static Dimension innholdSize = new Dimension(300,500), toppSize = new Dimension(900,50), søkSize = new Dimension(170,500);
 	private Border ramme = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 	private JComboBox<Fag> fagBox;
 	private JComboBox<Laerer> lærerBox;
 	private JComboBox<Studieprogram> progBox;
 	private JComboBox<String> vurderingBox;
 	private int type;
+	private JLabel overskrift;
 	//endre
 	private int selectedValue = STUDENT;
-	
+
 	public static final String fagkodeRegex = "[\\wæøåÆØÅ]{4}\\d{4}";
 	public static final String studentNrRegex = "s\\d{6}";
 	public static final String årRegex = "\\d{4}";
@@ -90,7 +93,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	public static final String datehandlerCheck1d2mRegex = "\\d{1}\\W\\d{2}\\W((\\d{4})||(\\d{2}))";
 	public static final String datehandlerCheck2d1mRegex = "\\d{2}\\W\\d{1}\\W((\\d{4})||(\\d{2}))";
 	public static final String sPoengRegex = "(\\d)||([01-5]\\d)||60";
-	
+
 	private JMenuBar meny;
 
 	public TestWindow(String tittel) {
@@ -104,26 +107,26 @@ public class TestWindow extends JFrame implements ActionListener {
 		skolen 		= arkivet.readFromFile();
 		//Oppretter vinduslytter
 		vl = new VinduLytter(this);
-		
+
 		//script for å generere fag, studenter og lærere
 		//kommenter den ut etter 1 generate
-//		ScriptClass sc = new ScriptClass(skolen);
-		
+		//		ScriptClass sc = new ScriptClass(skolen);
+
 		rammeverk = new JPanel(new BorderLayout());
 		add(rammeverk);
 		fyllRamme();
-		
+
 		//lager dateHandler
 		dateHandler = new DateHandler();
 		//setter inn meny
 		populateMenu();
-		
+
 		pack();
-		
+
 		//setter icon til framen
 		Image img = Toolkit.getDefaultToolkit().getImage("src/icon.png");
 		this.setIconImage(img);
-		
+
 		setVisible(true);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -132,10 +135,10 @@ public class TestWindow extends JFrame implements ActionListener {
 	//fyller meny-baren
 	private void populateMenu(){
 		meny = new JMenuBar();
-		
+
 		JMenu fil = new JMenu("Fil");
 		fil.setMnemonic('F');
-		
+
 		JMenuItem save = new JMenuItem("Save");
 		save.setMnemonic('S');
 		//anonym actionlistener som lagrer fila
@@ -147,10 +150,10 @@ public class TestWindow extends JFrame implements ActionListener {
 			}
 		});
 		fil.add(save);
-		
+
 		JMenu om = new JMenu("Om");
 		om.setMnemonic('O');
-		
+
 		JMenuItem omOss = new JMenuItem("Om oss");
 		omOss.setMnemonic('S');
 		omOss.addActionListener(new ActionListener(){
@@ -183,24 +186,24 @@ public class TestWindow extends JFrame implements ActionListener {
 				dialog.setVisible(true);
 			}
 		});
-		
+
 		om.add(omProgrammet);
 		om.add(omOss);
 		om.add(brukerveiledning);
-		
-		
+
+
 		meny.add(fil);
 		meny.add(om);
-		
-		
+
+
 		setJMenuBar(meny);
 	}
 	//tar inn lister fra høyreclick-menyene.
 	@SuppressWarnings("unchecked")
 	public void listApplier(ArrayList<?> listeobjekter, int qualifier){
 		if(qualifier == STUDENT){
-		JList<Student> listen = studentboks.listify((ArrayList<Student>)listeobjekter);
-		vis(studentboks.visResultat(listen));
+			JList<Student> listen = studentboks.listify((ArrayList<Student>)listeobjekter);
+			vis(studentboks.visResultat(listen));
 		}
 		else if(qualifier == FAG){
 			JList<Fag> listen = fagboks.listify((ArrayList<Fag>)listeobjekter);
@@ -213,50 +216,50 @@ public class TestWindow extends JFrame implements ActionListener {
 	//kanskje kaste denne inn i testwindow pga at den må update selectedValue, og jeg er usikker på å ta inn et TestWindow her.
 	//for valuePassing til søk
 	private void generateButtonGroup(JPanel panel){
-		 ButtonGroup group = new ButtonGroup();
-		 lærerCheck = new JRadioButton("Lærere");
-		 studentCheck = new JRadioButton("Student");
-		 fagCheck = new JRadioButton("Fag");
-		 studieCheck = new JRadioButton("Studier");
-		 
-		 lærerCheck.setActionCommand(LÆRER+"");
-		 studentCheck.setActionCommand(STUDENT+"");
-		 fagCheck.setActionCommand(FAG+"");
-		 studieCheck.setActionCommand(STUDIEPROGRAM+"");
-		 
-		 lærerCheck.addActionListener(this);
-		 studentCheck.addActionListener(this);
-		 fagCheck.addActionListener(this);
-		 studieCheck.addActionListener(this);
-		 
-		 studentCheck.setSelected(true);
-		 
-		 
-		 group.add(studentCheck);
-		 group.add(lærerCheck);
-		 group.add(fagCheck);
-		 group.add(studieCheck);
-		 
-		 panel.add(studentCheck);
-		 panel.add(lærerCheck);
-		 panel.add(fagCheck);
-		 panel.add(studieCheck);
+		ButtonGroup group = new ButtonGroup();
+		lærerCheck = new JRadioButton("Lærere");
+		studentCheck = new JRadioButton("Student");
+		fagCheck = new JRadioButton("Fag");
+		studieCheck = new JRadioButton("Studier");
+
+		lærerCheck.setActionCommand(LÆRER+"");
+		studentCheck.setActionCommand(STUDENT+"");
+		fagCheck.setActionCommand(FAG+"");
+		studieCheck.setActionCommand(STUDIEPROGRAM+"");
+
+		lærerCheck.addActionListener(this);
+		studentCheck.addActionListener(this);
+		fagCheck.addActionListener(this);
+		studieCheck.addActionListener(this);
+
+		studentCheck.setSelected(true);
+
+
+		group.add(studentCheck);
+		group.add(lærerCheck);
+		group.add(fagCheck);
+		group.add(studieCheck);
+
+		panel.add(studentCheck);
+		panel.add(lærerCheck);
+		panel.add(fagCheck);
+		panel.add(studieCheck);
 	}
 
 	//getmetoder for windowlistener slik at det lagres info via system.exit
 	public Archiver getArkiv(){
 		return arkivet;
 	}
-	
+
 	public Skole getSkole(){
 		return skolen;
 	}
-	
+
 	//Metoder som endrer teksten i display-tekstområdet
 	public void setText(String tekst){
 		info.setText(tekst);
 	}
-	
+
 	//Oppretter og legger inn elementer til vinduet
 	public void fyllRamme() {
 
@@ -270,10 +273,10 @@ public class TestWindow extends JFrame implements ActionListener {
 		leggtil.setBorder(ramme);
 		visning.setBorder(ramme);
 		display.setBorder(ramme);
-		
+
 		søkefelt		= new InputFelt("Søk", Buttons.KORT, new søkelytter());
 		visning.add(søkefelt);
-		
+
 		søkeknapp 		= buttonGenerator.generateButton("Søk", visning, Buttons.HALV, new søkelytter());
 		generateButtonGroup(visning);
 		visAvansert 	= buttonGenerator.generateButton("Avansert søk", visning, Buttons.HALV);
@@ -294,69 +297,74 @@ public class TestWindow extends JFrame implements ActionListener {
 		info.setEditable(false);
 		info.setLineWrap(true);
 		setText("\n\n\n\n\n Velkommen til vår studieadmininistrasjon!\n" +
-				   "                       Her er alt mulig!");
-		
+				"                       Her er alt mulig!");
+
 		display.add(info);
 		rammeverk.add(display, BorderLayout.WEST);
 		rammeverk.add(leggtil, BorderLayout.NORTH);
 		rammeverk.add(visning, BorderLayout.EAST);
 
 		//Oppretter objekter til registreringsfelter
-
-			navn	 		= new InputFelt("Navn", 20, navnRegex);
-			tittel			= new InputFelt("Navn", 20, tittelRegex);
-			epost	 		= new InputFelt("E-post", 20, mailRegex);
-			tlf		 		= new InputFelt("Telefon", 20, mobRegex);
-			adresse			= new InputFelt("Adresse", 20);
-			innDato			= new InputFelt("Startdato", 20, dateRegex);
-			utDato			= new InputFelt("Sluttdato", 20, dateRegex);
-			kontorNr		= new InputFelt("Kontornummer", 20);
-			fagkode			= new InputFelt("Fagkode", 20, fagkodeRegex);
-			beskrivelse		= new InputFelt("Beskrivelse", 20);
-			studiepoeng		= new InputFelt("Studiepoeng", 20,  sPoengRegex);
-			innÅr 			= new InputFelt("Startår", 20,  årRegex);
-			utÅr			= new InputFelt("Sluttår", 20,  årRegex);
-			studNr 			= new InputFelt("StudentNr", 20,  studentNrRegex);
 		
+		overskrift = new JLabel();
+		overskrift.setFont(new Font("Arial", Font.BOLD, 20));
+		
+		navn	 		= new InputFelt("Navn", 20, navnRegex);
+		tittel			= new InputFelt("Navn", 20, tittelRegex);
+		epost	 		= new InputFelt("E-post", 20, mailRegex);
+		tlf		 		= new InputFelt("Telefon", 20, mobRegex);
+		adresse			= new InputFelt("Adresse", 20);
+		innDato			= new InputFelt("Startdato", 20, dateRegex);
+		utDato			= new InputFelt("Sluttdato", 20, dateRegex);
+		kontorNr		= new InputFelt("Kontornummer", 20);
+		fagkode			= new InputFelt("Fagkode", 20, fagkodeRegex);
+		beskrivelse		= new InputFelt("Beskrivelse", 20);
+		studiepoeng		= new InputFelt("Studiepoeng", 20,  sPoengRegex);
+		innÅr 			= new InputFelt("Startår", 20,  årRegex);
+		utÅr			= new InputFelt("Sluttår", 20,  årRegex);
+		studNr 			= new InputFelt("StudentNr", 20,  studentNrRegex);
+
 		lagre 			= buttonGenerator.generateButton("Lagre", Buttons.HEL, new lagrelytter());
 		leggtilfag 		= buttonGenerator.generateButton("Legg til fag", Buttons.HEL);
 		avansert 		= buttonGenerator.generateButton("Søk", Buttons.HEL, new søkelytter());
 		tilbake 		= buttonGenerator.generateButton("Tilbake", Buttons.HEL);
-		
+
 		fagBox = new JComboBox<Fag>();
 		fagBox.setPreferredSize(Buttons.HEL);
 		for(Fag f : skolen.getFagene().visAlle()) {
 			fagBox.addItem(f);
 		}
-		
+
 		lærerBox = new JComboBox<Laerer>();
 		lærerBox.setPreferredSize(Buttons.HEL);
 		for(Laerer l : skolen.getLærerne().visAlle()) {
 			lærerBox.addItem(l);
 		}
-		
+
 		progBox = new JComboBox<Studieprogram>();
 		progBox.setPreferredSize(Buttons.HEL);
 		for(Studieprogram sp : skolen.getStudieprogrammene().visAlle()) {
 			progBox.addItem(sp);
 		}
-		
+
 		String[] boxitems =  {"Muntlig", "Skriftlig", "Prosjekt"};
 		vurderingBox = new JComboBox<String>(boxitems);
 		vurderingBox.setPreferredSize(Buttons.HEL);
 
 		innhold = new JPanel();
 		innhold.setBorder( ramme);
-		
+
 		rammeverk.add(innhold, BorderLayout.CENTER);
 		revalidate();
 	}
-	
+
 	//Metoder for å vise relevante felter for registrering av objekter
 	public void student() {
 		stud = new JPanel();
 		stud.setPreferredSize(innholdSize);
 
+		overskrift.setText("Registrer student");
+		stud.add(overskrift);
 		stud.add(navn);
 		stud.add(epost);
 		stud.add(tlf);
@@ -365,13 +373,15 @@ public class TestWindow extends JFrame implements ActionListener {
 		stud.add(progBox);
 		stud.add(lagre);
 		progBox.setSelectedIndex(-1);
-		
+
 		vis(stud);
 	}
 	public void lærer() {
 		lær = new JPanel();
 		lær.setPreferredSize(innholdSize);
 
+		overskrift.setText("Registrer lærer");
+		lær.add(overskrift);
 		lær.add(navn);
 		lær.add(epost);
 		lær.add(tlf);
@@ -383,7 +393,9 @@ public class TestWindow extends JFrame implements ActionListener {
 	public void fag() {
 		fag = new JPanel();
 		fag.setPreferredSize(innholdSize);
-		
+
+		overskrift.setText("Registrer fag");
+		fag.add(overskrift);
 		fag.add(tittel);
 		fag.add(fagkode);
 		fag.add(beskrivelse);
@@ -391,13 +403,15 @@ public class TestWindow extends JFrame implements ActionListener {
 		fag.add(vurderingBox);
 		fag.add(lærerBox);
 		fag.add(lagre);
-		
+
 		vis(fag);
 	}
 	public void studieprog() {
 		studprog = new JPanel();
 		studprog.setPreferredSize(innholdSize);
-		
+
+		overskrift.setText("Registrer studieprogram");
+		studprog.add(overskrift);
 		studprog.add(tittel);
 		studprog.add(lagre);
 		studprog.add(Box.createRigidArea(Buttons.HEL));
@@ -410,13 +424,14 @@ public class TestWindow extends JFrame implements ActionListener {
 	public void avansert(int type){
 		JPanel søk = new JPanel();
 		søk.setPreferredSize(innholdSize);
-		
+
 		final int STUDENTFAG = 1, STUDENTPERIODE = 2, STUDENTPROGRAM = 3, POENGSTUDENT = 4, KARAKTER = 5;
-		
+
 		refresh();
-		
+
 		Buttons b = new Buttons(new søkelytter());
-		
+		overskrift.setText("Avansert søk");
+		søk.add(overskrift);
 		switch(type){
 		case STUDENTFAG:
 			søk.add(fagBox);
@@ -459,10 +474,10 @@ public class TestWindow extends JFrame implements ActionListener {
 
 		vis(søk);
 	}
-	
+
 	//Resetter tekstfeltene
 	public void refresh(){
-		
+
 		navn			.setText("Navn");
 		tittel			.setText("Navn");
 		epost			.setText("E-post");
@@ -482,6 +497,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	public void vis(Component c){
 		refresh();
 		innhold.removeAll();
+		innhold.add(overskrift);
 		innhold.add(c);
 		innhold.updateUI();
 		revalidate();
@@ -527,15 +543,15 @@ public class TestWindow extends JFrame implements ActionListener {
 		setText(distribusjon);
 		display();
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
 		//Nullstiller displayet
 		display();
 		setText(""); 
 		//setter selectedValue for programmet sånn at vi får filtrert hva vi søker mot.
 		if(e.getSource() == studentCheck || e.getSource() == lærerCheck || e.getSource() == fagCheck || e.getSource() == studieCheck)
-		selectedValue = Integer.parseInt(e.getActionCommand());
-		
+			selectedValue = Integer.parseInt(e.getActionCommand());
+
 		if (e.getSource() == nystudent) {
 			student();
 		}
@@ -549,25 +565,29 @@ public class TestWindow extends JFrame implements ActionListener {
 			studieprog();
 		}
 		if (e.getSource() == visstudent) {
+			overskrift.setText("Studenter");
 			vis(studentboks.visResultat(studentboks.listify(skolen.getStudentene().visAlle())));
 		}
 		if (e.getSource() == vislærer) {
+			overskrift.setText("Lærere");
 			vis(laererboks.visResultat(laererboks.listify(skolen.getLærerne().visAlle())));
 		}
 		if (e.getSource() == visfag) {
+			overskrift.setText("Fag");
 			vis(fagboks.visResultat(fagboks.listify(skolen.getFagene().visAlle())));
 		}
 		if (e.getSource() == visstudieprog) {
+			overskrift.setText("Studieprogram");
 			vis(studieboks.visResultat(studieboks.listify(skolen.getStudieprogrammene().visAlle())));
 		}
-		
+
 		if (e.getSource() == visAvansert){
 			avansert(type = 0);
 		}
 		if (e.getSource() == tilbake){
 			avansert(type = 0);
 		}
-				
+
 		if (e.getSource() == leggtilfag) {
 			if(innhold.getComponent(FØRSTE).equals(studprog)){
 				try{
@@ -579,7 +599,7 @@ public class TestWindow extends JFrame implements ActionListener {
 			}
 		}
 	}
-	
+
 	private class søkelytter implements ActionListener{
 		@SuppressWarnings("unchecked")
 		public void actionPerformed(ActionEvent e) {
@@ -608,8 +628,10 @@ public class TestWindow extends JFrame implements ActionListener {
 							JList<Studieprogram> listen = studieboks.listify((ArrayList<Studieprogram>) resultat);
 							vis(studieboks.visResultat(listen));
 						}
+						overskrift.setText("søkeresultat");
 					} else{
 						vis(new JPanel());
+						overskrift.setText("Ingen treff");
 						setText("Ingen treff");
 					}
 				} 
@@ -676,7 +698,8 @@ public class TestWindow extends JFrame implements ActionListener {
 							double stryk = skolen.findStrykProsent(f, Integer.parseInt(d) );
 							displayKarakterer(karakterer, stryk);
 						} else
-							setText("Fyll inn nødvendige felter");
+							overskrift.setText("Fyll inn nødvendige felter");
+//							setText("Fyll inn nødvendige felter");
 						break;
 					default:
 						avansert(0);
@@ -714,7 +737,7 @@ public class TestWindow extends JFrame implements ActionListener {
 			}
 		}
 	}
-	
+
 	private class lagrelytter implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			try{
@@ -762,7 +785,7 @@ public class TestWindow extends JFrame implements ActionListener {
 							vurderingBox.getSelectedItem().toString(), 
 							poeng, 
 							(Laerer)lærerBox.getSelectedItem());
-					
+
 					setText(f.fullString());
 					fagBox.addItem(f);
 				} 
@@ -784,11 +807,11 @@ public class TestWindow extends JFrame implements ActionListener {
 		}
 	}
 	private class limitedOptionPane extends JOptionPane{
-		
+
 		public limitedOptionPane(){
 			//
 		}
-		
+
 		public int getMaxCharactersPerLineCount() {
 			return 85;
 		}

@@ -3,18 +3,15 @@ package no.HiOAProsjektV2013.Interface;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 
 //klassen genererer knapper for hovedvinduet, og legger til en actionlistener + størrelse på knappen.
 //for å unngå kodeduplisering
-public class Buttons implements ActionListener, FocusListener{
+public class Buttons implements ActionListener{
 
 	public static final Dimension HALV = new Dimension(160, 30);
 	public static final Dimension HEL = new Dimension(260, 30);
@@ -79,27 +76,6 @@ public class Buttons implements ActionListener, FocusListener{
 		 return group;
 	}
 
-	public JTextField generateTextField(String tekst, int bredde){
-		JTextField felt = new JTextField(tekst, bredde);
-		felt.setName(tekst);
-		felt.addFocusListener(this);
-		return felt;
-	}
-	public JTextField generateTextField(String tekst, int bredde, ActionListener al){
-		JTextField felt = new JTextField(tekst, bredde);
-		felt.setName(tekst);
-		felt.addFocusListener(this);
-		return felt;
-	}
-	public JTextField generateTextField(String tekst, int bredde, Boolean editable){
-		JTextField felt = new JTextField(tekst, bredde);
-		felt.setName(tekst);
-		felt.setEditable(editable);
-		if(editable)
-			felt.addFocusListener(this);
-		return felt;
-	}
-
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -110,15 +86,5 @@ public class Buttons implements ActionListener, FocusListener{
 		}catch(NumberFormatException ne){
 			ne.printStackTrace();
 		}
-	}
-	public void focusGained(FocusEvent e) {
-		JTextField fokus = (JTextField)(e.getSource());
-		if(fokus.getText().equals(fokus.getName()))
-			fokus.setText("");
-	}
-	public void focusLost(FocusEvent e) {
-		JTextField fokus = (JTextField)(e.getSource());
-		if(fokus.getText().equals(""))
-			fokus.setText(fokus.getName());
 	}
 }
