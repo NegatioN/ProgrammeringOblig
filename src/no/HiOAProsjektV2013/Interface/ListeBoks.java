@@ -60,8 +60,6 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 		ImageIcon iiIcon = new ImageIcon(editIcon);
 		rediger = button.generateButton("", knapper, Buttons.ICONBUTTON, BorderLayout.WEST,iiIcon,this);
 		
-		Object o = liste.getSelectedValue();
-		
 		if(!(o instanceof Student)){
 			iiIcon = new ImageIcon(deleteIcon);
 		slett = button.generateButton("", knapper, Buttons.ICONBUTTON, BorderLayout.EAST, iiIcon,this);

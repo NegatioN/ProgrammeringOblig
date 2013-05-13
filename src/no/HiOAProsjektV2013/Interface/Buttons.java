@@ -1,11 +1,10 @@
 package no.HiOAProsjektV2013.Interface;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.ImageObserver;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
@@ -13,10 +12,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
 //klassen genererer knapper for hovedvinduet, og legger til en actionlistener + størrelse på knappen.
 //for å unngå kodeduplisering
-public class Buttons implements ActionListener{
+public class Buttons implements ActionListener, FocusListener{
 
 	public static final Dimension HALV = new Dimension(160, 30);
 	public static final Dimension HEL = new Dimension(260, 30);
@@ -103,6 +103,27 @@ public class Buttons implements ActionListener{
 		 return group;
 	}
 
+	public JTextField generateTextField(String tekst, int bredde) {
+		JTextField felt = new JTextField(tekst, bredde);
+		felt.setName(tekst);
+		felt.addFocusListener(this);
+		return felt;
+	}
+
+	
+	public void focusGained(FocusEvent e) {
+		JTextField fokus = (JTextField) (e.getSource());
+		if (fokus.getText().equals(fokus.getName()))
+			fokus.setText("");
+	}
+
+	public void focusLost(FocusEvent e) {
+		JTextField fokus = (JTextField) (e.getSource());
+		if (fokus.getText().equals(""))
+			fokus.setText(fokus.getName());
+	}
+
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
