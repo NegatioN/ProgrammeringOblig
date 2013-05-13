@@ -219,7 +219,7 @@ public class Fag implements Serializable{
 					"\nBeskrivelse: " + beskrivelse + 
 					"\nVurderingsform: " + vurderingsform + 
 					"\nStudiepoeng: " + studiepoeng +
-					"\nLærer: " + lærer.geteNavn() + 
+					"\nLærer: " + lærer.getfNavn() + " " + lærer.geteNavn() + 
 					"\nArbeidskrav:\n" + krav.toString() +
 					"\nEksamener:\n";
 		for(Eksamen e: eksamener){

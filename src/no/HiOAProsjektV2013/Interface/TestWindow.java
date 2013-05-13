@@ -54,10 +54,10 @@ public class TestWindow extends JFrame implements ActionListener {
 	private Buttons buttonGenerator;
 	private DateHandler dateHandler;
 	private RightClickMenus popup = new RightClickMenus(this);
-	private ListeBoks<Student> studentboks = new ListeBoks<>(this);
-	private ListeBoks<Laerer> laererboks = new ListeBoks<>(this);
-	private ListeBoks<Fag> fagboks = new ListeBoks<>(this);
-	private ListeBoks<Studieprogram> studieboks = new ListeBoks<>(this);
+	private ListeBoks<Student> studentboks;
+	private ListeBoks<Laerer> laererboks;
+	private ListeBoks<Fag> fagboks;
+	private ListeBoks<Studieprogram> studieboks;
 	private JTextArea info;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
 			vislærer, visfag, visstudieprog, lagre, leggtilfag, søkeknapp, avansert, visAvansert, tilbake;
@@ -105,6 +105,11 @@ public class TestWindow extends JFrame implements ActionListener {
 		//Oppretter vinduslytter
 		vl = new VinduLytter(this);
 		
+		studentboks = new ListeBoks<>(this);
+		laererboks = new ListeBoks<>(this);
+		fagboks = new ListeBoks<>(this);
+		studieboks = new ListeBoks<>(this);
+		
 		//script for å generere fag, studenter og lærere
 		//kommenter den ut etter 1 generate
 //		ScriptClass sc = new ScriptClass(skolen);
@@ -126,7 +131,8 @@ public class TestWindow extends JFrame implements ActionListener {
 		
 		setVisible(true);
 		setLocationRelativeTo(null);
-		setResizable(false);
+		setMinimumSize(new Dimension(900,500));
+		setResizable(true);
 
 	}
 	//fyller meny-baren
@@ -792,6 +798,9 @@ public class TestWindow extends JFrame implements ActionListener {
 		public int getMaxCharactersPerLineCount() {
 			return 85;
 		}
+	}
+	public Buttons getButtonGen() {
+		return buttonGenerator;
 	}
 }
 

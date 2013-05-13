@@ -1,12 +1,17 @@
 package no.HiOAProsjektV2013.Interface;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.image.ImageObserver;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -18,12 +23,14 @@ public class Buttons implements ActionListener, FocusListener{
 
 	public static final Dimension HALV = new Dimension(160, 30);
 	public static final Dimension HEL = new Dimension(260, 30);
+	public static final Dimension ICONBUTTON = new Dimension(64,64);
 	public static final int KORT = 12, LANG = 20;
 	private ActionListener al;
 	//fill med button-opprettelseting.
 	public Buttons( ActionListener al){
 		this.al = al;
 	}
+	//lager knapp med alle inputvalues binder til actionlistener
 	public JButton generateButton(String name, JPanel panelet, Dimension size, ActionListener actionListener){
 		JButton knapp = new JButton(name);
 		knapp.setPreferredSize(size);
@@ -31,12 +38,14 @@ public class Buttons implements ActionListener, FocusListener{
 		panelet.add(knapp);
 		return knapp;
 	}
+	//lager knapp med alle inputvalues binder til actionlistener
 	public JButton generateButton(String name, Dimension size, ActionListener actionListener){
 		JButton knapp = new JButton(name);
 		knapp.setPreferredSize(size);
 		knapp.addActionListener(actionListener);
 		return knapp;
 	}
+	//lager knapp med inputvalues.
 	public JButton generateButton(String name, JPanel panelet, Dimension size){
 		JButton knapp = new JButton(name);
 		knapp.setPreferredSize(size);
@@ -44,6 +53,24 @@ public class Buttons implements ActionListener, FocusListener{
 		panelet.add(knapp);
 		return knapp;
 	}
+	//lager knapp med ikoner
+	public JButton generateButton(String name, JPanel panelet, Dimension size, String qualifier, ImageIcon icon, ActionListener action){
+		JButton knapp = new JButton(name,icon);
+		
+		//fikser icon	
+		knapp.setVerticalTextPosition(AbstractButton.BOTTOM);
+		knapp.setHorizontalTextPosition(AbstractButton.CENTER);
+		knapp.setPreferredSize(size);
+		//setter gjennomsiktig bakgrunn på knappen
+		knapp.setOpaque(false);
+		knapp.setContentAreaFilled(false);
+		knapp.setBorderPainted(false);
+		
+		knapp.addActionListener(action);
+		panelet.add(knapp,qualifier);
+		return knapp;
+	}
+	//generisk knapp
 	public JButton generateButton(String name, Dimension size){
 		JButton knapp = new JButton(name);
 		knapp.setPreferredSize(size);

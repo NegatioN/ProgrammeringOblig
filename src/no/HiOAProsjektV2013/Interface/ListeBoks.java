@@ -2,19 +2,22 @@ package no.HiOAProsjektV2013.Interface;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -35,26 +38,35 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 	private TestWindow tw;
 	private RightClickMenus popup;
 	private JList<E> curList = null;
+	private Buttons button;
+	private static Image editIcon = Toolkit.getDefaultToolkit().getImage("src/editBlue.png");
+	private static Image deleteIcon = Toolkit.getDefaultToolkit().getImage("src/delBlue.png");
 	
 	public ListeBoks(TestWindow tw){
 		this.tw = tw;
 		popup = tw.getRightClickMenu();
+		button = tw.getButtonGen();
 	}
 	
 	public JPanel visResultat(JList<E> liste){
 		vis = new JPanel(new BorderLayout());
-		JPanel knapper = new JPanel(new GridLayout(2,1));
+		JPanel knapper = new JPanel(new BorderLayout());
 
-		Buttons button = new Buttons(this);
-		rediger = button.generateButton("Rediger", knapper, Buttons.HEL);
+		//oppretter knapper
+		ImageIcon iiIcon = new ImageIcon(editIcon);
+		rediger = button.generateButton("", knapper, Buttons.ICONBUTTON, BorderLayout.WEST,iiIcon,this);
 		
 		Object o = liste.getSelectedValue();
 		
 		if(!(o instanceof Student)){
-		slett = button.generateButton("Slett", knapper, Buttons.HEL);
+			iiIcon = new ImageIcon(deleteIcon);
+		slett = button.generateButton("", knapper, Buttons.ICONBUTTON, BorderLayout.EAST, iiIcon,this);
 		}
+		//definerer scrollPane
+		JScrollPane scroller = new JScrollPane(liste);
+		scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
-		vis.add(new JScrollPane(liste), BorderLayout.CENTER);
+		vis.add(scroller, BorderLayout.CENTER);
 		vis.add(knapper, BorderLayout.SOUTH);
 		
 		return vis;
@@ -68,9 +80,6 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 			model.addElement(object);
 		}
 		JList<E> listen = new JList<>(model);
-//		@SuppressWarnings("unchecked")
-//		E[] tilArray = (E[]) array.toArray();
-//		listen.setListData(tilArray);
 		listen.setVisibleRowCount(ROWCOUNT);
 		
 		listen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
