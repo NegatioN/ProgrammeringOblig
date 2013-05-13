@@ -1,8 +1,6 @@
 package no.HiOAProsjektV2013.Interface;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -13,7 +11,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -41,8 +38,16 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 	private RightClickMenus popup;
 	private JList<E> curList = null;
 	private Buttons button;
-	private static Image editIcon = Toolkit.getDefaultToolkit().getImage("src/editBlue.png");
-	private static Image deleteIcon = Toolkit.getDefaultToolkit().getImage("src/delBlue.png");
+	private static ImageIcon editIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/editBlue.png"));
+	private static ImageIcon delIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/delBlue.png"));
+	private static ImageIcon addIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/addBlue.png"));
+	private static ImageIcon editRoll = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/editBlueRoll.png"));
+	private static ImageIcon delRoll = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/delBlueRoll.png"));
+	private static ImageIcon addRoll = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/addBlueRoll.png"));
+	private static ImageIcon editPress = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/editBluePress.png"));
+	private static ImageIcon delPress = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/delBluePress.png"));
+	private static ImageIcon addPress = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/addBluePress.png"));
+	
 	
 	public ListeBoks(TestWindow tw){
 		this.tw = tw;
@@ -57,12 +62,10 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 		Object o = liste.getSelectedValue();
 
 		//oppretter knapper
-		ImageIcon iiIcon = new ImageIcon(editIcon);
-		rediger = button.generateButton("", knapper, Buttons.ICONBUTTON, BorderLayout.WEST,iiIcon,this);
+		rediger = button.generateButton(null, knapper, Buttons.ICONBUTTON, BorderLayout.WEST,editIcon,editRoll,editPress,this);
 		
 		if(!(o instanceof Student)){
-			iiIcon = new ImageIcon(deleteIcon);
-		slett = button.generateButton("", knapper, Buttons.ICONBUTTON, BorderLayout.EAST, iiIcon,this);
+		slett = button.generateButton(null, knapper, Buttons.ICONBUTTON, BorderLayout.EAST, delIcon,delRoll,delPress,this);
 		}
 		//definerer scrollPane
 		JScrollPane scroller = new JScrollPane(liste);

@@ -51,17 +51,19 @@ public class Buttons implements ActionListener, FocusListener{
 		return knapp;
 	}
 	//lager knapp med ikoner
-	public JButton generateButton(String name, JPanel panelet, Dimension size, String qualifier, ImageIcon icon, ActionListener action){
+	public JButton generateButton(String name, JPanel panelet, Dimension size, String qualifier, ImageIcon icon,ImageIcon roll,ImageIcon press, ActionListener action){
 		JButton knapp = new JButton(name,icon);
 		
 		//fikser icon	
-		knapp.setVerticalTextPosition(AbstractButton.BOTTOM);
-		knapp.setHorizontalTextPosition(AbstractButton.CENTER);
 		knapp.setPreferredSize(size);
 		//setter gjennomsiktig bakgrunn på knappen
 		knapp.setOpaque(false);
 		knapp.setContentAreaFilled(false);
 		knapp.setBorderPainted(false);
+		//roll+pressed-state
+		knapp.setRolloverEnabled(true);
+		knapp.setRolloverIcon(roll);
+		knapp.setPressedIcon(press);
 		
 		knapp.addActionListener(action);
 		panelet.add(knapp,qualifier);

@@ -129,7 +129,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		pack();
 
 		//setter icon til framen
-		Image img = Toolkit.getDefaultToolkit().getImage("src/icon.png");
+		Image img = Toolkit.getDefaultToolkit().getImage("src/icons/icon.png");
 		this.setIconImage(img);
 
 		setVisible(true);
