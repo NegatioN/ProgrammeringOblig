@@ -21,6 +21,10 @@ import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 
+/*
+ * Klassen har som formål å generere høyreklikk-menyer for våre JLists
+ * og JPanel hvor det er praktisk. Streamliner mulighetene for å bruke søkemetodene som er implementert.
+ */
 public class RightClickMenus extends MouseAdapter implements ActionListener{
 
 	private JPopupMenu popMeny;
@@ -28,6 +32,7 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 	private JMenuItem eStrykPros, eKarDist, fagBeståttKrav, fagStudenter,studieStudenter, fagLedetAv;
 	private Object curObject = null;
 	private TestWindow tw;
+	private final int PANELOBJEKT = 1;
 	
 	public RightClickMenus(TestWindow tw){
 		this.tw = tw;
@@ -78,7 +83,7 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 					fagItem.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
 							curObject = (tw.getSkole().søk(
-									fagItem.getActionCommand(), TestWindow.FAG)).get(0);
+									fagItem.getActionCommand(), TestWindow.FAG)).get(TestWindow.FØRSTE);
 							String melding = "Er du sikker på at du vil melde\n" + s.getfNavn() + " " + s.geteNavn() + " av " + fagItem.getActionCommand();
 							int option = JOptionPane.showConfirmDialog(tw, melding, "Slette faget?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 							if(option == JOptionPane.OK_OPTION)
@@ -135,7 +140,7 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 				JTable lista = (JTable) comp;
 				int row = lista.getSelectedRow();
 				if (row != -1) {
-					curObject = lista.getValueAt(row, 1);
+					curObject = lista.getValueAt(row, PANELOBJEKT);
 					createPopMenu(curObject);
 				}
 			}

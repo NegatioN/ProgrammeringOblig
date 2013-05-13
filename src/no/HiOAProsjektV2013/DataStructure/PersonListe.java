@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.regex.Pattern;
 
 //abstrakt parent-class for å minimere kodeduplikasjon i StudentListe og LaererListe
-//FIKS NAVNSORTERING PÅ LÆRERE JOAKIM
 public abstract class PersonListe<E> implements Serializable{
 	
 	

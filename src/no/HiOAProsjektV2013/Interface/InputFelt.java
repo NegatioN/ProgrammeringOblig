@@ -10,6 +10,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+
+/*
+ * Klassen har som formål å generere tekstfelt hvor brukeren får feilmeldinger
+ * basert på om input er valid i forhold til gjeldende regex. Det stopper også feil-input.
+ */
 public class InputFelt extends JTextField implements FocusListener, ActionListener{
 
 	private static final long serialVersionUID = 101112L;
