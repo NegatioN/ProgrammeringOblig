@@ -24,13 +24,10 @@ public class Studieprogram implements Serializable{
 		this.navn = navn;
 	}
 	
-	private boolean harFaget(Fag fag){
+	public boolean harFaget(Fag fag){
 		for(Fag checkFag : fagIProgrammet){
-			if(fag.getFagkode().equals(checkFag.getFagkode())){
-				JOptionPane.showMessageDialog(null, this.getNavn() + " har faget " + fag.getFagkode() + " fra før.", "Feilmelding", JOptionPane.ERROR_MESSAGE);
+			if(fag.getFagkode().equals(checkFag.getFagkode()))
 				return true;
-			}
-			System.out.println(this.getNavn() + " har fag ikke " + fag.getFagkode());
 		}
 		return false;
 	}
@@ -38,6 +35,8 @@ public class Studieprogram implements Serializable{
 	public void addFag(Fag fag) {
 		if(!harFaget(fag))
 			fagIProgrammet.add(fag);
+		else
+			JOptionPane.showMessageDialog(null, this.getNavn() + " har faget " + fag.getFagkode() + " fra før.", "Feilmelding", JOptionPane.ERROR_MESSAGE);
 	}
 
 	public List<Fag> getFagene()

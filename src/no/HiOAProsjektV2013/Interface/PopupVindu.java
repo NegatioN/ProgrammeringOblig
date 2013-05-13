@@ -25,6 +25,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListModel;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
@@ -43,7 +44,7 @@ import no.HiOAProsjektV2013.Main.DateHandler;
 public class PopupVindu extends JPanel{
 
 	private static final long serialVersionUID = 1073L;
-	private Dimension venstreSize = new Dimension(290, 600), høyreSize = new Dimension(400, 600), infoSize = new Dimension(400, 250), tabellSize = new Dimension(385, 200);
+	private Dimension venstreSize = new Dimension(290, 600), høyreSize = new Dimension(400, 600), infoSize = new Dimension(400, 250), tabellSize = new Dimension(385, 200), listeSize = new Dimension(250, 195);
 	private InputFelt navn, epost, tlf, adresse, start, slutt, kontorNr, fagkode, beskrivelse, studiepoeng, vurderingsform, studentNr, fag, eksamensdato;
 	private JPanel panelet, visepanel, faginfo, kravinfo;
 	private TestWindow vindu;
@@ -59,6 +60,7 @@ public class PopupVindu extends JPanel{
 	private JTable resultater;
 	private JCheckBox oppmeldtCheck;
 	private JList<Krav> kravListe;
+	private JList<Fag> fagListe;
 	private Arbeidskrav aktivKrav;
 	private DateFormat formatter = new SimpleDateFormat("dd.mm.yy"); //Setter inputformat for dato
 	private RightClickMenus popup;
@@ -175,7 +177,7 @@ public class PopupVindu extends JPanel{
 
 		navn	 		= new InputFelt(n, 20, false);
 		fagkode	 		= new InputFelt(fk, 20, false);
-		beskrivelse		= new InputFelt(b, 20, false);
+		beskrivelse		= new InputFelt(b, 20);
 		studiepoeng		= new InputFelt(""+sp, 20, "\\d{2}");
 		vurderingsform	= new InputFelt(vf, 20, false);
 		eksamensdato 	= new InputFelt("dag/mnd/år", 20, TestWindow.dateRegex);
@@ -200,6 +202,8 @@ public class PopupVindu extends JPanel{
 		panelet.add(studiepoeng);
 		panelet.add(vurderingBox);
 		panelet.add(velgLærer);
+		panelet.add(Box.createRigidArea(Buttons.HEL));
+
 		panelet.add(eksamensdato);
 		leggtil = button.generateButton("Legg til Eksamen", panelet, Buttons.HEL);
 		panelet.add(Box.createRigidArea(Buttons.HEL));
@@ -214,11 +218,13 @@ public class PopupVindu extends JPanel{
 		aktiv = sp;
 
 		String n = sp.getNavn();
-		String fagene = "";
+
+		DefaultListModel<Fag> fagmodell = new DefaultListModel<Fag>();  
+		fagListe = new JList<>(fagmodell);
+		fagListe.setPreferredSize(listeSize);
+		fagListe.setBorder(BorderFactory.createEtchedBorder());
 		for(Fag f : sp.getFagene()){
-			if(fagene != "")
-				fagene += ", ";
-			fagene += f.getNavn();
+			fagmodell.addElement(f);
 		}
 
 		velgFag = new JComboBox<Fag>();
@@ -227,18 +233,20 @@ public class PopupVindu extends JPanel{
 			velgFag.addItem((Fag)f);
 		}
 
-		navn	 		= new InputFelt(n, 20, TestWindow.tittelRegex);
-		fag		 		= new InputFelt(fagene, 20, false);
+		navn	= new InputFelt(n, 20, TestWindow.tittelRegex);
 
 		panelet = new JPanel();
 		panelet.setPreferredSize(venstreSize);
 		panelet.add(navn);
-		panelet.add(fag);
-		panelet.add(velgFag);
-
-		button.generateButton("Lagre", panelet, Buttons.HEL);
-		leggtil = button.generateButton("Legg til fag", panelet, Buttons.HEL);
+		panelet.add(fagListe);
 		fjern = button.generateButton("Fjern fag", panelet, Buttons.HEL);
+		panelet.add(Box.createRigidArea(Buttons.HEL));
+		
+		panelet.add(velgFag);
+		leggtil = button.generateButton("Legg til fag", panelet, Buttons.HEL);
+		panelet.add(Box.createRigidArea(Buttons.HEL));
+		
+		button.generateButton("Lagre", panelet, Buttons.HEL);
 		return panelet;
 	}
 
@@ -404,16 +412,17 @@ public class PopupVindu extends JPanel{
 		
 		private void fyllTabell(int lengde, LinkedList<EksamensDeltaker> eksamener){
 			celler = new Object[lengde][5];
-			int rad = 0;
-			for(EksamensDeltaker ed: eksamener){
-				Eksamen e = ed.getFag().findEksamenByDate(ed.getDato());
-				celler[rad][0] = ed.getFag().getFagkode();
-				celler[rad][1] = e;
-				celler[rad][2] = ed;
-				celler[rad][3] = ed.isOppmøtt();
-				celler[rad++][4] = new String(""+ed.getKarakter());
+			for(int rad = 0; rad < lengde; rad++){
+				for(EksamensDeltaker ed: eksamener){
+					Eksamen e = ed.getFag().findEksamenByDate(ed.getDato());
+					celler[rad][0] = ed.getFag().getFagkode();
+					celler[rad][1] = e;
+					celler[rad][2] = ed;
+					celler[rad][3] = ed.isOppmøtt();
+					celler[rad][4] = new String(""+ed.getKarakter());
+				}
 			}
-			
+
 			this.addTableModelListener(new tabellytter());
 		}
 		
@@ -519,8 +528,10 @@ public class PopupVindu extends JPanel{
 						visFag(f);
 					}
 					else if(aktiv instanceof Studieprogram){
-						Studieprogram studiet = (Studieprogram) aktiv;
-						studiet.addFag((Fag)velgFag.getSelectedItem());
+						Fag f = (Fag)velgFag.getSelectedItem();
+						if(!((Studieprogram) aktiv).harFaget(f))
+							((DefaultListModel<Fag>) fagListe.getModel()).addElement(f);
+						((Studieprogram) aktiv).addFag(f);
 					}
 					else if(aktiv instanceof Fag){
 							GregorianCalendar dato = dateHandler.dateFixer(eksamensdato.getText(), null);
@@ -548,21 +559,23 @@ public class PopupVindu extends JPanel{
 						((Student) aktiv).removeFag((Fag)studentFag.getSelectedItem());
 						vindu.cover(fagPanel());
 					}
-					else if(aktiv instanceof Studieprogram)
-						((Studieprogram) aktiv).fjernFag(((Fag)velgFag.getSelectedItem()));
+					else if(aktiv instanceof Studieprogram){
+						((Studieprogram) aktiv).fjernFag(fagListe.getSelectedValue());
+						((DefaultListModel<Fag>) fagListe.getModel()).remove(fagListe.getSelectedIndex());
+					}
 					else if(aktiv instanceof Fag){				
 						aktivKrav.fjernKrav(kravListe.getSelectedValue());
 						vindu.cover(kravPanel((Fag)aktiv));
 					}
-
-
 				} catch (NullPointerException npe){
+					System.out.println("Nullpointer fordi alle fag er fjernet");
 				}
 			}
 
 			else if(e.getSource() == deltaker){
 				Student s = vindu.getSkole().getStudentene().findStudentByStudentNr(studentNr.getText());
-				((Eksamen)velgEksamen.getSelectedItem()).addDeltaker(s);
+				if(s != null)
+					((Eksamen)velgEksamen.getSelectedItem()).addDeltaker(s);
 				visEksamen((Eksamen)velgEksamen.getSelectedItem());
 			}
 			else if(e.getSource() == oppmeldte){

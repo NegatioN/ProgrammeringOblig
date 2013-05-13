@@ -40,6 +40,7 @@ public class InputFelt extends JTextField implements FocusListener, ActionListen
 	public InputFelt(String tekst, int bredde, Boolean editable){
 		super(tekst, bredde);
 		setName(tekst);
+		setEditable(editable);
 		if(editable)
 			addFocusListener(this);
 	}

@@ -30,7 +30,7 @@ import no.HiOAProsjektV2013.DataStructure.Studieprogram;
  */
 public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 
-	private final int ROWCOUNT = 18;
+	private final int ROWCOUNT = 20;
 	private Object valgt;
 	private JPanel vis;
 	private JButton rediger, slett;
