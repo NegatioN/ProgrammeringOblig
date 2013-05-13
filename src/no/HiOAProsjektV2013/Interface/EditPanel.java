@@ -7,8 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,13 +38,13 @@ import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 import no.HiOAProsjektV2013.Interface.InputFelt;
 import no.HiOAProsjektV2013.Main.DateHandler;
 
-public class PopupVindu extends JPanel{
+public class EditPanel extends JPanel{
 
 	private static final long serialVersionUID = 1073L;
-	private Dimension venstreSize = new Dimension(290, 600), høyreSize = new Dimension(400, 600), infoSize = new Dimension(400, 250), tabellSize = new Dimension(385, 200);
-	private InputFelt navn, epost, tlf, adresse, start, slutt, kontorNr, fagkode, beskrivelse, studiepoeng, vurderingsform, studentNr, fag, eksamensdato;
+	private Dimension venstreSize = new Dimension(290, 600), høyreSize = new Dimension(400, 600), infoSize = new Dimension(400, 250), tabellSize = new Dimension(385, 200), listeSize = new Dimension(250, 195);
+	private InputFelt navn, epost, tlf, adresse, start, slutt, kontorNr, fagkode, beskrivelse, studiepoeng, studentNr, eksamensdato;
 	private JPanel panelet, visepanel, faginfo, kravinfo;
-	private TestWindow vindu;
+	private Vindu vindu;
 	private lytter ly = new lytter();
 	private Buttons button = new Buttons(ly);
 	private Object aktiv;
@@ -59,13 +57,13 @@ public class PopupVindu extends JPanel{
 	private JTable resultater;
 	private JCheckBox oppmeldtCheck;
 	private JList<Krav> kravListe;
+	private JList<Fag> fagListe;
 	private Arbeidskrav aktivKrav;
-	private DateFormat formatter = new SimpleDateFormat("dd.mm.yy"); //Setter inputformat for dato
 	private RightClickMenus popup;
 	private JComboBox<String> vurderingBox = null;
 	private DateHandler dateHandler = new DateHandler();
 	
-	public PopupVindu(TestWindow vindu, Object o){
+	public EditPanel(Vindu vindu, Object o){
 		this.vindu = vindu;
 		popup = vindu.getRightClickMenu();
 		
@@ -90,17 +88,18 @@ public class PopupVindu extends JPanel{
 		String studTlf = s.getTelefonNr() + "";
 		String studAdresse = s.getAdresse();
 		Date startdato = s.getStart().getTime();
+		SimpleDateFormat format = new SimpleDateFormat("dd. MMM yyyy");
 
-		navn	 		= new InputFelt(studNavn, 20, false);
-		epost	 		= new InputFelt(studEpost, 20, TestWindow.mailRegex);
-		tlf		 		= new InputFelt(studTlf, 20, TestWindow.mobRegex);
-		adresse			= new InputFelt(studAdresse, 20);
-		start			= new InputFelt(formatter.format(startdato), 20, false);
+		navn	 		= new InputFelt(studNavn, InputFelt.LANG, false);
+		epost	 		= new InputFelt(studEpost, InputFelt.LANG, Vindu.mailRegex);
+		tlf		 		= new InputFelt(studTlf, InputFelt.LANG, Vindu.mobRegex);
+		adresse			= new InputFelt(studAdresse, InputFelt.LANG);
+		start			= new InputFelt(format.format(startdato.getTime()), InputFelt.LANG, false);
 		try{
 			Date sluttdato = s.getSlutt().getTime();
-			slutt 		= new InputFelt(formatter.format(sluttdato), 20, TestWindow.dateRegex);
+			slutt 		= new InputFelt(format.format(sluttdato.getTime()), InputFelt.LANG, Vindu.dateRegex);
 		} catch(NullPointerException npe){
-			slutt 		= new InputFelt("Sluttdato", 20, TestWindow.dateRegex);
+			slutt 		= new InputFelt("Sluttdato", InputFelt.LANG, Vindu.dateRegex);
 		}
 
 		velgFag = new JComboBox<Fag>();
@@ -148,10 +147,10 @@ public class PopupVindu extends JPanel{
 		String t = l.getTelefonNr() + "";
 		String k = l.getKontor();
 
-		navn	 		= new InputFelt(n, 20, false);
-		epost	 		= new InputFelt(e, 20, TestWindow.mailRegex);
-		tlf		 		= new InputFelt(t, 20, TestWindow.mobRegex);
-		kontorNr		= new InputFelt(k, 20);
+		navn	 		= new InputFelt(n, InputFelt.LANG, false);
+		epost	 		= new InputFelt(e, InputFelt.LANG, Vindu.mailRegex);
+		tlf		 		= new InputFelt(t, InputFelt.LANG, Vindu.mobRegex);
+		kontorNr		= new InputFelt(k, InputFelt.LANG);
 
 		panelet = new JPanel();
 		panelet.setPreferredSize(venstreSize);
@@ -170,14 +169,12 @@ public class PopupVindu extends JPanel{
 		String fk = f.getFagkode();
 		String b = f.getBeskrivelse() + "";
 		int sp = f.getStudiepoeng();
-		String vf = f.getVurderingsform();
 
-		navn	 		= new InputFelt(n, 20, false);
-		fagkode	 		= new InputFelt(fk, 20, false);
-		beskrivelse		= new InputFelt(b, 20, false);
-		studiepoeng		= new InputFelt(""+sp, 20, "\\d{2}");
-		vurderingsform	= new InputFelt(vf, 20, false);
-		eksamensdato 	= new InputFelt("dag/mnd/år", 20, TestWindow.dateRegex);
+		navn	 		= new InputFelt(n, InputFelt.LANG, false);
+		fagkode	 		= new InputFelt(fk, InputFelt.LANG, false);
+		beskrivelse		= new InputFelt(b, InputFelt.LANG);
+		studiepoeng		= new InputFelt(""+sp, InputFelt.LANG, "\\d{2}");
+		eksamensdato 	= new InputFelt("dag/mnd/år", InputFelt.LANG, Vindu.dateRegex);
 
 		String[] boxitems =  {"Muntlig", "Skriftlig", "Prosjekt"};
 		vurderingBox = new JComboBox<String>(boxitems);
@@ -199,6 +196,8 @@ public class PopupVindu extends JPanel{
 		panelet.add(studiepoeng);
 		panelet.add(vurderingBox);
 		panelet.add(velgLærer);
+		panelet.add(Box.createRigidArea(Buttons.HEL));
+
 		panelet.add(eksamensdato);
 		leggtil = button.generateButton("Legg til Eksamen", panelet, Buttons.HEL);
 		panelet.add(Box.createRigidArea(Buttons.HEL));
@@ -213,11 +212,13 @@ public class PopupVindu extends JPanel{
 		aktiv = sp;
 
 		String n = sp.getNavn();
-		String fagene = "";
+
+		DefaultListModel<Fag> fagmodell = new DefaultListModel<Fag>();  
+		fagListe = new JList<>(fagmodell);
+		fagListe.setPreferredSize(listeSize);
+		fagListe.setBorder(BorderFactory.createEtchedBorder());
 		for(Fag f : sp.getFagene()){
-			if(fagene != "")
-				fagene += ", ";
-			fagene += f.getNavn();
+			fagmodell.addElement(f);
 		}
 
 		velgFag = new JComboBox<Fag>();
@@ -226,18 +227,20 @@ public class PopupVindu extends JPanel{
 			velgFag.addItem((Fag)f);
 		}
 
-		navn	 		= new InputFelt(n, 20, TestWindow.tittelRegex);
-		fag		 		= new InputFelt(fagene, 20, false);
+		navn	= new InputFelt(n, InputFelt.LANG, Vindu.tittelRegex);
 
 		panelet = new JPanel();
 		panelet.setPreferredSize(venstreSize);
 		panelet.add(navn);
-		panelet.add(fag);
-		panelet.add(velgFag);
-
-		button.generateButton("Lagre", panelet, Buttons.HEL);
-		leggtil = button.generateButton("Legg til fag", panelet, Buttons.HEL);
+		panelet.add(fagListe);
 		fjern = button.generateButton("Fjern fag", panelet, Buttons.HEL);
+		panelet.add(Box.createRigidArea(Buttons.HEL));
+		
+		panelet.add(velgFag);
+		leggtil = button.generateButton("Legg til fag", panelet, Buttons.HEL);
+		panelet.add(Box.createRigidArea(Buttons.HEL));
+		
+		button.generateButton("Lagre", panelet, Buttons.HEL);
 		return panelet;
 	}
 
@@ -258,7 +261,7 @@ public class PopupVindu extends JPanel{
 		visepanel.add(studentFag);
 
 		if(studentFag.getItemCount() > 0)
-			visFag(studentFag.getItemAt(TestWindow.FØRSTE));
+			visFag(studentFag.getItemAt(Vindu.FØRSTE));
 		else
 			visFag();
 
@@ -287,7 +290,7 @@ public class PopupVindu extends JPanel{
 		kravinfo.setBorder(BorderFactory.createTitledBorder("Arbeidskrav for " + (f.getNavn())));
 		kravinfo.add(kravListe);
 
-		beskrivelse	= new InputFelt("Arbeidskrav", 20);
+		beskrivelse	= new InputFelt("Arbeidskrav", InputFelt.LANG);
 
 		visepanel.add(kravinfo);
 		visepanel.add(beskrivelse);
@@ -314,11 +317,11 @@ public class PopupVindu extends JPanel{
 		visepanel.add(velgEksamen);
 
 		if(velgEksamen.getItemCount() > 0)
-			visEksamen(velgEksamen.getItemAt(TestWindow.FØRSTE));
+			visEksamen(velgEksamen.getItemAt(Vindu.FØRSTE));
 		else
 			visFag();
 
-		studentNr = new InputFelt("StudentNr", 20, TestWindow.studentNrRegex);
+		studentNr = new InputFelt("StudentNr", InputFelt.LANG, Vindu.studentNrRegex);
 		visepanel.add(faginfo);
 		visepanel.add(studentNr);
 		deltaker = button.generateButton("Legg til deltaker", visepanel, Buttons.HEL);
@@ -341,6 +344,7 @@ public class PopupVindu extends JPanel{
 		resultater.setPreferredScrollableViewportSize(tabellSize);
 		resultater.addMouseListener(popup);
 		faginfo.add(new JScrollPane(resultater));
+		resultater.getColumnModel().getColumn(1).setPreferredWidth(120);
 
 		visepanel.add(faginfo);
 		tilbake = button.generateButton("Tilbake", visepanel, Buttons.HEL);
@@ -354,6 +358,8 @@ public class PopupVindu extends JPanel{
 		resultater = new JTable(modell);
 		resultater.setPreferredScrollableViewportSize(tabellSize);
 		resultater.addMouseListener(popup);
+		resultater.getColumnModel().getColumn(1).setPreferredWidth(120);
+
 		faginfo.add(new JScrollPane(resultater));
 		faginfo.updateUI();
 	}
@@ -403,16 +409,17 @@ public class PopupVindu extends JPanel{
 		
 		private void fyllTabell(int lengde, LinkedList<EksamensDeltaker> eksamener){
 			celler = new Object[lengde][5];
-			int rad = 0;
-			for(EksamensDeltaker ed: eksamener){
-				Eksamen e = ed.getFag().findEksamenByDate(ed.getDato());
-				celler[rad][0] = ed.getFag().getFagkode();
-				celler[rad][1] = e;
-				celler[rad][2] = ed;
-				celler[rad][3] = ed.isOppmøtt();
-				celler[rad++][4] = new String(""+ed.getKarakter());
+			for(int rad = 0; rad < lengde; rad++){
+				for(EksamensDeltaker ed: eksamener){
+					Eksamen e = ed.getFag().findEksamenByDate(ed.getDato());
+					celler[rad][0] = ed.getFag().getFagkode();
+					celler[rad][1] = e;
+					celler[rad][2] = ed;
+					celler[rad][3] = ed.isOppmøtt();
+					celler[rad][4] = new String(""+ed.getKarakter());
+				}
 			}
-			
+						
 			this.addTableModelListener(new tabellytter());
 		}
 		
@@ -462,7 +469,7 @@ public class PopupVindu extends JPanel{
 				String s = (resultater.getValueAt(e.getFirstRow(), e.getColumn())).toString();
 				char k = ed.getKarakter();
 				if(s.matches("[a-fA-F]")){
-					k = s.charAt(TestWindow.FØRSTE);
+					k = s.charAt(Vindu.FØRSTE);
 				} else if(s.matches("\0[a-fA-F]")){
 					k = s.charAt(1);
 				}
@@ -518,8 +525,10 @@ public class PopupVindu extends JPanel{
 						visFag(f);
 					}
 					else if(aktiv instanceof Studieprogram){
-						Studieprogram studiet = (Studieprogram) aktiv;
-						studiet.addFag((Fag)velgFag.getSelectedItem());
+						Fag f = (Fag)velgFag.getSelectedItem();
+						if(!((Studieprogram) aktiv).harFaget(f))
+							((DefaultListModel<Fag>) fagListe.getModel()).addElement(f);
+						((Studieprogram) aktiv).addFag(f);
 					}
 					else if(aktiv instanceof Fag){
 							GregorianCalendar dato = dateHandler.dateFixer(eksamensdato.getText(), null);
@@ -547,21 +556,23 @@ public class PopupVindu extends JPanel{
 						((Student) aktiv).removeFag((Fag)studentFag.getSelectedItem());
 						vindu.cover(fagPanel());
 					}
-					else if(aktiv instanceof Studieprogram)
-						((Studieprogram) aktiv).fjernFag(((Fag)velgFag.getSelectedItem()));
+					else if(aktiv instanceof Studieprogram){
+						((Studieprogram) aktiv).fjernFag(fagListe.getSelectedValue());
+						((DefaultListModel<Fag>) fagListe.getModel()).remove(fagListe.getSelectedIndex());
+					}
 					else if(aktiv instanceof Fag){				
 						aktivKrav.fjernKrav(kravListe.getSelectedValue());
 						vindu.cover(kravPanel((Fag)aktiv));
 					}
-
-
 				} catch (NullPointerException npe){
+					System.out.println("Nullpointer fordi alle fag er fjernet");
 				}
 			}
 
 			else if(e.getSource() == deltaker){
 				Student s = vindu.getSkole().getStudentene().findStudentByStudentNr(studentNr.getText());
-				((Eksamen)velgEksamen.getSelectedItem()).addDeltaker(s);
+				if(s != null)
+					((Eksamen)velgEksamen.getSelectedItem()).addDeltaker(s);
 				visEksamen((Eksamen)velgEksamen.getSelectedItem());
 			}
 			else if(e.getSource() == oppmeldte){
@@ -596,20 +607,13 @@ public class PopupVindu extends JPanel{
 
 				if(aktiv instanceof Student){
 					Student s = (Student) aktiv;
-					
-					try {
-						Date date;
-						date = (Date) formatter.parse(slutt.getText());
-						GregorianCalendar dato = (GregorianCalendar) GregorianCalendar.getInstance();
-						dato.setTime(date);
-						s.setSlutt(dato);
-					} catch (ParseException pe) {
-						
-					}
-				
+
+					GregorianCalendar dato = dateHandler.dateFixer(slutt.getText(), null);
+					s.setSlutt(dato);
+
 					try{
 						int nr = Integer.parseInt(tlf.getText());
-						
+
 						s.setAdresse(adresse.getText());
 						s.setTlf(nr);
 						s.setEpost(epost.getText());

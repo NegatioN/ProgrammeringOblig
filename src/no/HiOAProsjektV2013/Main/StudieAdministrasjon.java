@@ -1,10 +1,10 @@
 package no.HiOAProsjektV2013.Main;
 
-import no.HiOAProsjektV2013.Interface.TestWindow;
+import no.HiOAProsjektV2013.Interface.Vindu;
 
 //Holder på main-metode og starter programmet.
 public class StudieAdministrasjon {
 	public static void main(String[] args) {
-		TestWindow tw = new TestWindow("StudieAdministrasjon");
+		Vindu vindu = new Vindu("StudieAdministrasjon");
 	}
 }

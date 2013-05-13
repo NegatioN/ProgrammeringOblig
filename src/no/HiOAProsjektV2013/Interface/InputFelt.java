@@ -20,7 +20,7 @@ public class InputFelt extends JTextField implements FocusListener, ActionListen
 	private static final long serialVersionUID = 101112L;
 	private String regex = ".*";
 	private String tekst, feilmelding;
-	private JLabel l = new JLabel();
+	public static final int KORT = 12, LANG = 20;
 
 	public InputFelt(String tekst, int bredde){
 		super(tekst, bredde);
@@ -45,22 +45,9 @@ public class InputFelt extends JTextField implements FocusListener, ActionListen
 	public InputFelt(String tekst, int bredde, Boolean editable){
 		super(tekst, bredde);
 		setName(tekst);
+		setEditable(editable);
 		if(editable)
 			addFocusListener(this);
-	}
-	
-	public JPanel getLab(){
-		l.setText(tekst);
-
-		JPanel p = new JPanel();
-		p.add(l);
-		p.add(this);
-		l.setLabelFor(this);
-		return p;
-	}
-
-	public boolean sjekkInput(){
-		return getText().matches(regex);
 	}
 	
 	public void focusGained(FocusEvent e) {
@@ -73,31 +60,31 @@ public class InputFelt extends JTextField implements FocusListener, ActionListen
 			setText(tekst);
 		else if(!getText().matches(regex)){
 			switch(regex){
-			case TestWindow.fagkodeRegex :
+			case Vindu.fagkodeRegex :
 				feilmelding = "Kun på formen ABCD1234";
 				break;
-			case TestWindow.tittelRegex :
+			case Vindu.tittelRegex :
 				feilmelding = "Kun ett eller to ord tillatt";
 				break;
-			case TestWindow.studentNrRegex :
+			case Vindu.studentNrRegex :
 				feilmelding = "Kun på formen S123456";
 				break;
-			case TestWindow.årRegex :
+			case Vindu.årRegex :
 				feilmelding = "Kun på formen 2010";
 				break;
-			case TestWindow.mobRegex :
+			case Vindu.mobRegex :
 				feilmelding = "Kun 8 siffer tillatt";
 				break;
-			case TestWindow.mailRegex :
+			case Vindu.mailRegex :
 				feilmelding = "Feil epost-format";
 				break;
-			case TestWindow.navnRegex :
+			case Vindu.navnRegex :
 				feilmelding = "Fornavn og etternavn";
 				break;
-			case TestWindow.dateRegex :
+			case Vindu.dateRegex :
 				feilmelding = "På form dd.mm.åå, eller dd.mm.åååå";
 				break;
-			case TestWindow.sPoengRegex:
+			case Vindu.sPoengRegex:
 				feilmelding = "Kun hele tall mellom 0-60";
 				break;
 			default:

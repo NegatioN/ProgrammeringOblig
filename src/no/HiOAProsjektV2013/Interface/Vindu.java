@@ -44,7 +44,7 @@ import no.HiOAProsjektV2013.Main.ScriptClass;
  * Hovedvinduet i programmet. Inneholder mesteparten av interfacen.
  * LE, skriv litt mer her xD
  */
-public class TestWindow extends JFrame implements ActionListener {
+public class Vindu extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	//checkbox burde sette selectedValue til en av disse, og passe value inn i search
@@ -87,16 +87,11 @@ public class TestWindow extends JFrame implements ActionListener {
 	public static final String navnRegex = "(?:([a-zA-ZæøåÆØÅ']+\\s+[a-zA-ZæøåÆØÅ']+\\s*)){1}(?:([a-zA-ZæøåÆØÅ']+\\s*))*";
 	public static final String tittelRegex = "(\\w+)||(\\w+\\s\\S+)";
 	public static final String dateRegex = "(\\d{1,2}\\W\\d{1,2}\\W((\\d{4})||(\\d{2})))";
-	public static final String datehandlerCheck4yRegex = "d{4}";
-	public static final String datehandlerCheck2d2mRegex = "\\d{2}\\W\\d{2}\\W\\d{4}";
-	public static final String datehandlerCheck1d1mRegex = "\\d{1}\\W\\d{1}\\W((\\d{4})||(\\d{2}))";
-	public static final String datehandlerCheck1d2mRegex = "\\d{1}\\W\\d{2}\\W((\\d{4})||(\\d{2}))";
-	public static final String datehandlerCheck2d1mRegex = "\\d{2}\\W\\d{1}\\W((\\d{4})||(\\d{2}))";
 	public static final String sPoengRegex = "(\\d)||([01-5]\\d)||60";
 
 	private JMenuBar meny;
 
-	public TestWindow(String tittel) {
+	public Vindu(String tittel) {
 
 		super(tittel);
 		//oppretter buttongeneratoren som sparer linjer på gjentagende oppgaver.
@@ -107,15 +102,15 @@ public class TestWindow extends JFrame implements ActionListener {
 		skolen 		= arkivet.readFromFile();
 		//Oppretter vinduslytter
 		vl = new VinduLytter(this);
-		
+
 		studentboks = new ListeBoks<>(this);
 		laererboks = new ListeBoks<>(this);
 		fagboks = new ListeBoks<>(this);
 		studieboks = new ListeBoks<>(this);
-		
+
 		//script for å generere fag, studenter og lærere
 		//kommenter den ut etter 1 generate
-//				ScriptClass sc = new ScriptClass(skolen);
+		//				ScriptClass sc = new ScriptClass(skolen);
 
 		rammeverk = new JPanel(new BorderLayout());
 		add(rammeverk);
@@ -138,6 +133,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		setResizable(true);
 
 	}
+	
 	//fyller meny-baren
 	private void populateMenu(){
 		meny = new JMenuBar();
@@ -280,7 +276,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		visning.setBorder(ramme);
 		display.setBorder(ramme);
 
-		søkefelt		= new InputFelt("Søk", Buttons.KORT, new søkelytter());
+		søkefelt		= new InputFelt("Søk", InputFelt.KORT, new søkelytter());
 		visning.add(søkefelt);
 
 		søkeknapp 		= buttonGenerator.generateButton("Søk", visning, Buttons.HALV, new søkelytter());
@@ -311,24 +307,24 @@ public class TestWindow extends JFrame implements ActionListener {
 		rammeverk.add(visning, BorderLayout.EAST);
 
 		//Oppretter objekter til registreringsfelter
-		
+
 		overskrift = new JLabel();
 		overskrift.setFont(new Font("Arial", Font.BOLD, 20));
-		
-		navn	 		= new InputFelt("Navn", 20, navnRegex);
-		tittel			= new InputFelt("Navn", 20, tittelRegex);
-		epost	 		= new InputFelt("E-post", 20, mailRegex);
-		tlf		 		= new InputFelt("Telefon", 20, mobRegex);
-		adresse			= new InputFelt("Adresse", 20);
-		innDato			= new InputFelt("Startdato", 20, dateRegex);
-		utDato			= new InputFelt("Sluttdato", 20, dateRegex);
-		kontorNr		= new InputFelt("Kontornummer", 20);
-		fagkode			= new InputFelt("Fagkode", 20, fagkodeRegex);
-		beskrivelse		= new InputFelt("Beskrivelse", 20);
-		studiepoeng		= new InputFelt("Studiepoeng", 20,  sPoengRegex);
-		innÅr 			= new InputFelt("Startår", 20,  årRegex);
-		utÅr			= new InputFelt("Sluttår", 20,  årRegex);
-		studNr 			= new InputFelt("StudentNr", 20,  studentNrRegex);
+
+		navn	 		= new InputFelt("Navn", InputFelt.LANG, navnRegex);
+		tittel			= new InputFelt("Navn", InputFelt.LANG, tittelRegex);
+		epost	 		= new InputFelt("E-post", InputFelt.LANG, mailRegex);
+		tlf		 		= new InputFelt("Telefon", InputFelt.LANG, mobRegex);
+		adresse			= new InputFelt("Adresse", InputFelt.LANG);
+		innDato			= new InputFelt("Startdato", InputFelt.LANG, dateRegex);
+		utDato			= new InputFelt("Sluttdato", InputFelt.LANG, dateRegex);
+		kontorNr		= new InputFelt("Kontornummer", InputFelt.LANG);
+		fagkode			= new InputFelt("Fagkode", InputFelt.LANG, fagkodeRegex);
+		beskrivelse		= new InputFelt("Beskrivelse", InputFelt.LANG);
+		studiepoeng		= new InputFelt("Studiepoeng", InputFelt.LANG,  sPoengRegex);
+		innÅr 			= new InputFelt("Startår", InputFelt.LANG,  årRegex);
+		utÅr			= new InputFelt("Sluttår", InputFelt.LANG,  årRegex);
+		studNr 			= new InputFelt("StudentNr", InputFelt.LANG,  studentNrRegex);
 
 		lagre 			= buttonGenerator.generateButton("Lagre", Buttons.HEL, new lagrelytter());
 		leggtilfag 		= buttonGenerator.generateButton("Legg til fag", Buttons.HEL);
@@ -525,14 +521,14 @@ public class TestWindow extends JFrame implements ActionListener {
 		innhold.updateUI();
 		revalidate();
 	}
-	
+
 	public void setSelectedValue(int i){
 		selectedValue = i;
 	}
 	public Buttons getButtonGen() {
 		return buttonGenerator;
 	}
-	
+
 	//Oppdaterer display-panelet
 	public void display(Component c){
 		display.removeAll();
@@ -617,7 +613,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			try{
 				if (e.getSource() == søkefelt || e.getSource() == søkeknapp) {
-					
+
 					if(søkefelt.getText().length() < 1){
 						setText("Ingen treff");
 						overskrift.setText("Ingen treff");
@@ -625,7 +621,7 @@ public class TestWindow extends JFrame implements ActionListener {
 					}
 					//Oppretter en arraylist av typen som returneres av søk-metoden
 					ArrayList<?> resultat = skolen.søk(søkefelt.getText(), selectedValue);
-					
+
 					//Sjekker at søket ikke returnerte null eller tom list, sjekker så hva slags objekt første element i listen er,
 					//og viser et displayvindu av riktig type
 					if(!(resultat == null || resultat.isEmpty())){
@@ -671,7 +667,7 @@ public class TestWindow extends JFrame implements ActionListener {
 						break;
 					case 2:
 						listen = null;
-						
+
 						if(inn.matches(årRegex)){
 							if(ut.matches(årRegex))
 								listen = studentboks.listify(skolen.findStudentByPeriode(inn,ut));
@@ -717,7 +713,7 @@ public class TestWindow extends JFrame implements ActionListener {
 							double stryk = skolen.findStrykProsent(f, Integer.parseInt(inn) );
 							displayKarakterer(karakterer, stryk);
 						} else
-//							overskrift.setText("Fyll inn nødvendige felter");
+							//overskrift.setText("Fyll inn nødvendige felter");
 							setText("Fyll inn nødvendige felter");
 						break;
 					default:
@@ -823,7 +819,7 @@ public class TestWindow extends JFrame implements ActionListener {
 			}
 		}
 	}
-	
+
 	private class limitedOptionPane extends JOptionPane{
 
 		public limitedOptionPane(){

@@ -21,7 +21,6 @@ public class Buttons implements ActionListener, FocusListener{
 	public static final Dimension HALV = new Dimension(160, 30);
 	public static final Dimension HEL = new Dimension(260, 30);
 	public static final Dimension ICONBUTTON = new Dimension(64,64);
-	public static final int KORT = 12, LANG = 20;
 	private ActionListener al;
 	//fill med button-opprettelseting.
 	public Buttons( ActionListener al){
@@ -53,7 +52,7 @@ public class Buttons implements ActionListener, FocusListener{
 	//lager knapp med ikoner
 	public JButton generateButton(String name, JPanel panelet, Dimension size, String qualifier, ImageIcon icon,ImageIcon roll,ImageIcon press, ActionListener action){
 		JButton knapp = new JButton(name,icon);
-		
+
 		//fikser icon	
 		knapp.setPreferredSize(size);
 		//setter gjennomsiktig bakgrunn på knappen
@@ -64,7 +63,7 @@ public class Buttons implements ActionListener, FocusListener{
 		knapp.setRolloverEnabled(true);
 		knapp.setRolloverIcon(roll);
 		knapp.setPressedIcon(press);
-		
+
 		knapp.addActionListener(action);
 		panelet.add(knapp,qualifier);
 		return knapp;
@@ -79,30 +78,30 @@ public class Buttons implements ActionListener, FocusListener{
 	//kanskje kaste denne inn i testwindow pga at den må update selectedValue, og jeg er usikker på å ta inn et TestWindow her.
 	//for valuePassing til søk
 	public ButtonGroup generateButtonGroup(){
-		 ButtonGroup group = new ButtonGroup();
-		 JRadioButton lærer = new JRadioButton("Lærere");
-		 JRadioButton student = new JRadioButton("Student");
-		 JRadioButton fag = new JRadioButton("Fag");
-		 JRadioButton studier = new JRadioButton("Studier");
-		 
-		 lærer.setActionCommand(TestWindow.LÆRER+"");
-		 student.setActionCommand(TestWindow.STUDENT+"");
-		 fag.setActionCommand(TestWindow.FAG+"");
-		 studier.setActionCommand(TestWindow.STUDIEPROGRAM+"");
-		 
-		 lærer.addActionListener(this);
-		 student.addActionListener(this);
-		 fag.addActionListener(this);
-		 studier.addActionListener(this);
-		 
-		 student.setSelected(true);
-		 
-		 group.add(student);
-		 group.add(lærer);
-		 group.add(fag);
-		 group.add(studier);
-		 
-		 return group;
+		ButtonGroup group = new ButtonGroup();
+		JRadioButton lærer = new JRadioButton("Lærere");
+		JRadioButton student = new JRadioButton("Student");
+		JRadioButton fag = new JRadioButton("Fag");
+		JRadioButton studier = new JRadioButton("Studier");
+
+		lærer.setActionCommand(Vindu.LÆRER+"");
+		student.setActionCommand(Vindu.STUDENT+"");
+		fag.setActionCommand(Vindu.FAG+"");
+		studier.setActionCommand(Vindu.STUDIEPROGRAM+"");
+
+		lærer.addActionListener(this);
+		student.addActionListener(this);
+		fag.addActionListener(this);
+		studier.addActionListener(this);
+
+		student.setSelected(true);
+
+		group.add(student);
+		group.add(lærer);
+		group.add(fag);
+		group.add(studier);
+
+		return group;
 	}
 
 	public JTextField generateTextField(String tekst, int bredde) {
@@ -112,7 +111,7 @@ public class Buttons implements ActionListener, FocusListener{
 		return felt;
 	}
 
-	
+
 	public void focusGained(FocusEvent e) {
 		JTextField fokus = (JTextField) (e.getSource());
 		if (fokus.getText().equals(fokus.getName()))
@@ -125,14 +124,13 @@ public class Buttons implements ActionListener, FocusListener{
 			fokus.setText(fokus.getName());
 	}
 
-	
+
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		//try trengs egentlig ikke siden vi ALLTID sender tall i stringen.
 		try{
-		int passValue = Integer.parseInt(e.getActionCommand());
-//		tw.setSelectedValue(passValue);
+			int passValue = Integer.parseInt(e.getActionCommand());
 		}catch(NumberFormatException ne){
 			ne.printStackTrace();
 		}

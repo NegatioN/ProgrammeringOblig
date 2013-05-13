@@ -9,11 +9,11 @@ public class VinduLytter implements WindowListener, Serializable{
 	
 
 	private static final long serialVersionUID = 2L;
-	TestWindow info;
+	Vindu info;
 	
-	public VinduLytter(TestWindow tw){
-		info = tw;
-		tw.addWindowListener(this);
+	public VinduLytter(Vindu vindu){
+		info = vindu;
+		vindu.addWindowListener(this);
 	}
 	
 	@Override
