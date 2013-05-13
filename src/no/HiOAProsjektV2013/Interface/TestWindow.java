@@ -467,6 +467,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		case KARAKTER:
 			søk.add(fagBox);
 			søk.add(innDato);
+			søk.add(innÅr);
 			søk.add(avansert);
 			søk.add(tilbake);
 			break;
@@ -659,7 +660,6 @@ public class TestWindow extends JFrame implements ActionListener {
 					String nr = studNr.getText();
 					String d = innDato.getText();
 
-					overskrift.setText("Søkeresultat");
 					switch(type){
 					case 1:
 						JList<Student> listen = null;
@@ -708,13 +708,13 @@ public class TestWindow extends JFrame implements ActionListener {
 					case 5:
 						Fag f = (Fag)fagBox.getSelectedItem();
 						int[] karakterer = null;
-						if(d.matches(årRegex)){
-							karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(d));
-							double stryk = skolen.findStrykProsent(f, Integer.parseInt(d) );
+						if(d.matches(dateRegex)){
+							karakterer = skolen.findKarakterDistribusjon(f,f.findEksamenByDate(dateHandler.dateFixer(d, null)));
+							double stryk = skolen.findStrykProsent(f, dateHandler.dateFixer(d, null).YEAR );
 							displayKarakterer(karakterer, stryk);
-						} else if (d.matches(dateRegex)){
-							karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(d));
-							double stryk = skolen.findStrykProsent(f, Integer.parseInt(d) );
+						} else if (inn.matches(årRegex)){
+							karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(inn));
+							double stryk = skolen.findStrykProsent(f, Integer.parseInt(inn) );
 							displayKarakterer(karakterer, stryk);
 						} else
 //							overskrift.setText("Fyll inn nødvendige felter");
