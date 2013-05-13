@@ -32,6 +32,7 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 	private JMenuItem eStrykPros, eKarDist, fagBeståttKrav, fagStudenter,studieStudenter, fagLedetAv;
 	private Object curObject = null;
 	private Vindu vindu;
+	private final int PANELOBJEKT = 1;
 	
 	public RightClickMenus(Vindu vindu){
 		this.vindu = vindu;

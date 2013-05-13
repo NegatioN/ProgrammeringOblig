@@ -10,6 +10,7 @@ import no.HiOAProsjektV2013.Interface.Vindu;
  */
 public class DateHandler {
 
+	private final int DAY = 0, MONTH = 1, YEAR = 2;
 	
 	public GregorianCalendar dateFixer(String dateToBeConverted, String timeToBeConverted) {
 		//hvis ikke input matcher dd/mm/YYYY eller dd/mm/YY
@@ -28,8 +29,8 @@ public class DateHandler {
 		
 		String[] daymonthyear = dateToBeConverted.split("\\W");
 
-		if(daymonthyear[2].matches("\\d{2}")){
-			year = Integer.parseInt(daymonthyear[2]);
+		if(daymonthyear[YEAR].matches("\\d{2}")){
+			year = Integer.parseInt(daymonthyear[YEAR]);
 			if(year > 70){
 				year = year + 1900;
 			}
@@ -38,10 +39,10 @@ public class DateHandler {
 				year = year + 2000;
 			}
 		}else{
-			year = Integer.parseInt(daymonthyear[2]);
+			year = Integer.parseInt(daymonthyear[YEAR]);
 		}
-		day = Integer.parseInt(daymonthyear[0]);
-		month = Integer.parseInt(daymonthyear[1]);
+		day = Integer.parseInt(daymonthyear[DAY]);
+		month = Integer.parseInt(daymonthyear[MONTH]);
 			
 		
 		// true hvis month invalid value
