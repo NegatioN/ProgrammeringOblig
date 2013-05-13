@@ -48,7 +48,7 @@ public class TestWindow extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	//checkbox burde sette selectedValue til en av disse, og passe value inn i search
-	public static final int LÆRER = 30, STUDENT = 40, FAG = 50, STUDIEPROGRAM = 60, FØRSTE = 0;
+	public static final int LÆRER = 30, STUDENT = 40, FAG = 50, STUDIEPROGRAM = 60, FØRSTE = 0, ANDRE = 1;
 
 	private Archiver arkivet;
 	private VinduLytter vl;
@@ -510,13 +510,13 @@ public class TestWindow extends JFrame implements ActionListener {
 	}
 	public void cover(Component c){
 		vis();
-		innhold.getComponent(FØRSTE).setVisible(false);
+		innhold.getComponent(ANDRE).setVisible(false);
 		innhold.add(c);
 		innhold.updateUI();
 		revalidate();
 	}
 	public void vis(){
-		innhold.getComponent(FØRSTE).setVisible(true);
+		innhold.getComponent(ANDRE).setVisible(true);
 		if(innhold.getComponentCount() > 1)
 			innhold.remove(1);
 		innhold.updateUI();
@@ -595,7 +595,7 @@ public class TestWindow extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == leggtilfag) {
-			if(innhold.getComponent(FØRSTE).equals(studprog)){
+			if(innhold.getComponent(ANDRE).equals(studprog)){
 				try{
 					skolen.getStudieprogrammene().findEnByNavn(tittel.getText()).addFag((Fag)fagBox.getSelectedItem());
 					setText(skolen.getStudieprogrammene().findEnByNavn(navn.getText()).fullString());
@@ -634,7 +634,7 @@ public class TestWindow extends JFrame implements ActionListener {
 							JList<Studieprogram> listen = studieboks.listify((ArrayList<Studieprogram>) resultat);
 							vis(studieboks.visResultat(listen));
 						}
-						overskrift.setText("søkeresultat");
+						overskrift.setText("Søkeresultat");
 					} else{
 						vis(new JPanel());
 						overskrift.setText("Ingen treff");
@@ -704,8 +704,8 @@ public class TestWindow extends JFrame implements ActionListener {
 							double stryk = skolen.findStrykProsent(f, Integer.parseInt(d) );
 							displayKarakterer(karakterer, stryk);
 						} else
-							overskrift.setText("Fyll inn nødvendige felter");
-//							setText("Fyll inn nødvendige felter");
+//							overskrift.setText("Fyll inn nødvendige felter");
+							setText("Fyll inn nødvendige felter");
 						break;
 					default:
 						avansert(0);
@@ -747,7 +747,7 @@ public class TestWindow extends JFrame implements ActionListener {
 	private class lagrelytter implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			try{
-				if (innhold.getComponent(FØRSTE).equals(stud)) { //Sjekker hvilket panel som ligger i innhold-panelet
+				if (innhold.getComponent(ANDRE).equals(stud)) { //Sjekker hvilket panel som ligger i innhold-panelet
 					int nr = Integer.parseInt(tlf.getText());
 					//setter dato i følge input.
 					String dateString = innDato.getText();
@@ -766,23 +766,22 @@ public class TestWindow extends JFrame implements ActionListener {
 							dato);
 					if(progBox.getSelectedIndex() != -1)
 						s.setStudieprogram((Studieprogram)progBox.getSelectedItem());
-					setText(s.fullString());
-
+					setText("Lagret student:\n\n" + s.fullString());
 				} 
 
-				else if (innhold.getComponent(FØRSTE).equals(lær)) {
+				else if (innhold.getComponent(ANDRE).equals(lær)) {
 					int nr = Integer.parseInt(tlf.getText());
 
 					Laerer l = skolen.getLærerne().addLærer(navn.getText(), 
 							epost.getText(), 
 							nr,
 							kontorNr.getText());
-					setText(l.fullString());
+					setText("Lagret lærer:\n\n" + l.fullString());
 					lærerBox.addItem(l);
 
 				} 
 
-				else if (innhold.getComponent(FØRSTE).equals(fag)) {
+				else if (innhold.getComponent(ANDRE).equals(fag)) {
 					int poeng = Integer.parseInt(studiepoeng.getText());
 
 					Fag f = skolen.getFagene().addFag(tittel.getText(), 
@@ -792,13 +791,13 @@ public class TestWindow extends JFrame implements ActionListener {
 							poeng, 
 							(Laerer)lærerBox.getSelectedItem());
 
-					setText(f.fullString());
+					setText("Lagret fag:\n\n" + f.fullString());
 					fagBox.addItem(f);
 				} 
 
-				else if (innhold.getComponent(FØRSTE).equals(studprog)) {
+				else if (innhold.getComponent(ANDRE).equals(studprog)) {
 					Studieprogram sp = skolen.getStudieprogrammene().addStudProg(tittel.getText());
-					setText(sp.fullString());
+					setText("Lagret studieprogram:\n\n" + sp.fullString());
 					progBox.addItem(sp);
 					fagBox.setVisible(true);
 					leggtilfag.setVisible(true);

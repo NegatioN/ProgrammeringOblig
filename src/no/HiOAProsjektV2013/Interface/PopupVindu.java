@@ -60,7 +60,7 @@ public class PopupVindu extends JPanel{
 	private JCheckBox oppmeldtCheck;
 	private JList<Krav> kravListe;
 	private Arbeidskrav aktivKrav;
-	private DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); //Setter inputformat for dato
+	private DateFormat formatter = new SimpleDateFormat("dd.mm.yy"); //Setter inputformat for dato
 	private RightClickMenus popup;
 	private JComboBox<String> vurderingBox = null;
 	private DateHandler dateHandler = new DateHandler();

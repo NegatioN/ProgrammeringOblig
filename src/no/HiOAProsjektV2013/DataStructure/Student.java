@@ -196,7 +196,7 @@ public class Student extends Person implements Serializable{
 					if(sp != null)
 						stringen += "\nStudieProgram: " + sp.getNavn();
 					
-					stringen += "\nFag:\n";
+					stringen += "\n\nFag:\n";
 					for(Fag fag : fagListe){
 						stringen += fag.getFagkode() + "\n";
 					}
