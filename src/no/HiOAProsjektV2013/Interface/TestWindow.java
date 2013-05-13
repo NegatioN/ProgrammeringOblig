@@ -510,22 +510,28 @@ public class TestWindow extends JFrame implements ActionListener {
 	}
 	public void cover(Component c){
 		vis();
+		innhold.getComponent(FØRSTE).setVisible(false);
 		innhold.getComponent(ANDRE).setVisible(false);
 		innhold.add(c);
 		innhold.updateUI();
 		revalidate();
 	}
 	public void vis(){
+		innhold.getComponent(FØRSTE).setVisible(true);
 		innhold.getComponent(ANDRE).setVisible(true);
-		if(innhold.getComponentCount() > 1)
-			innhold.remove(1);
+		if(innhold.getComponentCount() > 2)
+			innhold.remove(2);
 		innhold.updateUI();
 		revalidate();
 	}
+	
 	public void setSelectedValue(int i){
 		selectedValue = i;
 	}
-
+	public Buttons getButtonGen() {
+		return buttonGenerator;
+	}
+	
 	//Oppdaterer display-panelet
 	public void display(Component c){
 		display.removeAll();
@@ -605,15 +611,20 @@ public class TestWindow extends JFrame implements ActionListener {
 			}
 		}
 	}
-
 	private class søkelytter implements ActionListener{
 		@SuppressWarnings("unchecked")
 		public void actionPerformed(ActionEvent e) {
 			try{
 				if (e.getSource() == søkefelt || e.getSource() == søkeknapp) {
+					
+					if(søkefelt.getText().length() < 1){
+						setText("Ingen treff");
+						overskrift.setText("Ingen treff");
+						return;
+					}
 					//Oppretter en arraylist av typen som returneres av søk-metoden
 					ArrayList<?> resultat = skolen.søk(søkefelt.getText(), selectedValue);
-
+					
 					//Sjekker at søket ikke returnerte null eller tom list, sjekker så hva slags objekt første element i listen er,
 					//og viser et displayvindu av riktig type
 					if(!(resultat == null || resultat.isEmpty())){
@@ -648,6 +659,7 @@ public class TestWindow extends JFrame implements ActionListener {
 					String nr = studNr.getText();
 					String d = innDato.getText();
 
+					overskrift.setText("Søkeresultat");
 					switch(type){
 					case 1:
 						JList<Student> listen = null;
@@ -659,6 +671,7 @@ public class TestWindow extends JFrame implements ActionListener {
 						break;
 					case 2:
 						listen = null;
+						
 						if(inn.matches(årRegex)){
 							if(ut.matches(årRegex))
 								listen = studentboks.listify(skolen.findStudentByPeriode(inn,ut));
@@ -743,7 +756,6 @@ public class TestWindow extends JFrame implements ActionListener {
 			}
 		}
 	}
-
 	private class lagrelytter implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			try{
@@ -811,6 +823,7 @@ public class TestWindow extends JFrame implements ActionListener {
 			}
 		}
 	}
+	
 	private class limitedOptionPane extends JOptionPane{
 
 		public limitedOptionPane(){
@@ -821,8 +834,6 @@ public class TestWindow extends JFrame implements ActionListener {
 			return 85;
 		}
 	}
-	public Buttons getButtonGen() {
-		return buttonGenerator;
-	}
+
 }
 
