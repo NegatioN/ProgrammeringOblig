@@ -57,7 +57,7 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 
 	public JPanel visResultat(JList<E> liste){
 		vis = new JPanel(new BorderLayout());
-		JPanel knapper = new JPanel(new BorderLayout());
+		JPanel knapper = new JPanel();
 
 		Object o = liste.getSelectedValue();
 
