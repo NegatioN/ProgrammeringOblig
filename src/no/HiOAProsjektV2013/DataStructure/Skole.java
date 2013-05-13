@@ -147,12 +147,12 @@ public class Skole implements Serializable{
 		return studentene;
 	}
 	//finner studenter som gikk på skolen i perioden brukeren søker på.
-//	public ArrayList<Student> findStudentByPeriode(String start, String slutt){
-//		int startÅr = Integer.parseInt(start);
-//		int sluttÅr = Integer.parseInt(slutt);
-//		ArrayList<Student> studentene = getStudentene().findStudentBySlutt(sluttÅr);
-//		return studentene;
-//	}
+	public ArrayList<Student> findStudentByPeriode(String start, String slutt){
+		int startÅr = Integer.parseInt(start);
+		int sluttÅr = Integer.parseInt(slutt);
+		ArrayList<Student> studentene = getStudentene().findStudentByPeriode(startÅr, sluttÅr);
+		return studentene;
+	}
 	//returnerer studiepoengene mellom år X og år Y for studenten.
 	public int findStudiepoengForStudIPeriode(Student s, String start, String slutt){
 		int startÅr = Integer.parseInt(start);
@@ -254,10 +254,6 @@ public class Skole implements Serializable{
 		ArrayList<Studieprogram> studiene = getStudieprogrammene().findByNavn(input);
 		return studiene;
 	}
-	
-	public String årSøk(){
-		return null;
-	}
 
 	private ArrayList<Student> studentNrSøk(String input){
 		ArrayList<Student> student = new ArrayList<>();
@@ -275,6 +271,7 @@ public class Skole implements Serializable{
 		return fag;
 
 	}
+	//end private metoder
 	
 
 }

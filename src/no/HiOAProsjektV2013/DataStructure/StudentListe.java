@@ -101,6 +101,35 @@ public class StudentListe extends PersonListe<Student> implements Serializable{
 		return studentNummer++;
 	}
 	
+	//finner alle studenter som gikk på skolen i periode
+	public ArrayList<Student> findStudentByPeriode(int søkStart, int søkSlutt){
+		ArrayList<Student> studentene = new ArrayList<>();
+		System.out.println("start " + søkStart + " - slutt: " + søkSlutt);
+		for(Student s : register){
+			int startår = s.getStart().get(Calendar.YEAR);
+			if(s.getSlutt()==null){
+				if(søkStart <= startår && startår <= søkSlutt){
+					studentene.add(s);
+				}
+			}
+			else{
+				int sluttår = s.getSlutt().get(Calendar.YEAR);
+				int counter = startår;
+				
+				while(counter <= sluttår){
+					if(søkStart < counter && counter > søkSlutt){
+						studentene.add(s);
+						break;
+					}
+					
+					counter++;
+				}
+			}
+		}
+		
+		return studentene;
+	}
+	
 
 	public ArrayList<Student> findStudentByStart(int år) {
 		ArrayList<Student> studentene = new ArrayList<>();

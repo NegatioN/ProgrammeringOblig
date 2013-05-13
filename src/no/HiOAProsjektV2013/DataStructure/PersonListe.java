@@ -94,7 +94,19 @@ public abstract class PersonListe<E> implements Serializable{
 		}// end while for fornavn
 		ArrayList<E> studenteneFornavn = looper(searchStart, navn[FØRSTE], fornavnRegister, fFirstLetter, FORNAVN);
 		
-		ArrayList<E> studentene = findByNavn(studenteneFornavn, studenteneEtternavn);
+		ArrayList<E> studentene = new ArrayList<>();
+		
+		//hvis bruker har søkt på både fornavn og etternavn
+		//ta med kun de hvor treff på begge søk
+		if(!navn[FØRSTE].equals(navn[ANDRE])){
+			for(E person : studenteneFornavn){
+				if(studenteneEtternavn.contains(person))
+					studentene.add(person);
+			}
+			return studentene;
+		}
+		
+		studentene = findByNavn(studenteneFornavn, studenteneEtternavn);
 		
 		return studentene;
 	}

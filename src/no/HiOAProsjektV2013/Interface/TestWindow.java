@@ -633,7 +633,7 @@ public class TestWindow extends JFrame implements ActionListener {
 						listen = null;
 						if(inn.matches(årRegex)){
 							if(ut.matches(årRegex))
-								System.out.println("Lage en periodemetode");//listen = studentboks.listify(skolen.findStudentByPeriode(inn,ut);
+								listen = studentboks.listify(skolen.findStudentByPeriode(inn,ut));
 							else
 								listen = studentboks.listify(skolen.findStudentByStart(inn));
 						} else
