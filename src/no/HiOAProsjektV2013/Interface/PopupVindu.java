@@ -84,6 +84,7 @@ public class PopupVindu extends JPanel{
 
 	public Component fyllVindu(Student s){
 		aktiv = s;
+		System.out.println("PING JEG EKSISTERER");
 
 		String studNavn = s.getfNavn() +" "+ s.geteNavn();
 		String studEpost = s.getEpost();

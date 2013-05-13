@@ -69,14 +69,11 @@ public class ScriptClass {
 	}
 	private Fag generateFag(Laerer l){
 		
-		String fagnavnet = fagnavn[randomTall(0,fagnavn.length-1)];
+		String fagnavnet = fagnavn[counter];
 		String fagkode = fagnavnet.substring(0, 4) + 1000;
 		Fag fag = skolen.getFagene().addFag(fagnavnet, fagkode, "Beskrivende tekst", vurderingsform[randomTall(0,vurderingsform.length-1)], randomTall(0,30), l);
 		
-		int antKrav = randomTall(0,5);
-		for(int i = 0; i<antKrav;i++){
 			generateKrav(fag);
-		}
 		
 		return fag;
 	}
@@ -108,7 +105,9 @@ public class ScriptClass {
 		}
 	}
 	private void generateKrav(Fag fag){
-		fag.addKrav(kravNavn[randomTall(0,kravNavn.length-1)]);		
+		for(String s : kravNavn){
+			fag.addKrav(s);
+		}	
 	}
 	
 	
