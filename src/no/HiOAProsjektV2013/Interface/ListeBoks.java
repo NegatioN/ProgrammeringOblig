@@ -34,7 +34,7 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 	private Object valgt;
 	private JPanel vis;
 	private JButton rediger, slett;
-	private TestWindow tw;
+	private Vindu vindu;
 	private RightClickMenus popup;
 	private JList<E> curList = null;
 	private Buttons button;
@@ -49,10 +49,10 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 	private static ImageIcon addPress = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/addBluePress.png"));
 	
 	
-	public ListeBoks(TestWindow tw){
-		this.tw = tw;
-		popup = tw.getRightClickMenu();
-		button = tw.getButtonGen();
+	public ListeBoks(Vindu vindu){
+		this.vindu = vindu;
+		popup = vindu.getRightClickMenu();
+		button = vindu.getButtonGen();
 	}
 
 	public JPanel visResultat(JList<E> liste){
@@ -114,15 +114,15 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 
 	private void visInfo(Object o){
 
-		tw.display();
+		vindu.display();
 		if(o instanceof Student)
-			tw.setText(((Student) o).fullString());
+			vindu.setText(((Student) o).fullString());
 		if(o instanceof Laerer)
-			tw.setText(((Laerer) o).fullString());
+			vindu.setText(((Laerer) o).fullString());
 		if(o instanceof Fag)
-			tw.setText(((Fag) o).fullString());
+			vindu.setText(((Fag) o).fullString());
 		if(o instanceof Studieprogram)
-			tw.setText(((Studieprogram) o).fullString());
+			vindu.setText(((Studieprogram) o).fullString());
 
 	}
 
@@ -144,11 +144,11 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == rediger){
-			PopupVindu pop = new PopupVindu(tw, valgt);
+			EditPanel ep = new EditPanel(vindu, valgt);
 		}
 		else if(e.getSource() == slett){
 			int svar = JOptionPane.showConfirmDialog(
-					tw,
+					vindu,
 					"Er du sikker på at du vil slette?",
 					"Slette objekt?",
 					JOptionPane.YES_NO_OPTION,
@@ -156,16 +156,16 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 			if (svar == JOptionPane.YES_OPTION )
 			{
 				if(valgt instanceof Student)
-					tw.getSkole().getStudentene().removeStudent((Student)valgt);
+					vindu.getSkole().getStudentene().removeStudent((Student)valgt);
 				else if(valgt instanceof Laerer)
-					tw.getSkole().getLærerne().removeLærer((Laerer)valgt);
+					vindu.getSkole().getLærerne().removeLærer((Laerer)valgt);
 				else if(valgt instanceof Fag)
-					tw.getSkole().getFagene().removeFag((Fag)valgt);
+					vindu.getSkole().getFagene().removeFag((Fag)valgt);
 				else if(valgt instanceof Studieprogram)
-					tw.getSkole().getStudieprogrammene().removeStudieprogram((Studieprogram)valgt);
+					vindu.getSkole().getStudieprogrammene().removeStudieprogram((Studieprogram)valgt);
 
-				tw.setText(valgt.toString() + " ble fjernet fra systemet.");
-				tw.display();
+				vindu.setText(valgt.toString() + " ble fjernet fra systemet.");
+				vindu.display();
 				//sørger for at lista mister det objektet som blir sletta fra datastrukturen.
 				DefaultListModel<E> model = (DefaultListModel<E>) curList.getModel();
 				model.removeElement(valgt);

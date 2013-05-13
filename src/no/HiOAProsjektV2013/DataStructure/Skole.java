@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import no.HiOAProsjektV2013.Interface.TestWindow;
+import no.HiOAProsjektV2013.Interface.Vindu;
 
 //	Klassen fungerer som en samling av alle datastrukturer for skolesystemet
 //	Dette for å unngå clutter i hovedklassen/vindusklassen som skal lage og holde datastrukturen
@@ -86,16 +86,16 @@ public class Skole implements Serializable{
 	
 	public ArrayList<?> søk(String input, int qualifier){ //Sjekker inputen i søkefeltet og utfører relevante søk
 		
-		if(qualifier == TestWindow.FAG){
+		if(qualifier == Vindu.FAG){
 			ArrayList<Fag> fagene = fagSøk(input);
 			return fagene;
-		}else if(qualifier == TestWindow.STUDENT){
+		}else if(qualifier == Vindu.STUDENT){
 			ArrayList<Student> studentene = studentSøk(input);
 			return studentene;
-		}else if(qualifier == TestWindow.LÆRER){
+		}else if(qualifier == Vindu.LÆRER){
 			ArrayList<Laerer> lærerne = lærerSøk(input);
 			return lærerne;
-		}else if(qualifier == TestWindow.STUDIEPROGRAM){
+		}else if(qualifier == Vindu.STUDIEPROGRAM){
 			ArrayList<Studieprogram> studiene = studieSøk(input);
 			return studiene;
 		}
@@ -231,7 +231,7 @@ public class Skole implements Serializable{
 	
 	//private søkemetoder for vanlige søk i hovedmeny
 	private ArrayList<Fag> fagSøk(String input){
-		if(input.matches(TestWindow.fagkodeRegex)){
+		if(input.matches(Vindu.fagkodeRegex)){
 			return fagkodeSøk(input);
 		}
 		ArrayList<Fag> fagene = new ArrayList<>();
@@ -241,7 +241,7 @@ public class Skole implements Serializable{
 		return fagene;
 	}
 	private ArrayList<Student> studentSøk(String input){
-		if(input.matches(TestWindow.studentNrRegex))
+		if(input.matches(Vindu.studentNrRegex))
 			return studentNrSøk(input);
 		ArrayList<Student> studentene = getStudentene().findByNavn(input);		
 		return studentene;

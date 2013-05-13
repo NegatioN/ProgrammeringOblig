@@ -3,7 +3,7 @@ package no.HiOAProsjektV2013.Main;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import no.HiOAProsjektV2013.Interface.TestWindow;
+import no.HiOAProsjektV2013.Interface.Vindu;
 
 /*
  * Klassen har som formål å håndtere alle datoer sendt fra input.
@@ -14,7 +14,7 @@ public class DateHandler {
 	public GregorianCalendar dateFixer(String dateToBeConverted, String timeToBeConverted) {
 		//hvis ikke input matcher dd/mm/YYYY eller dd/mm/YY
 		
-		if(!dateToBeConverted.matches(TestWindow.dateRegex)){
+		if(!dateToBeConverted.matches(Vindu.dateRegex)){
 			return null;
 		}
 		String sHour;

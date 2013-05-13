@@ -27,10 +27,10 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 	private JMenu fagene;
 	private JMenuItem eStrykPros, eKarDist, fagBeståttKrav, fagStudenter,studieStudenter, fagLedetAv;
 	private Object curObject = null;
-	private TestWindow tw;
+	private Vindu vindu;
 	
-	public RightClickMenus(TestWindow tw){
-		this.tw = tw;
+	public RightClickMenus(Vindu vindu){
+		this.vindu = vindu;
 	}
 	public void createPopMenu(Object o){
 		popMeny = new JPopupMenu();
@@ -77,10 +77,10 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 					final JMenuItem fagItem = new JMenuItem(fag.getFagkode());
 					fagItem.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
-							curObject = (tw.getSkole().søk(
-									fagItem.getActionCommand(), TestWindow.FAG)).get(0);
+							curObject = (vindu.getSkole().søk(
+									fagItem.getActionCommand(), Vindu.FAG)).get(0);
 							String melding = "Er du sikker på at du vil melde\n" + s.getfNavn() + " " + s.geteNavn() + " av " + fagItem.getActionCommand();
-							int option = JOptionPane.showConfirmDialog(tw, melding, "Slette faget?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+							int option = JOptionPane.showConfirmDialog(vindu, melding, "Slette faget?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 							if(option == JOptionPane.OK_OPTION)
 							s.removeFag((Fag)curObject);
 						}
@@ -151,46 +151,46 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 		Object source = e.getSource();
 		if(source == eStrykPros){
 			Eksamen eks = (Eksamen) curObject;
-			tw.setText("Eksamen " + eks.toString() + " har : " + tw.getSkole().findStrykProsent(eks.getFag(), eks) + "% stryk.");
-			tw.display();
+			vindu.setText("Eksamen " + eks.toString() + " har : " + vindu.getSkole().findStrykProsent(eks.getFag(), eks) + "% stryk.");
+			vindu.display();
 		}
 		if(source == fagBeståttKrav){
 			Fag fag = (Fag) curObject;
-			ArrayList<Student> studenter = tw.getSkole().findKravBeståtteStudenter(fag);
+			ArrayList<Student> studenter = vindu.getSkole().findKravBeståtteStudenter(fag);
 			if(!studenter.isEmpty())
-				tw.listApplier(studenter, TestWindow.STUDENT);
+				vindu.listApplier(studenter, Vindu.STUDENT);
 			else
 				JOptionPane.showMessageDialog(null, "Det er ingen studenter som har besått kravene enda");
 		}
 		if(source == fagStudenter){
 			Fag fag = (Fag) curObject;
-			ArrayList<Student> studenter = tw.getSkole().findStudentMedFag(fag);
+			ArrayList<Student> studenter = vindu.getSkole().findStudentMedFag(fag);
 			if(!studenter.isEmpty())
-			tw.listApplier(studenter, TestWindow.STUDENT);
+			vindu.listApplier(studenter, Vindu.STUDENT);
 			else
 				JOptionPane.showMessageDialog(null, "Det er ingen studenter i faget.");
 		}
 		if(source == studieStudenter){
 			Studieprogram sp = (Studieprogram) curObject;
-			ArrayList<Student> studenter = tw.getSkole().findStudentsByStudieprogram(sp.getNavn());
+			ArrayList<Student> studenter = vindu.getSkole().findStudentsByStudieprogram(sp.getNavn());
 			if(!studenter.isEmpty())
-			tw.listApplier(studenter, TestWindow.STUDENT);
+			vindu.listApplier(studenter, Vindu.STUDENT);
 			else
 				JOptionPane.showMessageDialog(null, "Det er ingen studenter i studieprogrammet.");
 		}
 		if(source == eKarDist){
 			Eksamen eks = (Eksamen) curObject;
 			Fag f = eks.getFag();
-			int[] karakterer = tw.getSkole().findKarakterDistribusjon(f, eks);
-			double stryk = tw.getSkole().findStrykProsent(f, eks);
-			tw.displayKarakterer(karakterer, stryk);
+			int[] karakterer = vindu.getSkole().findKarakterDistribusjon(f, eks);
+			double stryk = vindu.getSkole().findStrykProsent(f, eks);
+			vindu.displayKarakterer(karakterer, stryk);
 
 		}
 		if(source == fagLedetAv){
 			Laerer lærer = (Laerer) curObject;
-			ArrayList<Fag> fagene = tw.getSkole().fagLedetAv(lærer);
+			ArrayList<Fag> fagene = vindu.getSkole().fagLedetAv(lærer);
 			if(!fagene.isEmpty()){
-				tw.listApplier(fagene, TestWindow.FAG);
+				vindu.listApplier(fagene, Vindu.FAG);
 			}else{
 				JOptionPane.showMessageDialog(null, "Læreren har ingen fag.");
 			}
