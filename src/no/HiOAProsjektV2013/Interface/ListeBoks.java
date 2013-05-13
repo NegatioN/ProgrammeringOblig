@@ -1,6 +1,7 @@
 package no.HiOAProsjektV2013.Interface;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -12,6 +13,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -47,10 +49,12 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 		popup = tw.getRightClickMenu();
 		button = tw.getButtonGen();
 	}
-	
+
 	public JPanel visResultat(JList<E> liste){
 		vis = new JPanel(new BorderLayout());
 		JPanel knapper = new JPanel(new BorderLayout());
+
+		Object o = liste.getSelectedValue();
 
 		//oppretter knapper
 		ImageIcon iiIcon = new ImageIcon(editIcon);
@@ -68,7 +72,7 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 		
 		vis.add(scroller, BorderLayout.CENTER);
 		vis.add(knapper, BorderLayout.SOUTH);
-		
+
 		return vis;
 	}
 
@@ -81,14 +85,14 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 		}
 		JList<E> listen = new JList<>(model);
 		listen.setVisibleRowCount(ROWCOUNT);
-		
+
 		listen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listen.addListSelectionListener(this);
 		listen.addMouseListener(popup);
 		listen.setFixedCellWidth(390);
 		listen.setSelectedIndex(0);
 		//listen.setPreferredSize(størrelse);
-		
+
 		return listen;
 	}
 	public JComboBox<E> combify(ArrayList<E> array){
@@ -101,14 +105,14 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 				JComboBox<?> boks = (JComboBox<?>) e.getSource();
 				int i = boks.getSelectedIndex();
 			}
-			
+
 		});
-		
+
 		return combo;
 	}
-	
+
 	private void visInfo(Object o){
-		
+
 		tw.display();
 		if(o instanceof Student)
 			tw.setText(((Student) o).fullString());
@@ -120,7 +124,7 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 			tw.setText(((Studieprogram) o).fullString());
 
 	}
-	
+
 	private void setValgt(Object v){
 		valgt = v;
 	}
@@ -128,15 +132,15 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 	public void valueChanged(ListSelectionEvent e) {
 		//Det som skal skje når vi clicker objektet
 		//if(e.getValueIsAdjusting()){
-			@SuppressWarnings("unchecked")
-			JList<E> lista = (JList<E>) e.getSource();
-			E valgtObjekt = lista.getSelectedValue();
-			curList = lista;
-			setValgt(valgtObjekt);
-			visInfo(valgtObjekt);
-	//	}
+		@SuppressWarnings("unchecked")
+		JList<E> lista = (JList<E>) e.getSource();
+		E valgtObjekt = lista.getSelectedValue();
+		curList = lista;
+		setValgt(valgtObjekt);
+		visInfo(valgtObjekt);
+		//	}
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == rediger){
 			PopupVindu pop = new PopupVindu(tw, valgt);
@@ -163,7 +167,7 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 				tw.display();
 				//sørger for at lista mister det objektet som blir sletta fra datastrukturen.
 				DefaultListModel<E> model = (DefaultListModel<E>) curList.getModel();
-					model.removeElement(valgt);
+				model.removeElement(valgt);
 			}
 		}
 	}
