@@ -28,6 +28,7 @@ public class ScriptClass {
 	private ArrayList<Fag> scriptFagene = new ArrayList<>();
 	private ArrayList<Studieprogram> scriptSp = new ArrayList<>();
 	private int counter = 0;
+	private int antiCounter = kravNavn.length;
 	Random rand = new Random(); 
 
 	
@@ -105,8 +106,9 @@ public class ScriptClass {
 		}
 	}
 	private void generateKrav(Fag fag){
-		for(String s : kravNavn){
-			fag.addKrav(s);
+		antiCounter -= 1;
+		for(int i = 0; i<antiCounter;i++){
+			fag.addKrav(kravNavn[i]);
 		}	
 	}
 	

@@ -177,15 +177,20 @@ public class Fag implements Serializable{
 	//strykprosent for en gitt eksamen
 	public double findStrykProsentEksamen(Eksamen e){
 		List<EksamensDeltaker> deltakere = e.getDeltakere();
-		int antallStudenter = deltakere.size();
+		int antallStudenter = 0;
 		int antallStryk = 0;
 		for(EksamensDeltaker ed : deltakere){
 			char karakter = ed.getKarakter();
+			//hvis en student har fått en karakter telles han med for beregning av snitt.
+			if(karakter != '\0'){
+				antallStudenter += 1;
+			}
 			if(karakter == 'f' || karakter == 'F'){
 				antallStryk++;
 			}
 		}
 		double strykProsent = ((double)antallStryk/(double)antallStudenter)*100;
+		System.out.println(strykProsent + "");
 		
 		return strykProsent;
 	}
@@ -201,8 +206,10 @@ public class Fag implements Serializable{
 	//finner alle eksamener som ble holdt et spesifikkt år.
 	private Eksamen findEksamenByÅr(int år) {
 		for (Eksamen e : eksamener) {
-			if (e.getKalender().get(Calendar.YEAR) == år)
+			GregorianCalendar kal = e.getKalender();
+			if (e.getKalender().get(Calendar.YEAR) == år){
 				return e;
+			}
 		}
 		return null;
 	}

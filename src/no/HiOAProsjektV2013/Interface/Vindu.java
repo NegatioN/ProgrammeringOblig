@@ -113,7 +113,7 @@ public class Vindu extends JFrame implements ActionListener {
 
 		//script for å generere fag, studenter og lærere
 		//kommenter den ut etter 1 generate
-		//ScriptClass sc = new ScriptClass(skolen);
+		ScriptClass sc = new ScriptClass(skolen);
 
 		//Panel som inneholder alle de andre panelene og fordeler dem i vinduet
 		rammeverk = new JPanel(new BorderLayout());
@@ -545,7 +545,7 @@ public class Vindu extends JFrame implements ActionListener {
 	//Viser karakterdistribusjon i displayet
 	public void displayKarakterer(int[] karakterer, double stryk){
 		String distribusjon = "Karakterdistribusjon:\n";
-		for(int i = 0; i < (int)'G'; i++ )	//Går igjennom bokstavene fra A til F
+		for(int i = 0; i < (int) ('F'-'A'); i++ )	//Går igjennom bokstavene fra A til F
 			distribusjon += (char)('A'+i) + ":" + karakterer[i] + "\n";
 		distribusjon += "\nStrykprosent: " + stryk;
 		setText(distribusjon);

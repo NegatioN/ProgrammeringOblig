@@ -23,9 +23,7 @@ public class Eksamen implements Serializable{
 	private Fag fag;
 	
 	public Eksamen(GregorianCalendar dato, Fag fag){
-		GregorianCalendar kalender = (GregorianCalendar) GregorianCalendar.getInstance();
-		kalender = dato;
-		this.dato = kalender;
+		this.dato = dato;
 		this.fag = fag;
 	}
 	

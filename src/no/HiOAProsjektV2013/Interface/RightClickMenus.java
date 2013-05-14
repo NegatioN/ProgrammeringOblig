@@ -147,7 +147,7 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 			try{
 			popMeny.show(e.getComponent(), e.getX(), e.getY());
 			}catch(NullPointerException ex){
-				ex.printStackTrace();
+				//user har trykket på før et listeobjekt er valgt.
 			}
 		}
 	}

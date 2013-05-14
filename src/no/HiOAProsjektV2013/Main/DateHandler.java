@@ -18,12 +18,10 @@ public class DateHandler {
 		if(!dateToBeConverted.matches(Vindu.dateRegex)){
 			return null;
 		}
-		String sHour;
 		int hour = 0;
 		//hvis tid blir sendt med
 		if (timeToBeConverted != null) {
-			sHour = timeToBeConverted.substring(0, 2);
-			hour = Integer.parseInt(sHour);
+			//ikke implementert
 		}
 		int day,month,year;
 		
@@ -57,6 +55,7 @@ public class DateHandler {
 		
 		GregorianCalendar newDate = new GregorianCalendar(year, month, day,
 				hour, 0, 0);
+		System.out.println(newDate.get(Calendar.DATE) + " dag " + newDate.get(Calendar.MONTH) + " mnd " + newDate.get(Calendar.YEAR)+ " år" );
 		return newDate;
 	}
 }
