@@ -1,5 +1,6 @@
 package no.HiOAProsjektV2013.DataStructure;
-
+//Joakim Rishaug - s188080 - Dataingeniør - 1AA
+//Siste versjon: 14.05.13
 import java.io.Serializable;
 import java.util.ArrayList;
 

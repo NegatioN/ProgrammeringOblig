@@ -1,5 +1,7 @@
 package no.HiOAProsjektV2013.Interface;
 
+//Lars-Erik Kasin - s178816 - Dataingeniør - 1AA
+//Siste versjon: 13.05.13
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;

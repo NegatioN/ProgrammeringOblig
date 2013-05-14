@@ -1,5 +1,7 @@
 package no.HiOAProsjektV2013.Main;
 
+//Joakim Rishaug - s188080 - Dataingeniør - 1AA
+//Siste versjon: 06.05.13
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

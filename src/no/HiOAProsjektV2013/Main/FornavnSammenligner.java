@@ -1,5 +1,6 @@
 package no.HiOAProsjektV2013.Main;
-
+//Joakim Rishaug - s188080 - Dataingeniør - 1AA
+//Siste versjon: 14.05.13
 import java.io.Serializable;
 import java.text.Collator;
 import java.text.ParseException;
@@ -7,7 +8,6 @@ import java.text.RuleBasedCollator;
 import java.util.Comparator;
 
 import no.HiOAProsjektV2013.DataStructure.Person;
-import no.HiOAProsjektV2013.DataStructure.Student;
 
 //Comparator for fornavn-sortering og søk.
 public class FornavnSammenligner implements Comparator<Person>, Serializable{

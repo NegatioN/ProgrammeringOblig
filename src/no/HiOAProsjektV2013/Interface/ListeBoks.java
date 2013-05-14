@@ -1,7 +1,8 @@
 package no.HiOAProsjektV2013.Interface;
-
+//Lars-Erik Kasin - s178816 - Dataingeniør - 1AA
+//Joakim Rishaug - s188080 - Dataingeniør - 1AA
+//Siste versjon: 14.05.13
 import java.awt.BorderLayout;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,7 +11,6 @@ import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;

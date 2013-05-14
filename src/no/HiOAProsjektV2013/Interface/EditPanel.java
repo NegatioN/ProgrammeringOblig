@@ -1,5 +1,6 @@
 package no.HiOAProsjektV2013.Interface;
-
+//Lars-Erik Kasin - s178816 - Dataingeniør - 1AA
+//Siste versjon: 13.05.13
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -35,7 +36,6 @@ import no.HiOAProsjektV2013.DataStructure.Krav;
 import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
-import no.HiOAProsjektV2013.Interface.InputFelt;
 import no.HiOAProsjektV2013.Main.DateHandler;
 
 /*

@@ -1,4 +1,6 @@
 package no.HiOAProsjektV2013.Interface;
+//Joakim Rishaug - s188080 - Dataingeniør - 1AA
+//Siste versjon: 13.05.13
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;

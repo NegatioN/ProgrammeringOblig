@@ -1,16 +1,15 @@
 package no.HiOAProsjektV2013.Interface;
-
+//Lars-Erik Kasin - s178816 - Dataingeniør - 1AA
+//Joakim Rishaug - s188080 - Dataingeniør - 1AA
+//Siste versjon: 14.05.13
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
-import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 //klassen genererer knapper for hovedvinduet, og legger til en actionlistener + størrelse på knappen.

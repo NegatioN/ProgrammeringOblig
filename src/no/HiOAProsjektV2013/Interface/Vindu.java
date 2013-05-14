@@ -1,5 +1,9 @@
 package no.HiOAProsjektV2013.Interface;
 
+//Lars-Erik Kasin - s178816 - Dataingeniør - 1AA
+//Joakim Rishaug - s188080 - Dataingeniør - 1AA
+//Siste versjon: 14.05.13
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -27,7 +31,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 
@@ -38,7 +41,6 @@ import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 import no.HiOAProsjektV2013.Main.Archiver;
 import no.HiOAProsjektV2013.Main.DateHandler;
-import no.HiOAProsjektV2013.Main.ScriptClass;
 
 /*
  * Hovedvinduet i programmet. Inneholder mesteparten av interfacen. Oppretter og fyller ut forskjellige paneler som er konstante i vinduet,
@@ -47,7 +49,6 @@ import no.HiOAProsjektV2013.Main.ScriptClass;
 public class Vindu extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	//checkbox burde sette selectedValue til en av disse, og passe value inn i search
 	public static final int LÆRER = 30, STUDENT = 40, FAG = 50, STUDIEPROGRAM = 60, FØRSTE = 0, ANDRE = 1, TITTELSIZE = 20, TOM = 0, BLANK = -1;
 	private final static int VELGSØK = 0, STUDENTFAG = 1, STUDENTPERIODE = 2, STUDENTPROGRAM = 3, POENGSTUDENT = 4, KARAKTER = 5;
 	private final static int COVER = 2, COVERED = 3;
@@ -58,7 +59,7 @@ public class Vindu extends JFrame implements ActionListener {
 	public static final String årRegex = "\\d{4}";
 	public static final String mobRegex = "\\d{8}";
 	public static final String mailRegex = "\\S+@\\S+[.]\\S+";
-	public static final String navnRegex = "(?:([a-zA-ZæøåÆØÅ']+\\s+[a-zA-ZæøåÆØÅ']+\\s*)){1}(?:([a-zA-ZæøåÆØÅ']+\\s*))*";
+	public static final String navnRegex = "(?:([a-zA-ZæøåÆØÅ'[-]]+\\s+[a-zA-ZæøåÆØÅ'[-]]+\\s*)){1}(?:([a-zA-ZæøåÆØÅ'[-]]+\\s*))*";
 	public static final String tittelRegex = "(\\D+)||(\\w+\\s\\S+)";
 	public static final String dateRegex = "(\\d{1,2}\\W\\d{1,2}\\W((\\d{4})||(\\d{2})))";
 	public static final String sPoengRegex = "(\\d)||([01-5]\\d)||60";
