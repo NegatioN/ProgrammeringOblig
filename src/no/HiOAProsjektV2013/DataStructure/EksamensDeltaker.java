@@ -6,8 +6,8 @@ import java.util.GregorianCalendar;
 
 
 /*
- * En eksamensdeltaker er et ganske enkelt objekt som inneholder en student, karakter og andre småinfo
- * om en eksamensdeltakelse.
+ * En eksamensdeltaker representerer en deltaker på en bestemt eksamen. 
+ * Den inneholder en student, dato, karakter og andre detaljer om eksamensdeltakelsen.
  */
 public class EksamensDeltaker implements Serializable{
 

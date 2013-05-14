@@ -390,7 +390,6 @@ public class EditPanel extends JPanel{
 		resultater.addMouseListener(popup);	//Legger til høyreklikkfunksjoner
 		resultater.getColumnModel().getColumn(DATO).setPreferredWidth(DATOBREDDE);
 		
-
 		faginfo.add(new JScrollPane(resultater));
 		faginfo.updateUI();
 	}
@@ -435,9 +434,8 @@ public class EditPanel extends JPanel{
 		private Object[][] celler = {{"", "", "", "", ""}};	//Tom tabell
 
 		private Tabellmodell(Eksamen e){ 	//Fyller tabellen med alle deltakere på en eksamen
-			if(!e.getDeltakere().isEmpty()){
+			if(!e.getDeltakere().isEmpty())
 				fyllTabell(e.getDeltakere().size(), e.getDeltakere());
-			}
 		}
 		private Tabellmodell(Student s){	//Fyller tabellen med alle eksamener for en student
 			if(!s.getEksamener().isEmpty())
@@ -485,9 +483,6 @@ public class EditPanel extends JPanel{
 			default:
 				return false;
 			}
-		}
-		public void removeRow(int row){
-			fireTableRowsDeleted(row,row);
 		}
 
 		public void setValueAt(Object value, int rad, int kolonne) { //Setter ny verdi i gitt celler
@@ -636,11 +631,6 @@ public class EditPanel extends JPanel{
 				ArrayList<Student> studentliste = vindu.getSkole().getStudentene().getAlle();
 				((Eksamen)velgEksamen.getSelectedItem()).addOppmeldteStudenter(studentliste);
 				visEksamen((Eksamen)velgEksamen.getSelectedItem());   //Oppdaterer panelet med de nye deltakerene lagt til
-			}
-			else if(e.getSource() == slett){
-				Tabellmodell modell = (Tabellmodell)resultater.getModel();
-				System.out.println(resultater.getSelectedRow());
-				modell.removeRow(resultater.getSelectedRow());
 			}
 
 			//Metode for å lagre nye arbeidskrav med beskrivelse fra et tekstfelt

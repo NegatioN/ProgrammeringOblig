@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-// Klassen definerer en liste av krav i et fag-objekt som kreves for at en student kan ta eksamen
+//Klassen definerer en liste av krav i et fag-objekt som kreves for at en student skal kunne ta eksamen.
 public class Arbeidskrav implements Serializable, Cloneable{
 
 	private static final long serialVersionUID = 1050L;

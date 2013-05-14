@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /*
- * Liste over studieprogrammene. Inneholder søkenemetodene for studieprogram.
+ * Liste over studieprogrammene. Inneholder søkemetodene for studieprogram.
  */
 public class StudieprogramListe implements Serializable{
 	

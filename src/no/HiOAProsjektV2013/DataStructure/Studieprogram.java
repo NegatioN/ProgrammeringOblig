@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 
 /*
  * Klassen representerer et studieprogram, og inneholder en liste av fag som er assosiert med studieprogrammet.
- * Dette gjør det lettere å opprette studenter med fag på seg, enn å individuelt legge på fag.
+ * Dette gjør det lettere å opprette studenter med et utvalg fag, enn å individuelt legge på fagene, selv om dette også er mulig.
  * Inneholder også en liste over studenter som nå går programmet.
  */
 public class Studieprogram implements Serializable{
