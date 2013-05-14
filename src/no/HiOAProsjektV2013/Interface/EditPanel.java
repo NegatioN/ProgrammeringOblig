@@ -41,7 +41,7 @@ import no.HiOAProsjektV2013.Main.DateHandler;
 /*
  * Klasse som oppretter redigeringsvinduer for et valgt objekt. Tar imot student, lærer, fag og studieprogram.
  * Brukes også til å redigere arbeidskrav, eksamener og lignende. Her kan du legge til alt som ikke kunne legges til
- * fær hovedobjektet allerede var opprettet.
+ * før hovedobjektet allerede var opprettet.
  */
 public class EditPanel extends JPanel{
 
