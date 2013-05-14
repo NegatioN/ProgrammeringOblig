@@ -15,7 +15,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 import no.HiOAProsjektV2013.DataStructure.Eksamen;
 import no.HiOAProsjektV2013.DataStructure.EksamensDeltaker;
@@ -23,6 +22,7 @@ import no.HiOAProsjektV2013.DataStructure.Fag;
 import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
+import no.HiOAProsjektV2013.Main.Tabellmodell;
 
 /*
  * Klassen har som formål å generere høyreklikk-menyer for våre JLists
@@ -38,8 +38,6 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 	private final int PANELOBJEKT = 2;
 	private JMenuItem edFjernOppmelding;
 	private Component comp;
-	private int modelRow;
-	
 	public RightClickMenus(Vindu vindu){
 		this.vindu = vindu;
 	}
@@ -147,7 +145,6 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 				int row = lista.getSelectedRow();
 				if (row != -1) {
 					curObject = lista.getValueAt(row, PANELOBJEKT);
-					modelRow = lista.getSelectedRow();
 					createPopMenu(curObject);
 				}
 			}
@@ -218,9 +215,6 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 			if(svar == JOptionPane.YES_OPTION){
 			Eksamen eks = ed.getFag().findEksamenByDate(ed.getDato());
 			eks.avmeld(ed.getDeltaker());
-			//lag metode i EDITPANEL og pass med int rowPos for sletting
-//			JTable tabellen = (JTable) comp;
-//			((DefaultTableModel)tabellen.getModel()).removeRow(modelRow);
 			}
 			
 		}

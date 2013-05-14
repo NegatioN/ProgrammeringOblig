@@ -26,6 +26,12 @@ public class Laerer extends Person implements Serializable{
 	public void addFag(Fag fag){
 		fagene.add(fag);
 	}
+	//fjerner alle hendelser av lærern som faglærer på fagene om lærern slettes.
+	public void emptyFag(){
+		for(Fag fag : fagene){
+			fag.setLærer(null);
+		}
+	}
 	public void removeFag(Fag fag){
 		fagene.remove(fag);
 	}

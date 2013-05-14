@@ -82,6 +82,7 @@ public class Fag implements Serializable{
 			this.lærer.removeFag(this);
 		}
 		this.lærer = lærer;
+		if(lærer != null)
 		this.lærer.addFag(this);
 	}
 
@@ -224,9 +225,11 @@ public class Fag implements Serializable{
 					"\nNavn: " + navn + 
 					"\nBeskrivelse: " + beskrivelse + 
 					"\nVurderingsform: " + vurderingsform + 
-					"\nStudiepoeng: " + studiepoeng +
-					"\nLærer: " + lærer.getfNavn() + " " + lærer.geteNavn() + 
-					"\n\nArbeidskrav:\n" + krav.toString() +
+					"\nStudiepoeng: " + studiepoeng;
+		if(this.lærer != null){
+		stringen +=	"\nLærer: " + lærer.getfNavn() + " " + lærer.geteNavn();
+		}
+		stringen +=		"\n\nArbeidskrav:\n" + krav.toString() +
 					"\nEksamener:\n";
 		for(Eksamen e: eksamener){
 			stringen += new SimpleDateFormat("dd. MMM yyyy").format(e.getDato()) + " \n";

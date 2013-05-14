@@ -37,6 +37,7 @@ import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 import no.HiOAProsjektV2013.Main.DateHandler;
+import no.HiOAProsjektV2013.Main.Tabellmodell;
 
 /*
  * Klasse som oppretter redigeringsvinduer for et valgt objekt. Tar imot student, lærer, fag og studieprogram.
@@ -54,7 +55,7 @@ public class EditPanel extends JPanel{
 	private Vindu vindu;
 	private lytter ly = new lytter();
 	private Buttons button = new Buttons(ly);
-	private JButton leggtil, fjern, slett, oppmeldte, deltaker , lagreKrav, visFag, visEksamen, visKrav, tilbake;
+	private JButton leggtil, fjern, oppmeldte, deltaker , lagreKrav, visFag, visEksamen, visKrav, tilbake;
 	private JComboBox<Fag> velgFag, studentFag;
 	private JComboBox<Laerer> velgLærer;
 	private JComboBox<Studieprogram> velgProg;
@@ -355,7 +356,6 @@ public class EditPanel extends JPanel{
 		deltaker 	= button.generateButton("Legg til deltaker", visepanel, Buttons.HEL);	//Legger til deltaker med studentnr fra studentnrfeltet
 		oppmeldte 	= button.generateButton("Legg til Oppmeldte", visepanel, Buttons.HEL);	//Legger til alle studenter som er oppmeldt til eksamen
 		tilbake 	= button.generateButton("Tilbake", visepanel, Buttons.HEL);
-		slett = button.generateButton("Slett eksamensoppmelding", visepanel, Buttons.HEL);
 
 		return visepanel;
 	} //End of eksamensPanel
@@ -368,7 +368,7 @@ public class EditPanel extends JPanel{
 		faginfo.setPreferredSize(infoSize);
 		faginfo.setBorder(BorderFactory.createTitledBorder("Eksamener for " + s.getfNavn() + " " + s.geteNavn()));
 
-		Tabellmodell modell = new Tabellmodell(s);	//Oppretter tabell for visning og redigering av alle studentens eksamener
+		Tabellmodell modell = new Tabellmodell(s, new tabellytter());	//Oppretter tabell for visning og redigering av alle studentens eksamener
 		resultater = new JTable(modell);
 		resultater.setPreferredScrollableViewportSize(tabellSize);
 		resultater.addMouseListener(popup);
@@ -384,7 +384,7 @@ public class EditPanel extends JPanel{
 		faginfo.removeAll();
 		faginfo.setBorder(BorderFactory.createTitledBorder("Eksamen for " + ((Fag)aktiv).getNavn()));
 
-		Tabellmodell modell = new Tabellmodell(e);
+		Tabellmodell modell = new Tabellmodell(e, new tabellytter());
 		resultater = new JTable(modell);
 		resultater.setPreferredScrollableViewportSize(tabellSize);
 		resultater.addMouseListener(popup);	//Legger til høyreklikkfunksjoner
@@ -426,80 +426,7 @@ public class EditPanel extends JPanel{
 		faginfo.updateUI();
 	}
 
-	//Tabellmodell som setter formatet for tabellen som viser eksamener, og fyller denne
-	private class Tabellmodell extends AbstractTableModel{
-
-		private static final long serialVersionUID = 100110L;
-
-		private String[] kolonnenavn = {"Fag", "Dato", "StudentNr", "Møtt", "Karakter"};
-		private Object[][] celler = {{"", "", "", "", ""}};	//Tom tabell
-
-		private Tabellmodell(Eksamen e){ 	//Fyller tabellen med alle deltakere på en eksamen
-			if(!e.getDeltakere().isEmpty()){
-				fyllTabell(e.getDeltakere().size(), e.getDeltakere());
-			}
-		}
-		private Tabellmodell(Student s){	//Fyller tabellen med alle eksamener for en student
-			if(!s.getEksamener().isEmpty())
-				fyllTabell(s.getEksamener().size(), s.getEksamener());
-		}
-
-		//Legger inn riktige elementer på det rett plass i tabellen med en for-løkke
-		private void fyllTabell(int lengde, LinkedList<EksamensDeltaker> eksamener){
-			celler = new Object[lengde][KOLONNER];
-
-			int rad = 0; //Sørger for at hver deltaker havner på en ny rad
-			for(EksamensDeltaker ed: eksamener){
-				Eksamen e = ed.getFag().findEksamenByDate(ed.getDato());
-				celler[rad][FAG] = ed.getFag().getFagkode();
-				celler[rad][DATO] = e;
-				celler[rad][SNR] = ed;
-				celler[rad][MØTT] = ed.isOppmøtt();
-				celler[rad++][KAR] = new String(""+ed.getKarakter());
-			}
-			this.addTableModelListener(new tabellytter());
-		}
-
-
-		public Object getValueAt(int rad, int kolonne){ //Henter verdien i en gitt celle
-			return celler[rad][kolonne];
-		}
-
-		public String getColumnName(int kolonne) { //Henter kolonnenavn
-			return kolonnenavn[kolonne];
-		}
-
-		public int getRowCount() { //Henter antall rader
-			return celler.length; 
-		}
-
-		public int getColumnCount() { //Henter antall kolonner
-			return celler[FAG].length;
-		}
-
-		public boolean isCellEditable(int rad, int kolonne){ //Sørger for at kun møtt, og karakteren er redigerbare
-			switch (kolonne) {
-			case MØTT:
-			case KAR:
-				return true;
-			default:
-				return false;
-			}
-		}
-		public void removeRow(int row){
-			fireTableRowsDeleted(row,row);
-		}
-
-		public void setValueAt(Object value, int rad, int kolonne) { //Setter ny verdi i gitt celler
-			celler[rad][kolonne] = value;
-			fireTableCellUpdated(rad, kolonne);
-		}
-
-		//For å informere tabellmodellen om kolonnenes datatyper.
-		public Class<? extends Object> getColumnClass(int kolonne) {
-			return celler[FAG][kolonne].getClass();
-		}
-	} //End of class Tabellmodell
+	
 
 	//Privat klasse som lytter etter endringer i eksamenstabellen
 	private class tabellytter implements TableModelListener{
@@ -620,7 +547,6 @@ public class EditPanel extends JPanel{
 					}
 				} catch (NullPointerException npe){
 					//Kan forekomme hvis knappen trykkes når et studieprogram er tomt for fag
-					System.out.println("Nullpointer fordi alle fag er fjernet"); 
 				}
 			}
 
@@ -636,11 +562,6 @@ public class EditPanel extends JPanel{
 				ArrayList<Student> studentliste = vindu.getSkole().getStudentene().getAlle();
 				((Eksamen)velgEksamen.getSelectedItem()).addOppmeldteStudenter(studentliste);
 				visEksamen((Eksamen)velgEksamen.getSelectedItem());   //Oppdaterer panelet med de nye deltakerene lagt til
-			}
-			else if(e.getSource() == slett){
-				Tabellmodell modell = (Tabellmodell)resultater.getModel();
-				System.out.println(resultater.getSelectedRow());
-				modell.removeRow(resultater.getSelectedRow());
 			}
 
 			//Metode for å lagre nye arbeidskrav med beskrivelse fra et tekstfelt

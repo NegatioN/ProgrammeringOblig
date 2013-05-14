@@ -39,6 +39,7 @@ public class LaererListe extends PersonListe<Laerer> implements Serializable{
 	}
 	//fjerner lærern fra hele strukturen
 	public void removeLærer(Laerer lærer){
+		lærer.emptyFag();
 		fornavnRegister.remove(lærer);
 		etternavnRegister.remove(lærer);
 	}
