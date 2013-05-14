@@ -113,7 +113,7 @@ public class Vindu extends JFrame implements ActionListener {
 
 		//script for å generere fag, studenter og lærere
 		//kommenter den ut etter 1 generate
-		ScriptClass sc = new ScriptClass(skolen);
+//		ScriptClass sc = new ScriptClass(skolen);
 
 		//Panel som inneholder alle de andre panelene og fordeler dem i vinduet
 		rammeverk = new JPanel(new BorderLayout());
