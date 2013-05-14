@@ -50,7 +50,7 @@ public class LaererListe extends PersonListe<Laerer> implements Serializable{
 	}
 
 	//Returnerer liste over alle lærere
-	public ArrayList<Laerer> visAlle() {
+	public ArrayList<Laerer> getAlle() {
 		ArrayList<Laerer> lærerne = new ArrayList<>();
 		for(Laerer l : fornavnRegister){
 			lærerne.add(l);

@@ -10,56 +10,51 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-
 /*
- * Klassen har som formål å generere tekstfelt hvor brukeren får feilmeldinger
- * basert på om input er valid i forhold til gjeldende regex. Det stopper også feil-input.
+ * Denne klassen brukes til å opprette tekstfeltene som brukes i programmet. Muligheten til å sjekke opp mot regexer er særlig nyttig,
+ * da mange av tekstfeltene brukes til å lagre objecter, og derfor må ha tekst på en spesiell form. Her kan vi også sørge for at feltene
+ * har en standardtekst forsvinner når det skal skrives, og dukker opp igjen når feltet blankes ut.
  */
-public class InputFelt extends JTextField implements FocusListener, ActionListener{
+public class InputFelt extends JTextField implements FocusListener{
 
 	private static final long serialVersionUID = 101112L;
-	private String regex = ".*";
+	private String regex = ".*"; //Standardregex for åpne felter. Endres som regel i konstruktøren
 	private String tekst, feilmelding;
 	public static final int KORT = 12, LANG = 20;
 
+	//Bruker overloading til å kunne opprette forskjellige tekstfelter etter behov
 	public InputFelt(String tekst, int bredde){
 		super(tekst, bredde);
-		this.tekst = tekst;
-		setName(tekst);
-		addFocusListener(this);
+		this.tekst = tekst; //Tekst brukes til å lagre standardteksten feltet skal inneholde. Det skal kunne dukke opp igjen når feltet blankes ut
+		addFocusListener(this); //Brukes til å fjerne/sette teksten når feltet er, og ikke er i fokus
 	}
 	public InputFelt(String tekst, int bredde, String regex ){
 		super(tekst, bredde);
-		this.regex = regex;
+		this.regex = regex; //regex som sier noe om hva som skal tas inn via dette feltet
 		this.tekst = tekst;
-		setName(tekst);
-		addFocusListener(this);
+		addFocusListener(this); 
 	}
 	public InputFelt(String tekst, int bredde, ActionListener al){
 		super(tekst, bredde);
 		this.tekst = tekst;
-		setName(tekst);
 		addFocusListener(this);
-		addActionListener(al);
+		addActionListener(al); //Tar imot ActionListener hvis feltet skal kunne ta utføre spesielle oppgaver
 	}
-	public InputFelt(String tekst, int bredde, Boolean editable){
+	public InputFelt(String tekst, int bredde, Boolean editable){ //Brukes på felter som ikke skal blankes ut. Oftest felter som ikke skal redigeres.
 		super(tekst, bredde);
-		setName(tekst);
 		setEditable(editable);
-		if(editable)
-			addFocusListener(this);
 	}
 	
 	public void focusGained(FocusEvent e) {
-		setForeground(Color.BLACK);
-		if(getText().equals(tekst) || getText().equals(feilmelding))
-			setText("");
+		setForeground(Color.BLACK); //Tilbakestiller tekstfargen hvis feltet har vist en feilmelding
+		if(getText().equals(tekst) || getText().equals(feilmelding)) //Hvis teksten tilsvarer standardtekst eller feilmelding,
+			setText("");											//har ikke bruker skrevet noe, og feltet blankes ut for brukervennlighet
 	}
 	public void focusLost(FocusEvent e) {
-		if(getText().equals(""))
+		if(getText().equals("")) //Fyller feltet med standardteksten hvis det er blankt
 			setText(tekst);
-		else if(!getText().matches(regex)){
-			switch(regex){
+		else if(!getText().matches(regex)){ //Sjekker hvilken regex som er sendt ved. Denne forteller hva feltet skal ta imot,
+			switch(regex){					//og også hvilken feilmelding som skal vises
 			case Vindu.fagkodeRegex :
 				feilmelding = "Kun på formen ABCD1234";
 				break;
@@ -88,16 +83,10 @@ public class InputFelt extends JTextField implements FocusListener, ActionListen
 				feilmelding = "Kun hele tall mellom 0-60";
 				break;
 			default:
-				feilmelding = "Feil inputformat";
+				feilmelding = "Feil inputformat"; //Generell feilmelding som ikke skal forekomme
 			}
-			setForeground(Color.RED);
-			setText(feilmelding);
+			setForeground(Color.RED); //Bytter tekstfargen for å tydeligjøre at det sendes en feilmelding
+			setText(feilmelding); //Setter passende feilmelding i tekstfeltet så bruker ser hvor feilen er
 		} 
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-}
+	} //End of FocusLost
+} //End of class InputFelt

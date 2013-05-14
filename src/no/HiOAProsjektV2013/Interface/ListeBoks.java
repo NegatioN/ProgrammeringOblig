@@ -30,7 +30,7 @@ import no.HiOAProsjektV2013.DataStructure.Studieprogram;
  */
 public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 
-	private final int ROWCOUNT = 20;
+	private final int ROWCOUNT = 20, CELLWIDTH = 390;
 	private Object valgt;
 	private JPanel vis;
 	private JButton rediger, slett;
@@ -90,17 +90,18 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 		listen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listen.addListSelectionListener(this);
 		listen.addMouseListener(popup);
-		listen.setFixedCellWidth(390);
-		listen.setSelectedIndex(0);
+		listen.setFixedCellWidth(CELLWIDTH);
+		listen.setSelectedIndex(Vindu.FØRSTE);
 		//listen.setPreferredSize(størrelse);
 
 		return listen;
 	}
 	public JComboBox<E> combify(ArrayList<E> array){
 		//vi vet det er E som kommer inn, og kan derfor caste trygt til E[]
+		@SuppressWarnings("unchecked")
 		E[] tilArray = (E[]) array.toArray();
 		JComboBox<E> combo = new JComboBox<>(tilArray);
-		combo.setSelectedIndex(0);
+		combo.setSelectedIndex(Vindu.FØRSTE);
 		combo.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				JComboBox<?> boks = (JComboBox<?>) e.getSource();
