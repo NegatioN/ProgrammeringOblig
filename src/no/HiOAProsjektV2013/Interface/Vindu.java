@@ -13,6 +13,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javax.swing.BorderFactory;
@@ -131,7 +132,7 @@ public class Vindu extends JFrame implements ActionListener {
 		//setter icon til framen
 		Image img = Toolkit.getDefaultToolkit().getImage("src/icons/icon.png");
 		this.setIconImage(img);
-
+		
 		setVisible(true);
 		setLocationRelativeTo(null);
 		setMinimumSize(totalSize);
@@ -504,12 +505,13 @@ public class Vindu extends JFrame implements ActionListener {
 	public void avansert(int type){
 		JPanel søk = new JPanel();
 		søk.setPreferredSize(innholdSize);
-
+		
 		refresh(); //Nullstiller inputfeltene
 
 		Buttons b = new Buttons(new søkelytter());
 		overskrift.setText("Avansert søk");
 		søk.add(overskrift);
+		fagBox.setVisible(true);
 		
 		//Legger til relevante felter for de forskjellige søkene
 		switch(type){
@@ -644,9 +646,8 @@ public class Vindu extends JFrame implements ActionListener {
 			//Nullstiller displayet
 			display();
 			setText(""); 
-			vis();
+			overskrift.setVisible(true);
 			
-			try{
 				if (e.getSource() == søkefelt || e.getSource() == søkeknapp) {
 
 					if(søkefelt.getText().length() == TOM ){
@@ -693,6 +694,8 @@ public class Vindu extends JFrame implements ActionListener {
 					String ut 	= utÅr.getText();
 					String nr	= studNr.getText();
 					String d 	= innDato.getText();
+					
+					setText("");
 
 					ArrayList<Student> studs = null; //Listen som skal vises hvis det søkes på student
 
@@ -711,14 +714,14 @@ public class Vindu extends JFrame implements ActionListener {
 						
 					case STUDENTPERIODE: //Viser studenter som har vært studenter i en gitt periode
 						
-						//Her søkes det enten på tidsrommet mellom inn og ut, fra inn og frem, eller frem til ut, avhengig av hva som er fylt ut
+						//Her søkes det enten på tidsrommet mellom to år, fra et år og frem, eller frem til et år, avhengig av hva som er fylt inn
 						if(inn.matches(årRegex)){
-							if(ut.matches(årRegex)) //Begge felter fylt ut
+							if(ut.matches(årRegex)) //Begge felter fylt inn
 								studs = skolen.findStudentByPeriode(inn,ut);
-							else					//Kun startdato fylt ut
+							else					//Kun startdato fylt inn
 								studs = skolen.findStudentByStart(inn);
 						} 
-						else						//Kun sluttdato fylt ut
+						else if(ut.matches(årRegex))//Kun sluttdato fylt inn
 							studs = skolen.findStudentBySlutt(ut);
 						
 						break;
@@ -726,7 +729,7 @@ public class Vindu extends JFrame implements ActionListener {
 					case STUDENTPROGRAM: //Viser studenter i et gitt studieprogram
 						Studieprogram sp = (Studieprogram)progBox.getSelectedItem();
 						
-						//Søker på studieprogram, med år hvis det er fylt ut
+						//Søker på studieprogram, med år hvis det er fylt inn
 						if(inn.matches(årRegex)){
 							studs = skolen.findStudentByStudieprogramByStart(sp, Integer.parseInt(inn));
 						} 
@@ -737,18 +740,23 @@ public class Vindu extends JFrame implements ActionListener {
 						
 					case POENGSTUDENT: //Viser studiepoeng en student har produsert
 						int poeng = 0;
-						Student s = skolen.getStudentene().findStudentByStudentNr(nr);
 						
-						//Her kan det søkes på tidsrom mellom inn og ut, fra inn og frem, frem til ut, eller hele students studietid
+						Student s = skolen.getStudentene().findStudentByStudentNr(nr); //Henter student med oppgitte studentnummer
+						if(s == null){	//Passer på at det bare søkes hvis det finnes en student med det oppgitte studentnummer
+							setText("Finner ikke student");
+							return;
+						}
+						
+						//Her kan det søkes på tidsrom mellom to år, fra et år og frem, frem til et år, eller hele students studietid
 						if(inn.matches(årRegex)){
-							if(ut.matches(årRegex)) //Begge felter fylt ut
+							if(ut.matches(årRegex)) //Begge felter fylt inn
 								poeng = skolen.findStudiepoengForStudIPeriode(s, inn, ut);
-							else					//Bare inn fylt ut
+							else					//Bare inn fylt inn
 								poeng = skolen.findStudiepoengForStudIPeriode(s, inn, FREMTID);
 						} 
-						else if(ut.matches(årRegex))//Bare ut fylt ut
+						else if(ut.matches(årRegex))//Bare ut fylt inn
 							poeng = skolen.findStudiepoengForStudIPeriode(s, FORTID, ut);
-						else						//Ingen felter fylt ut
+						else						//Ingen felter fylt inn
 							poeng = skolen.findStudiepoengForStudIPeriode(s, FORTID, FREMTID);
 						
 						setText("Studiepoeng for " + s.getfNavn() + " " + s.geteNavn() + ": " + poeng);
@@ -757,20 +765,25 @@ public class Vindu extends JFrame implements ActionListener {
 					case KARAKTER: //Viser karakterdistribusjon og strykprosent for et fag, enten for et gitt år, eller en gitt eksamensdato
 						f = (Fag)fagBox.getSelectedItem();
 						int[] karakterer = null;
+						double stryk = BLANK;
 						
 						if(d.matches(dateRegex)){ //Hvis både dato og år er fylt inn, prioriteres dato
-							karakterer = skolen.findKarakterDistribusjon(f,f.findEksamenByDate(dateHandler.dateFixer(d, null))); //Finner karakterdistribusjon
-							double stryk = skolen.findStrykProsent(f, 2010 ); //Finner strykprosent
-							displayKarakterer(karakterer, stryk);
+							karakterer = skolen.findKarakterDistribusjon(f, f.findEksamenByDate(dateHandler.dateFixer(d, null))); //Finner karakterdistribusjon
+							stryk = skolen.findStrykProsent(f, dateHandler.dateFixer(d, null).get(Calendar.YEAR) ); //Finner strykprosent
 						} 
 						else if (inn.matches(årRegex)){
 							karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(inn));
-							double stryk = skolen.findStrykProsent(f, Integer.parseInt(inn) );
-							if(karakterer != null)
-								displayKarakterer(karakterer, stryk);
+							stryk = skolen.findStrykProsent(f, Integer.parseInt(inn) );
 						} 
 						else
 							setText("Fyll inn nødvendige felter - ikke valgt");
+						
+						if(stryk != BLANK || stryk != Double.NaN)
+							displayKarakterer(karakterer, stryk);
+						else if(stryk == BLANK){
+							setText("Finner ikke eksamen");
+						} else if(stryk == Double.NaN)
+							setText("Ingen eksamensdeltakere registrert");
 						break;
 						
 					default:
@@ -806,11 +819,6 @@ public class Vindu extends JFrame implements ActionListener {
 					}
 					avansert(type);
 				}
-			}catch (NumberFormatException nfe){
-				setText("Fyll ut all nødvendige felter numberformat");
-			}catch (NullPointerException nfe){
-				setText("Fyll ut all nødvendige felter nullpointer");
-			}
 		}
 	}
 	

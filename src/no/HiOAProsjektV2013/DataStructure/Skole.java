@@ -184,8 +184,7 @@ public class Skole implements Serializable{
 			return strykprosent;
 		}
 		catch(NullPointerException npe){
-			JOptionPane.showMessageDialog(null, "Finner ikke eksamenen", "Feilmelding", JOptionPane.ERROR_MESSAGE);
-			return 0;
+			return -1;
 		}
 	}
 	public double findStrykProsent(Fag fag, Eksamen e){
