@@ -15,6 +15,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 import no.HiOAProsjektV2013.DataStructure.Eksamen;
 import no.HiOAProsjektV2013.DataStructure.EksamensDeltaker;
@@ -34,7 +35,10 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 	private JMenuItem eStrykPros, eKarDist, fagBeståttKrav, fagStudenter,studieStudenter, fagLedetAv;
 	private Object curObject = null;
 	private Vindu vindu;
-	private final int PANELOBJEKT = 1;
+	private final int PANELOBJEKT = 2;
+	private JMenuItem edFjernOppmelding;
+	private Component comp;
+	private int modelRow;
 	
 	public RightClickMenus(Vindu vindu){
 		this.vindu = vindu;
@@ -100,16 +104,16 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 		else if(o instanceof EksamensDeltaker){
 			eStrykPros = new JMenuItem("Finn Strykprosent i dette faget.");
 			eKarDist = new JMenuItem("Finn Karakterdistribusjon");
+			edFjernOppmelding = new JMenuItem("Fjern eksamensoppmelding");
 			
 			eStrykPros.addActionListener(this);
 			eKarDist.addActionListener(this);
+			edFjernOppmelding.addActionListener(this);
 			
 			popMeny.add(eStrykPros);
 			popMeny.add(eKarDist);
+			popMeny.add(edFjernOppmelding);
 			
-			EksamensDeltaker ed = ((EksamensDeltaker) o);
-			Eksamen e = ed.getFag().findEksamenByDate(ed.getDato());
-			curObject = e;
 		}
 		else if(o instanceof Laerer){
 			fagLedetAv = new JMenuItem("Finn fag ledet av lærer");
@@ -131,7 +135,7 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 
 	private void sjekkOmMenySkalVises(MouseEvent e){
 		if(e.isPopupTrigger()){
-			Component comp = e.getComponent();
+			comp = e.getComponent();
 			if(comp instanceof JList<?>){
 				JList<?> lista =(JList<?>) comp;
 				Object o = lista.getSelectedValue();
@@ -143,6 +147,7 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 				int row = lista.getSelectedRow();
 				if (row != -1) {
 					curObject = lista.getValueAt(row, PANELOBJEKT);
+					modelRow = lista.getSelectedRow();
 					createPopMenu(curObject);
 				}
 			}
@@ -158,7 +163,8 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 		//vanlig actionlistener
 		Object source = e.getSource();
 		if(source == eStrykPros){
-			Eksamen eks = (Eksamen) curObject;
+			EksamensDeltaker ed = ((EksamensDeltaker) curObject);
+			Eksamen eks = ed.getFag().findEksamenByDate(ed.getDato());
 			vindu.setText("Eksamen " + eks.toString() + " har : " + vindu.getSkole().findStrykProsent(eks.getFag(), eks) + "% stryk.");
 			vindu.display();
 		}
@@ -187,7 +193,8 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 				JOptionPane.showMessageDialog(null, "Det er ingen studenter i studieprogrammet.");
 		}
 		if(source == eKarDist){
-			Eksamen eks = (Eksamen) curObject;
+			EksamensDeltaker ed = ((EksamensDeltaker) curObject);
+			Eksamen eks = ed.getFag().findEksamenByDate(ed.getDato());
 			Fag f = eks.getFag();
 			int[] karakterer = vindu.getSkole().findKarakterDistribusjon(f, eks);
 			double stryk = vindu.getSkole().findStrykProsent(f, eks);
@@ -201,6 +208,19 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 				vindu.listApplier(fagene, Vindu.FAG);
 			}else{
 				JOptionPane.showMessageDialog(null, "Læreren har ingen fag.");
+			}
+			
+		}
+		if(source == edFjernOppmelding){
+			EksamensDeltaker ed = (EksamensDeltaker) curObject;
+			int svar = JOptionPane.showConfirmDialog(null, "Er du sikker på at du vil slette eksamensdeltakelse for " + ed.getDeltaker().getfNavn() + " "+ ed.getDeltaker().geteNavn() + "?", 
+					"Prompt", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			if(svar == JOptionPane.YES_OPTION){
+			Eksamen eks = ed.getFag().findEksamenByDate(ed.getDato());
+			eks.avmeld(ed.getDeltaker());
+			//lag metode i EDITPANEL og pass med int rowPos for sletting
+//			JTable tabellen = (JTable) comp;
+//			((DefaultTableModel)tabellen.getModel()).removeRow(modelRow);
 			}
 			
 		}

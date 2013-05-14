@@ -249,7 +249,6 @@ public class Vindu extends JFrame implements ActionListener {
 		save.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				arkivet.writeToFile(skolen);
-				//må endres til å reflektere utfall.
 				JOptionPane.showMessageDialog(null, "Filen er lagret");
 			}
 		});
@@ -262,7 +261,8 @@ public class Vindu extends JFrame implements ActionListener {
 		omOss.setMnemonic('S');
 		omOss.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				JOptionPane.showMessageDialog(null, "BLABLABLA");
+				JOptionPane.showMessageDialog(null, "Lars-Erik Kasin - s178816 - Dataingeniør - 1AA\n" +
+						"Joakim Rishaug - s188080 - Dataingeniør - 1AA", "Om oss" , JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		JMenuItem omProgrammet = new JMenuItem("Om Programmet");
@@ -778,11 +778,13 @@ public class Vindu extends JFrame implements ActionListener {
 						else
 							setText("Fyll inn nødvendige felter - ikke valgt");
 						
-						if(stryk != BLANK || stryk != Double.NaN)
+						if(stryk != BLANK && !Double.isNaN(stryk)){
+							System.out.println("pig");
 							displayKarakterer(karakterer, stryk);
+						}
 						else if(stryk == BLANK){
 							setText("Finner ikke eksamen");
-						} else if(stryk == Double.NaN)
+						} else if(Double.isNaN(stryk))
 							setText("Ingen eksamensdeltakere registrert");
 						break;
 						

@@ -57,7 +57,6 @@ public class DateHandler {
 		
 		GregorianCalendar newDate = new GregorianCalendar(year, month, day,
 				hour, 0, 0);
-		System.out.println(newDate.get(Calendar.DATE) + " dag " + newDate.get(Calendar.MONTH) + " mnd " + newDate.get(Calendar.YEAR)+ " år" );
 		return newDate;
 	}
 }

@@ -50,15 +50,18 @@ public class Eksamen implements Serializable{
 		return deltakere;
 	}
 	
-	//melder studenten av eksamenen. Setter boolean i deltaker til false for oppmeldt. (for historikkens del)
+	//melder studenten av eksamenen. Fjernes fra eksamensdeltakelse, og fjerner eksamen i stud.
 	public void avmeld(Student student){
 		for(EksamensDeltaker ed : deltakere){
 			if(student.equals(ed.getDeltaker())){
-				ed.avmeld();
+				student.avmeldEksamen(ed);
+				deltakere.remove(ed);
+				JOptionPane.showMessageDialog(null, "Eksamensoppmelding fjernet for " + this.getFag().getFagkode() + "\nfra " + student.getfNavn() + " " + student.geteNavn());
 				return;
 			}
 		}
-		//add en eller annen beskjed om at deltakeren ikke ble funnet og dermed ikke fjernet.
+		//deltaker ikke funnet.
+		JOptionPane.showMessageDialog(null, "Finner ikke deltakeren", "Feilmelding", JOptionPane.ERROR_MESSAGE);
 		return;
 	}
 	

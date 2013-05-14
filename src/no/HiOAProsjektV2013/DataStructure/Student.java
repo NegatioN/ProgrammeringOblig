@@ -54,6 +54,9 @@ public class Student extends Person implements Serializable{
 	public void setEksamen(EksamensDeltaker ed){
 		eksamener.add(ed);
 	}
+	public void avmeldEksamen(EksamensDeltaker ed){
+		eksamener.remove(ed);
+	}
 	
 	//har studenten overskredet 3 forsøk for denne eksamenen?
 	public boolean maksForsøkOverskredet(Fag fag){
