@@ -10,8 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /*
- * Klassen er et fag på skolen. Faget inneholder eksamener, krav og faglærer.
- * Inneholder også i tillegg informasjon om faget.
+ * Klassen representerer et fag på skolen. Faget inneholder eksamener, krav og faglærer.
+ * Inneholder også informasjon om faget.
  */
 public class Fag implements Serializable{
 

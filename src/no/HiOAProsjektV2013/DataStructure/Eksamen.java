@@ -13,9 +13,10 @@ import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
 /*
- * Klassen definerer en Eksamens-hendelse. Et fag kan ha mange eksamener over tid. 
+ * Klassen representer en eksamen i et bestemt fag på en bestemt dato. Et fag kan ha mange eksamener over tid. 
  * Eksamen inneholder en liste av alle eksamensdeltakerne.
  */
+
 public class Eksamen implements Serializable{
 	
 	private static final long serialVersionUID = 1040L;

@@ -390,7 +390,6 @@ public class EditPanel extends JPanel{
 		resultater.addMouseListener(popup);	//Legger til høyreklikkfunksjoner
 		resultater.getColumnModel().getColumn(DATO).setPreferredWidth(DATOBREDDE);
 		
-
 		faginfo.add(new JScrollPane(resultater));
 		faginfo.updateUI();
 	}
@@ -426,7 +425,6 @@ public class EditPanel extends JPanel{
 		faginfo.updateUI();
 	}
 
-	
 
 	//Privat klasse som lytter etter endringer i eksamenstabellen
 	private class tabellytter implements TableModelListener{

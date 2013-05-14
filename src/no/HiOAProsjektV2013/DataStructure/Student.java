@@ -10,7 +10,7 @@ import java.util.List;
 
 /*
  * Klassen representerer en student og er det største objektet i programmet.
- * Et objekt er åpenbart en student på skolen, og har mange fag, eksamener og fag-krav og et studieprogram.
+ * Det inneholder mange personalia for studenten, fag og eksamener studenter har eller har hatt, arbeidskrav for fagene, og et studieprogram.
  */
 public class Student extends Person implements Serializable{
 	

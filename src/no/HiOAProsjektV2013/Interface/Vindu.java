@@ -278,11 +278,21 @@ public class Vindu extends JFrame implements ActionListener {
 		brukerveiledning.setMnemonic('B');
 		brukerveiledning.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				String userbeskrivelse = "Fra hovedmenyen kan du velge å lage nye studenter, lærere, fag og studieprogram. Når du velger en av disse, vil det komme frem nødvendige registreringsfelt. Registreringsfeltene vil hele tiden gi deg tilbakemelding på om det du har skrevet er tillatte verdier." +
-						"\n\nVidere er det muligheter for å søke på alle disse tingene i søkefeltet til høyre, hvor man kan søke på identiske treff, eller bare delvise treff. Man må velge hvilken type man skal søke etter i programmet ved hjelp av radioknappene under.\n\n" +
-						"Ved mer spesielle søk enn navn, fagkode og studentnummer må man søke ved hjelp av de avanserte søkene, som man finner en knapp til rett under." +
-						"\nDet er også knapper for å vise alle objekter av en type, som fag, lærere, studenter og studieprogram.\n\n" +
-						"Når en liste kommer opp, kan man høyreklikke på et valgt objekt for å få opp relevante alternativer for hva man kan gjøre med det. \nOm man ønsker videre handlinger med objektet, kan man trykke rediger-knappen under lista. Dette tar deg videre til et mer spesialisert område.";
+				String userbeskrivelse = "Registrering:\n" +
+						"Fra hovedmenyen kan du velge å lage nye studenter, lærere, fag og studieprogram. " +
+						"Når du velger en av disse, vil det komme frem nødvendige registreringsfelt. " +
+						"Registreringsfeltene vil hele tiden gi deg tilbakemelding på om det du har skrevet er tillatte verdier. " +
+						"Alle registrerte objekter kan vises ved hjelp av Vis-knappene til høyre.\n\n" + 
+						"Visning\n" +
+						"Videre er det muligheter for å søke på alle disse objektene i søkefeltet til høyre, hvor man kan søke på hele ord, " +
+						"eller bare deler av ordet. Man må velge hvilken objekttype man skal søke etter i programmet ved hjelp av radioknappene under. " +
+						"Når en liste kommer opp, kan man se gjennom informasjon ved å klikke på objekter fra lista, eller bla med piltastene.\n\n" +
+						"Redigering\n" +
+						"Man kan videre redigere informasjon, eller legge til ting som eksamener, arbeidskrav og karakterer ved å trykke på rediger-knappen under lista. " +
+						"Man kan høyreklikke på et valgt objekt for å få opp relevante alternativer for hva man kan gjøre med det.\n\n" +
+						"Avansert søk\n" +
+						"Ved mer spesielle søk som krever mer enn ett ord, som for eksempel å finne elever som tar et fag, eller karakterdistribusjon for en eksamen, " +
+						"må man søke ved hjelp av de avanserte søkene, som man finner ved hjelp av knappen under radioknappene. Her får du opp forskjellige valg for søk.";
 				JOptionPane optionPane = new limitedOptionPane();
 				optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
 				optionPane.setMessage(userbeskrivelse);
@@ -714,7 +724,7 @@ public class Vindu extends JFrame implements ActionListener {
 						
 					case STUDENTPERIODE: //Viser studenter som har vært studenter i en gitt periode
 						
-						//Her søkes det enten på tidsrommet mellom to år, fra et år og frem, eller frem til et år, avhengig av hva som er fylt inn
+						//Her søkes det enten på tidsrommet mellom to år, startår eller sluttår, avhengig av hva som er fylt inn
 						if(inn.matches(årRegex)){
 							if(ut.matches(årRegex)) //Begge felter fylt inn
 								studs = skolen.findStudentByPeriode(inn,ut);
