@@ -30,7 +30,7 @@ import no.HiOAProsjektV2013.DataStructure.Studieprogram;
  */
 public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 
-	private final int ROWCOUNT = 20;
+	private final int ROWCOUNT = 20, CELLWIDTH = 390;
 	private Object valgt;
 	private JPanel vis;
 	private JButton rediger, slett;
@@ -88,8 +88,8 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 		listen.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listen.addListSelectionListener(this);
 		listen.addMouseListener(popup);
-		listen.setFixedCellWidth(390);
-		listen.setSelectedIndex(0);
+		listen.setFixedCellWidth(CELLWIDTH);
+		listen.setSelectedIndex(Vindu.FØRSTE);
 		//listen.setPreferredSize(størrelse);
 
 		return listen;

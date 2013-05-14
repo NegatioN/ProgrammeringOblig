@@ -48,7 +48,20 @@ public class Vindu extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	//checkbox burde sette selectedValue til en av disse, og passe value inn i search
-	public static final int LÆRER = 30, STUDENT = 40, FAG = 50, STUDIEPROGRAM = 60, FØRSTE = 0, ANDRE = 1;
+	public static final int LÆRER = 30, STUDENT = 40, FAG = 50, STUDIEPROGRAM = 60, FØRSTE = 0, ANDRE = 1, TITTELSIZE = 20, TOM = 0, BLANK = -1;
+	private final static int VELGSØK = 0, STUDENTFAG = 1, STUDENTPERIODE = 2, STUDENTPROGRAM = 3, POENGSTUDENT = 4, KARAKTER = 5;
+	private final static int COVER = 2, COVERED = 3;
+	private final static String FORTID = "1000", FREMTID = "3000";
+
+	public static final String fagkodeRegex = "[\\wæøåÆØÅ]{4}\\d{4}";
+	public static final String studentNrRegex = "s\\d{6}";
+	public static final String årRegex = "\\d{4}";
+	public static final String mobRegex = "\\d{8}";
+	public static final String mailRegex = "\\S+@\\S+.\\S+";
+	public static final String navnRegex = "(?:([a-zA-ZæøåÆØÅ']+\\s+[a-zA-ZæøåÆØÅ']+\\s*)){1}(?:([a-zA-ZæøåÆØÅ']+\\s*))*";
+	public static final String tittelRegex = "(\\D+)||(\\w+\\s\\S+)";
+	public static final String dateRegex = "(\\d{1,2}\\W\\d{1,2}\\W((\\d{4})||(\\d{2})))";
+	public static final String sPoengRegex = "(\\d)||([01-5]\\d)||60";
 
 	private Archiver arkivet;
 	private VinduLytter vl;
@@ -68,7 +81,7 @@ public class Vindu extends JFrame implements ActionListener {
 	beskrivelse, studiepoeng, innÅr, utÅr, studNr;
 	private JTextField søkefelt;
 	private JPanel rammeverk, innhold, stud, lær, fag, studprog, display;
-	public static Dimension innholdSize = new Dimension(300,500), toppSize = new Dimension(900,50), søkSize = new Dimension(170,500);
+	public static Dimension innholdSize = new Dimension(300,500), toppSize = new Dimension(900,50), søkSize = new Dimension(170,500), totalSize = new Dimension(900,500);
 	private Border ramme = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 	private JComboBox<Fag> fagBox;
 	private JComboBox<Laerer> lærerBox;
@@ -78,16 +91,6 @@ public class Vindu extends JFrame implements ActionListener {
 	private JLabel overskrift;
 	//endre
 	private int selectedValue = STUDENT;
-
-	public static final String fagkodeRegex = "[\\wæøåÆØÅ]{4}\\d{4}";
-	public static final String studentNrRegex = "s\\d{6}";
-	public static final String årRegex = "\\d{4}";
-	public static final String mobRegex = "\\d{8}";
-	public static final String mailRegex = "\\S+@\\S+.\\S+";
-	public static final String navnRegex = "(?:([a-zA-ZæøåÆØÅ']+\\s+[a-zA-ZæøåÆØÅ']+\\s*)){1}(?:([a-zA-ZæøåÆØÅ']+\\s*))*";
-	public static final String tittelRegex = "(\\w+)||(\\w+\\s\\S+)";
-	public static final String dateRegex = "(\\d{1,2}\\W\\d{1,2}\\W((\\d{4})||(\\d{2})))";
-	public static final String sPoengRegex = "(\\d)||([01-5]\\d)||60";
 
 	private JMenuBar meny;
 
@@ -129,7 +132,7 @@ public class Vindu extends JFrame implements ActionListener {
 
 		setVisible(true);
 		setLocationRelativeTo(null);
-		setMinimumSize(new Dimension(900,500));
+		setMinimumSize(totalSize);
 		setResizable(true);
 
 	}
@@ -287,7 +290,7 @@ public class Vindu extends JFrame implements ActionListener {
 		nystudent 		= buttonGenerator.generateButton("Legg til student", leggtil, Buttons.HALV);
 		nylærer 		= buttonGenerator.generateButton("Legg til lærer", leggtil, Buttons.HALV);
 		nyttfag 		= buttonGenerator.generateButton("Legg til fag", leggtil, Buttons.HALV);
-		nyttstudieprog 	= buttonGenerator.generateButton("Legg til studieprogram", leggtil, new Dimension(200, 30));
+		nyttstudieprog 	= buttonGenerator.generateButton("Legg til studieprogram", leggtil, Buttons.HEL);
 
 		visstudent 		= buttonGenerator.generateButton("Vis studenter", visning, Buttons.HALV);
 		vislærer 		= buttonGenerator.generateButton("Vis lærere", visning, Buttons.HALV);
@@ -309,7 +312,7 @@ public class Vindu extends JFrame implements ActionListener {
 		//Oppretter objekter til registreringsfelter
 
 		overskrift = new JLabel();
-		overskrift.setFont(new Font("Arial", Font.BOLD, 20));
+		overskrift.setFont(new Font("Arial", Font.BOLD, TITTELSIZE));
 
 		navn	 		= new InputFelt("Navn", InputFelt.LANG, navnRegex);
 		tittel			= new InputFelt("Navn", InputFelt.LANG, tittelRegex);
@@ -333,19 +336,19 @@ public class Vindu extends JFrame implements ActionListener {
 
 		fagBox = new JComboBox<Fag>();
 		fagBox.setPreferredSize(Buttons.HEL);
-		for(Fag f : skolen.getFagene().visAlle()) {
+		for(Fag f : skolen.getFagene().getAlle()) {
 			fagBox.addItem(f);
 		}
 
 		lærerBox = new JComboBox<Laerer>();
 		lærerBox.setPreferredSize(Buttons.HEL);
-		for(Laerer l : skolen.getLærerne().visAlle()) {
+		for(Laerer l : skolen.getLærerne().getAlle()) {
 			lærerBox.addItem(l);
 		}
 
 		progBox = new JComboBox<Studieprogram>();
 		progBox.setPreferredSize(Buttons.HEL);
-		for(Studieprogram sp : skolen.getStudieprogrammene().visAlle()) {
+		for(Studieprogram sp : skolen.getStudieprogrammene().getAlle()) {
 			progBox.addItem(sp);
 		}
 
@@ -374,7 +377,7 @@ public class Vindu extends JFrame implements ActionListener {
 		stud.add(innDato);
 		stud.add(progBox);
 		stud.add(lagre);
-		progBox.setSelectedIndex(-1);
+		progBox.setSelectedIndex(BLANK);
 
 		vis(stud);
 	}
@@ -426,8 +429,6 @@ public class Vindu extends JFrame implements ActionListener {
 	public void avansert(int type){
 		JPanel søk = new JPanel();
 		søk.setPreferredSize(innholdSize);
-
-		final int STUDENTFAG = 1, STUDENTPERIODE = 2, STUDENTPROGRAM = 3, POENGSTUDENT = 4, KARAKTER = 5;
 
 		refresh();
 
@@ -516,8 +517,8 @@ public class Vindu extends JFrame implements ActionListener {
 	public void vis(){
 		innhold.getComponent(FØRSTE).setVisible(true);
 		innhold.getComponent(ANDRE).setVisible(true);
-		if(innhold.getComponentCount() > 2)
-			innhold.remove(2);
+		if(innhold.getComponentCount() == COVERED)
+			innhold.remove(COVER);
 		innhold.updateUI();
 		revalidate();
 	}
@@ -546,7 +547,7 @@ public class Vindu extends JFrame implements ActionListener {
 	//Viser karakterdistribusjon i displayet
 	public void displayKarakterer(int[] karakterer, double stryk){
 		String distribusjon = "Karakterdistribusjon:\n";
-		for(int i = 0; i < 6; i++ )
+		for(int i = 0; i < (int)'G'; i++ )
 			distribusjon += (char)('A'+i) + ":" + karakterer[i] + "\n";
 		distribusjon += "\nStrykprosent: " + stryk;
 		setText(distribusjon);
@@ -575,26 +576,26 @@ public class Vindu extends JFrame implements ActionListener {
 		}
 		if (e.getSource() == visstudent) {
 			overskrift.setText("Studenter");
-			vis(studentboks.visResultat(studentboks.listify(skolen.getStudentene().visAlle())));
+			vis(studentboks.visResultat(studentboks.listify(skolen.getStudentene().getAlle())));
 		}
 		if (e.getSource() == vislærer) {
 			overskrift.setText("Lærere");
-			vis(laererboks.visResultat(laererboks.listify(skolen.getLærerne().visAlle())));
+			vis(laererboks.visResultat(laererboks.listify(skolen.getLærerne().getAlle())));
 		}
 		if (e.getSource() == visfag) {
 			overskrift.setText("Fag");
-			vis(fagboks.visResultat(fagboks.listify(skolen.getFagene().visAlle())));
+			vis(fagboks.visResultat(fagboks.listify(skolen.getFagene().getAlle())));
 		}
 		if (e.getSource() == visstudieprog) {
 			overskrift.setText("Studieprogram");
-			vis(studieboks.visResultat(studieboks.listify(skolen.getStudieprogrammene().visAlle())));
+			vis(studieboks.visResultat(studieboks.listify(skolen.getStudieprogrammene().getAlle())));
 		}
 
 		if (e.getSource() == visAvansert){
-			avansert(type = 0);
+			avansert(type = Vindu.VELGSØK);
 		}
 		if (e.getSource() == tilbake){
-			avansert(type = 0);
+			avansert(type = Vindu.VELGSØK);
 		}
 
 		if (e.getSource() == leggtilfag) {
@@ -614,7 +615,7 @@ public class Vindu extends JFrame implements ActionListener {
 			try{
 				if (e.getSource() == søkefelt || e.getSource() == søkeknapp) {
 
-					if(søkefelt.getText().length() < 1){
+					if(søkefelt.getText().length() == TOM ){
 						setText("Ingen treff");
 						overskrift.setText("Ingen treff");
 						return;
@@ -657,7 +658,7 @@ public class Vindu extends JFrame implements ActionListener {
 					String d = innDato.getText();
 
 					switch(type){
-					case 1:
+					case Vindu.STUDENTFAG:
 						JList<Student> listen = null;
 						if(inn.matches(årRegex))
 							listen = studentboks.listify(skolen.findStudentMedFagByÅr(((Fag)fagBox.getSelectedItem()).getFagkode(),Integer.parseInt(inn)));
@@ -665,7 +666,7 @@ public class Vindu extends JFrame implements ActionListener {
 							listen = studentboks.listify(skolen.findStudentMedFag(((Fag)fagBox.getSelectedItem()).getFagkode()));
 						vis(studentboks.visResultat(listen));
 						break;
-					case 2:
+					case Vindu.STUDENTPERIODE:
 						listen = null;
 
 						if(inn.matches(årRegex)){
@@ -677,7 +678,7 @@ public class Vindu extends JFrame implements ActionListener {
 							listen = studentboks.listify(skolen.findStudentBySlutt(ut));
 						vis(studentboks.visResultat(listen));
 						break;
-					case 3:
+					case Vindu.STUDENTPROGRAM:
 						listen = null;
 						Studieprogram sp = (Studieprogram)progBox.getSelectedItem();
 						if(inn.matches(årRegex)){
@@ -687,21 +688,21 @@ public class Vindu extends JFrame implements ActionListener {
 						if(listen != null)
 							vis(studentboks.visResultat(listen));
 						break;
-					case 4:
+					case Vindu.POENGSTUDENT:
 						int poeng = 0;
 						Student s = skolen.getStudentene().findStudentByStudentNr(nr);
 						if(inn.matches(årRegex)){
 							if(ut.matches(årRegex))
 								poeng = skolen.findStudiepoengForStudIPeriode(s, inn, ut);
 							else
-								poeng = skolen.findStudiepoengForStudIPeriode(s, inn, "3000");
+								poeng = skolen.findStudiepoengForStudIPeriode(s, inn, Vindu.FREMTID);
 						} else if(ut.matches(årRegex))
-							poeng = skolen.findStudiepoengForStudIPeriode(s, "1000", ut);
+							poeng = skolen.findStudiepoengForStudIPeriode(s, Vindu.FORTID, ut);
 						else
-							poeng = skolen.findStudiepoengForStudIPeriode(s, "1000", "3000");
+							poeng = skolen.findStudiepoengForStudIPeriode(s, Vindu.FORTID, Vindu.FREMTID);
 						setText("Studiepoeng for " + s.getfNavn() + " " + s.geteNavn() + ": " + poeng);
 						break;
-					case 5:
+					case Vindu.KARAKTER:
 						Fag f = (Fag)fagBox.getSelectedItem();
 						int[] karakterer = null;
 						if(d.matches(dateRegex)){
@@ -717,7 +718,7 @@ public class Vindu extends JFrame implements ActionListener {
 							setText("Fyll inn nødvendige felter");
 						break;
 					default:
-						avansert(0);
+						avansert(Vindu.VELGSØK);
 					}
 
 				} else {
@@ -726,22 +727,22 @@ public class Vindu extends JFrame implements ActionListener {
 
 					switch(knapp.getText()){
 					case "Finn studenter med fag":
-						type = 1;
+						type = Vindu.STUDENTFAG;
 						break;
 					case "Finn studenter i periode":
-						type = 2;
+						type = Vindu.STUDENTPERIODE;
 						break;
 					case "Finn studenter i studieprogram":
-						type = 3;				
+						type = Vindu.STUDENTPROGRAM;				
 						break;
 					case "Finn studiepoeng for student":
-						type = 4;				
+						type = Vindu.POENGSTUDENT;				
 						break;
 					case "Finn karakterfordeling":
-						type = 5;			
+						type = Vindu.KARAKTER;			
 						break;
 					default:
-						type = 0;
+						type = Vindu.VELGSØK;
 					}
 					avansert(type);
 				}
@@ -772,7 +773,7 @@ public class Vindu extends JFrame implements ActionListener {
 							nr,
 							adresse.getText(), 
 							dato);
-					if(progBox.getSelectedIndex() != -1)
+					if(progBox.getSelectedIndex() != BLANK)
 						s.setStudieprogram((Studieprogram)progBox.getSelectedItem());
 					setText("Lagret student:\n\n" + s.fullString());
 				} 

@@ -91,7 +91,7 @@ public class Skole implements Serializable{
 	}
 	//finner studenter med faget bruker søker på
 	public ArrayList<Student> findStudentMedFag(String input){		
-		Fag faget = fagSøk(input).get(0);
+		Fag faget = fagSøk(input).get(Vindu.FØRSTE);
 		
 		ArrayList<Student> studentene = faget.getStudenter();
 		

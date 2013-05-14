@@ -83,7 +83,7 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 					fagItem.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
 							curObject = (vindu.getSkole().søk(
-									fagItem.getActionCommand(), Vindu.FAG)).get(0);
+									fagItem.getActionCommand(), Vindu.FAG)).get(Vindu.FØRSTE);
 							String melding = "Er du sikker på at du vil melde\n" + s.getfNavn() + " " + s.geteNavn() + " av " + fagItem.getActionCommand();
 							int option = JOptionPane.showConfirmDialog(vindu, melding, "Slette faget?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 							if(option == JOptionPane.OK_OPTION)

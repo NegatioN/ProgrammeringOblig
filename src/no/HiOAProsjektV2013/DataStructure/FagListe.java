@@ -100,7 +100,7 @@ public class FagListe implements Serializable{
 	}
 	
 	//Returnerer liste over alle Fag
-	public ArrayList<Fag> visAlle() {
+	public ArrayList<Fag> getAlle() {
 		ArrayList<Fag> fagene = new ArrayList<>();
 		for(Fag f : register){
 			fagene.add(f);
