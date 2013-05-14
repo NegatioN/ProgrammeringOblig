@@ -153,6 +153,7 @@ public class RightClickMenus extends MouseAdapter implements ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		//vanlig actionlistener
 		Object source = e.getSource();
 		if(source == eStrykPros){
 			Eksamen eks = (Eksamen) curObject;

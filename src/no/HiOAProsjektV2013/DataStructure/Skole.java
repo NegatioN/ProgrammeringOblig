@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import javax.swing.JOptionPane;
+
 import no.HiOAProsjektV2013.Interface.Vindu;
 
 //	Klassen fungerer som en samling av alle datastrukturer for skolesystemet
@@ -15,7 +17,6 @@ public class Skole implements Serializable{
 	private LaererListe lærerne = new LaererListe();
 	private FagListe fagene = new FagListe();
 	private StudentListe studentene = new StudentListe();
-	private String arRegex = "\\d{4}";
 	
 	public Skole() {
 		// Constructor
@@ -68,19 +69,6 @@ public class Skole implements Serializable{
 		if(f != null)
 			f.addKrav(beskrivelse);
 	}
-//	//prøver å legge til en eksamen til gitt fag basert på input. Kan feile.
-//	public void addEksamenToFag(Fag fag, String dato){
-//		DateFormat formatter = new SimpleDateFormat("dd-MMM-yy"); //Setter inputformat for startdato
-//		try {
-//			Date date = (Date) formatter.parse(dato);
-//			fag.addEksamen(date);
-//		} catch (NumberFormatException nfe){
-//			System.out.println("NumberformatException i addEksamenToFag");
-//		} catch (ParseException pe) {
-//			System.out.println("ParseException i addEksamenToFag");
-//		}
-//		
-//	}
 	
 	//****************SØØØØØØØØØØK SØKEMETODER SØØØØØØØØØØK****************//
 	
@@ -98,11 +86,6 @@ public class Skole implements Serializable{
 		}else if(qualifier == Vindu.STUDIEPROGRAM){
 			ArrayList<Studieprogram> studiene = studieSøk(input);
 			return studiene;
-		}
-		
-		
-		if(input.matches(arRegex)){ //Sjekker om det er søkt på år
-			//split input og sjekk neste paramenter for hvordan søket skal håndteres.
 		}
 		return null;
 	}
@@ -199,6 +182,7 @@ public class Skole implements Serializable{
 			return strykprosent;
 		}
 		catch(NullPointerException npe){
+			JOptionPane.showMessageDialog(null, "Finner ikke eksamenen", "Feilmelding", JOptionPane.ERROR_MESSAGE);
 			return 0;
 		}
 	}
@@ -240,16 +224,19 @@ public class Skole implements Serializable{
 		}
 		return fagene;
 	}
+	//søker på studenter etter navn/studnr
 	private ArrayList<Student> studentSøk(String input){
 		if(input.matches(Vindu.studentNrRegex))
 			return studentNrSøk(input);
 		ArrayList<Student> studentene = getStudentene().findByNavn(input);		
 		return studentene;
 	}
+	//søker på lærere
 	private ArrayList<Laerer> lærerSøk(String input){
 		ArrayList<Laerer> lærerne = getLærerne().findByNavn(input);
 		return lærerne;
 	}
+	//søker på studieprogram
 	private ArrayList<Studieprogram> studieSøk(String input){
 		ArrayList<Studieprogram> studiene = getStudieprogrammene().findByNavn(input);
 		return studiene;

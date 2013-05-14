@@ -2,6 +2,7 @@ package no.HiOAProsjektV2013.DataStructure;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +20,7 @@ public class Student extends Person implements Serializable{
 	private LinkedList<EksamensDeltaker> eksamener = new LinkedList<>();
 	//faglista er kun pointers
 	private List<Fag> fagListe = new LinkedList<>();
-	//kravlisten er de individuelle objektene som opprettes per student.
+	//kravlisten er de individuelle objektene av krav som opprettes per student.
 	private List<Arbeidskrav> kravListe = new LinkedList<>();
 	private boolean avsluttet = false;
 	private Studieprogram sp = null;
@@ -181,7 +182,13 @@ public class Student extends Person implements Serializable{
 	public String toString(){	
 		return "S" + studentnummer + " - " + getfNavn() + " " + geteNavn();
 	}
-	
+	//brukes fordi javas implementerte datefunksjonalitet er forferdelig dårlig.
+	private Date formatDate(GregorianCalendar dato){
+		Date date = dato.getTime();
+		date.setMonth(date.getMonth()-1);
+		return date;
+	}
+	//String til displayvindu
 	public String fullString(){	
 		String stringen = new String();
 		
@@ -190,9 +197,9 @@ public class Student extends Person implements Serializable{
 					"\nE-post: " + getEpost() + 
 					"\nTlf: " + getTelefonNr() + 
 					"\nAdresse: " + adresse + 
-					"\nStartdato: " + new SimpleDateFormat("dd. MMM yyyy").format(start.getTime());
+					"\nStartdato: " + new SimpleDateFormat("dd. MMM yyyy").format(formatDate(start));
 					if(slutt != null)
-						stringen += "\nSluttdato: " + new SimpleDateFormat("dd. MMM yyyy").format(slutt.getTime());
+						stringen += "\nSluttdato: " + new SimpleDateFormat("dd. MMM yyyy").format(formatDate(slutt));
 					if(sp != null)
 						stringen += "\nStudieProgram: " + sp.getNavn();
 					
@@ -207,7 +214,7 @@ public class Student extends Person implements Serializable{
 	public List<Arbeidskrav> getKravene(){
 		return kravListe;
 	}
-	
+	//henter ut det fagrelevante egeneide kravobjektet til studenten.
 	public Arbeidskrav getFagKrav(Fag fag){
 		for( Arbeidskrav ak : kravListe){
 			if(ak.getFagkode() == fag.getFagkode())

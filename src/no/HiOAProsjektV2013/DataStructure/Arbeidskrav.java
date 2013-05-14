@@ -63,11 +63,13 @@ public class Arbeidskrav implements Serializable, Cloneable{
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
-		kravet.dropList();
-		
-		for(Krav minikrav : krav.getKrav()){
-			Krav klonekrav = new Krav(minikrav);
-			kravet.addKrav(klonekrav);
+		if (kravet != null) {
+			kravet.dropList();
+
+			for (Krav minikrav : krav.getKrav()) {
+				Krav klonekrav = new Krav(minikrav);
+				kravet.addKrav(klonekrav);
+			}
 		}
 		return kravet;
 	}

@@ -52,7 +52,7 @@ public class Studieprogram implements Serializable{
 			}
 		}
 	}
-	
+	//finner faget i studieprogrammet om det finnes.
 	public Fag finnFag(Fag fag){
 		for (Fag f : fagIProgrammet) {
 			if(f.equals(fag)) {

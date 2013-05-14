@@ -38,15 +38,13 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 	private RightClickMenus popup;
 	private JList<E> curList = null;
 	private Buttons button;
-	private static ImageIcon editIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/editBlue.png"));
-	private static ImageIcon delIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/delBlue.png"));
-	private static ImageIcon addIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/addBlue.png"));
-	private static ImageIcon editRoll = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/editBlueRoll.png"));
-	private static ImageIcon delRoll = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/delBlueRoll.png"));
-	private static ImageIcon addRoll = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/addBlueRoll.png"));
-	private static ImageIcon editPress = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/editBluePress.png"));
-	private static ImageIcon delPress = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/delBluePress.png"));
-	private static ImageIcon addPress = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/addBluePress.png"));
+	//private static siden vi har flere instanser av dette objektet, men bildene vil alltid bli de samme.
+	private final static ImageIcon editIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/editBlue.png"));
+	private final static ImageIcon delIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/delBlue.png"));
+	private final static ImageIcon editRoll = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/editBlueRoll.png"));
+	private final static ImageIcon delRoll = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/delBlueRoll.png"));
+	private final static ImageIcon editPress = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/editBluePress.png"));
+	private final static ImageIcon delPress = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/delBluePress.png"));
 	
 	
 	public ListeBoks(Vindu vindu){
@@ -96,21 +94,6 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 
 		return listen;
 	}
-	public JComboBox<E> combify(ArrayList<E> array){
-		//vi vet det er E som kommer inn, og kan derfor caste trygt til E[]
-		E[] tilArray = (E[]) array.toArray();
-		JComboBox<E> combo = new JComboBox<>(tilArray);
-		combo.setSelectedIndex(0);
-		combo.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				JComboBox<?> boks = (JComboBox<?>) e.getSource();
-				int i = boks.getSelectedIndex();
-			}
-
-		});
-
-		return combo;
-	}
 
 	private void visInfo(Object o){
 
@@ -132,19 +115,17 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		//Det som skal skje når vi clicker objektet
-		//if(e.getValueIsAdjusting()){
 		@SuppressWarnings("unchecked")
 		JList<E> lista = (JList<E>) e.getSource();
 		E valgtObjekt = lista.getSelectedValue();
 		curList = lista;
 		setValgt(valgtObjekt);
 		visInfo(valgtObjekt);
-		//	}
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == rediger){
-			EditPanel ep = new EditPanel(vindu, valgt);
+			new EditPanel(vindu, valgt);
 		}
 		else if(e.getSource() == slett){
 			int svar = JOptionPane.showConfirmDialog(
@@ -163,7 +144,8 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 					vindu.getSkole().getFagene().removeFag((Fag)valgt);
 				else if(valgt instanceof Studieprogram)
 					vindu.getSkole().getStudieprogrammene().removeStudieprogram((Studieprogram)valgt);
-
+				
+				//displayer informasjonen i displayvinduet.
 				vindu.setText(valgt.toString() + " ble fjernet fra systemet.");
 				vindu.display();
 				//sørger for at lista mister det objektet som blir sletta fra datastrukturen.

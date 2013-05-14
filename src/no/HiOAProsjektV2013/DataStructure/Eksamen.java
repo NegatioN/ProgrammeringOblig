@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
@@ -39,13 +40,12 @@ public class Eksamen implements Serializable{
 		return fag;
 	}
 	public Date getDato() {
-		return dato.getTime();
+		Date date = dato.getTime();
+		date.setMonth(date.getMonth()-1);
+		return date;
 	}
 	public GregorianCalendar getKalender(){
 		return dato;
-	}
-	public void setDato(Date dato) {
-		this.dato.setTime(dato);
 	}
 	public LinkedList<EksamensDeltaker> getDeltakere(){
 		return deltakere;
@@ -76,7 +76,7 @@ public class Eksamen implements Serializable{
 			JOptionPane.showMessageDialog(null, "Studenten har ikke bestått krav, eller har overskredet antall forsøk.");
 		}
 	}
-	
+	//legger til alle de oppmeldte studentene (studenter som har bestått alle krav)
 	public void addOppmeldteStudenter(ArrayList<Student> studentene){
 		for(Student studenten : studentene)
 			if(studenten.innfriddKrav(fag) && !studenten.maksForsøkOverskredet(fag)){
@@ -86,7 +86,7 @@ public class Eksamen implements Serializable{
 	
 	public String toString(){
 		DateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
-		return formatter.format(dato.getTime());
+		return formatter.format(getDato());
 	}
 	
 }

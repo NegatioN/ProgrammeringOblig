@@ -21,6 +21,7 @@ public class Laerer extends Person implements Serializable{
 	public String getKontor(){
 		return kontorNr;
 	}
+	//metoder for å legge til/fjerne/vise fag i lista ledet av læreren.
 	public void addFag(Fag fag){
 		fagene.add(fag);
 	}
@@ -30,17 +31,18 @@ public class Laerer extends Person implements Serializable{
 	public ArrayList<Fag> getFagene(){
 		return fagene;
 	}
+	//end 
 	
 	public void setKontor(String kontorNr){
 		this.kontorNr = kontorNr;
 	}
-	
+	//tostring for bruk i JList og JTable
 	public String toString(){
 		String stringen = new String();
 		stringen = 	getfNavn() + " " + geteNavn() +" - " + kontorNr;
 		return stringen;
 	}
-	
+	//string for visning av info i displaypanel
 	public String fullString(){
 		String stringen = new String();
 		stringen = 	"Navn: " + getfNavn() + " " + geteNavn() + 

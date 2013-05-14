@@ -75,7 +75,7 @@ public class Fag implements Serializable{
 	public Laerer getLærer() {
 		return lærer;
 	}
-
+	//setter fagets hovedlærer. Legger også til faget i lista over fag i Lærerobjektet.
 	public void setLærer(Laerer lærer) {
 		if(this.lærer != null){
 			this.lærer.removeFag(this);
@@ -104,7 +104,7 @@ public class Fag implements Serializable{
 		return studiepoeng;
 	}
 	
-	//kloner et krav og gir det til en student.
+	//kloner et krav for å gi det til en student.
 	public Arbeidskrav makeKrav() {
 		Arbeidskrav kloneKrav = krav.clone(krav);
 		return kloneKrav;
@@ -136,6 +136,7 @@ public class Fag implements Serializable{
 		
 		return karakterene;
 	}
+	//overload
 	public int[] findKarakterDistribusjon(Eksamen e){
 		int[] karakterene = new int[6];
 		if (eksamener.contains(e)) {
@@ -188,6 +189,7 @@ public class Fag implements Serializable{
 		
 		return strykProsent;
 	}
+	//finner alle eksamener med en spesifikk date.
 	public Eksamen findEksamenByDate(GregorianCalendar calendar){
 		for(Eksamen e : eksamener){
 			if(calendar.equals(e.getKalender())){
@@ -196,7 +198,7 @@ public class Fag implements Serializable{
 		}
 		return null;
 	}
-
+	//finner alle eksamener som ble holdt et spesifikkt år.
 	private Eksamen findEksamenByÅr(int år) {
 		for (Eksamen e : eksamener) {
 			if (e.getKalender().get(Calendar.YEAR) == år)
@@ -204,13 +206,13 @@ public class Fag implements Serializable{
 		}
 		return null;
 	}
-	
+	//tostring for bruk i JLIst/JTable
 	public String toString(){
 		String stringen = new String();
 		stringen = 	navn +" - "+  fagkode;
 		return stringen;
 	}
-	
+	//string for display av informasjon i displayvinduet
 	public String fullString(){
 		String stringen = new String();
 		stringen = 	"Fagkode: " + fagkode + 

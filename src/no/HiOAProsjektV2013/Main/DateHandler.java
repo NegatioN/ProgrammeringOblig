@@ -43,7 +43,6 @@ public class DateHandler {
 		}
 		day = Integer.parseInt(daymonthyear[DAY]);
 		month = Integer.parseInt(daymonthyear[MONTH]);
-			
 		
 		// true hvis month invalid value
 		if (month < 0 || month > 12) {
