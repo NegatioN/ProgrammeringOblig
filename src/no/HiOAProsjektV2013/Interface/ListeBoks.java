@@ -37,7 +37,7 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 	private Vindu vindu;
 	private RightClickMenus popup;
 	private JList<E> curList = null;
-	private Buttons button;
+
 	//private static siden vi har flere instanser av dette objektet, men bildene vil alltid bli de samme.
 	private final static ImageIcon editIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/editBlue.png"));
 	private final static ImageIcon delIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/icons/delBlue.png"));
@@ -50,7 +50,6 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 	public ListeBoks(Vindu vindu){
 		this.vindu = vindu;
 		popup = vindu.getRightClickMenu();
-		button = vindu.getButtonGen();
 	}
 
 	public JPanel visResultat(JList<E> liste){
@@ -59,6 +58,8 @@ public class ListeBoks<E> implements ListSelectionListener, ActionListener{
 
 		Object o = liste.getSelectedValue();
 
+		Buttons button = new Buttons(this);
+		
 		//oppretter knapper
 		rediger = button.generateButton(null, knapper, Buttons.ICONBUTTON, BorderLayout.WEST,editIcon,editRoll,editPress,this);
 		

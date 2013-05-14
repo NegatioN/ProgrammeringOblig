@@ -149,7 +149,7 @@ public class EditPanel extends JPanel{
 
 		visFag = button.generateButton("Vis fag", panelet, Buttons.HEL); 			//Knapp for å vise alle studentens fag, med arbeidskrav
 		visEksamen = button.generateButton("Vis Eksamener", panelet, Buttons.HEL); 	//Knapp for å vise alle studentes eksamener med resultat
-		button.generateButton("Lagre", panelet, Buttons.HEL);						//Knapp for å lagre alle endringer som er gjort
+		button.generateButton("Lagre endringer", panelet, Buttons.HEL);						//Knapp for å lagre alle endringer som er gjort
 
 		return panelet;
 	} //End of fyllPanel(Student)
@@ -174,7 +174,7 @@ public class EditPanel extends JPanel{
 		panelet.add(epost);
 		panelet.add(tlf);
 		panelet.add(kontorNr);
-		button.generateButton("Lagre", panelet, Buttons.HEL);
+		button.generateButton("Lagre endringer", panelet, Buttons.HEL);
 
 		return panelet;
 	}  //End of fyllPanel(Laerer)
@@ -223,7 +223,7 @@ public class EditPanel extends JPanel{
 
 		visEksamen = button.generateButton("Vis Eksamener", panelet, Buttons.HEL);	//Knapp for å vise eksamener, og fjerne og legge til deltakere og resultater
 		visKrav = button.generateButton("Vis Arbeidskrav", panelet, Buttons.HEL);	//Knapp for å vise arbeidskrav for faget. Her kan også krav fjernes og legges til
-		button.generateButton("Lagre", panelet, Buttons.HEL);
+		button.generateButton("Lagre endringer", panelet, Buttons.HEL);
 
 		return panelet;
 	} //End of fyllPanel(Fag)
@@ -261,7 +261,7 @@ public class EditPanel extends JPanel{
 		leggtil = button.generateButton("Legg til fag", panelet, Buttons.HEL);//Knapp for å legge til fag fra komboboksen
 		panelet.add(Box.createRigidArea(Buttons.HEL));
 
-		button.generateButton("Lagre", panelet, Buttons.HEL);
+		button.generateButton("Lagre endringer", panelet, Buttons.HEL);
 		return panelet;
 	} //End of fyllPanel(Studieprogram)
 

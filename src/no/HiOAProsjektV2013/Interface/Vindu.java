@@ -64,12 +64,18 @@ public class Vindu extends JFrame implements ActionListener {
 	public static final String dateRegex = "(\\d{1,2}\\W\\d{1,2}\\W((\\d{4})||(\\d{2})))";
 	public static final String sPoengRegex = "(\\d)||([01-5]\\d)||60";
 
-	private Archiver arkivet;
+	public static Dimension innholdSize = new Dimension(300,500), toppSize = new Dimension(900,50), søkSize = new Dimension(170,500), totalSize = new Dimension(900,500);
+
+	//Brukes til å bestemme søk
+	private int selectedValue = STUDENT, type = VELGSØK;
+
 	private VinduLytter vl;
+	private Archiver arkivet;
 	private Skole skolen;
+	private JMenuBar meny;
+	private RightClickMenus popup = new RightClickMenus(this);
 	private Buttons buttonGenerator;
 	private DateHandler dateHandler;
-	private RightClickMenus popup = new RightClickMenus(this);
 	private ListeBoks<Student> studentboks;
 	private ListeBoks<Laerer> laererboks;
 	private ListeBoks<Fag> fagboks;
@@ -79,20 +85,14 @@ public class Vindu extends JFrame implements ActionListener {
 	private JComboBox<Studieprogram> progBox;
 	private JComboBox<String> vurderingBox;
 	private JTextArea info;
+	private InputFelt navn, tittel, epost, tlf, adresse, innDato, utDato, kontorNr, fagkode,
+	beskrivelse, studiepoeng, innÅr, utÅr, studNr, søkefelt;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
 	vislærer, visfag, visstudieprog, lagre, leggtilfag, søkeknapp, avansert, visAvansert, tilbake;
 	private JRadioButton studentCheck, lærerCheck, fagCheck, studieCheck;
-	private InputFelt navn, tittel, epost, tlf, adresse, innDato, utDato, kontorNr, fagkode,
-	beskrivelse, studiepoeng, innÅr, utÅr, studNr, søkefelt;
 	private JPanel rammeverk, innhold, stud, lær, fag, studprog, display;
-	public static Dimension innholdSize = new Dimension(300,500), toppSize = new Dimension(900,50), søkSize = new Dimension(170,500), totalSize = new Dimension(900,500);
-	private Border ramme = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
-	private int type;
 	private JLabel overskrift;
-	//endre
-	private int selectedValue = STUDENT;
-
-	private JMenuBar meny;
+	private Border ramme = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 
 	public Vindu(String tittel) {
 
@@ -114,7 +114,7 @@ public class Vindu extends JFrame implements ActionListener {
 
 		//script for å generere fag, studenter og lærere
 		//kommenter den ut etter 1 generate
-//		ScriptClass sc = new ScriptClass(skolen);
+		//ScriptClass sc = new ScriptClass(skolen);
 
 		//Panel som inneholder alle de andre panelene og fordeler dem i vinduet
 		rammeverk = new JPanel(new BorderLayout());
@@ -313,11 +313,7 @@ public class Vindu extends JFrame implements ActionListener {
 			vis(fagboks.visResultat(listen));
 		}
 	}
-	
-	public RightClickMenus getRightClickMenu(){
-		return popup;
-	}
-	//for valuePassing til søk
+	//Oppretter radiobuttongruppe for søk
 	private void generateButtonGroup(JPanel panel){
 		ButtonGroup group = new ButtonGroup();
 		lærerCheck = new JRadioButton("Lærere");
@@ -353,16 +349,21 @@ public class Vindu extends JFrame implements ActionListener {
 	public Archiver getArkiv(){
 		return arkivet;
 	}
+	
+	//Henter skolen, slik at søk og lignende kan utføres fra andre klasser
 	public Skole getSkole(){
 		return skolen;
 	}
+	
+	//Henter ut høyreklikkmenyen for kall fra andre klasser
+	public RightClickMenus getRightClickMenu(){
+		return popup;
+	}
+	
+	//for valuePassing til søk
 	public void setSelectedValue(int i){
 		selectedValue = i;
 	}
-	public Buttons getButtonGen() {
-		return buttonGenerator;
-	}
-
 
 	//Metoder for å vise relevante felter for registrering av objekter
 	public void studentPanel() {
@@ -427,60 +428,7 @@ public class Vindu extends JFrame implements ActionListener {
 		leggtilfag.setVisible(false);
 		vis(studprog);
 	}
-	public void avansert(int type){
-		JPanel søk = new JPanel();
-		søk.setPreferredSize(innholdSize);
 
-		refresh();
-
-		Buttons b = new Buttons(new søkelytter());
-		overskrift.setText("Avansert søk");
-		søk.add(overskrift);
-		switch(type){
-		case STUDENTFAG:
-			søk.add(fagBox);
-			søk.add(innÅr);
-			søk.add(avansert);
-			søk.add(tilbake);
-			break;
-		case STUDENTPERIODE:
-			søk.add(innÅr);
-			søk.add(utÅr);
-			søk.add(avansert);
-			søk.add(tilbake);
-			break;
-		case STUDENTPROGRAM:
-			søk.add(progBox);
-			søk.add(innÅr);
-			søk.add(avansert);
-			søk.add(tilbake);
-			break;
-		case POENGSTUDENT:
-			søk.add(studNr);
-			søk.add(innÅr);
-			søk.add(utÅr);
-			søk.add(avansert);
-			søk.add(tilbake);
-			break;
-		case KARAKTER:
-			søk.add(fagBox);
-			søk.add(innDato);
-			søk.add(innÅr);
-			søk.add(avansert);
-			søk.add(tilbake);
-			break;
-		default:
-			søk.add(b.generateButton("Finn studenter med fag", Buttons.HEL));
-			søk.add(b.generateButton("Finn studenter i periode", Buttons.HEL));
-			søk.add(b.generateButton("Finn studenter i studieprogram", Buttons.HEL));
-			søk.add(b.generateButton("Finn studiepoeng for student", Buttons.HEL));
-			søk.add(b.generateButton("Finn karakterfordeling", Buttons.HEL));
-		}
-
-		vis(søk);
-	}
-
-	
 	//Metoder som oppdaterer innholdspanelet
 	
 	//Resetter tekstfeltene til standardverdier
@@ -546,13 +494,67 @@ public class Vindu extends JFrame implements ActionListener {
 	//Viser karakterdistribusjon i displayet
 	public void displayKarakterer(int[] karakterer, double stryk){
 		String distribusjon = "Karakterdistribusjon:\n";
-		for(int i = 0; i < (int) ('F'-'A'); i++ )	//Går igjennom bokstavene fra A til F
+		for(int i = 0; i < (int)('G'-'A'); i++ )	//Går igjennom bokstavene fra A til F
 			distribusjon += (char)('A'+i) + ":" + karakterer[i] + "\n";
 		distribusjon += "\nStrykprosent: " + stryk;
 		setText(distribusjon);
 		display();
 	}
-	
+	//Metode for å vise avansert søk-panelet. Tar imot en int, Type, som sier noe om hvilket panel som skal vises
+	public void avansert(int type){
+		JPanel søk = new JPanel();
+		søk.setPreferredSize(innholdSize);
+
+		refresh(); //Nullstiller inputfeltene
+
+		Buttons b = new Buttons(new søkelytter());
+		overskrift.setText("Avansert søk");
+		søk.add(overskrift);
+		
+		//Legger til relevante felter for de forskjellige søkene
+		switch(type){
+		case STUDENTFAG:
+			søk.add(fagBox);
+			søk.add(innÅr);
+			søk.add(avansert);
+			søk.add(tilbake);
+			break;
+		case STUDENTPERIODE:
+			søk.add(innÅr);
+			søk.add(utÅr);
+			søk.add(avansert);
+			søk.add(tilbake);
+			break;
+		case STUDENTPROGRAM:
+			søk.add(progBox);
+			søk.add(innÅr);
+			søk.add(avansert);
+			søk.add(tilbake);
+			break;
+		case POENGSTUDENT:
+			søk.add(studNr);
+			søk.add(innÅr);
+			søk.add(utÅr);
+			søk.add(avansert);
+			søk.add(tilbake);
+			break;
+		case KARAKTER:
+			søk.add(fagBox);
+			søk.add(innDato);
+			søk.add(innÅr);
+			søk.add(avansert);
+			søk.add(tilbake);
+			break;
+		default: //Viser oversikten over de forskjellige avansertsøk
+			søk.add(b.generateButton("Finn studenter med fag", Buttons.HEL));
+			søk.add(b.generateButton("Finn studenter i periode", Buttons.HEL));
+			søk.add(b.generateButton("Finn studenter i studieprogram", Buttons.HEL));
+			søk.add(b.generateButton("Finn studiepoeng for student", Buttons.HEL));
+			søk.add(b.generateButton("Finn karakterfordeling", Buttons.HEL));
+		}
+
+		vis(søk);
+	}
 	
 	//Metode som sjekker om alle tekstfelt i et panel inneholder godkjent tekst til lagring
 	public boolean inputGodkjent(JPanel aktivt){
@@ -568,8 +570,6 @@ public class Vindu extends JFrame implements ActionListener {
 			return godkjent;
 		}
 
-	//Lytterklasser
-	
 	//Lytterklasse som tar imot events fra diverse knapper som utfører mindre oppgaver
 	public void actionPerformed(ActionEvent e) {
 		
@@ -583,7 +583,8 @@ public class Vindu extends JFrame implements ActionListener {
 		
 		//Nullstiller displayet
 		display();
-		setText(""); 
+		setText("");
+		overskrift.setVisible(true);
 
 		//Åpner registreringspaneler for de ulike objektene
 		if (source == nystudent) {
@@ -619,7 +620,7 @@ public class Vindu extends JFrame implements ActionListener {
 
 		//Viser avansert søk-panelet
 		if (source == visAvansert || source == tilbake){
-			avansert(type = Vindu.VELGSØK);
+			avansert(type = VELGSØK);
 		}
 
 		//Legger til et fag i et studieprogram
@@ -643,6 +644,7 @@ public class Vindu extends JFrame implements ActionListener {
 			//Nullstiller displayet
 			display();
 			setText(""); 
+			vis();
 			
 			try{
 				if (e.getSource() == søkefelt || e.getSource() == søkeknapp) {
@@ -658,20 +660,21 @@ public class Vindu extends JFrame implements ActionListener {
 					//Sjekker at søket ikke returnerte null eller tom list, sjekker så hva slags objekt første element i listen er,
 					//og viser et displayvindu av riktig type
 					if(!(resultat == null || resultat.isEmpty())){
-
-						if(resultat.get(FØRSTE) instanceof Student){
+						Object o = resultat.get(FØRSTE); //Bruker første objekt til klassesjekk
+						
+						if(o instanceof Student){
 							JList<Student> listen = studentboks.listify((ArrayList<Student>) resultat);
 							vis(studentboks.visResultat(listen));
 
-						} else if(resultat.get(FØRSTE) instanceof Laerer){
+						} else if(o instanceof Laerer){
 							JList<Laerer> listen = laererboks.listify((ArrayList<Laerer>) resultat);
 							vis(laererboks.visResultat(listen));
 
-						} else if(resultat.get(FØRSTE) instanceof Fag){
+						} else if(o instanceof Fag){
 							JList<Fag> listen = fagboks.listify((ArrayList<Fag>) resultat);
 							vis(fagboks.visResultat(listen));
 
-						} else if(resultat.get(FØRSTE) instanceof Studieprogram){
+						} else if(o instanceof Studieprogram){
 							JList<Studieprogram> listen = studieboks.listify((ArrayList<Studieprogram>) resultat);
 							vis(studieboks.visResultat(listen));
 						}
@@ -683,153 +686,179 @@ public class Vindu extends JFrame implements ActionListener {
 					}
 				} 
 
+				//Her utføres de avanserte søkene
 				else if(e.getSource() == avansert){
-					String inn = innÅr.getText();
-					String ut = utÅr.getText();
-					String nr = studNr.getText();
-					String d = innDato.getText();
+					//Tar imot verdier fra tekstfeltene og lager variable for oversiktlighet
+					String inn	= innÅr.getText();
+					String ut 	= utÅr.getText();
+					String nr	= studNr.getText();
+					String d 	= innDato.getText();
 
-					switch(type){
-					case Vindu.STUDENTFAG:
-						JList<Student> listen = null;
+					ArrayList<Student> studs = null; //Listen som skal vises hvis det søkes på student
+
+					switch(type){ //Sjekker hvilket søk som er utført
+					
+					case STUDENTFAG: //Viser studenter som har et gitt fag
+						Fag f = (Fag)fagBox.getSelectedItem();
+						
+						//Hvis det fylles inn år, så vises studenter som har faget og startet dette året, ellers vises alle som har faget
 						if(inn.matches(årRegex))
-							listen = studentboks.listify(skolen.findStudentMedFagByÅr(((Fag)fagBox.getSelectedItem()).getFagkode(),Integer.parseInt(inn)));
+							studs = skolen.findStudentMedFagByÅr(f.getFagkode(),Integer.parseInt(inn));
 						else
-							listen = studentboks.listify(skolen.findStudentMedFag(((Fag)fagBox.getSelectedItem()).getFagkode()));
-						vis(studentboks.visResultat(listen));
+							studs = skolen.findStudentMedFag(f.getFagkode());
+						
 						break;
 						
-					case Vindu.STUDENTPERIODE:
-						listen = null;
-
+					case STUDENTPERIODE: //Viser studenter som har vært studenter i en gitt periode
+						
+						//Her søkes det enten på tidsrommet mellom inn og ut, fra inn og frem, eller frem til ut, avhengig av hva som er fylt ut
 						if(inn.matches(årRegex)){
-							if(ut.matches(årRegex))
-								listen = studentboks.listify(skolen.findStudentByPeriode(inn,ut));
-							else
-								listen = studentboks.listify(skolen.findStudentByStart(inn));
-						} else
-							listen = studentboks.listify(skolen.findStudentBySlutt(ut));
-						vis(studentboks.visResultat(listen));
+							if(ut.matches(årRegex)) //Begge felter fylt ut
+								studs = skolen.findStudentByPeriode(inn,ut);
+							else					//Kun startdato fylt ut
+								studs = skolen.findStudentByStart(inn);
+						} 
+						else						//Kun sluttdato fylt ut
+							studs = skolen.findStudentBySlutt(ut);
+						
 						break;
 						
-					case Vindu.STUDENTPROGRAM:
-						listen = null;
+					case STUDENTPROGRAM: //Viser studenter i et gitt studieprogram
 						Studieprogram sp = (Studieprogram)progBox.getSelectedItem();
+						
+						//Søker på studieprogram, med år hvis det er fylt ut
 						if(inn.matches(årRegex)){
-							listen = studentboks.listify(skolen.findStudentByStudieprogramByStart(sp, Integer.parseInt(inn)));
-						} else
-							listen = studentboks.listify(skolen.findStudentsByStudieprogram(sp.getNavn()));
-						if(listen != null)
-							vis(studentboks.visResultat(listen));
+							studs = skolen.findStudentByStudieprogramByStart(sp, Integer.parseInt(inn));
+						} 
+						else
+							studs = skolen.findStudentsByStudieprogram(sp.getNavn());
+				
 						break;
 						
-					case Vindu.POENGSTUDENT:
+					case POENGSTUDENT: //Viser studiepoeng en student har produsert
 						int poeng = 0;
 						Student s = skolen.getStudentene().findStudentByStudentNr(nr);
+						
+						//Her kan det søkes på tidsrom mellom inn og ut, fra inn og frem, frem til ut, eller hele students studietid
 						if(inn.matches(årRegex)){
-							if(ut.matches(årRegex))
+							if(ut.matches(årRegex)) //Begge felter fylt ut
 								poeng = skolen.findStudiepoengForStudIPeriode(s, inn, ut);
-							else
-								poeng = skolen.findStudiepoengForStudIPeriode(s, inn, Vindu.FREMTID);
-						} else if(ut.matches(årRegex))
-							poeng = skolen.findStudiepoengForStudIPeriode(s, Vindu.FORTID, ut);
-						else
-							poeng = skolen.findStudiepoengForStudIPeriode(s, Vindu.FORTID, Vindu.FREMTID);
+							else					//Bare inn fylt ut
+								poeng = skolen.findStudiepoengForStudIPeriode(s, inn, FREMTID);
+						} 
+						else if(ut.matches(årRegex))//Bare ut fylt ut
+							poeng = skolen.findStudiepoengForStudIPeriode(s, FORTID, ut);
+						else						//Ingen felter fylt ut
+							poeng = skolen.findStudiepoengForStudIPeriode(s, FORTID, FREMTID);
+						
 						setText("Studiepoeng for " + s.getfNavn() + " " + s.geteNavn() + ": " + poeng);
 						break;
 						
-					case Vindu.KARAKTER:
-						Fag f = (Fag)fagBox.getSelectedItem();
+					case KARAKTER: //Viser karakterdistribusjon og strykprosent for et fag, enten for et gitt år, eller en gitt eksamensdato
+						f = (Fag)fagBox.getSelectedItem();
 						int[] karakterer = null;
-						if(d.matches(dateRegex)){
-							karakterer = skolen.findKarakterDistribusjon(f,f.findEksamenByDate(dateHandler.dateFixer(d, null)));
-							double stryk = skolen.findStrykProsent(f, dateHandler.dateFixer(d, null).YEAR );
+						
+						if(d.matches(dateRegex)){ //Hvis både dato og år er fylt inn, prioriteres dato
+							karakterer = skolen.findKarakterDistribusjon(f,f.findEksamenByDate(dateHandler.dateFixer(d, null))); //Finner karakterdistribusjon
+							double stryk = skolen.findStrykProsent(f, 2010 ); //Finner strykprosent
 							displayKarakterer(karakterer, stryk);
-						} else if (inn.matches(årRegex)){
+						} 
+						else if (inn.matches(årRegex)){
 							karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(inn));
 							double stryk = skolen.findStrykProsent(f, Integer.parseInt(inn) );
-							displayKarakterer(karakterer, stryk);
-						} else
-							//overskrift.setText("Fyll inn nødvendige felter");
-							setText("Fyll inn nødvendige felter");
+							if(karakterer != null)
+								displayKarakterer(karakterer, stryk);
+						} 
+						else
+							setText("Fyll inn nødvendige felter - ikke valgt");
 						break;
 						
 					default:
-						avansert(Vindu.VELGSØK);
+						avansert(VELGSØK);
 					}
+					
+					if(studs != null) //Viser studentlista
+						vis(studentboks.visResultat(studentboks.listify(studs)));
 
 				} else {
 
 					JButton knapp = (JButton)e.getSource();
-
+					
+					//Velger hvilket søk som skal utføres og hvilke felter som skal vises
 					switch(knapp.getText()){
 					case "Finn studenter med fag":
-						type = Vindu.STUDENTFAG;
+						type = STUDENTFAG;
 						break;
 					case "Finn studenter i periode":
-						type = Vindu.STUDENTPERIODE;
+						type = STUDENTPERIODE;
 						break;
 					case "Finn studenter i studieprogram":
-						type = Vindu.STUDENTPROGRAM;				
+						type = STUDENTPROGRAM;				
 						break;
 					case "Finn studiepoeng for student":
-						type = Vindu.POENGSTUDENT;				
+						type = POENGSTUDENT;				
 						break;
 					case "Finn karakterfordeling":
-						type = Vindu.KARAKTER;			
+						type = KARAKTER;			
 						break;
 					default:
-						type = Vindu.VELGSØK;
+						type = VELGSØK;
 					}
 					avansert(type);
 				}
 			}catch (NumberFormatException nfe){
-				setText("Fyll ut all nødvendige felter");
+				setText("Fyll ut all nødvendige felter numberformat");
 			}catch (NullPointerException nfe){
-				setText("Fyll ut all nødvendige felter");
+				setText("Fyll ut all nødvendige felter nullpointer");
 			}
 		}
 	}
+	
+	//Klasse for lagring av objekter (Student, lærer, fag, studieprogram)
 	private class lagrelytter implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-
-			JPanel aktivtPanel = (JPanel)innhold.getComponent(ANDRE);
-			if(!inputGodkjent(aktivtPanel)){
+			
+			//Velger det aktive panelet (Andre fordi overskriften er første komponent). Dette gir da også hva slags objekt som skal lagres
+			JPanel aktivtPanel = (JPanel)innhold.getComponent(ANDRE);  
+			
+			if(!inputGodkjent(aktivtPanel)){ //Avbryter oprasjonene hvis ikke alle felter har godkjent input
 				setText("Fyll inn nødvendige felter");
 				return;
 			}
 
-			if (aktivtPanel.equals(stud)) { //Sjekker hvilket panel som ligger i innhold-panelet (Andre fordi overskriften er første komponent
+			if (aktivtPanel.equals(stud)) { //Sjekker om det er student som skal lagres
 
 				int nr = Integer.parseInt(tlf.getText());
+				
 				//setter dato i følge input.
 				String dateString = innDato.getText();
 				GregorianCalendar dato = dateHandler.dateFixer(dateString, null);
 
-				//oppretter Studentobjektet.
+				//oppretter Studentobjektet ut fra inputfeltene
 				Student s = skolen.getStudentene().addStudent(navn.getText(), 
 						epost.getText(), 
 						nr,
 						adresse.getText(), 
 						dato);
-				if(progBox.getSelectedIndex() != BLANK)
+				if(progBox.getSelectedIndex() != BLANK) //Lagrer studieprogram hvis det er valgt
 					s.setStudieprogram((Studieprogram)progBox.getSelectedItem());
-				setText("Lagret student:\n\n" + s.fullString());
+				
+				setText("Lagret student:\n\n" + s.fullString()); //Viser info om lagret student i displayet
 			} 
 
-			else if (aktivtPanel.equals(lær)) {
+			else if (aktivtPanel.equals(lær)) { //Sjekker om det er lærer som skal lagres
 				int nr = Integer.parseInt(tlf.getText());
 
 				Laerer l = skolen.getLærerne().addLærer(navn.getText(), 
 						epost.getText(), 
 						nr,
 						kontorNr.getText());
+				
 				setText("Lagret lærer:\n\n" + l.fullString());
-				lærerBox.addItem(l);
-
+				lærerBox.addItem(l); //Sørger for at den nye læreren kan velges ved lagring av fag
 			} 
 
-			else if (aktivtPanel.equals(fag)) {
+			else if (aktivtPanel.equals(fag)) { //Sjekker om det er fag som skal lagres
 				int poeng = Integer.parseInt(studiepoeng.getText());
 
 				Fag f = skolen.getFagene().addFag(tittel.getText(), 
@@ -840,19 +869,22 @@ public class Vindu extends JFrame implements ActionListener {
 						(Laerer)lærerBox.getSelectedItem());
 
 				setText("Lagret fag:\n\n" + f.fullString());
-				fagBox.addItem(f);
+				fagBox.addItem(f); //Sørger for at det nye faget kan velges ved lagring av studieprogram
 			} 
 
-			else if (aktivtPanel.equals(studprog)) {
+			else if (aktivtPanel.equals(studprog)) { //Sjekker om det er studieprogram som skal lagres
 				Studieprogram sp = skolen.getStudieprogrammene().addStudProg(tittel.getText());
 				setText("Lagret studieprogram:\n\n" + sp.fullString());
-				progBox.addItem(sp);
+				
+				progBox.addItem(sp); //Sørger for at det nye studieprogrammet kan velges ved lagring av student
+				
 				fagBox.setVisible(true);
 				leggtilfag.setVisible(true);
 			}
 		}
 	}
 
+	//Modifiserer messagedialog for brukerveiledning
 	private class limitedOptionPane extends JOptionPane{
 
 		public limitedOptionPane(){

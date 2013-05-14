@@ -141,11 +141,8 @@ public class Fag implements Serializable{
 	public int[] findKarakterDistribusjon(Eksamen e){
 		int[] karakterene = new int[6];
 		if (eksamener.contains(e)) {
-			for (int i : karakterene) {
-				i = 0;
-			}
 			if (e == null)
-				return karakterene;
+				return null;
 			List<EksamensDeltaker> deltakerne = e.getDeltakere();
 			for (EksamensDeltaker ed : deltakerne) {
 				// legger bare til en i arrayen som represeenterer antall av
