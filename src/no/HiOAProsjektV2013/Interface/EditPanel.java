@@ -76,20 +76,20 @@ public class EditPanel extends JPanel{
 
 		//Sjekker hva slags objekt som er sendt med, og oppretter korrekt panel
 		if(o instanceof Student)
-			add(fyllVindu((Student) o));		
+			add(fyllPanel((Student) o));		
 		else if(o instanceof Laerer)
-			add(fyllVindu((Laerer) o));		
+			add(fyllPanel((Laerer) o));		
 		else if(o instanceof Fag)
-			add(fyllVindu((Fag) o));	
+			add(fyllPanel((Fag) o));	
 		else if(o instanceof Studieprogram)
-			add(fyllVindu((Studieprogram) o));	
+			add(fyllPanel((Studieprogram) o));	
 		setPreferredSize(venstreSize);
 		setVisible(true);
 		vindu.display(this);
 	}
 
 	//Overloadet "konstruktør" som fyller panelet med relevante elementer for å vise og endre egenskaper ved Studenten og de andre objektene
-	public Component fyllVindu(Student s){
+	private Component fyllPanel(Student s){
 		aktiv = s;
 
 		//Finner alle nåværende verdier ved studenten og sender disse til tekstfeltene for visning
@@ -152,10 +152,10 @@ public class EditPanel extends JPanel{
 		button.generateButton("Lagre", panelet, Buttons.HEL);						//Knapp for å lagre alle endringer som er gjort
 
 		return panelet;
-	} //End of fyllVindu(Student)
+	} //End of fyllPanel(Student)
 
-	//Nokså lik metode som fyllVindu(Student), men med færre, og litt andre felter
-	public Component fyllVindu(Laerer l){ 
+	//Nokså lik metode som fyllPanel(Student), men med færre, og litt andre felter
+	private Component fyllPanel(Laerer l){ 
 		aktiv = l;
 
 		String n = l.getfNavn() +" "+ l.geteNavn();
@@ -177,10 +177,10 @@ public class EditPanel extends JPanel{
 		button.generateButton("Lagre", panelet, Buttons.HEL);
 
 		return panelet;
-	}  //End of fyllVindu(Laerer)
+	}  //End of fyllPanel(Laerer)
 
-	//Nokså lik metode som fyllVindu(Student), men med andre felter og funksjoner
-	public Component fyllVindu(Fag f){ 
+	//Nokså lik metode som fyllPanel(Student), men med andre felter og funksjoner
+	private Component fyllPanel(Fag f){ 
 		aktiv = f;
 
 		String n = f.getNavn();
@@ -191,7 +191,7 @@ public class EditPanel extends JPanel{
 		navn	 		= new InputFelt(n, InputFelt.LANG, false);
 		fagkode	 		= new InputFelt(fk, InputFelt.LANG, false);
 		beskrivelse		= new InputFelt(b, InputFelt.LANG);
-		studiepoeng		= new InputFelt(""+sp, InputFelt.LANG, Vindu.sPoengRegex);
+		studiepoeng		= new InputFelt(""+sp, InputFelt.LANG, false);
 		eksamensdato 	= new InputFelt("dag/mnd/år", InputFelt.LANG, Vindu.dateRegex);
 
 		//Oppretter aktuelle kombobokser
@@ -226,10 +226,10 @@ public class EditPanel extends JPanel{
 		button.generateButton("Lagre", panelet, Buttons.HEL);
 
 		return panelet;
-	} //End of fyllVindu(Fag)
+	} //End of fyllPanel(Fag)
 
-	//Nokså lik metode som fyllVindu(Student), men med færre, og litt andre felter
-	public Component fyllVindu(Studieprogram sp){
+	//Nokså lik metode som fyllPanel(Student), men med færre, og litt andre felter
+	private Component fyllPanel(Studieprogram sp){
 		aktiv = sp;
 
 		String n = sp.getNavn();
@@ -263,14 +263,13 @@ public class EditPanel extends JPanel{
 
 		button.generateButton("Lagre", panelet, Buttons.HEL);
 		return panelet;
-	} //End of fyllVindu(Studieprogram)
-
+	} //End of fyllPanel(Studieprogram)
 
 	/*Metoder som oppretter paneler som kalles på fra redigeringspanelene. Neste nivå i hierarkiet. 
 	Her vises arbeidskrav, eksamener og lignende, og kan redigeres*/
 
 	//Oppretter panel for å redigere arbeidskrav for alle fagene en student tar
-	public JPanel fagPanel(){ 
+	private JPanel fagPanel(){ 
 		visepanel = new JPanel();
 		visepanel.setPreferredSize(høyreSize);
 
@@ -298,7 +297,7 @@ public class EditPanel extends JPanel{
 		return visepanel;
 	}
 	//Oppretter panel for å redigere arbeidskravene til et fag
-	public JPanel kravPanel(Fag f){
+	private JPanel kravPanel(Fag f){
 		visepanel = new JPanel();
 		visepanel.setPreferredSize(høyreSize);
 
@@ -328,7 +327,7 @@ public class EditPanel extends JPanel{
 		return visepanel;
 	}
 	//Oppretter panel for visning og redigering av eksamener i et bestemt fag
-	public JPanel eksamensPanel(){
+	private JPanel eksamensPanel(){
 		visepanel = new JPanel();
 		visepanel.setPreferredSize((høyreSize));
 
@@ -359,10 +358,8 @@ public class EditPanel extends JPanel{
 
 		return visepanel;
 	} //End of eksamensPanel
-
-
 	//Oppretter panel for visning av eksamener for en bestemt student
-	public JPanel eksamensPanel(Student s){
+	private JPanel eksamensPanel(Student s){
 		visepanel = new JPanel();
 		visepanel.setPreferredSize((høyreSize));
 
@@ -382,7 +379,7 @@ public class EditPanel extends JPanel{
 		return visepanel;
 	}
 	//Oppretter og viser en tabell med deltakere og resultater for en bestemt eksamen
-	public void visEksamen(Eksamen e){
+	private void visEksamen(Eksamen e){
 		faginfo.removeAll();
 		faginfo.setBorder(BorderFactory.createTitledBorder("Eksamen for " + ((Fag)aktiv).getNavn()));
 
@@ -396,7 +393,7 @@ public class EditPanel extends JPanel{
 		faginfo.updateUI();
 	}
 	//Fyller et panel med arbeidskrav for en student, hvis han har noen fag
-	public void visFag(){
+	private void visFag(){
 		faginfo.removeAll();
 		if(studentFag == null || studentFag.getSelectedIndex() == Vindu.BLANK)
 			faginfo.setBorder(BorderFactory.createTitledBorder("Ingen fag"));
@@ -406,7 +403,7 @@ public class EditPanel extends JPanel{
 		faginfo.updateUI();
 	}
 	//Fyller et panel med sjekkbokser for alle arbeidskrav for et fag 
-	public void visFag(Fag f){
+	private void visFag(Fag f){
 		faginfo.removeAll();
 		faginfo.setBorder(BorderFactory.createTitledBorder(f.getNavn()));
 
@@ -427,7 +424,6 @@ public class EditPanel extends JPanel{
 		faginfo.updateUI();
 	}
 
-
 	//Tabellmodell som setter formatet for tabellen som viser eksamener, og fyller denne
 	private class Tabellmodell extends AbstractTableModel{
 
@@ -436,11 +432,11 @@ public class EditPanel extends JPanel{
 		private String[] kolonnenavn = {"Fag", "Dato", "StudentNr", "Møtt", "Karakter"};
 		private Object[][] celler = {{"", "", "", "", ""}};	//Tom tabell
 
-		public Tabellmodell(Eksamen e){ //Fyller tabellen med alle deltakere på en eksamen
+		private Tabellmodell(Eksamen e){ 	//Fyller tabellen med alle deltakere på en eksamen
 			if(!e.getDeltakere().isEmpty())
 				fyllTabell(e.getDeltakere().size(), e.getDeltakere());
 		}
-		public Tabellmodell(Student s){	//Fyller tabellen med alle eksamener for en student
+		private Tabellmodell(Student s){	//Fyller tabellen med alle eksamener for en student
 			if(!s.getEksamener().isEmpty())
 				fyllTabell(s.getEksamener().size(), s.getEksamener());
 		}
@@ -568,37 +564,37 @@ public class EditPanel extends JPanel{
 
 			//Metoder for å legge til fag eller eksamen avhengig av hva slags panel som er åpent
 			if (e.getSource() == leggtil) {
-				try{
-					if(aktiv instanceof Student){ //Hvis vi er i et studentpanel, skal det legges til et fag med arbeidskrav til studenten
-						Fag f = (Fag)velgFag.getSelectedItem();
-						Student s = (Student)aktiv;
-						s.addFag(f);
-						vindu.cover(fagPanel()); //Viser et fagpanel med det nye faget og dets arbeidskrav
-						studentFag.setSelectedItem(f);
-						visFag(f);
-					}
-					else if(aktiv instanceof Studieprogram){ //Hvis vi er i et studieprogrampanel, skal det legges til et fag til programmet
-						Fag f = (Fag)velgFag.getSelectedItem();
-						if(!((Studieprogram) aktiv).harFaget(f)) //Oppdaterer faglisten, bare hvis faget ikke finnes i listen fra før
-							((DefaultListModel<Fag>) fagListe.getModel()).addElement(f);
-						((Studieprogram) aktiv).addFag(f);
-					}
-					else if(aktiv instanceof Fag){ //Hvis vi er i et fagpanel, skal det legges til en eksamen til faget
+				if(aktiv instanceof Student){ //Hvis vi er i et studentpanel, skal det legges til et fag med arbeidskrav til studenten
+					Fag f = (Fag)velgFag.getSelectedItem();
+					Student s = (Student)aktiv;
+					s.addFag(f);
+					vindu.cover(fagPanel()); //Viser et fagpanel med det nye faget og dets arbeidskrav
+					studentFag.setSelectedItem(f);
+					visFag(f);
+				}
+				else if(aktiv instanceof Studieprogram){ //Hvis vi er i et studieprogrampanel, skal det legges til et fag til programmet
+					Fag f = (Fag)velgFag.getSelectedItem();
+					Studieprogram sp = (Studieprogram) aktiv;
+					if(!sp.harFaget(f)) //Oppdaterer faglisten, bare hvis faget ikke finnes i listen fra før
+						((DefaultListModel<Fag>) fagListe.getModel()).addElement(f);
+					sp.addFag(f);
+				}
+				else if(aktiv instanceof Fag){ //Hvis vi er i et fagpanel, skal det legges til en eksamen til faget
 
-						//Oppretter et kalenderobjekt utfra teksten i eksamensdatofeltet
-						GregorianCalendar dato = dateHandler.dateFixer(eksamensdato.getText(), null);  
+					if(!eksamensdato.matcher()) //Hvis eksamensdato er på feil format, blir det ikke lagt til noen eksamen
+						return;
 
-						//Legger det nye eksamensobjektet til faget
-						Eksamen eks = new Eksamen(dato, (Fag)aktiv);
-						((Fag)aktiv).addEksamen(eks);
-						eksamensdato.setText("Eksamen lagret");
+					//Oppretter et kalenderobjekt utfra teksten i eksamensdatofeltet
+					GregorianCalendar dato = dateHandler.dateFixer(eksamensdato.getText(), null);  
 
-						vindu.cover(eksamensPanel());	//Viser et eksamenspanel med den nye eksamenen
-						velgEksamen.setSelectedItem(eks);
-						visEksamen(eks);
-					}
-				} catch (NullPointerException npe){ //Bruker kun en enkel try catch fordi inputfelt viser de korrekte feilmeldingene automatisk
-					System.out.println("Feil i datoinput");
+					//Legger det nye eksamensobjektet til faget
+					Eksamen eks = new Eksamen(dato, (Fag)aktiv);
+					((Fag)aktiv).addEksamen(eks);
+					eksamensdato.setText("Eksamen lagret");
+
+					vindu.cover(eksamensPanel());	//Viser et eksamenspanel med den nye eksamenen
+					velgEksamen.setSelectedItem(eks);
+					visEksamen(eks);
 				}
 
 				//Metoder for å fjerne fag eller arbeidskrav avhengig av hva slags panel som er åpent
@@ -669,51 +665,58 @@ public class EditPanel extends JPanel{
 				vindu.display();
 				vindu.vis();
 
-				try{
-					if(aktiv instanceof Student){
-						Student s = (Student) aktiv;
 
+				if(aktiv instanceof Student){
+					Student s = (Student) aktiv;
+
+					//If-setninger som sjekker input og endrer de verdiene som har fått rett input
+					if(slutt.matcher()){
 						GregorianCalendar dato = dateHandler.dateFixer(slutt.getText(), null);
-						if(dato != null) //Dato blir null hvis inputteksten ikke matcher 
-							s.setSlutt(dato);
-
+						s.setSlutt(dato);
+					}							
+					if(tlf.matcher()){
 						int nr = Integer.parseInt(tlf.getText());
-
-						s.setAdresse(adresse.getText());
 						s.setTlf(nr);
+					}
+					if(epost.matcher())
 						s.setEpost(epost.getText());
-						if(velgProg.getSelectedIndex() != Vindu.BLANK)
-							s.setStudieprogram((Studieprogram)velgProg.getSelectedItem());
 
-						vindu.setText(s.fullString());
+					s.setAdresse(adresse.getText());
 
-					} else if(aktiv instanceof Laerer){
-						Laerer l = (Laerer) aktiv;
+					if(velgProg.getSelectedIndex() != Vindu.BLANK)
+						s.setStudieprogram((Studieprogram)velgProg.getSelectedItem());
 
+					vindu.setText(s.fullString());
+
+				} else if(aktiv instanceof Laerer){
+					Laerer l = (Laerer) aktiv;
+
+					//If-setninger som sjekker input og endrer de verdiene som har fått rett input
+					if(tlf.matcher()){
 						int nr = Integer.parseInt(tlf.getText());
-
 						l.setTlf(nr);
+					}
+					if(epost.matcher())
 						l.setEpost(epost.getText());
+					if(kontorNr.matcher())
 						l.setKontor(kontorNr.getText());
 
-						vindu.setText(l.fullString());
+					vindu.setText(l.fullString());
 
-					} else if(aktiv instanceof Fag){
-						Fag f = (Fag) aktiv;
+				} else if(aktiv instanceof Fag){
+					Fag f = (Fag) aktiv;
 
-						f.setBeskrivelse(beskrivelse.getText());
-						f.setVurderingsform(vurderingBox.getSelectedItem().toString());
-						f.setLærer((Laerer)velgLærer.getSelectedItem());
-						vindu.setText(f.fullString());
+					f.setBeskrivelse(beskrivelse.getText());
+					f.setVurderingsform((String)vurderingBox.getSelectedItem());
+					f.setLærer((Laerer)velgLærer.getSelectedItem());
+					vindu.setText(f.fullString());
 
-					} else if(aktiv instanceof Studieprogram){
-						Studieprogram sp = (Studieprogram) aktiv;
+				} else if(aktiv instanceof Studieprogram){
+					Studieprogram sp = (Studieprogram) aktiv;
+					if(navn.matcher())
 						sp.setNavn(navn.getText());
-						vindu.setText(sp.fullString());
-					}
-				}catch (NumberFormatException nfe){
-					System.out.println("Feil Nummerformat");
-				}				
+					vindu.setText(sp.fullString());
+				}		
 			}
 		}
 	}

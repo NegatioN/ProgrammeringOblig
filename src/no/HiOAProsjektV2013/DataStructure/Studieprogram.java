@@ -77,7 +77,7 @@ public class Studieprogram implements Serializable{
 	}
 	
 	public String fullString() {
-		String stringen = "Navn: " + navn +  "\nFag:";
+		String stringen = "Navn: " + navn +  "\n\nFag:";
 		if(!fagIProgrammet.isEmpty()){
 			for (Fag f : fagIProgrammet) {
 				stringen += "\n" + f.getFagkode();

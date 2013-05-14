@@ -41,8 +41,8 @@ import no.HiOAProsjektV2013.Main.DateHandler;
 import no.HiOAProsjektV2013.Main.ScriptClass;
 
 /*
- * Hovedvinduet i programmet. Inneholder mesteparten av interfacen.
- * LE, skriv litt mer her xD
+ * Hovedvinduet i programmet. Inneholder mesteparten av interfacen. Oppretter og fyller ut forskjellige paneler som er konstante i vinduet,
+ * samt paneler for oppretting av nye studenter, fag osv. 
  */
 public class Vindu extends JFrame implements ActionListener {
 
@@ -57,7 +57,7 @@ public class Vindu extends JFrame implements ActionListener {
 	public static final String studentNrRegex = "s\\d{6}";
 	public static final String årRegex = "\\d{4}";
 	public static final String mobRegex = "\\d{8}";
-	public static final String mailRegex = "\\S+@\\S+.\\S+";
+	public static final String mailRegex = "\\S+@\\S+[.]\\S+";
 	public static final String navnRegex = "(?:([a-zA-ZæøåÆØÅ']+\\s+[a-zA-ZæøåÆØÅ']+\\s*)){1}(?:([a-zA-ZæøåÆØÅ']+\\s*))*";
 	public static final String tittelRegex = "(\\D+)||(\\w+\\s\\S+)";
 	public static final String dateRegex = "(\\d{1,2}\\W\\d{1,2}\\W((\\d{4})||(\\d{2})))";
@@ -73,20 +73,19 @@ public class Vindu extends JFrame implements ActionListener {
 	private ListeBoks<Laerer> laererboks;
 	private ListeBoks<Fag> fagboks;
 	private ListeBoks<Studieprogram> studieboks;
+	private JComboBox<Fag> fagBox;
+	private JComboBox<Laerer> lærerBox;
+	private JComboBox<Studieprogram> progBox;
+	private JComboBox<String> vurderingBox;
 	private JTextArea info;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
 	vislærer, visfag, visstudieprog, lagre, leggtilfag, søkeknapp, avansert, visAvansert, tilbake;
 	private JRadioButton studentCheck, lærerCheck, fagCheck, studieCheck;
 	private InputFelt navn, tittel, epost, tlf, adresse, innDato, utDato, kontorNr, fagkode,
-	beskrivelse, studiepoeng, innÅr, utÅr, studNr;
-	private JTextField søkefelt;
+	beskrivelse, studiepoeng, innÅr, utÅr, studNr, søkefelt;
 	private JPanel rammeverk, innhold, stud, lær, fag, studprog, display;
 	public static Dimension innholdSize = new Dimension(300,500), toppSize = new Dimension(900,50), søkSize = new Dimension(170,500), totalSize = new Dimension(900,500);
 	private Border ramme = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
-	private JComboBox<Fag> fagBox;
-	private JComboBox<Laerer> lærerBox;
-	private JComboBox<Studieprogram> progBox;
-	private JComboBox<String> vurderingBox;
 	private int type;
 	private JLabel overskrift;
 	//endre
@@ -106,22 +105,24 @@ public class Vindu extends JFrame implements ActionListener {
 		//Oppretter vinduslytter
 		vl = new VinduLytter(this);
 
+		//Oppretter listeboks for visning av søkeresultat
 		studentboks = new ListeBoks<>(this);
-		laererboks = new ListeBoks<>(this);
-		fagboks = new ListeBoks<>(this);
-		studieboks = new ListeBoks<>(this);
+		laererboks	= new ListeBoks<>(this);
+		fagboks 	= new ListeBoks<>(this);
+		studieboks 	= new ListeBoks<>(this);
 
 		//script for å generere fag, studenter og lærere
 		//kommenter den ut etter 1 generate
-		//				ScriptClass sc = new ScriptClass(skolen);
+		//ScriptClass sc = new ScriptClass(skolen);
 
+		//Panel som inneholder alle de andre panelene og fordeler dem i vinduet
 		rammeverk = new JPanel(new BorderLayout());
 		add(rammeverk);
-		fyllRamme();
+		fyllRamme(); //Fyller rammeverket
 
-		//lager dateHandler
+		//DateHandler for håndtering av datoinput
 		dateHandler = new DateHandler();
-		//setter inn meny
+		//Setter inn toppmeny
 		populateMenu();
 
 		pack();
@@ -134,9 +135,105 @@ public class Vindu extends JFrame implements ActionListener {
 		setLocationRelativeTo(null);
 		setMinimumSize(totalSize);
 		setResizable(true);
-
 	}
-	
+
+	//Oppretter og legger inn elementer til vinduet
+	public void fyllRamme() {
+
+			//Oppretter objekter til Fast ramme
+			JPanel leggtil = new JPanel();
+			JPanel visning = new JPanel();
+			display = new JPanel();
+			leggtil.setPreferredSize(toppSize);
+			visning.setPreferredSize(søkSize);
+			display.setPreferredSize(innholdSize);
+			leggtil.setBorder(ramme);
+			visning.setBorder(ramme);
+			display.setBorder(ramme);
+
+			søkefelt		= new InputFelt("Søk", InputFelt.KORT, new søkelytter());
+			visning.add(søkefelt);
+
+			søkeknapp 		= buttonGenerator.generateButton("Søk", visning, Buttons.HALV, new søkelytter());
+			generateButtonGroup(visning);
+			visAvansert 	= buttonGenerator.generateButton("Avansert søk", visning, Buttons.HALV);
+			visning.add(Box.createRigidArea(Buttons.HALV));
+
+			nystudent 		= buttonGenerator.generateButton("Legg til student", leggtil, Buttons.HALV);
+			nylærer 		= buttonGenerator.generateButton("Legg til lærer", leggtil, Buttons.HALV);
+			nyttfag 		= buttonGenerator.generateButton("Legg til fag", leggtil, Buttons.HALV);
+			nyttstudieprog 	= buttonGenerator.generateButton("Legg til studieprogram", leggtil, Buttons.HEL);
+
+			visstudent 		= buttonGenerator.generateButton("Vis studenter", visning, Buttons.HALV);
+			vislærer 		= buttonGenerator.generateButton("Vis lærere", visning, Buttons.HALV);
+			visfag 			= buttonGenerator.generateButton("Vis fag", visning, Buttons.HALV);
+			visstudieprog 	= buttonGenerator.generateButton("Vis studieprogram", visning, Buttons.HALV);
+
+			info = new JTextArea(23, 23);
+			info.setBorder(BorderFactory.createLoweredBevelBorder());
+			info.setEditable(false);
+			info.setLineWrap(true);
+			setText("\n\n\n\n\n Velkommen til vår studieadmininistrasjon!\n" +
+					"                       Her er alt mulig!");
+
+			display.add(info);
+			rammeverk.add(display, BorderLayout.WEST);
+			rammeverk.add(leggtil, BorderLayout.NORTH);
+			rammeverk.add(visning, BorderLayout.EAST);
+
+			//Oppretter objekter til registreringsfelter
+			overskrift = new JLabel();
+			overskrift.setFont(new Font("Arial", Font.BOLD, TITTELSIZE));
+
+			navn	 		= new InputFelt("Navn", InputFelt.LANG, navnRegex);
+			tittel			= new InputFelt("Navn", InputFelt.LANG, tittelRegex);
+			epost	 		= new InputFelt("E-post", InputFelt.LANG, mailRegex);
+			tlf		 		= new InputFelt("Telefon", InputFelt.LANG, mobRegex);
+			adresse			= new InputFelt("Adresse", InputFelt.LANG);
+			innDato			= new InputFelt("Startdato", InputFelt.LANG, dateRegex);
+			utDato			= new InputFelt("Sluttdato", InputFelt.LANG, dateRegex);
+			kontorNr		= new InputFelt("Kontornummer", InputFelt.LANG);
+			fagkode			= new InputFelt("Fagkode", InputFelt.LANG, fagkodeRegex);
+			beskrivelse		= new InputFelt("Beskrivelse", InputFelt.LANG);
+			studiepoeng		= new InputFelt("Studiepoeng", InputFelt.LANG,  sPoengRegex);
+			innÅr 			= new InputFelt("Startår", InputFelt.LANG,  årRegex);
+			utÅr			= new InputFelt("Sluttår", InputFelt.LANG,  årRegex);
+			studNr 			= new InputFelt("StudentNr", InputFelt.LANG,  studentNrRegex);
+
+			lagre 			= buttonGenerator.generateButton("Lagre", Buttons.HEL, new lagrelytter());
+			leggtilfag 		= buttonGenerator.generateButton("Legg til fag", Buttons.HEL);
+			avansert 		= buttonGenerator.generateButton("Søk", Buttons.HEL, new søkelytter());
+			tilbake 		= buttonGenerator.generateButton("Tilbake", Buttons.HEL);
+
+			fagBox = new JComboBox<Fag>();
+			fagBox.setPreferredSize(Buttons.HEL);
+			for(Fag f : skolen.getFagene().getAlle()) {
+				fagBox.addItem(f);
+			}
+
+			lærerBox = new JComboBox<Laerer>();
+			lærerBox.setPreferredSize(Buttons.HEL);
+			for(Laerer l : skolen.getLærerne().getAlle()) {
+				lærerBox.addItem(l);
+			}
+
+			progBox = new JComboBox<Studieprogram>();
+			progBox.setPreferredSize(Buttons.HEL);
+			for(Studieprogram sp : skolen.getStudieprogrammene().getAlle()) {
+				progBox.addItem(sp);
+			}
+
+			String[] boxitems =  {"Muntlig", "Skriftlig", "Prosjekt"};
+			vurderingBox = new JComboBox<String>(boxitems);
+			vurderingBox.setPreferredSize(Buttons.HEL);
+
+			innhold = new JPanel();
+			innhold.setBorder( ramme);
+
+			rammeverk.add(innhold, BorderLayout.CENTER);
+			revalidate();
+		}
+
 	//fyller meny-baren
 	private void populateMenu(){
 		meny = new JMenuBar();
@@ -215,10 +312,10 @@ public class Vindu extends JFrame implements ActionListener {
 			vis(fagboks.visResultat(listen));
 		}
 	}
+	
 	public RightClickMenus getRightClickMenu(){
 		return popup;
 	}
-	//kanskje kaste denne inn i testwindow pga at den må update selectedValue, og jeg er usikker på å ta inn et TestWindow her.
 	//for valuePassing til søk
 	private void generateButtonGroup(JPanel panel){
 		ButtonGroup group = new ButtonGroup();
@@ -255,116 +352,19 @@ public class Vindu extends JFrame implements ActionListener {
 	public Archiver getArkiv(){
 		return arkivet;
 	}
-
 	public Skole getSkole(){
 		return skolen;
 	}
-
-	//Metoder som endrer teksten i display-tekstområdet
-	public void setText(String tekst){
-		info.setText(tekst);
+	public void setSelectedValue(int i){
+		selectedValue = i;
+	}
+	public Buttons getButtonGen() {
+		return buttonGenerator;
 	}
 
-	//Oppretter og legger inn elementer til vinduet
-	public void fyllRamme() {
-
-		//Oppretter objekter til Fast ramme
-		JPanel leggtil = new JPanel();
-		JPanel visning = new JPanel();
-		display = new JPanel();
-		leggtil.setPreferredSize(toppSize);
-		visning.setPreferredSize(søkSize);
-		display.setPreferredSize(innholdSize);
-		leggtil.setBorder(ramme);
-		visning.setBorder(ramme);
-		display.setBorder(ramme);
-
-		søkefelt		= new InputFelt("Søk", InputFelt.KORT, new søkelytter());
-		visning.add(søkefelt);
-
-		søkeknapp 		= buttonGenerator.generateButton("Søk", visning, Buttons.HALV, new søkelytter());
-		generateButtonGroup(visning);
-		visAvansert 	= buttonGenerator.generateButton("Avansert søk", visning, Buttons.HALV);
-		visning.add(Box.createRigidArea(Buttons.HALV));
-
-		nystudent 		= buttonGenerator.generateButton("Legg til student", leggtil, Buttons.HALV);
-		nylærer 		= buttonGenerator.generateButton("Legg til lærer", leggtil, Buttons.HALV);
-		nyttfag 		= buttonGenerator.generateButton("Legg til fag", leggtil, Buttons.HALV);
-		nyttstudieprog 	= buttonGenerator.generateButton("Legg til studieprogram", leggtil, Buttons.HEL);
-
-		visstudent 		= buttonGenerator.generateButton("Vis studenter", visning, Buttons.HALV);
-		vislærer 		= buttonGenerator.generateButton("Vis lærere", visning, Buttons.HALV);
-		visfag 			= buttonGenerator.generateButton("Vis fag", visning, Buttons.HALV);
-		visstudieprog 	= buttonGenerator.generateButton("Vis studieprogram", visning, Buttons.HALV);
-
-		info = new JTextArea(23, 23);
-		info.setBorder(BorderFactory.createLoweredBevelBorder());
-		info.setEditable(false);
-		info.setLineWrap(true);
-		setText("\n\n\n\n\n Velkommen til vår studieadmininistrasjon!\n" +
-				"                       Her er alt mulig!");
-
-		display.add(info);
-		rammeverk.add(display, BorderLayout.WEST);
-		rammeverk.add(leggtil, BorderLayout.NORTH);
-		rammeverk.add(visning, BorderLayout.EAST);
-
-		//Oppretter objekter til registreringsfelter
-
-		overskrift = new JLabel();
-		overskrift.setFont(new Font("Arial", Font.BOLD, TITTELSIZE));
-
-		navn	 		= new InputFelt("Navn", InputFelt.LANG, navnRegex);
-		tittel			= new InputFelt("Navn", InputFelt.LANG, tittelRegex);
-		epost	 		= new InputFelt("E-post", InputFelt.LANG, mailRegex);
-		tlf		 		= new InputFelt("Telefon", InputFelt.LANG, mobRegex);
-		adresse			= new InputFelt("Adresse", InputFelt.LANG);
-		innDato			= new InputFelt("Startdato", InputFelt.LANG, dateRegex);
-		utDato			= new InputFelt("Sluttdato", InputFelt.LANG, dateRegex);
-		kontorNr		= new InputFelt("Kontornummer", InputFelt.LANG);
-		fagkode			= new InputFelt("Fagkode", InputFelt.LANG, fagkodeRegex);
-		beskrivelse		= new InputFelt("Beskrivelse", InputFelt.LANG);
-		studiepoeng		= new InputFelt("Studiepoeng", InputFelt.LANG,  sPoengRegex);
-		innÅr 			= new InputFelt("Startår", InputFelt.LANG,  årRegex);
-		utÅr			= new InputFelt("Sluttår", InputFelt.LANG,  årRegex);
-		studNr 			= new InputFelt("StudentNr", InputFelt.LANG,  studentNrRegex);
-
-		lagre 			= buttonGenerator.generateButton("Lagre", Buttons.HEL, new lagrelytter());
-		leggtilfag 		= buttonGenerator.generateButton("Legg til fag", Buttons.HEL);
-		avansert 		= buttonGenerator.generateButton("Søk", Buttons.HEL, new søkelytter());
-		tilbake 		= buttonGenerator.generateButton("Tilbake", Buttons.HEL);
-
-		fagBox = new JComboBox<Fag>();
-		fagBox.setPreferredSize(Buttons.HEL);
-		for(Fag f : skolen.getFagene().getAlle()) {
-			fagBox.addItem(f);
-		}
-
-		lærerBox = new JComboBox<Laerer>();
-		lærerBox.setPreferredSize(Buttons.HEL);
-		for(Laerer l : skolen.getLærerne().getAlle()) {
-			lærerBox.addItem(l);
-		}
-
-		progBox = new JComboBox<Studieprogram>();
-		progBox.setPreferredSize(Buttons.HEL);
-		for(Studieprogram sp : skolen.getStudieprogrammene().getAlle()) {
-			progBox.addItem(sp);
-		}
-
-		String[] boxitems =  {"Muntlig", "Skriftlig", "Prosjekt"};
-		vurderingBox = new JComboBox<String>(boxitems);
-		vurderingBox.setPreferredSize(Buttons.HEL);
-
-		innhold = new JPanel();
-		innhold.setBorder( ramme);
-
-		rammeverk.add(innhold, BorderLayout.CENTER);
-		revalidate();
-	}
 
 	//Metoder for å vise relevante felter for registrering av objekter
-	public void student() {
+	public void studentPanel() {
 		stud = new JPanel();
 		stud.setPreferredSize(innholdSize);
 
@@ -381,7 +381,7 @@ public class Vindu extends JFrame implements ActionListener {
 
 		vis(stud);
 	}
-	public void lærer() {
+	public void lærerPanel() {
 		lær = new JPanel();
 		lær.setPreferredSize(innholdSize);
 
@@ -395,7 +395,7 @@ public class Vindu extends JFrame implements ActionListener {
 
 		vis(lær);
 	}
-	public void fag() {
+	public void fagPanel() {
 		fag = new JPanel();
 		fag.setPreferredSize(innholdSize);
 
@@ -411,7 +411,7 @@ public class Vindu extends JFrame implements ActionListener {
 
 		vis(fag);
 	}
-	public void studieprog() {
+	public void studieprogPanel() {
 		studprog = new JPanel();
 		studprog.setPreferredSize(innholdSize);
 
@@ -479,139 +479,170 @@ public class Vindu extends JFrame implements ActionListener {
 		vis(søk);
 	}
 
-	//Resetter tekstfeltene
+	
+	//Metoder som oppdaterer innholdspanelet
+	
+	//Resetter tekstfeltene til standardverdier
 	public void refresh(){
-
-		navn			.setText("Navn");
-		tittel			.setText("Navn");
-		epost			.setText("E-post");
-		tlf				.setText("Telefon");
-		adresse			.setText("Adresse");
-		innDato			.setText("Startdato");
-		utDato			.setText("Sluttdato");
-		kontorNr		.setText("Kontornummer");
-		fagkode			.setText("Fagkode");
-		beskrivelse		.setText("Beskrivelse");
-		studiepoeng		.setText("Studiepoeng");
-		innÅr 			.setText("Startår");
-		utÅr			.setText("Sluttår");
-		studNr 			.setText("StudentNr");
-	}
-	//Oppdaterer innholdspanelet
-	public void vis(Component c){
-		refresh();
-		innhold.removeAll();
+				navn			.setText("Navn");
+				tittel			.setText("Navn");
+				epost			.setText("E-post");
+				tlf				.setText("Telefon");
+				adresse			.setText("Adresse");
+				innDato			.setText("Startdato");
+				utDato			.setText("Sluttdato");
+				kontorNr		.setText("Kontornummer");
+				fagkode			.setText("Fagkode");
+				beskrivelse		.setText("Beskrivelse");
+				studiepoeng		.setText("Studiepoeng");
+				innÅr 			.setText("Startår");
+				utÅr			.setText("Sluttår");
+				studNr 			.setText("StudentNr");
+			}
+	//Oppdaterer innholdspanelet, og legger til gitt komponent
+	public void vis(JPanel p){
+		refresh(); //Oppdaterer tekstfeltene for å ikke dra med verdier fra forrige bruk
+		innhold.removeAll(); //Passer på at det ikke hoper seg opp med innhold
 		innhold.add(overskrift);
-		innhold.add(c);
+		innhold.add(p);
 		innhold.updateUI();
-		revalidate();
 	}
-	public void cover(Component c){
-		vis();
-		innhold.getComponent(FØRSTE).setVisible(false);
+	//Viser paneler i innholdspanelet uten å fjerne søkersultatene, som ligger der fra før. Brukes fra EditPanel
+	public void cover(JPanel p){
+		vis();	//Passer på at det ikke legges til to "cover"-paneler oppå hverandre
+		innhold.getComponent(FØRSTE).setVisible(false); //Gjemmer overskrift og søkeresultat
 		innhold.getComponent(ANDRE).setVisible(false);
-		innhold.add(c);
+		innhold.add(p);
 		innhold.updateUI();
-		revalidate();
 	}
+	//Fjerne "Cover"-panel og vise søkeresultat igjen
 	public void vis(){
 		innhold.getComponent(FØRSTE).setVisible(true);
 		innhold.getComponent(ANDRE).setVisible(true);
-		if(innhold.getComponentCount() == COVERED)
-			innhold.remove(COVER);
+		if(innhold.getComponentCount() == COVERED) //Fjerner "coveret" hvis det finnes. Det vil alltid være maks 3 komponenter i innhold
+			innhold.remove(COVER); //Det ekstra panelet har alltid index 2
 		innhold.updateUI();
-		revalidate();
 	}
-
-	public void setSelectedValue(int i){
-		selectedValue = i;
-	}
-	public Buttons getButtonGen() {
-		return buttonGenerator;
-	}
-
-	//Oppdaterer display-panelet
+		
+	//Metoder som oppdaterer display-panelet
+		
+	//Oppdaterer display-panelet med gitt komponent, som oftest et panel
 	public void display(Component c){
 		display.removeAll();
 		display.add(c);
 		display.updateUI();
-		revalidate();
 	}
-	//Får opp igjen displayet
+	//Får opp igjen display-tekstområdet i displaypanelet
 	public void display(){
 		display.removeAll();
 		display.add(info);
 		display.updateUI();
-		revalidate();
 	}
+	//Endrer teksten i display-tekstområdet
+	public void setText(String tekst){
+			info.setText(tekst);
+		}
 	//Viser karakterdistribusjon i displayet
 	public void displayKarakterer(int[] karakterer, double stryk){
 		String distribusjon = "Karakterdistribusjon:\n";
-		for(int i = 0; i < (int)'G'; i++ )
+		for(int i = 0; i < (int)'G'; i++ )	//Går igjennom bokstavene fra A til F
 			distribusjon += (char)('A'+i) + ":" + karakterer[i] + "\n";
 		distribusjon += "\nStrykprosent: " + stryk;
 		setText(distribusjon);
 		display();
 	}
+	
+	
+	//Metode som sjekker om alle tekstfelt i et panel inneholder godkjent tekst til lagring
+	public boolean inputGodkjent(JPanel aktivt){
+			boolean godkjent = true;
+			
+			for(Component c: aktivt.getComponents()){
+				if(c instanceof InputFelt){
+					if(!((InputFelt)c).matcher()) {
+						godkjent = false;
+					}
+				}
+			}
+			return godkjent;
+		}
 
+	//Lytterklasser
+	
+	//Lytterklasse som tar imot events fra diverse knapper som utfører mindre oppgaver
 	public void actionPerformed(ActionEvent e) {
+		
+		Object source = e.getSource();
+		
+		//setter selectedValue for programmet sånn at vi får filtrert hva vi søker mot.
+		if(source == studentCheck || source == lærerCheck || source == fagCheck || source == studieCheck){
+			selectedValue = Integer.parseInt(e.getActionCommand());
+			return;
+		}
+		
 		//Nullstiller displayet
 		display();
 		setText(""); 
-		//setter selectedValue for programmet sånn at vi får filtrert hva vi søker mot.
-		if(e.getSource() == studentCheck || e.getSource() == lærerCheck || e.getSource() == fagCheck || e.getSource() == studieCheck)
-			selectedValue = Integer.parseInt(e.getActionCommand());
 
-		if (e.getSource() == nystudent) {
-			student();
+		//Åpner registreringspaneler for de ulike objektene
+		if (source == nystudent) {
+			studentPanel();
 		}
-		if (e.getSource() == nylærer) {
-			lærer();
+		if (source == nylærer) {
+			lærerPanel();
 		}
-		if (e.getSource() == nyttfag) {
-			fag();
+		if (source == nyttfag) {
+			fagPanel();
 		}
-		if (e.getSource() == nyttstudieprog) {
-			studieprog();
+		if (source == nyttstudieprog) {
+			studieprogPanel();
 		}
-		if (e.getSource() == visstudent) {
+		
+		//Viser alle registrerte studenter, lærere, fag eller studieprogram
+		if (source == visstudent) {
 			overskrift.setText("Studenter");
 			vis(studentboks.visResultat(studentboks.listify(skolen.getStudentene().getAlle())));
 		}
-		if (e.getSource() == vislærer) {
+		if (source == vislærer) {
 			overskrift.setText("Lærere");
 			vis(laererboks.visResultat(laererboks.listify(skolen.getLærerne().getAlle())));
 		}
-		if (e.getSource() == visfag) {
+		if (source == visfag) {
 			overskrift.setText("Fag");
 			vis(fagboks.visResultat(fagboks.listify(skolen.getFagene().getAlle())));
 		}
-		if (e.getSource() == visstudieprog) {
+		if (source == visstudieprog) {
 			overskrift.setText("Studieprogram");
 			vis(studieboks.visResultat(studieboks.listify(skolen.getStudieprogrammene().getAlle())));
 		}
 
-		if (e.getSource() == visAvansert){
-			avansert(type = Vindu.VELGSØK);
-		}
-		if (e.getSource() == tilbake){
+		//Viser avansert søk-panelet
+		if (source == visAvansert || source == tilbake){
 			avansert(type = Vindu.VELGSØK);
 		}
 
-		if (e.getSource() == leggtilfag) {
+		//Legger til et fag i et studieprogram
+		if (source == leggtilfag) {
 			if(innhold.getComponent(ANDRE).equals(studprog)){
 				try{
-					skolen.getStudieprogrammene().findEnByNavn(tittel.getText()).addFag((Fag)fagBox.getSelectedItem());
-					setText(skolen.getStudieprogrammene().findEnByNavn(navn.getText()).fullString());
+					Studieprogram sp = skolen.getStudieprogrammene().findEnByNavn(tittel.getText()); 
+					sp.addFag((Fag)fagBox.getSelectedItem());
+					setText(sp.fullString());
 				} catch (NullPointerException npe){
-					setText("Fyll ut all nødvendige felter");
+					setText("Ikke lagret studieprogram");
 				}
 			}
 		}
 	}
+
+	//Lytterklasse for alle komponenter som har med søk å gjøre
 	private class søkelytter implements ActionListener{
 		@SuppressWarnings("unchecked")
 		public void actionPerformed(ActionEvent e) {
+			//Nullstiller displayet
+			display();
+			setText(""); 
+			
 			try{
 				if (e.getSource() == søkefelt || e.getSource() == søkeknapp) {
 
@@ -666,6 +697,7 @@ public class Vindu extends JFrame implements ActionListener {
 							listen = studentboks.listify(skolen.findStudentMedFag(((Fag)fagBox.getSelectedItem()).getFagkode()));
 						vis(studentboks.visResultat(listen));
 						break;
+						
 					case Vindu.STUDENTPERIODE:
 						listen = null;
 
@@ -678,6 +710,7 @@ public class Vindu extends JFrame implements ActionListener {
 							listen = studentboks.listify(skolen.findStudentBySlutt(ut));
 						vis(studentboks.visResultat(listen));
 						break;
+						
 					case Vindu.STUDENTPROGRAM:
 						listen = null;
 						Studieprogram sp = (Studieprogram)progBox.getSelectedItem();
@@ -688,6 +721,7 @@ public class Vindu extends JFrame implements ActionListener {
 						if(listen != null)
 							vis(studentboks.visResultat(listen));
 						break;
+						
 					case Vindu.POENGSTUDENT:
 						int poeng = 0;
 						Student s = skolen.getStudentene().findStudentByStudentNr(nr);
@@ -702,6 +736,7 @@ public class Vindu extends JFrame implements ActionListener {
 							poeng = skolen.findStudiepoengForStudIPeriode(s, Vindu.FORTID, Vindu.FREMTID);
 						setText("Studiepoeng for " + s.getfNavn() + " " + s.geteNavn() + ": " + poeng);
 						break;
+						
 					case Vindu.KARAKTER:
 						Fag f = (Fag)fagBox.getSelectedItem();
 						int[] karakterer = null;
@@ -717,6 +752,7 @@ public class Vindu extends JFrame implements ActionListener {
 							//overskrift.setText("Fyll inn nødvendige felter");
 							setText("Fyll inn nødvendige felter");
 						break;
+						
 					default:
 						avansert(Vindu.VELGSØK);
 					}
@@ -755,68 +791,63 @@ public class Vindu extends JFrame implements ActionListener {
 	}
 	private class lagrelytter implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			try{
-				if (innhold.getComponent(ANDRE).equals(stud)) { //Sjekker hvilket panel som ligger i innhold-panelet
-					int nr = Integer.parseInt(tlf.getText());
-					//setter dato i følge input.
-					String dateString = innDato.getText();
-					GregorianCalendar dato = dateHandler.dateFixer(dateString, null);
-					//hvis dato null er input invalid på en eller annen måte.
-					if(dato == null){
-						JOptionPane.showMessageDialog(null, "Eksempel på datoformatering: 01/10/1990.", "Beklager",  JOptionPane.ERROR_MESSAGE);
-						return;
-					}
 
-					//oppretter Studentobjektet.
-					Student s = skolen.getStudentene().addStudent(navn.getText(), 
-							epost.getText(), 
-							nr,
-							adresse.getText(), 
-							dato);
-					if(progBox.getSelectedIndex() != BLANK)
-						s.setStudieprogram((Studieprogram)progBox.getSelectedItem());
-					setText("Lagret student:\n\n" + s.fullString());
-				} 
+			JPanel aktivtPanel = (JPanel)innhold.getComponent(ANDRE);
+			if(!inputGodkjent(aktivtPanel)){
+				setText("Fyll inn nødvendige felter");
+				return;
+			}
 
-				else if (innhold.getComponent(ANDRE).equals(lær)) {
-					int nr = Integer.parseInt(tlf.getText());
+			if (aktivtPanel.equals(stud)) { //Sjekker hvilket panel som ligger i innhold-panelet (Andre fordi overskriften er første komponent
 
-					Laerer l = skolen.getLærerne().addLærer(navn.getText(), 
-							epost.getText(), 
-							nr,
-							kontorNr.getText());
-					setText("Lagret lærer:\n\n" + l.fullString());
-					lærerBox.addItem(l);
+				int nr = Integer.parseInt(tlf.getText());
+				//setter dato i følge input.
+				String dateString = innDato.getText();
+				GregorianCalendar dato = dateHandler.dateFixer(dateString, null);
 
-				} 
+				//oppretter Studentobjektet.
+				Student s = skolen.getStudentene().addStudent(navn.getText(), 
+						epost.getText(), 
+						nr,
+						adresse.getText(), 
+						dato);
+				if(progBox.getSelectedIndex() != BLANK)
+					s.setStudieprogram((Studieprogram)progBox.getSelectedItem());
+				setText("Lagret student:\n\n" + s.fullString());
+			} 
 
-				else if (innhold.getComponent(ANDRE).equals(fag)) {
-					int poeng = Integer.parseInt(studiepoeng.getText());
+			else if (aktivtPanel.equals(lær)) {
+				int nr = Integer.parseInt(tlf.getText());
 
-					Fag f = skolen.getFagene().addFag(tittel.getText(), 
-							fagkode.getText(),
-							beskrivelse.getText(),
-							vurderingBox.getSelectedItem().toString(), 
-							poeng, 
-							(Laerer)lærerBox.getSelectedItem());
+				Laerer l = skolen.getLærerne().addLærer(navn.getText(), 
+						epost.getText(), 
+						nr,
+						kontorNr.getText());
+				setText("Lagret lærer:\n\n" + l.fullString());
+				lærerBox.addItem(l);
 
-					setText("Lagret fag:\n\n" + f.fullString());
-					fagBox.addItem(f);
-				} 
+			} 
 
-				else if (innhold.getComponent(ANDRE).equals(studprog)) {
-					Studieprogram sp = skolen.getStudieprogrammene().addStudProg(tittel.getText());
-					setText("Lagret studieprogram:\n\n" + sp.fullString());
-					progBox.addItem(sp);
-					fagBox.setVisible(true);
-					leggtilfag.setVisible(true);
-				}
-			}catch (NumberFormatException nfe){
-				setText("Fyll ut all nødvendige felter");
-			}catch (NullPointerException nfe){
-				setText("Fyll ut all nødvendige felter");
-			}catch (IndexOutOfBoundsException iobe){
-				setText("Fyll ut all nødvendige felter");
+			else if (aktivtPanel.equals(fag)) {
+				int poeng = Integer.parseInt(studiepoeng.getText());
+
+				Fag f = skolen.getFagene().addFag(tittel.getText(), 
+						fagkode.getText(),
+						beskrivelse.getText(),
+						vurderingBox.getSelectedItem().toString(), 
+						poeng, 
+						(Laerer)lærerBox.getSelectedItem());
+
+				setText("Lagret fag:\n\n" + f.fullString());
+				fagBox.addItem(f);
+			} 
+
+			else if (aktivtPanel.equals(studprog)) {
+				Studieprogram sp = skolen.getStudieprogrammene().addStudProg(tittel.getText());
+				setText("Lagret studieprogram:\n\n" + sp.fullString());
+				progBox.addItem(sp);
+				fagBox.setVisible(true);
+				leggtilfag.setVisible(true);
 			}
 		}
 	}

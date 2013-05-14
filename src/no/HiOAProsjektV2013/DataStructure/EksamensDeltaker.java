@@ -60,6 +60,8 @@ public class EksamensDeltaker implements Serializable{
 	}
 	public void setOppmøtt(boolean oppmøtt) {
 		this.oppmøtt = oppmøtt;
+		if(!oppmøtt)
+			karakter = '\0';
 	}
 	
 }
