@@ -1,4 +1,6 @@
 package no.HiOAProsjektV2013.Main;
+//Lars-Erik Kasin - s178816 - Dataingeniør - 1AA
+//Siste versjon: 14.05.13
 
 import java.util.LinkedList;
 
@@ -9,6 +11,8 @@ import no.HiOAProsjektV2013.DataStructure.Eksamen;
 import no.HiOAProsjektV2013.DataStructure.EksamensDeltaker;
 import no.HiOAProsjektV2013.DataStructure.Student;
 
+
+//Tabellmodell for våre JTables som befinner seg i EditPanel
 public class TabellModell extends AbstractTableModel{
 
 	private static final long serialVersionUID = 100110L;
