@@ -87,7 +87,7 @@ public class Vindu extends JFrame implements ActionListener {
 	private JComboBox<String> vurderingBox;
 	private JTextArea info;
 	private InputFelt navn, tittel, epost, tlf, adresse, innDato, utDato, kontorNr, fagkode,
-	beskrivelse, studiepoeng, innÅr, utÅr, studNr, søkefelt;
+	beskrivelse, studiepoeng, innÅr, utÅr, studNr, eksamensdato, søkefelt;
 	private JButton nystudent, nylærer, nyttfag, nyttstudieprog, visstudent,
 	vislærer, visfag, visstudieprog, lagre, leggtilfag, søkeknapp, avansert, visAvansert, tilbake;
 	private JRadioButton studentCheck, lærerCheck, fagCheck, studieCheck;
@@ -175,6 +175,7 @@ public class Vindu extends JFrame implements ActionListener {
 			info.setBorder(BorderFactory.createLoweredBevelBorder());
 			info.setEditable(false);
 			info.setLineWrap(true);
+			info.setWrapStyleWord(true);
 			setText("\n\n\n\n\n Velkommen til vår studieadmininistrasjon!\n" +
 					"                       Her er alt mulig!");
 
@@ -201,6 +202,7 @@ public class Vindu extends JFrame implements ActionListener {
 			innÅr 			= new InputFelt("Startår", InputFelt.LANG,  årRegex);
 			utÅr			= new InputFelt("Sluttår", InputFelt.LANG,  årRegex);
 			studNr 			= new InputFelt("StudentNr", InputFelt.LANG,  studentNrRegex);
+			eksamensdato 	= new InputFelt("Eksamensdato", InputFelt.LANG, "(\\d{1,2}\\W\\d{1,2}\\W((\\d{4})||(\\d{2})))||\\d{4}");
 
 			lagre 			= buttonGenerator.generateButton("Lagre", Buttons.HEL, new lagrelytter());
 			leggtilfag 		= buttonGenerator.generateButton("Legg til fag", Buttons.HEL);
@@ -521,7 +523,11 @@ public class Vindu extends JFrame implements ActionListener {
 		Buttons b = new Buttons(new søkelytter());
 		overskrift.setText("Avansert søk");
 		søk.add(overskrift);
+		
 		fagBox.setVisible(true);
+		progBox.setSelectedIndex(0);
+		
+		String forklaring = "Trykk på knappene for å velge søk"; //Forklaring som skal vises i displayet. Oppdateres når et søk velges
 		
 		//Legger til relevante felter for de forskjellige søkene
 		switch(type){
@@ -529,33 +535,32 @@ public class Vindu extends JFrame implements ActionListener {
 			søk.add(fagBox);
 			søk.add(innÅr);
 			søk.add(avansert);
-			søk.add(tilbake);
+			forklaring = "Søk etter studenter med dette faget. Oppgi startdato for å søke på et spesielt år.";
 			break;
 		case STUDENTPERIODE:
 			søk.add(innÅr);
 			søk.add(utÅr);
 			søk.add(avansert);
-			søk.add(tilbake);
+			forklaring = "Søk etter studenter som har studert ved skolen etter en startdato, før en sluttdato, eller mellom begge datoene";
 			break;
 		case STUDENTPROGRAM:
 			søk.add(progBox);
 			søk.add(innÅr);
 			søk.add(avansert);
-			søk.add(tilbake);
+			forklaring = "Søk etter studenter som er en del av det valgte studieprogrammet. Oppgi startdato for å begrense søket til studenter som startet det året.";
 			break;
 		case POENGSTUDENT:
 			søk.add(studNr);
 			søk.add(innÅr);
 			søk.add(utÅr);
 			søk.add(avansert);
-			søk.add(tilbake);
+			forklaring = "Søk etter produserte studiepoeng for den oppgitte studenten. Oppgi datoer for å begrense tidsrammen for søket.";
 			break;
 		case KARAKTER:
 			søk.add(fagBox);
-			søk.add(innDato);
-			søk.add(innÅr);
+			søk.add(eksamensdato);
 			søk.add(avansert);
-			søk.add(tilbake);
+			forklaring = "Finn karakterdistribusjon for det en eksamen i det valgte faget. Oppgi eksamensdato eller år for å velge eksamen. ";
 			break;
 		default: //Viser oversikten over de forskjellige avansertsøk
 			søk.add(b.generateButton("Finn studenter med fag", Buttons.HEL));
@@ -563,8 +568,12 @@ public class Vindu extends JFrame implements ActionListener {
 			søk.add(b.generateButton("Finn studenter i studieprogram", Buttons.HEL));
 			søk.add(b.generateButton("Finn studiepoeng for student", Buttons.HEL));
 			søk.add(b.generateButton("Finn karakterfordeling", Buttons.HEL));
+			forklaring = "Trykk på knappene for å velge søk";
 		}
-
+		
+		if(type != VELGSØK)
+			søk.add(tilbake);
+		setText(forklaring);
 		vis(søk);
 	}
 	
@@ -704,8 +713,9 @@ public class Vindu extends JFrame implements ActionListener {
 					String ut 	= utÅr.getText();
 					String nr	= studNr.getText();
 					String d 	= innDato.getText();
+					String ed	= eksamensdato.getText();
 					
-					setText("");
+					setText("Ingen treff");
 
 					ArrayList<Student> studs = null; //Listen som skal vises hvis det søkes på student
 
@@ -722,7 +732,7 @@ public class Vindu extends JFrame implements ActionListener {
 						
 						break;
 						
-					case STUDENTPERIODE: //Viser studenter som har vært studenter i en gitt periode
+					case STUDENTPERIODE: //Viser studenter som har gått på skolen i en gitt periode
 						
 						//Her søkes det enten på tidsrommet mellom to år, startår eller sluttår, avhengig av hva som er fylt inn
 						if(inn.matches(årRegex)){
@@ -777,19 +787,18 @@ public class Vindu extends JFrame implements ActionListener {
 						int[] karakterer = null;
 						double stryk = BLANK;
 						
-						if(d.matches(dateRegex)){ //Hvis både dato og år er fylt inn, prioriteres dato
-							karakterer = skolen.findKarakterDistribusjon(f, f.findEksamenByDate(dateHandler.dateFixer(d, null))); //Finner karakterdistribusjon
-							stryk = skolen.findStrykProsent(f, dateHandler.dateFixer(d, null).get(Calendar.YEAR) ); //Finner strykprosent
+						if(ed.matches(dateRegex)){ //Dato skrevet inn
+							karakterer = skolen.findKarakterDistribusjon(f, f.findEksamenByDate(dateHandler.dateFixer(ed, null))); //Finner karakterdistribusjon
+							stryk = skolen.findStrykProsent(f, dateHandler.dateFixer(ed, null).get(Calendar.YEAR) ); //Finner strykprosent
 						} 
-						else if (inn.matches(årRegex)){
-							karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(inn));
-							stryk = skolen.findStrykProsent(f, Integer.parseInt(inn) );
+						else if (ed.matches(årRegex)){ //År skrevet inn
+							karakterer = skolen.findKarakterDistribusjon(f, Integer.parseInt(ed));
+							stryk = skolen.findStrykProsent(f, Integer.parseInt(ed) );
 						} 
 						else
 							setText("Fyll inn nødvendige felter - ikke valgt");
 						
 						if(stryk != BLANK && !Double.isNaN(stryk)){
-							System.out.println("pig");
 							displayKarakterer(karakterer, stryk);
 						}
 						else if(stryk == BLANK){
@@ -802,7 +811,7 @@ public class Vindu extends JFrame implements ActionListener {
 						avansert(VELGSØK);
 					}
 					
-					if(studs != null) //Viser studentlista
+					if(studs != null && !studs.isEmpty()) //Viser studentlista
 						vis(studentboks.visResultat(studentboks.listify(studs)));
 
 				} else {

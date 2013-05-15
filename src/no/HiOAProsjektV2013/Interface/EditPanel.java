@@ -193,7 +193,7 @@ public class EditPanel extends JPanel{
 		fagkode	 		= new InputFelt(fk, InputFelt.LANG, false);
 		beskrivelse		= new InputFelt(b, InputFelt.LANG);
 		studiepoeng		= new InputFelt(""+sp, InputFelt.LANG, false);
-		eksamensdato 	= new InputFelt("dag/mnd/år", InputFelt.LANG, Vindu.dateRegex);
+		eksamensdato 	= new InputFelt("Eksamensdato", InputFelt.LANG, Vindu.dateRegex);
 
 		//Oppretter aktuelle kombobokser
 		String[] boxitems =  {"Muntlig", "Skriftlig", "Prosjekt"}; //Komboboks for å bestemme hva slags vurderingsform som brukes i faget
@@ -439,19 +439,18 @@ public class EditPanel extends JPanel{
 				char k = ed.getKarakter();
 
 				if(s.matches("[a-fA-F]")){ 		//Sjekker her fordi den blanke char'en har verdien \0. Hvis du prøver å bare skrive inn en bokstav,
-					k = s.charAt(Vindu.FØRSTE);	//blir whitespacet registrert fremfor bokstaven. Denne sjekken sikrer at det den innskrevne karakteren lagres.
+					k = Character.toUpperCase(s.charAt(Vindu.FØRSTE));	//blir whitespacet registrert fremfor bokstaven. Denne sjekken sikrer at det den innskrevne karakteren lagres.
+					resultater.setValueAt(true, e.getFirstRow(), MØTT);
 				} else if(s.matches("\0[a-fA-F]")){
-					k = s.charAt(Vindu.ANDRE);
+					k = Character.toUpperCase(s.charAt(Vindu.ANDRE));
+					resultater.setValueAt(true, e.getFirstRow(), MØTT);
 				}
 				if(k != ed.getKarakter())		//Hvis karakteren er den samme, trengs det ikke å gjøres noen endring
 					ed.setKarakter(k);
+
 			}
 
 			//Oppdaterer visningspanelet. Enten med den valgte eksamenen et fags eksamenspanel, eller med et nytt eksamenspanel for en student
-			if(velgEksamen != null)	
-				visEksamen((Eksamen)velgEksamen.getSelectedItem());
-			else
-				vindu.cover(eksamensPanel((Student)aktiv));
 		}
 	} //End of class tabellytter
 

@@ -46,7 +46,6 @@ public class Tabellmodell extends AbstractTableModel{
 		this.addTableModelListener(tabellytter);
 	}
 
-
 	public Object getValueAt(int rad, int kolonne){ //Henter verdien i en gitt celle
 		return celler[rad][kolonne];
 	}
