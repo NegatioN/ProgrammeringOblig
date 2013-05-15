@@ -9,22 +9,22 @@ import no.HiOAProsjektV2013.DataStructure.Eksamen;
 import no.HiOAProsjektV2013.DataStructure.EksamensDeltaker;
 import no.HiOAProsjektV2013.DataStructure.Student;
 
-public class Tabellmodell extends AbstractTableModel{
+public class TabellModell extends AbstractTableModel{
 
 	private static final long serialVersionUID = 100110L;
-	private final int FAG = 0, DATO  = 1, SNR = 2, MØTT = 3, KAR = 4, DATOBREDDE = 120, KOLONNER = 5;
+	public static final int FAG = 0, DATO  = 1, SNR = 2, MØTT = 3, KAR = 4, DATOBREDDE = 130, KOLONNER = 5;
 	private TableModelListener tabellytter;
 
 	private String[] kolonnenavn = {"Fag", "Dato", "StudentNr", "Møtt", "Karakter"};
 	private Object[][] celler = {{"", "", "", "", ""}};	//Tom tabell
 
-	public Tabellmodell(Eksamen e, TableModelListener tabell){ 	//Fyller tabellen med alle deltakere på en eksamen
+	public TabellModell(Eksamen e, TableModelListener tabell){ 	//Fyller tabellen med alle deltakere på en eksamen
 		tabellytter = tabell;
 		if(!e.getDeltakere().isEmpty()){
 			fyllTabell(e.getDeltakere().size(), e.getDeltakere());
 		}
 	}
-	public  Tabellmodell(Student s, TableModelListener tabell){	//Fyller tabellen med alle eksamener for en student
+	public  TabellModell(Student s, TableModelListener tabell){	//Fyller tabellen med alle eksamener for en student
 		tabellytter = tabell;
 		if(!s.getEksamener().isEmpty())
 			fyllTabell(s.getEksamener().size(), s.getEksamener());

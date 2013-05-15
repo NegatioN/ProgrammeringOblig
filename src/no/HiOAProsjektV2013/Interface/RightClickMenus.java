@@ -22,7 +22,7 @@ import no.HiOAProsjektV2013.DataStructure.Fag;
 import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
-import no.HiOAProsjektV2013.Main.Tabellmodell;
+import no.HiOAProsjektV2013.Main.TabellModell;
 
 /*
  * Klassen har som formål å generere høyreklikk-menyer for våre JLists

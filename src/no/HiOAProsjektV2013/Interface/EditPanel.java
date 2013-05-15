@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -26,7 +25,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.AbstractTableModel;
 
 import no.HiOAProsjektV2013.DataStructure.Arbeidskrav;
 import no.HiOAProsjektV2013.DataStructure.Eksamen;
@@ -37,7 +35,7 @@ import no.HiOAProsjektV2013.DataStructure.Laerer;
 import no.HiOAProsjektV2013.DataStructure.Student;
 import no.HiOAProsjektV2013.DataStructure.Studieprogram;
 import no.HiOAProsjektV2013.Main.DateHandler;
-import no.HiOAProsjektV2013.Main.Tabellmodell;
+import no.HiOAProsjektV2013.Main.TabellModell;
 
 /*
  * Klasse som oppretter redigeringsvinduer for et valgt objekt. Tar imot student, lærer, fag og studieprogram.
@@ -47,7 +45,6 @@ import no.HiOAProsjektV2013.Main.Tabellmodell;
 public class EditPanel extends JPanel{
 
 	private static final long serialVersionUID = 1073L;
-	private final int FAG = 0, DATO  = 1, SNR = 2, MØTT = 3, KAR = 4, DATOBREDDE = 120, KOLONNER = 5;
 
 	private Dimension venstreSize = new Dimension(290, 600), høyreSize = new Dimension(400, 600), infoSize = new Dimension(400, 250), tabellSize = new Dimension(385, 200), listeSize = new Dimension(250, 195);
 	private InputFelt navn, epost, tlf, adresse, start, slutt, kontorNr, fagkode, beskrivelse, studiepoeng, studentNr, eksamensdato;
@@ -368,12 +365,12 @@ public class EditPanel extends JPanel{
 		faginfo.setPreferredSize(infoSize);
 		faginfo.setBorder(BorderFactory.createTitledBorder("Eksamener for " + s.getfNavn() + " " + s.geteNavn()));
 
-		Tabellmodell modell = new Tabellmodell(s, new tabellytter());	//Oppretter tabell for visning og redigering av alle studentens eksamener
+		TabellModell modell = new TabellModell(s, new tabellytter());	//Oppretter tabell for visning og redigering av alle studentens eksamener
 		resultater = new JTable(modell);
 		resultater.setPreferredScrollableViewportSize(tabellSize);
 		resultater.addMouseListener(popup);
 		faginfo.add(new JScrollPane(resultater));
-		resultater.getColumnModel().getColumn(DATO).setPreferredWidth(DATOBREDDE);
+		resultater.getColumnModel().getColumn(TabellModell.DATO).setPreferredWidth(TabellModell.DATOBREDDE);
 
 		visepanel.add(faginfo);
 		tilbake = button.generateButton("Tilbake", visepanel, Buttons.HEL);
@@ -384,11 +381,11 @@ public class EditPanel extends JPanel{
 		faginfo.removeAll();
 		faginfo.setBorder(BorderFactory.createTitledBorder("Eksamen for " + ((Fag)aktiv).getNavn()));
 
-		Tabellmodell modell = new Tabellmodell(e, new tabellytter());
+		TabellModell modell = new TabellModell(e, new tabellytter());
 		resultater = new JTable(modell);
 		resultater.setPreferredScrollableViewportSize(tabellSize);
 		resultater.addMouseListener(popup);	//Legger til høyreklikkfunksjoner
-		resultater.getColumnModel().getColumn(DATO).setPreferredWidth(DATOBREDDE);
+		resultater.getColumnModel().getColumn(TabellModell.DATO).setPreferredWidth(TabellModell.DATOBREDDE);
 		
 		faginfo.add(new JScrollPane(resultater));
 		faginfo.updateUI();
@@ -429,10 +426,10 @@ public class EditPanel extends JPanel{
 	//Privat klasse som lytter etter endringer i eksamenstabellen
 	private class tabellytter implements TableModelListener{
 		public void tableChanged(TableModelEvent e) {
-			EksamensDeltaker ed = (EksamensDeltaker)resultater.getValueAt(e.getFirstRow(), SNR); //Henter ut deltakeren som skal redigeres
+			EksamensDeltaker ed = (EksamensDeltaker)resultater.getValueAt(e.getFirstRow(), TabellModell.SNR); //Henter ut deltakeren som skal redigeres
 
-			if(e.getColumn() == MØTT)	//Setter oppmøtestatus med checkbox
-				ed.setOppmøtt((Boolean)resultater.getValueAt(e.getFirstRow(), MØTT));
+			if(e.getColumn() == TabellModell.MØTT)	//Setter oppmøtestatus med checkbox
+				ed.setOppmøtt((Boolean)resultater.getValueAt(e.getFirstRow(), TabellModell.MØTT));
 
 			else{	//Setter karakter som blir skrevet inn
 				String s = (resultater.getValueAt(e.getFirstRow(), e.getColumn())).toString();
@@ -440,10 +437,10 @@ public class EditPanel extends JPanel{
 
 				if(s.matches("[a-fA-F]")){ 		//Sjekker her fordi den blanke char'en har verdien \0. Hvis du prøver å bare skrive inn en bokstav,
 					k = Character.toUpperCase(s.charAt(Vindu.FØRSTE));	//blir whitespacet registrert fremfor bokstaven. Denne sjekken sikrer at det den innskrevne karakteren lagres.
-					resultater.setValueAt(true, e.getFirstRow(), MØTT);
+					resultater.setValueAt(true, e.getFirstRow(), TabellModell.MØTT);
 				} else if(s.matches("\0[a-fA-F]")){
 					k = Character.toUpperCase(s.charAt(Vindu.ANDRE));
-					resultater.setValueAt(true, e.getFirstRow(), MØTT);
+					resultater.setValueAt(true, e.getFirstRow(), TabellModell.MØTT);
 				}
 				if(k != ed.getKarakter())		//Hvis karakteren er den samme, trengs det ikke å gjøres noen endring
 					ed.setKarakter(k);

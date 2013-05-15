@@ -176,17 +176,21 @@ public class Vindu extends JFrame implements ActionListener {
 			info.setEditable(false);
 			info.setLineWrap(true);
 			info.setWrapStyleWord(true);
-			setText("\n\n\n\n\n Velkommen til vår studieadmininistrasjon!\n" +
-					"                       Her er alt mulig!");
+			info.setText("Kom i gang!\n\n" +
+					"Ønsker du å registrere Studenter, Lærere, Fag eller Studieporgram, kan du gjøre det ved å klikke på knappene over,\n\n" +
+					"For å vise lagrede objekter, kan du vise alle ved å bruke vis-knappene til høyre, eller finne spesifikke objekter med søkefunksjonen oppe til høyre.\n\n" +
+					"Ønsker du å karaktererstatistikk, studenter som har et gitt fag, eller annen info, kan du bruke Avansert søk-knappen. Der blir du veiledet videre i søkene.\n\n" +
+					"Da kan alltid finne brukerveiledningen under Om-knappen i menyen i toppen av vinduet.");
 
 			display.add(info);
 			rammeverk.add(display, BorderLayout.WEST);
 			rammeverk.add(leggtil, BorderLayout.NORTH);
 			rammeverk.add(visning, BorderLayout.EAST);
-
+			
 			//Oppretter objekter til registreringsfelter
 			overskrift = new JLabel();
 			overskrift.setFont(new Font("Arial", Font.BOLD, TITTELSIZE));
+			overskrift.setText("Velkommen til vår studieadmininistrasjon!");
 
 			navn	 		= new InputFelt("Navn", InputFelt.LANG, navnRegex);
 			tittel			= new InputFelt("Navn", InputFelt.LANG, tittelRegex);
@@ -209,6 +213,7 @@ public class Vindu extends JFrame implements ActionListener {
 			avansert 		= buttonGenerator.generateButton("Søk", Buttons.HEL, new søkelytter());
 			tilbake 		= buttonGenerator.generateButton("Tilbake", Buttons.HEL);
 
+			//Kombobokser for valg av lagrede objekter
 			fagBox = new JComboBox<Fag>();
 			fagBox.setPreferredSize(Buttons.HEL);
 			for(Fag f : skolen.getFagene().getAlle()) {
@@ -232,7 +237,8 @@ public class Vindu extends JFrame implements ActionListener {
 			vurderingBox.setPreferredSize(Buttons.HEL);
 
 			innhold = new JPanel();
-			innhold.setBorder( ramme);
+			innhold.setBorder(ramme);
+			innhold.add(overskrift);
 
 			rammeverk.add(innhold, BorderLayout.CENTER);
 			revalidate();
@@ -383,7 +389,11 @@ public class Vindu extends JFrame implements ActionListener {
 		stud = new JPanel();
 		stud.setPreferredSize(innholdSize);
 
+		//Info til bruker
 		overskrift.setText("Registrer student");
+		setText("Fyll ut alle felter og trykk lagre for å registrere student.\n\n" +
+				"Om ønskelig kan du også velge studieprogram fra listeboksen, for å plassere studenten i dette programmet.");
+		
 		stud.add(overskrift);
 		stud.add(navn);
 		stud.add(epost);
@@ -400,7 +410,10 @@ public class Vindu extends JFrame implements ActionListener {
 		lær = new JPanel();
 		lær.setPreferredSize(innholdSize);
 
+		//Info til bruker
 		overskrift.setText("Registrer lærer");
+		setText("Fyll ut alle felter og trykk lagre for å registrere lærer.");
+
 		lær.add(overskrift);
 		lær.add(navn);
 		lær.add(epost);
@@ -414,7 +427,10 @@ public class Vindu extends JFrame implements ActionListener {
 		fag = new JPanel();
 		fag.setPreferredSize(innholdSize);
 
+		//Info til bruker
 		overskrift.setText("Registrer fag");
+		setText("Fyll ut alle felter, og trykk lagre for å registrere fag.");
+
 		fag.add(overskrift);
 		fag.add(tittel);
 		fag.add(fagkode);
@@ -430,7 +446,11 @@ public class Vindu extends JFrame implements ActionListener {
 		studprog = new JPanel();
 		studprog.setPreferredSize(innholdSize);
 
+		//Info til bruker
 		overskrift.setText("Registrer studieprogram");
+		setText("Fyll ut navn, og trykk lagre for å registrere studieprogram.\n\n" +
+				"Du kan legge til fag i programmet når det er registrert.");
+		
 		studprog.add(overskrift);
 		studprog.add(tittel);
 		studprog.add(lagre);
