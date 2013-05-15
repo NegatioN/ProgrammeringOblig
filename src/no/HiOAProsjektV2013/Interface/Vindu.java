@@ -1,5 +1,4 @@
 package no.HiOAProsjektV2013.Interface;
-
 //Lars-Erik Kasin - s178816 - Dataingeniør - 1AA
 //Joakim Rishaug - s188080 - Dataingeniør - 1AA
 //Siste versjon: 14.05.13
