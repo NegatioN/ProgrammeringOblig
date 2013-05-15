@@ -191,7 +191,7 @@ public class Vindu extends JFrame implements ActionListener {
 			overskrift = new JLabel();
 			overskrift.setFont(new Font("Arial", Font.BOLD, TITTELSIZE));
 			overskrift.setText("Velkommen til vår studieadmininistrasjon!");
-
+			
 			navn	 		= new InputFelt("Navn", InputFelt.LANG, navnRegex);
 			tittel			= new InputFelt("Navn", InputFelt.LANG, tittelRegex);
 			epost	 		= new InputFelt("E-post", InputFelt.LANG, mailRegex);
@@ -690,7 +690,7 @@ public class Vindu extends JFrame implements ActionListener {
 				if (e.getSource() == søkefelt || e.getSource() == søkeknapp) {
 
 					if(søkefelt.getText().length() == TOM ){
-						setText("Ingen treff");
+						setText("Tomt søkefelt");
 						overskrift.setText("Ingen treff");
 						return;
 					}
@@ -722,7 +722,22 @@ public class Vindu extends JFrame implements ActionListener {
 					} else{
 						vis(new JPanel());
 						overskrift.setText("Ingen treff");
-						setText("Ingen treff");
+						switch(selectedValue){
+						case STUDENT:
+							setText("Fant ingen studenter med søkeord \"" + søkefelt.getText() + "\".");
+							break;
+						case LÆRER:
+							setText("Fant ingen lærere med søkeord \"" + søkefelt.getText() + "\".");
+							break;
+						case FAG:
+							setText("Fant ingen fag med søkeord \"" + søkefelt.getText() + "\".");
+							break;
+						case STUDIEPROGRAM:
+							setText("Fant ingen studieprogram med søkeord \"" + søkefelt.getText() + "\".");
+							break;
+						default:
+							setText("Ingen treff");
+						}
 					}
 				} 
 
